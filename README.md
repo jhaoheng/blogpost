@@ -4,7 +4,10 @@
 
 # update
 
-- `_config.yml` & `index.html` : add `<read more>` feature, and should be add `<!--more-->` in your post.md
+- read more 
+    - `_config.yml` : 增加 key-value `excerpt_separator: <!--more-->`
+    - `index.html` : 增加 `<p><a class="btn btn-sm btn-primary" href="{{ post.url }}/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>`
+    - `your_blog_new_post.md` : 增加 `<!--more-->`
 
 # github & jekyll 相關設定參考
 https://jhaoheng.github.io/blogpost/github&jekyll/
