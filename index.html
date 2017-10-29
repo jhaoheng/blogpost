@@ -34,7 +34,9 @@ image:
     {% endif %}
   </header>
   <div class="entry-content">
-    {{ post.content }}
+    {{ post.excerpt }}
+    <p><a class="btn btn-sm btn-primary" href="{{ post.url }}/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->
 {% endfor %}

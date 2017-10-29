@@ -2,6 +2,13 @@
 - localhost : `jekyll server -b ''`, 因此 theme 在 baseurl 的 localhost 與 gh-pages 在 deploy 會產生衝突，故 config 設定的 baseurl 以 deploy 為主
 - deploy : `jekyll build`
 
+# update
+
+- `_config.yml` & `index.html` : add `<read more>` feature, and should be add `<!--more-->` in your post.md
+
+# github & jekyll 相關設定參考
+https://jhaoheng.github.io/blogpost/github&jekyll/
+
 # Theme : HPSTR Jekyll Theme
 
 They say three times the charm, so here is another free responsive Jekyll theme for you. I've learned a ton since open sourcing [my first two themes](https://mademistakes.com/work/jekyll-themes/), and wanted to try a few new things this time around. If you've used my previous themes most of this should be familiar territory.

@@ -10,6 +10,8 @@ categories:
 > 沒想到 logdown 也會有服務出問題，甚至讓我覺得可能會中斷服務，讓我覺得挺可惜
 > 最後還是又回到了 github 中，不過這次用的服務是 `jekyll`
 
+<!--more-->
+
 - 環境 : osx
 - index
 	- 安裝 jekyll

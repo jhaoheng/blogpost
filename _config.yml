@@ -8,6 +8,8 @@ words_per_minute: 200
 url:  "https://jhaoheng.github.io/blogpost"
 baseurl: "/blogpost"
 
+excerpt_separator: <!--more-->
+
 # Owner/author information
 owner:
   name:           Max Hu
