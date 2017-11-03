@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "【facebook】進階：登入"
+title: "【facebook】進階：OAuth code flow"
 date: 2017-10-29 20:49
 categories: facebook app mobile web
 ---
@@ -14,7 +14,7 @@ categories: facebook app mobile web
 <!--more-->
 
 ## 方法一 : 直接取得 token -> 驗證 token
-> - URL 組成 : `protocol://hostname[:port]/path/[parameters]?[query]#fragment`
+> - URL 組成 : `scheme://host:port/path?query#fragment`
 - fragment : fragment 片段 網頁中可能會分為不同的片段，如果想訪問網頁後直接到達指定位置(tag)，可以在這部分設置
 
 1. `https://www.facebook.com/v2.10/dialog/oauth?client_id={your_app_id}&response_type=token&redirect_uri={redirect_uri}`

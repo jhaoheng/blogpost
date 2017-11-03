@@ -14,6 +14,15 @@
 # github & jekyll 相關設定參考
 https://jhaoheng.github.io/blogpost/github&jekyll/
 
+# Post need notice
+
+> layout: post
+title: "【Docker:mariadb】set init when first runnging"
+date: 2017-11-03 12:01
+categories: docker mairadb
+
+- 注意 日期 只能是 : `yy-mm-dd hh:mm`
+
 # Theme : HPSTR Jekyll Theme
 
 They say three times the charm, so here is another free responsive Jekyll theme for you. I've learned a ton since open sourcing [my first two themes](https://mademistakes.com/work/jekyll-themes/), and wanted to try a few new things this time around. If you've used my previous themes most of this should be familiar territory.
