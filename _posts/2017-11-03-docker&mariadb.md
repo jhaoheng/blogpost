@@ -1,6 +1,6 @@
 --- 
 layout: post
-title: "【Docker:mariadb】set init when first runngin"
+title: "【Docker:mariadb】set init when first running"
 date: 2017-11-03 12:01
 categories: docker mairadb
 ---

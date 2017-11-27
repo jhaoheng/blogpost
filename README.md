@@ -2,6 +2,11 @@
 - localhost : `jekyll server -b ''`, 因此 theme 在 baseurl 的 localhost 與 gh-pages 在 deploy 會產生衝突，故 config 設定的 baseurl 以 deploy 為主
 - deploy : `jekyll build`
 
+# deploy
+- gh-pages : 
+	1. `cd _site`
+	2. `git add . && git commit -m "update" && git push`
+
 # update
 
 - read more 
