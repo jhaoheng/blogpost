@@ -3,9 +3,7 @@
 - deploy : `jekyll build`
 
 # deploy
-- gh-pages : 
-	1. `cd _site`
-	2. `git add . && git commit -m "update" && git push`
+- gh-pages : `cd _site && git add . && git commit -m "update" && git push`
 
 # update
 
