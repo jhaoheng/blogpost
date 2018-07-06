@@ -1,3 +1,17 @@
+# 新增文章需注意
+
+```
+---
+layout: post
+title: 【Deploy Test】Use Kubernetes & Minikube(local)
+date: 2018-03-02 07:30
+categories: kubenetes minikube
+---
+```
+
+- 注意 日期 只能是 : `yy-mm-dd hh:mm`
+- 請將文章放在 `_posts` 中
+
 # build
 - localhost : `jekyll server -b ''`, 因此 theme 在 baseurl 的 localhost 與 gh-pages 在 deploy 會產生衝突，故 config 設定的 baseurl 以 deploy 為主
 - deploy : `jekyll build`
@@ -17,14 +31,6 @@
 # github & jekyll 相關設定參考
 https://jhaoheng.github.io/blogpost/github&jekyll/
 
-# Post need notice
-
-> layout: post
-title: "【Docker:mariadb】set init when first runnging"
-date: 2017-11-03 12:01
-categories: docker mairadb
-
-- 注意 日期 只能是 : `yy-mm-dd hh:mm`
 
 # Theme : HPSTR Jekyll Theme
 
