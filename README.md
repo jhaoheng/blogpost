@@ -12,12 +12,12 @@ categories: kubenetes minikube
 - 注意 日期 只能是 : `yy-mm-dd hh:mm`
 - 請將文章放在 `_posts` 中
 
-# build
-- localhost : `jekyll server -b ''`, 因此 theme 在 baseurl 的 localhost 與 gh-pages 在 deploy 會產生衝突，故 config 設定的 baseurl 以 deploy 為主
-- deploy : `jekyll build`
+# localhost test
+- localhost : `sudo jekyll server -b ''`, 因此 theme 在 baseurl 的 localhost 與 gh-pages 在 deploy 會產生衝突，故 config 設定的 baseurl 以 deploy 為主
 
 # deploy
-- gh-pages : `cd _site && git add . && git commit -m "update" && git push`
+- build : `sudo jekyll build`
+- upload : `cd _site && git add . && git commit -m "update" && git push`
 
 # update
 
