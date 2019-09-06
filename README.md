@@ -23,6 +23,9 @@ categories: kubenetes minikube
 ## 文章截斷
 `<!--more-->`
 
+## 修改 menu
+- `_/data/navigation.yml`
+
 # localhost test
 - localhost : `sudo jekyll server -b ''`, 因此 theme 在 baseurl 的 localhost 與 gh-pages 在 deploy 會產生衝突，故 config 設定的 baseurl 以 deploy 為主
 

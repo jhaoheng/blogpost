@@ -1,10 +1,7 @@
 # Menu navigation links
 
-- title: Personal
-  url: https://jhaoheng.github.io
+# - title: Theme Setup
+#   url: /theme-setup/
 
-- title: Theme Setup
-  url: /theme-setup/
-
-- title: Find Disqus Shortname
-  url: https://blogpost-5.disqus.com/admin/settings/general/
+# - title: Find Disqus Shortname
+#   url: https://blogpost-5.disqus.com/admin/settings/general/
