@@ -26,10 +26,23 @@ categories: kubenetes minikube
 ## 修改 menu
 - `_/data/navigation.yml`
 
+## 環境設定
+- `./config.yml`
+
 # localhost test
-- localhost : `sudo jekyll server -b ''`, 因此 theme 在 baseurl 的 localhost 與 gh-pages 在 deploy 會產生衝突，故 config 設定的 baseurl 以 deploy 為主
+- localhost : `sudo jekyll server -b ''`
+- 因 theme 在 baseurl 的 localhost 與 gh-pages 在 deploy 會產生衝突，故 config 設定的 baseurl 以 deploy 為主
 
 # deploy
+## init deploy env
+> 第一次 pull 時設定環境
+
+1. 因為 github/setting, 設定的 GitHub Pages branch = gh-pages
+2. 所以 必須將 `./_site` 的路徑, 設定成 git branch = gh-pages, 並且 git pull 一次
+3. 之後執行 deploy 即可
+    - 每次執行 build 都會重建文章的 commit code, 會讓 commit 很複雜, 故用此方法
+
+## deploy
 - build : `sudo jekyll build`
 - upload : `cd _site && git add . && git commit -m "update" && git push`
 
