@@ -47,20 +47,29 @@ A slice can be created with the built-in function called make, which has the sig
 - array : `fmt.Println(reflect.TypeOf(arrObject))`, 顯示 [4]int
 - slice : `fmt.Println(reflect.TypeOf(sliceObject))`, 顯示 []int
 
-<embed src="https://play.golang.org/p/WLS7doOuphz" width=100% height=300>
+<div>
+    <iframe src="https://play.golang.org/p/WLS7doOuphz" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
 
 ## 兩者 kind 不同 : 
 - array : `fmt.Println(reflect.TypeOf(arrObject).Kind())`, 顯示 array
 - slice : `fmt.Println(reflect.TypeOf(sliceObject).Kind())`, 顯示 slice
 
-<embed src="https://play.golang.org/p/6BD2qUVm00l" width=100% height=300>
+<div>
+    <iframe src="https://play.golang.org/p/6BD2qUVm00l" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
 	
 ## 兩者在宣告後, 不設定 content, 印出內容
 
 - array : An array's size is fixed
 - slice : A slice type has no specified length.
 
-<embed type="" src="https://play.golang.org/p/xXnbKIC5WhV" width=100% height=350>
+<div>
+    <iframe src="https://play.golang.org/p/xXnbKIC5WhV" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
 
 ## 兩者在新增/修改值上不同
 - array 
@@ -70,7 +79,10 @@ A slice can be created with the built-in function called make, which has the sig
 	- 新增 : `sliceObject = append(sliceObject, 1,2,3,4)`
 	- 修改 : `sliceObject[0] = 999`
 
-<embed src="https://play.golang.org/p/HY7kVBdV-KZ" width=100% height=600>
+<div>
+    <iframe src="https://play.golang.org/p/HY7kVBdV-KZ" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
 
 ## 兩者 func 中，使用原理方式不同
 > 範例中用到的 func, 需要注意 pointer
@@ -78,7 +90,10 @@ A slice can be created with the built-in function called make, which has the sig
 - array 在 func 中, 是用 copy 的方式. 故最好用 pointer 的方式在傳遞 array
 - slice 本身就是一個 pointer, 故可以在 func 中, 看到 address 相同
 
-<embed src="https://play.golang.org/p/Tt8rJNMjDAm" width=100% height=900>
+<div>
+    <iframe src="https://play.golang.org/p/Tt8rJNMjDAm" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
 
 # The same
 

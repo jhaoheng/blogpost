@@ -14,7 +14,10 @@ categories: kubenetes minikube
 
 ## 內遷 go playground 語法
 ```
-<embed type="" src="https://play.golang.org/p/HmnNoBf0p1z" width=100% height=300>
+<div>
+    <iframe src="https://play.golang.org/p/WLS7doOuphz" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
 ```
 
 ## 文章截斷
