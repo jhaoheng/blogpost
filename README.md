@@ -12,6 +12,14 @@ categories: kubenetes minikube
 - 注意 日期 只能是 : `yy-mm-dd hh:mm`
 - 請將文章放在 `_posts` 中
 
+## 內遷 go playground 語法
+```
+<embed type="" src="https://play.golang.org/p/HmnNoBf0p1z" width=100% height=300>
+```
+
+## 文章截斷
+`<!--more-->`
+
 # localhost test
 - localhost : `sudo jekyll server -b ''`, 因此 theme 在 baseurl 的 localhost 與 gh-pages 在 deploy 會產生衝突，故 config 設定的 baseurl 以 deploy 為主
 
