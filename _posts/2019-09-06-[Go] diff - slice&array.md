@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 【Golang】diff - slice & array
+title: 【Golang】Diff - slice & array
 date: 2019-09-06 14:40
 categories: Golang
 ---
