@@ -1,0 +1,281 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>【MQTT】Login mqtt:8883 SSL/TLS with certificate authority (CA) &#8211; Max 乎~</title>
+<meta name="description" content="修煉!">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【MQTT】Login mqtt:8883 SSL/TLS with certificate authority (CA)">
+<meta property="og:description" content="修煉!">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/">
+<meta property="og:site_name" content="Max 乎~">
+
+
+
+
+
+<link rel="canonical" href="https://jhaoheng.github.io/blogpost/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/">
+<link href="https://jhaoheng.github.io/blogpost/feed.xml" type="application/atom+xml" rel="alternate" title="Max 乎~ Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://jhaoheng.github.io/blogpost/assets/css/main.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="https://jhaoheng.github.io/blogpost/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="https://jhaoheng.github.io/blogpost/images/avatar2.jpg" alt="Max Hu photo" class="author-photo">
+					<h4>Max Hu</h4>
+					<p>developer</p>
+				</li>
+				<li><a href="https://jhaoheng.github.io/blogpost/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				<li>
+					<a href="mailto:jhaoheng@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/https://github.com/jhaoheng"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="https://jhaoheng.github.io/blogpost/posts/">All Posts</a></li>
+				<li><a href="https://jhaoheng.github.io/blogpost/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/" rel="bookmark" title="【MQTT】Login mqtt:8883 SSL/TLS with certificate authority (CA)">【MQTT】Login mqtt:8883 SSL/TLS with certificate authority (CA)</a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2016-09-07T02:01:00+08:00">September 07, 2016</time></span></h2>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+Reading time ~1 minute
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h1 id="login-mqtt8883-ssltls-certificate-authority-ca">login mqtt:8883 SSL/TLS (certificate authority (CA))</h1>
+
+<ul>
+  <li><a href="https://github.com/jhaoheng/emqttd_test">github</a></li>
+</ul>
+
+<h2 id="required-file">required file</h2>
+
+<p>use below file and cmd[mosquitto_sub] to connect MQTT:8883</p>
+
+<ul>
+  <li>ca.crt – The CA (Certificate Authority, who published the host certificate) public certificate.</li>
+  <li>ssl.crt – The hostname, public certificate.</li>
+  <li>ssl.key – The hostname, private key.</li>
+</ul>
+
+<h2 id="generate_1--use-generate-cash-to-generate">Generate_1 : use <strong>generate-CA.sh</strong> to generate</h2>
+
+<ol>
+  <li>Download generate-CA.sh and create local server CA, and will generate….
+    <ul>
+      <li>ca.srl / ca.crt / ca.key</li>
+      <li>xxx is local server name, xxx.crt / xxx.csr / xxx.key</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">cp xxx.crt ssl.crt</code> and <code class="highlighter-rouge">cp xxx.key ssl.key</code></li>
+</ol>
+
+<h2 id="generate_2--use-cmd-openssl-to-generate">Generate_2 : use cmd [openssl] to generate</h2>
+
+<ol>
+  <li>Generate ca.crt and ca.key
+    <ul>
+      <li><code class="highlighter-rouge">openssl req -newkey rsa:2048 -x509 -nodes -sha512 -days 365 -extensions v3_ca -keyout ca.key -out ca.crt</code></li>
+      <li>check : <code class="highlighter-rouge">openssl x509 -in ca.crt -nameopt multiline -subject -noout</code></li>
+    </ul>
+  </li>
+  <li>Generate server.key
+    <ul>
+      <li><code class="highlighter-rouge">openssl genrsa -out server.key 2048</code></li>
+    </ul>
+  </li>
+  <li>Generate server.csr
+    <ul>
+      <li><code class="highlighter-rouge">openssl req -new -sha512 -out server.csr -key server.key</code></li>
+    </ul>
+  </li>
+  <li>Generate server.crt by server.csr, ca.crt, cae.key, ca.srl
+    <ul>
+      <li><code class="highlighter-rouge">openssl x509 -req -sha512 -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -CAserial ca.srl -out server.crt -days 365 -extensions JPMextensions</code></li>
+      <li>check : <code class="highlighter-rouge">openssl x509 -in server.crt -nameopt multiline -subject -noout</code></li>
+    </ul>
+  </li>
+</ol>
+
+<p>note : <code class="highlighter-rouge">ca.crt</code> and <code class="highlighter-rouge">server.crt</code>, their <code class="highlighter-rouge">commonName</code> should not be the same.</p>
+
+<h2 id="verify-check-servercrt-is-generated-by-cacrt">Verify: check server.crt is generated by ca.crt</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">openssl verify -CAfile ca.crt server.crt</code>
+    <ul>
+      <li>output ssl.crt: OK</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="test">Test</h2>
+
+<ol>
+  <li><code class="highlighter-rouge">mv ssl* to /emqttd/etc/ssl/</code></li>
+  <li>Test : <code class="highlighter-rouge">mosquitto_sub -h [server_ip] -p 8883 -t [topic] -i [clientId] -u [username] -P [password] --cafile ca.crt</code>
+    <ul>
+      <li>Notice where is your <code class="highlighter-rouge">ca.crt</code> file</li>
+    </ul>
+  </li>
+  <li>go to your emqttd console, emqttd:18083, and watch Clients</li>
+</ol>
+
+<h2 id="ex--servercrt">ex : server.crt</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subject= 
+    countryName               = TW
+    stateOrProvinceName       = TAIWAN
+    localityName              = TAIPEI
+    organizationName          = COMPANY
+    organizationalUnitName    = DEV
+    commonName                = dev-mqtt.com
+    emailAddress              = max.hu@mail
+</code></pre></div></div>
+
+<h2 id="ex--cacrt">ex : ca.crt</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>subject= 
+    commonName                = An MQTT broker
+    organizationName          = COMPANY
+    organizationalUnitName    = DEV
+    emailAddress              = max.hu@mail
+</code></pre></div></div>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://jhaoheng.github.io/blogpost/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://jhaoheng.github.io/blogpost/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://jhaoheng.github.io/blogpost/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://jhaoheng.github.io/blogpost/xcode/xcode-macros-scheme/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
+      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Max Hu. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://jhaoheng.github.io/blogpost/assets/js/scripts.min.js"></script>
+
+
+
+	        
+
+</body>
+</html>

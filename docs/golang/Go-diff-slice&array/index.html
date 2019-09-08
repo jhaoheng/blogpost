@@ -1,0 +1,312 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>【Golang】Diff - slice & array &#8211; Max 乎~</title>
+<meta name="description" content="修煉!">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Golang】Diff - slice & array">
+<meta property="og:description" content="修煉!">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/">
+<meta property="og:site_name" content="Max 乎~">
+
+
+
+
+
+<link rel="canonical" href="https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/">
+<link href="https://jhaoheng.github.io/blogpost/feed.xml" type="application/atom+xml" rel="alternate" title="Max 乎~ Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://jhaoheng.github.io/blogpost/assets/css/main.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="https://jhaoheng.github.io/blogpost/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="https://jhaoheng.github.io/blogpost/images/avatar2.jpg" alt="Max Hu photo" class="author-photo">
+					<h4>Max Hu</h4>
+					<p>developer</p>
+				</li>
+				<li><a href="https://jhaoheng.github.io/blogpost/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				<li>
+					<a href="mailto:jhaoheng@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/https://github.com/jhaoheng"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="https://jhaoheng.github.io/blogpost/posts/">All Posts</a></li>
+				<li><a href="https://jhaoheng.github.io/blogpost/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/" rel="bookmark" title="【Golang】Diff - slice & array">【Golang】Diff - slice & array</a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2019-09-06T14:31:00+08:00">September 06, 2019</time></span></h2>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+Reading time ~1 minute
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h1 id="slice--array-差別">slice &amp; array 差別</h1>
+<blockquote>
+  <p>https://blog.golang.org/go-slices-usage-and-internals</p>
+</blockquote>
+
+<h1 id="array">Array</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value.
+- An array's size is fixed;
+- Arrays do not need to be initialized
+</code></pre></div></div>
+
+<h1 id="slice">Slice</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length.
+A slice can be created with the built-in function called make, which has the signature,
+`func make([]T, len, cap) []T`
+</code></pre></div></div>
+
+<h1 id="glance--difference-between-both">Glance : Difference between both</h1>
+
+<ul>
+  <li>兩者在宣告方式不同</li>
+  <li>兩者 type 不同</li>
+  <li>兩者 kind 不同</li>
+  <li>兩者在宣告後, 不設定 content, 印出內容</li>
+  <li>兩者在新增/修改值上不同</li>
+  <li>兩者 func 中，使用原理方式不同</li>
+</ul>
+
+<!--more-->
+
+<h2 id="兩者在宣告方式不同-">兩者在宣告方式不同 :</h2>
+<ul>
+  <li>array : Go’s arrays are values.
+    <ul>
+      <li><code class="highlighter-rouge">var arrObject [4]int</code></li>
+      <li><code class="highlighter-rouge">arrObject := [4]int{0, 1, 2, 3}</code></li>
+      <li><code class="highlighter-rouge">arrObject := [...]int{0, 1, 2, 3}</code></li>
+    </ul>
+  </li>
+  <li>slice : 用 make 建立
+    <ul>
+      <li><code class="highlighter-rouge">var sliceObject []int</code></li>
+      <li><code class="highlighter-rouge">sliceObject := []int{}</code></li>
+      <li><code class="highlighter-rouge">sliceObject := []int{1,2,3,4}</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="兩者-type-不同">兩者 type 不同</h2>
+<ul>
+  <li>array : <code class="highlighter-rouge">fmt.Println(reflect.TypeOf(arrObject))</code>, 顯示 [4]int</li>
+  <li>slice : <code class="highlighter-rouge">fmt.Println(reflect.TypeOf(sliceObject))</code>, 顯示 []int</li>
+</ul>
+
+<div>
+    <iframe src="https://play.golang.org/p/WLS7doOuphz" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<h2 id="兩者-kind-不同-">兩者 kind 不同 :</h2>
+<ul>
+  <li>array : <code class="highlighter-rouge">fmt.Println(reflect.TypeOf(arrObject).Kind())</code>, 顯示 array</li>
+  <li>slice : <code class="highlighter-rouge">fmt.Println(reflect.TypeOf(sliceObject).Kind())</code>, 顯示 slice</li>
+</ul>
+
+<div>
+    <iframe src="https://play.golang.org/p/6BD2qUVm00l" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<h2 id="兩者在宣告後-不設定-content-印出內容">兩者在宣告後, 不設定 content, 印出內容</h2>
+
+<ul>
+  <li>array : An array’s size is fixed</li>
+  <li>slice : A slice type has no specified length.</li>
+</ul>
+
+<div>
+    <iframe src="https://play.golang.org/p/xXnbKIC5WhV" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<h2 id="兩者在新增修改值上不同">兩者在新增/修改值上不同</h2>
+<ul>
+  <li>array
+    <ul>
+      <li>arr 長度固定, 無法新增</li>
+      <li>新增、修改 : <code class="highlighter-rouge">arrObject[0] = 999</code></li>
+    </ul>
+  </li>
+  <li>slice
+    <ul>
+      <li>新增 : <code class="highlighter-rouge">sliceObject = append(sliceObject, 1,2,3,4)</code></li>
+      <li>修改 : <code class="highlighter-rouge">sliceObject[0] = 999</code></li>
+    </ul>
+  </li>
+</ul>
+
+<div>
+    <iframe src="https://play.golang.org/p/HY7kVBdV-KZ" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<h2 id="兩者-func-中使用原理方式不同">兩者 func 中，使用原理方式不同</h2>
+<blockquote>
+  <p>範例中用到的 func, 需要注意 pointer</p>
+</blockquote>
+
+<ul>
+  <li>array 在 func 中, 是用 copy 的方式. 故最好用 pointer 的方式在傳遞 array</li>
+  <li>slice 本身就是一個 pointer, 故可以在 func 中, 看到 address 相同</li>
+</ul>
+
+<div>
+    <iframe src="https://play.golang.org/p/Tt8rJNMjDAm" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<h1 id="the-same">The same</h1>
+
+<h2 id="兩者在切割方式上相同-">兩者在切割方式上<strong>相同</strong> :</h2>
+<ul>
+  <li><code class="highlighter-rouge">arr[:2]</code> = <code class="highlighter-rouge">sliceObject[:2]</code></li>
+</ul>
+
+<h2 id="顯示長度上">顯示長度上</h2>
+<ul>
+  <li>array : <code class="highlighter-rouge">fmt.Println(len(arrayObject))</code>, 顯示 4</li>
+  <li>slice : <code class="highlighter-rouge">fmt.Println(len(sliceObject))</code> 顯示 0</li>
+</ul>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://jhaoheng.github.io/blogpost/golang/gomod/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
+      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Max Hu. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://jhaoheng.github.io/blogpost/assets/js/scripts.min.js"></script>
+
+
+
+	        
+
+</body>
+</html>

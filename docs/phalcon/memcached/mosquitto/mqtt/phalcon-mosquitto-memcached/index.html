@@ -1,0 +1,354 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>【AWS-centos7-php7.x】phalcon / memcached / mosquitto &#8211; Max 乎~</title>
+<meta name="description" content="修煉!">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【AWS-centos7-php7.x】phalcon / memcached / mosquitto">
+<meta property="og:description" content="修煉!">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/phalcon/memcached/mosquitto/mqtt/phalcon-mosquitto-memcached/">
+<meta property="og:site_name" content="Max 乎~">
+
+
+
+
+
+<link rel="canonical" href="https://jhaoheng.github.io/blogpost/phalcon/memcached/mosquitto/mqtt/phalcon-mosquitto-memcached/">
+<link href="https://jhaoheng.github.io/blogpost/feed.xml" type="application/atom+xml" rel="alternate" title="Max 乎~ Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://jhaoheng.github.io/blogpost/assets/css/main.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="https://jhaoheng.github.io/blogpost/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="https://jhaoheng.github.io/blogpost/images/avatar2.jpg" alt="Max Hu photo" class="author-photo">
+					<h4>Max Hu</h4>
+					<p>developer</p>
+				</li>
+				<li><a href="https://jhaoheng.github.io/blogpost/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				<li>
+					<a href="mailto:jhaoheng@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/https://github.com/jhaoheng"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="https://jhaoheng.github.io/blogpost/posts/">All Posts</a></li>
+				<li><a href="https://jhaoheng.github.io/blogpost/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/phalcon/memcached/mosquitto/mqtt/phalcon-mosquitto-memcached/" rel="bookmark" title="【AWS-centos7-php7.x】phalcon / memcached / mosquitto">【AWS-centos7-php7.x】phalcon / memcached / mosquitto</a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2017-02-08T09:55:00+08:00">February 08, 2017</time></span></h2>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+Reading time ~1 minute
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h1 id="完整的-bash-script">完整的 bash script</h1>
+<p><strong>base on AWS centos7</strong> : git@github.com:jhaoheng/centos-nginx-php7.x-extension.git
+執行 sh env.sh 即可，整體安裝約 20 分鐘</p>
+
+<h1 id="start">start</h1>
+<ol>
+  <li>至 aws</li>
+  <li>launch new instance</li>
+  <li>market search centos</li>
+  <li>choose centos7</li>
+</ol>
+
+<h1 id="centos7-安裝-nginx">centos7 安裝 nginx</h1>
+
+<ol>
+  <li>yum -y install epel-release</li>
+  <li>yum install nginx</li>
+  <li>驗證在瀏覽器開啟 ip, 注意 port 80 是否有開啟</li>
+</ol>
+
+<h2 id="操作">操作</h2>
+<p>/bin/systemctl restart nginx</p>
+
+<h1 id="centos7-安裝-php7x">centos7 安裝 php7.x</h1>
+
+<ol>
+  <li>yum -y install epel-release</li>
+  <li>yum install wget</li>
+  <li>wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm</li>
+  <li>rpm -ivh ./remi-release-7.rpm</li>
+  <li>yum install –enablerepo=remi,remi-php70 php-fpm php-devel php-mbstring php-pdo php-gd php-xml php-curl php-mysqlnd php-pdo_mysql php-mysqli php-json php-soap php-zip php-sockets php-session php-mcrypt php-date php-openssl php-yaml</li>
+</ol>
+
+<h2 id="source">source</h2>
+<ol>
+  <li>下載位置 http://php.net/downloads.php</li>
+  <li>可參考目前的 ext</li>
+  <li>手動新增 ext, ex:
+    <ol>
+      <li>cd xml</li>
+      <li>phpize</li>
+      <li>./configure</li>
+      <li>make &amp;&amp; make install</li>
+    </ol>
+  </li>
+  <li>查看 module 是否有此套件</li>
+</ol>
+
+<h2 id="操作-1">操作</h2>
+<p>/bin/systemctl restart php-fpm</p>
+
+<h2 id="測試">測試</h2>
+
+<ol>
+  <li>找出 nginx.conf : nginx -h</li>
+  <li>vi {$path}/nginx.conf</li>
+  <li>server 設定參數可參考 <code class="highlighter-rouge">https://docs.phalconphp.com/zh/latest/reference/nginx.html</code>
+    <ul>
+      <li>請將 fastcgi 設定為 127.0.0.1:9000 &lt;— 必須符合 php-fpm 的 listen 位置</li>
+    </ul>
+  </li>
+  <li>在適當位置建立 <?php phpinfo()?> 的 index.php</li>
+  <li>在 browser 輸入 ip 與 index.php</li>
+</ol>
+
+<h1 id="centos7-安裝-phalcon-with-php7x">centos7 安裝 phalcon with php7.x</h1>
+
+<ol>
+  <li>yun install git</li>
+  <li>yum install php-devel pcre-devel gcc make re2c</li>
+  <li>安裝編譯工具 : git clone https://github.com/phalcon/zephir</li>
+  <li>cd zephir/</li>
+  <li>./install-nosudo</li>
+  <li>下載 phalcon source : git clone git://github.com/phalcon/cphalcon.git</li>
+  <li>cd cphalcon/</li>
+  <li>git checkout 適當的版本</li>
+  <li>{$Path}/zephir build</li>
+  <li>將 extension=phalcon.so 放入 php.ini</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>php -i</td>
+          <td>grep phalcon</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+<h2 id="trouble">trouble</h2>
+<ul>
+  <li>undefined symbol: php_json_decode_ex in Unknown on line 0
+    <ul>
+      <li>原因在於此 extension=phalcon.so 不能直接放在 php.ini 中，請放置 /etc/php.d/</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="centos7-安裝-libmemcached-編譯-memcachedso">centos7 安裝 libmemcached 編譯 memcached.so</h1>
+
+<h2 id="安裝-libmemcached">安裝 libmemcached</h2>
+
+<ol>
+  <li>至官網下載 https://launchpad.net/libmemcached</li>
+  <li>wget ….</li>
+  <li>cd /libmemcached-1.x.x</li>
+  <li>yum groupinstall “Development Tools”</li>
+  <li>yum install zlib-static</li>
+  <li>./configure –disable-memcached-sasl</li>
+  <li>make &amp;&amp; make install</li>
+</ol>
+
+<h2 id="編譯-memcachedso">編譯 memcached.so</h2>
+<ol>
+  <li>git clone https://github.com/php-memcached-dev/php-memcached.git</li>
+  <li>git checkout php7</li>
+  <li>phpize</li>
+  <li>./configure</li>
+  <li>make &amp;&amp; make install</li>
+  <li>確定是否將 .so 放入 module 中 :
+    <ol>
+      <li><code class="highlighter-rouge">php -i | grep extension_dir</code></li>
+      <li>cd {dir}</li>
+      <li>檢查是否有 memcached.so</li>
+    </ol>
+  </li>
+  <li>確定 extension 是否有加入到 php.ini</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>驗證 php -i</td>
+          <td>grep memcached</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+<h1 id="centos7-安裝-libmosquitto-編譯-mosquittoso">centos7 安裝 libmosquitto 編譯 mosquitto.so</h1>
+
+<h2 id="安裝-libmosquitto">安裝 libmosquitto</h2>
+<ol>
+  <li>進入官網 : https://mosquitto.org/download/</li>
+  <li>找到 centos7 的 re 的 conf</li>
+  <li>將檔案 mosquitto.repo 放入 /etc/yum.repos.d 即可
+<code class="highlighter-rouge">The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto.</code></li>
+  <li>安裝 : yum install libmosquitto-devel</li>
+  <li>安裝後的 lib 路徑, 系統安裝後會提示, 無意外是 /usr/lib64/libmosquitto.so…..</li>
+</ol>
+
+<h2 id="編譯-mosquittoso">編譯 mosquitto.so</h2>
+<ol>
+  <li>下載 git source 後 : https://github.com/mgdm/Mosquitto-PHP</li>
+  <li>cd Mosquitto-PHP</li>
+  <li>phpize</li>
+  <li><code class="highlighter-rouge">./configure --with-mosquitto=/usr/lib64/libmosquitto.so</code></li>
+  <li>make &amp;&amp; make install</li>
+  <li>驗證 module 是否有 mosquitto.so</li>
+  <li>在 php.ini 中設定 extension=mosquitto.so</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>驗證 : php -i</td>
+          <td>grep mosquitto</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://jhaoheng.github.io/blogpost/phalcon/memcached/mosquitto/mqtt/phalcon-mosquitto-memcached/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://jhaoheng.github.io/blogpost/phalcon/memcached/mosquitto/mqtt/phalcon-mosquitto-memcached/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://jhaoheng.github.io/blogpost/phalcon/memcached/mosquitto/mqtt/phalcon-mosquitto-memcached/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://jhaoheng.github.io/blogpost/php/PHP-Memcached/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
+      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Max Hu. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://jhaoheng.github.io/blogpost/assets/js/scripts.min.js"></script>
+
+
+
+	        
+
+</body>
+</html>

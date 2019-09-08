@@ -1,0 +1,322 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>【Raspberry pi 3】wifi ap mode &#8211; Max 乎~</title>
+<meta name="description" content="修煉!">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Raspberry pi 3】wifi ap mode">
+<meta property="og:description" content="修煉!">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/raspberry/RPI3-wifiAp/">
+<meta property="og:site_name" content="Max 乎~">
+
+
+
+
+
+<link rel="canonical" href="https://jhaoheng.github.io/blogpost/raspberry/RPI3-wifiAp/">
+<link href="https://jhaoheng.github.io/blogpost/feed.xml" type="application/atom+xml" rel="alternate" title="Max 乎~ Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://jhaoheng.github.io/blogpost/assets/css/main.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="https://jhaoheng.github.io/blogpost/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="https://jhaoheng.github.io/blogpost/images/avatar2.jpg" alt="Max Hu photo" class="author-photo">
+					<h4>Max Hu</h4>
+					<p>developer</p>
+				</li>
+				<li><a href="https://jhaoheng.github.io/blogpost/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				<li>
+					<a href="mailto:jhaoheng@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/https://github.com/jhaoheng"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="https://jhaoheng.github.io/blogpost/posts/">All Posts</a></li>
+				<li><a href="https://jhaoheng.github.io/blogpost/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/raspberry/RPI3-wifiAp/" rel="bookmark" title="【Raspberry pi 3】wifi ap mode">【Raspberry pi 3】wifi ap mode</a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2017-09-08T13:16:00+08:00">September 08, 2017</time></span></h2>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+Reading time ~1 minute
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h2 id="initial-check">initial check</h2>
+<ol>
+  <li>檢查網路是否支援 AP : <code class="highlighter-rouge">iw list</code>，須找到支援 AP 的選項</li>
+  <li>檢察網路 : <code class="highlighter-rouge">ifconfig -a</code>，會看到
+    <ul>
+      <li>eth0 : 在我的 pi3 下顯示的是 enxb87ebbb66cf，在 iptables 的 package transfer 將 eth0 設定成此值</li>
+      <li>lo</li>
+      <li>wlan0</li>
+    </ul>
+  </li>
+  <li>接上 乙太網路線，先測試 raspberry pi 上的網路是否正常，透過 <code class="highlighter-rouge">route</code> 指令檢查 default 的 gateway，可得知 Iface 的名稱，也就是 eth0</li>
+  <li>整個目標就是透過 iptable 的方式，交換 wifi 與乙太網路的資訊</li>
+</ol>
+
+<h2 id="設定-wifi-的資訊">設定 wifi 的資訊</h2>
+<ul>
+  <li>目的 : 接收用戶端連線，設定 raspberry wifi gateway 的位置</li>
+</ul>
+
+<ol>
+  <li>編輯 DHCP Client 設定資訊 : <code class="highlighter-rouge">vim /etc/dhcpcd.conf</code></li>
+  <li>在最下方，新增
+    <ol>
+      <li><code class="highlighter-rouge">interface  wlan0</code></li>
+      <li><code class="highlighter-rouge">static ip_address=10.0.7.1/24</code> : 指定 wlan0 的 ip 位置</li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="啟用-nat">啟用 NAT</h2>
+<ul>
+  <li>目的 : 透過 iptable 的設定，交換 wifi ap(wlan0) 與 eth0 的網路資訊</li>
+</ul>
+
+<ol>
+  <li>開啟 ipv4 路由轉發功能，檔案位置 <code class="highlighter-rouge">/etc/sysctl.conf</code>
+    <ul>
+      <li>查詢 : <code class="highlighter-rouge">cat /etc/sysctl.conf | grep ip_forward</code></li>
+      <li>變更設定 : 至 <code class="highlighter-rouge">/etc/sysctl.conf</code>，找到 <code class="highlighter-rouge">net.ipv4.ip_forward</code> 並設定為 1
+        <ul>
+          <li>或透過指令變更 : <code class="highlighter-rouge">sudo sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>更新 iptable，將內部的 wlan0 封包轉給 eth0，詳細原理可參考 : <code class="highlighter-rouge">http://web.mit.edu/rhel-doc/4/RH-DOCS/rhel-sg-zh_tw-4/s1-firewall-ipt-fwd.html</code>
+    <ol>
+      <li><code class="highlighter-rouge">sudo iptables -F</code></li>
+      <li><code class="highlighter-rouge">sudo iptables -F -t nat</code></li>
+      <li><code class="highlighter-rouge">sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</code></li>
+      <li><code class="highlighter-rouge">sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT</code></li>
+      <li><code class="highlighter-rouge">sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT</code></li>
+    </ol>
+  </li>
+  <li>儲存設定，讓每次開機都自動設定
+    <ol>
+      <li><code class="highlighter-rouge">vim /etc/rc.local</code></li>
+      <li>在 <code class="highlighter-rouge">exit 0</code> 之前，加入<code class="highlighter-rouge">sudo iptables-save &gt; /etc/network/iptables.ipv4.nat</code></li>
+    </ol>
+  </li>
+  <li>查看 iptable
+    <ul>
+      <li><code class="highlighter-rouge">sudo iptables -t nat -S</code></li>
+      <li><code class="highlighter-rouge">sudo iptables -S</code></li>
+      <li><code class="highlighter-rouge">sudo iptables -L</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="架設-dhcp-server">架設 DHCP Server</h2>
+<ol>
+  <li><code class="highlighter-rouge">sudo apt-get -y install dnsmasq</code></li>
+  <li><code class="highlighter-rouge">sudo vim /etc/dnsmasq.conf</code>，在最下方編輯
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>interface=wlan0
+dhcp-range=10.0.7.101,10.0.7.200,255.255.255.0,12h
+</code></pre></div>    </div>
+  </li>
+  <li>重新啟動 dnsmasq : <code class="highlighter-rouge">sudo systemctl restart dnsmasq &amp;&amp; sudo systemctl enable dnsmasq</code></li>
+</ol>
+
+<h2 id="設定-hostapd">設定 hostapd</h2>
+
+<ol>
+  <li><code class="highlighter-rouge">sudo apt-get install hostapd -y</code></li>
+  <li><code class="highlighter-rouge">cp /usr/share/doc/hostapd/examples/hostapd.conf.gz /etc/hostapd/</code></li>
+  <li><code class="highlighter-rouge">gunzip /usr/share/doc/hostapd/examples/hostapd.conf.gz</code></li>
+  <li>編輯 hostapd.conf
+    <ol>
+      <li><code class="highlighter-rouge">interface=wlan0</code></li>
+      <li><code class="highlighter-rouge">driver=nl80211</code></li>
+      <li><code class="highlighter-rouge">ssid=RPI-AP</code></li>
+      <li><code class="highlighter-rouge">hw_mode=g</code></li>
+      <li><code class="highlighter-rouge">channel=11</code></li>
+      <li><code class="highlighter-rouge">macaddr_acl=0</code></li>
+      <li><code class="highlighter-rouge">auth_algs=1</code></li>
+      <li><code class="highlighter-rouge">ignore_broadcast_ssid=0</code></li>
+      <li><code class="highlighter-rouge">wpa=2</code></li>
+      <li><code class="highlighter-rouge">wpa_passphrase=12345678</code> : 設定無線網路密碼</li>
+      <li><code class="highlighter-rouge">wpa_key_mgmt=WPA-PSK</code></li>
+      <li><code class="highlighter-rouge">rsn_pairwise=CCMP</code></li>
+    </ol>
+  </li>
+  <li>測試 : <code class="highlighter-rouge">sudo hostapd -dd /etc/hostapd/hostapd.conf</code>
+    <ul>
+      <li>測試時，可以透過其他裝置，並連接上 wifi ap</li>
+      <li>如果連接得上，但沒有辦法看網頁，為 iptables 設定錯誤，請檢查你的 iptables : <code class="highlighter-rouge">iptables -L</code></li>
+    </ul>
+  </li>
+  <li>指定 hostapd daemon 的位置 : <code class="highlighter-rouge">sudo sed -i 's/#DAEMON_CONF=""/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/g' /etc/default/hostapd</code></li>
+</ol>
+
+<h2 id="重新開機讓所有的設定值都生效">重新開機讓所有的設定值都生效</h2>
+<ul>
+  <li><code class="highlighter-rouge">sudo systemctl enable hostapd &amp;&amp; sudo reboot</code></li>
+</ul>
+
+<h2 id="troubleshooting">troubleshooting</h2>
+
+<ol>
+  <li>找不到 ssid
+    <ul>
+      <li>請重新啟動 hostapd</li>
+    </ul>
+  </li>
+  <li>連上 ssid，卻無法連到外部網路
+    <ul>
+      <li>請檢查 iptables</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="檢查錯誤訊息">檢查錯誤訊息</h2>
+<ul>
+  <li><code class="highlighter-rouge">/var/log/syslog</code></li>
+</ul>
+
+<h2 id="如何關閉-wifi-ap">如何關閉 wifi ap</h2>
+<ul>
+  <li>停掉 hostapd 服務即可 : <code class="highlighter-rouge">sudo systemctl hostapd stop</code></li>
+</ul>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://jhaoheng.github.io/blogpost/raspberry/RPI3-wifiAp/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://jhaoheng.github.io/blogpost/raspberry/RPI3-wifiAp/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://jhaoheng.github.io/blogpost/raspberry/RPI3-wifiAp/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://jhaoheng.github.io/blogpost/docker/mariadb/Docker-MariaDB/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
+      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Max Hu. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://jhaoheng.github.io/blogpost/assets/js/scripts.min.js"></script>
+
+
+
+	        
+
+</body>
+</html>

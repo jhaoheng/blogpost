@@ -1,0 +1,251 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>【Log】Use Logrotate at ubuntu16.04 &#8211; Max 乎~</title>
+<meta name="description" content="修煉!">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Log】Use Logrotate at ubuntu16.04">
+<meta property="og:description" content="修煉!">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/ubuntu/log/logrotate/">
+<meta property="og:site_name" content="Max 乎~">
+
+
+
+
+
+<link rel="canonical" href="https://jhaoheng.github.io/blogpost/ubuntu/log/logrotate/">
+<link href="https://jhaoheng.github.io/blogpost/feed.xml" type="application/atom+xml" rel="alternate" title="Max 乎~ Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://jhaoheng.github.io/blogpost/assets/css/main.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="https://jhaoheng.github.io/blogpost/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="https://jhaoheng.github.io/blogpost/images/avatar2.jpg" alt="Max Hu photo" class="author-photo">
+					<h4>Max Hu</h4>
+					<p>developer</p>
+				</li>
+				<li><a href="https://jhaoheng.github.io/blogpost/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				<li>
+					<a href="mailto:jhaoheng@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/https://github.com/jhaoheng"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="https://jhaoheng.github.io/blogpost/posts/">All Posts</a></li>
+				<li><a href="https://jhaoheng.github.io/blogpost/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/ubuntu/log/logrotate/" rel="bookmark" title="【Log】Use Logrotate at ubuntu16.04">【Log】Use Logrotate at ubuntu16.04</a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2018-10-25T07:30:00+08:00">October 25, 2018</time></span></h2>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+Reading time ~1 minute
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h1 id="env--注意">env &amp; 注意</h1>
+<ul>
+  <li>ubuntu</li>
+  <li>必須確認有 cron 服務</li>
+  <li>doc : <code class="highlighter-rouge">https://linux.die.net/man/8/logrotate</code></li>
+  <li>必須確定已經有 log, 若無 log file, 系統會報錯 <code class="highlighter-rouge">error: stat of /root/xxxx.log failed: No such file or directory</code></li>
+</ul>
+
+<h1 id="說明">說明</h1>
+<ul>
+  <li><code class="highlighter-rouge">apt-get install -y logrotate</code></li>
+  <li>配置文件 : <code class="highlighter-rouge">/etc/logrotate.conf</code></li>
+  <li>設定檔為至 : <code class="highlighter-rouge">/etc/logrotate.d/</code>
+    <ul>
+      <li>若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 <code class="highlighter-rouge">/etc/logrotate.d/</code> 中, 建立相關的設定</li>
+    </ul>
+  </li>
+  <li>檢查設定 <code class="highlighter-rouge">sudo logrotate /etc/logrotate.conf --debug</code></li>
+  <li>logrotate 歷史紀錄 <code class="highlighter-rouge">cat /var/lib/logrotate/status</code></li>
+  <li>強迫 logrotate 立即執行 : <code class="highlighter-rouge">logrotate -f /etc/logrotate.conf</code>
+    <ul>
+      <li>透過 [logrotate 歷史紀錄] 可查看執行時間</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="主要設定">主要設定</h1>
+<ul>
+  <li>compress             –&gt; 壓縮日誌文件的所有非當前版本</li>
+  <li>daily,weekly,monthly –&gt; 按指定計劃輪換日誌文件</li>
+  <li>delaycompress        –&gt; 壓縮所有版本，除了當前和下一個最近的</li>
+  <li>errors “emailid”     –&gt; 給指定郵箱發送錯誤通知</li>
+  <li>missingok            –&gt; 如果日誌文件丟失，不要顯示錯誤</li>
+  <li>notifempty           –&gt; 如果日誌文件為空，則不輪換日誌文件</li>
+  <li>olddir “dir”         –&gt; 指定日誌文件的舊版本放在 「dir」 中</li>
+  <li>postrotate           –&gt; 引入一個在日誌被輪換後執行的腳本</li>
+  <li>prerotate            –&gt; 引入一個在日誌被輪換前執行的腳本</li>
+  <li>endscript            –&gt; 標記 prerotate 或 postrotate 腳本的結束</li>
+  <li>rotate ‘n’           –&gt; 在輪換方案中包含日誌的 n 個版本</li>
+  <li>sharedscripts        –&gt; 對於整個日誌組只運行一次腳本</li>
+  <li>size=’logsize’       –&gt; 在日誌大小大於 logsize（例如 100K，4M）時輪換</li>
+</ul>
+
+<h2 id="ex-">ex :</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/tmp/sample_output.log {
+	size 1k
+	create 700 root root
+	rotate 4
+	compress
+}
+</code></pre></div></div>
+
+<h2 id="ex--nginx">ex : nginx</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/log/nginx/*.log {
+    daily
+    missingok
+    rotate 52
+    compress
+    delaycompress
+    notifempty
+    create 640 nginx adm
+    sharedscripts
+    postrotate
+            if [ -f /var/run/nginx.pid ]; then
+                    kill -USR1 `cat /var/run/nginx.pid`
+            fi
+    endscript
+}
+</code></pre></div></div>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://jhaoheng.github.io/blogpost/ubuntu/log/logrotate/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://jhaoheng.github.io/blogpost/ubuntu/log/logrotate/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://jhaoheng.github.io/blogpost/ubuntu/log/logrotate/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://jhaoheng.github.io/blogpost/aws/redis/AWS-ElastiCache-Access/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
+      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Max Hu. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://jhaoheng.github.io/blogpost/assets/js/scripts.min.js"></script>
+
+
+
+	        
+
+</body>
+</html>

@@ -1,0 +1,292 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>【Phalcon】basic &#8211; Max 乎~</title>
+<meta name="description" content="修煉!">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Phalcon】basic">
+<meta property="og:description" content="修煉!">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/">
+<meta property="og:site_name" content="Max 乎~">
+
+
+
+
+
+<link rel="canonical" href="https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/">
+<link href="https://jhaoheng.github.io/blogpost/feed.xml" type="application/atom+xml" rel="alternate" title="Max 乎~ Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://jhaoheng.github.io/blogpost/assets/css/main.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="https://jhaoheng.github.io/blogpost/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="https://jhaoheng.github.io/blogpost/images/avatar2.jpg" alt="Max Hu photo" class="author-photo">
+					<h4>Max Hu</h4>
+					<p>developer</p>
+				</li>
+				<li><a href="https://jhaoheng.github.io/blogpost/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				<li>
+					<a href="mailto:jhaoheng@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/https://github.com/jhaoheng"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="https://jhaoheng.github.io/blogpost/posts/">All Posts</a></li>
+				<li><a href="https://jhaoheng.github.io/blogpost/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/" rel="bookmark" title="【Phalcon】basic">【Phalcon】basic</a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2016-07-07T09:35:00+08:00">July 07, 2016</time></span></h2>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+Reading time ~1 minute
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h1 id="ㄧinstall-phalcon">ㄧ、install phalcon</h1>
+
+<ol>
+  <li><a href="https://phalconphp.com/en/download">官方</a></li>
+  <li>github : https://github.com/phalcon/cphalcon</li>
+  <li>install from github
+    <ul>
+      <li><code class="highlighter-rouge">git clone</code></li>
+      <li><code class="highlighter-rouge">cd cphalcon/build</code></li>
+      <li><code class="highlighter-rouge">sudo ./install</code></li>
+    </ul>
+  </li>
+  <li>遇到問題，參考 troubleshoot</li>
+</ol>
+
+<h2 id="check">check</h2>
+
+<ol>
+  <li><code class="highlighter-rouge">phpinfo();</code>
+    <ul>
+      <li>找 phalcon extension，沒意外的話是 2.0.13</li>
+    </ul>
+  </li>
+  <li>安裝環境</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>環境
+- `php -m | grep -i phalcon`
+  - if output `phalcon` mean it is ok to use phalcon cmd
+- `apachectl -v`
+  - output : `apache/2.4.16`
+- `php -v`
+  - output : `php 5.6.23`
+- `mysql --version`
+  - output : `mysql ver 14.14`
+</code></pre></div></div>
+
+<h2 id="troubleshoot">troubleshoot</h2>
+
+<ol>
+  <li>若 gcc 編譯失敗，<code class="highlighter-rouge">free -g</code>，查看 memory or swap 是否有 1g 可供 compile
+    <ul>
+      <li>1g memory <code class="highlighter-rouge">https://github.com/phalcon/cphalcon/issues/10478</code></li>
+    </ul>
+  </li>
+  <li>因為目前僅支援 5.4/5.5/5.6 版本，故如果用 7.x 版本編譯時，會產生名稱錯誤</li>
+  <li>設定 <code class="highlighter-rouge">extension=phalcon.so</code>，出現 <code class="highlighter-rouge">PHP Warning:  Module 'phalcon' already loaded in Unknown on line 0</code>
+    <ul>
+      <li><a href="http://www.somacon.com/p520.php">info</a></li>
+      <li>在 php.ini 中，將 <code class="highlighter-rouge">extension=phalcon.so</code> 前面加 <code class="highlighter-rouge">;</code> -&gt; <code class="highlighter-rouge">;extension=phalcon.so</code></li>
+      <li>執行 <code class="highlighter-rouge">php -m | grep -i phalcon</code>，正常</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="二安裝-phalcon-develop-tool">二、安裝 Phalcon develop-tool</h1>
+
+<ul>
+  <li><a href="https://docs.phalconphp.com/zh/latest/reference/tools.html">介紹</a>
+    <ul>
+      <li>總之就是透過指令可以快速建立模組，連大小寫都處理好，另外還會結合資料庫建立 mode : getter / setter</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/phalcon/phalcon-devtools">install</a>
+    <ul>
+      <li>installation via Git</li>
+      <li><code class="highlighter-rouge">sudo ln -s ~/path/phalcon.php /usr/local/bin/phalcon</code> mac 要放在 <code class="highlighter-rouge">/usr/local/bin</code> 下</li>
+    </ul>
+  </li>
+  <li>執行 <code class="highlighter-rouge">phalcon</code></li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Phalcon</span> <span class="n">DevTools</span> <span class="p">(</span><span class="m">2.0.13</span><span class="p">)</span>
+
+<span class="n">Help</span><span class="p">:</span>
+  <span class="n">Lists</span> <span class="n">the</span> <span class="n">commands</span> <span class="n">available</span> <span class="k">in</span> <span class="n">Phalcon</span> <span class="n">devtools</span>
+
+<span class="n">Available</span> <span class="n">commands</span><span class="p">:</span>
+  <span class="n">commands</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="k">list</span><span class="p">,</span> <span class="n">enumerate</span><span class="p">)</span>
+  <span class="n">controller</span>       <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">controller</span><span class="p">)</span>
+  <span class="n">module</span>           <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">module</span><span class="p">)</span>
+  <span class="k">model</span>            <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="k">model</span><span class="p">)</span>
+  <span class="n">all</span><span class="p">-</span><span class="n">models</span>       <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">all</span><span class="p">-</span><span class="n">models</span><span class="p">)</span>
+  <span class="n">project</span>          <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">project</span><span class="p">)</span>
+  <span class="n">scaffold</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">scaffold</span><span class="p">)</span>
+  <span class="n">migration</span>        <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">migration</span><span class="p">)</span>
+  <span class="n">webtools</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">webtools</span><span class="p">)</span>
+</code></pre></div></div>
+<ul>
+  <li>查看語法，直接執行 <code class="highlighter-rouge">phalcon [command]</code> 即可
+    <ul>
+      <li><code class="highlighter-rouge">phalcon controller</code></li>
+      <li><code class="highlighter-rouge">phalcon webtools</code></li>
+    </ul>
+  </li>
+  <li>啟用 WebTools
+    <ul>
+      <li>在影片中，可以用 browser 的方式，進行設定，在網頁資料夾下，<code class="highlighter-rouge">phalcon webtools --action=enable</code>
+        <ul>
+          <li>有新舊版本的問題，查看 github readme</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>快速建立一個基本的 project : <code class="highlighter-rouge">phalcon create-project store</code>
+    <ul>
+      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code></li>
+    </ul>
+  </li>
+</ul>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://jhaoheng.github.io/blogpost/iosapns-with-http-2/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
+      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Max Hu. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://jhaoheng.github.io/blogpost/assets/js/scripts.min.js"></script>
+
+
+
+	        
+
+</body>
+</html>

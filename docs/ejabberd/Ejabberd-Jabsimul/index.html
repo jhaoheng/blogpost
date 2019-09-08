@@ -1,0 +1,295 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>【ejabberd stress】use Jabsimul &#8211; Max 乎~</title>
+<meta name="description" content="修煉!">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【ejabberd stress】use Jabsimul">
+<meta property="og:description" content="修煉!">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/ejabberd/Ejabberd-Jabsimul/">
+<meta property="og:site_name" content="Max 乎~">
+
+
+
+
+
+<link rel="canonical" href="https://jhaoheng.github.io/blogpost/ejabberd/Ejabberd-Jabsimul/">
+<link href="https://jhaoheng.github.io/blogpost/feed.xml" type="application/atom+xml" rel="alternate" title="Max 乎~ Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://jhaoheng.github.io/blogpost/assets/css/main.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="https://jhaoheng.github.io/blogpost/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="https://jhaoheng.github.io/blogpost/images/avatar2.jpg" alt="Max Hu photo" class="author-photo">
+					<h4>Max Hu</h4>
+					<p>developer</p>
+				</li>
+				<li><a href="https://jhaoheng.github.io/blogpost/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				<li>
+					<a href="mailto:jhaoheng@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/https://github.com/jhaoheng"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="https://jhaoheng.github.io/blogpost/posts/">All Posts</a></li>
+				<li><a href="https://jhaoheng.github.io/blogpost/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/ejabberd/Ejabberd-Jabsimul/" rel="bookmark" title="【ejabberd stress】use Jabsimul">【ejabberd stress】use Jabsimul</a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2017-08-06T06:26:00+08:00">August 06, 2017</time></span></h2>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+Reading time ~1 minute
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h1 id="ejabberd-stressuse-jabsimul">【ejabberd stress】use Jabsimul</h1>
+
+<h1 id="環境">環境</h1>
+
+<ul>
+  <li>aws instance t2.micro</li>
+  <li>ubuntu 16.04</li>
+</ul>
+
+<h1 id="安裝">安裝</h1>
+
+<ol>
+  <li>安裝 ejabberd 本體
+    <ul>
+      <li><code class="highlighter-rouge">apt-get update</code></li>
+      <li>到安裝頁面，選擇 deb，<code class="highlighter-rouge">wget {download source}</code></li>
+      <li><code class="highlighter-rouge">dpkg -i {download file}</code></li>
+      <li><code class="highlighter-rouge">su ejabberd &amp;&amp; cd ~</code></li>
+      <li>檢查你的 host 請更改為 localhost : <code class="highlighter-rouge">vi ./conf/ejabberd.yml</code></li>
+      <li>先記錄 {host}</li>
+      <li>啟動 ejabberd, <code class="highlighter-rouge">./bin/ejabberdctl start</code></li>
+      <li>建立管理者 : <code class="highlighter-rouge">./bin/ejabberdctl register admin {host} admin</code></li>
+    </ul>
+  </li>
+  <li>安裝壓力測試編譯時需要的套件 : <code class="highlighter-rouge">apt-get install cvs make gcc libexpat1-dev libncurses5-dev libssl-dev bison byacc flex -y</code></li>
+  <li>安裝 Jabber Test Suite，官方 : http://jabbertest.sourceforge.net/
+    <ol>
+      <li>確定切換回 root, cd /home/ubuntu</li>
+      <li><code class="highlighter-rouge">cvs -z3 -d:pserver:anonymous@jabbertest.cvs.sourceforge.net:/cvsroot/jabbertest co testsuite</code></li>
+      <li><code class="highlighter-rouge">cd testsuite/ &amp;&amp; cp Makefile.linux Makefile &amp;&amp; make userreg</code></li>
+      <li>查詢 <code class="highlighter-rouge">./userreg -?</code> 的使用方法</li>
+      <li><code class="highlighter-rouge">./userreg -h 127.0.0.1 -u 3000 -n 1 -o ./output</code></li>
+      <li><code class="highlighter-rouge">cat ./output</code> 如果成功會顯示類似，無意外會有 3000 筆資訊</li>
+      <li>如果沒有，請將 <code class="highlighter-rouge">ejabberd stop</code> then <code class="highlighter-rouge">start</code></li>
+    </ol>
+  </li>
+  <li>安裝 Jabsimul
+    <ol>
+      <li>確定切換回 root, cd /home/ubuntu</li>
+      <li><code class="highlighter-rouge">wget http://www.ejabberd.im/files/other/jabsimul.tar.gz</code></li>
+      <li><code class="highlighter-rouge">tar xzf jabsimul.tar.gz</code></li>
+      <li><code class="highlighter-rouge">cp jab_simul.xml.example jab_simul.xml</code></li>
+      <li><code class="highlighter-rouge">./configure &amp;&amp; make</code></li>
+      <li>調整設定值，開啟 <code class="highlighter-rouge">jab_simul.xml</code> : 參考 <code class="highlighter-rouge">http://tkabber.jabber.ru/files/badlop/jab_simul.xml.chat60</code></li>
+      <li>注意 <code class="highlighter-rouge">jab_simul.xml</code> 中，server 的位置，必須是可解析的 DNS，不能用 ip</li>
+      <li>開始執行壓力測試 <code class="highlighter-rouge">./jab_simul</code></li>
+      <li>請壓到你預設的數據人數，再去查看現在的資源狀態</li>
+    </ol>
+  </li>
+  <li>如何檢查你的壓力測試 user login 正常?
+    <ol>
+      <li>檢查你的 ejabberd.log</li>
+      <li>檢查 /tmp 底下的 xml testuser 中的訊息</li>
+    </ol>
+  </li>
+  <li><code class="highlighter-rouge">jab_simul</code> 執行後的錯誤訊息
+    <ul>
+      <li><code class="highlighter-rouge">Socket creation error ! (Too many open files)</code> : 請調整 ulimit 參考其他參數調整</li>
+      <li><code class="highlighter-rouge">Segmentation fault (core dumped)</code> : 伺服器超載</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="其他參數調整">其他參數調整</h1>
+<p>如果要模擬 2000 個用戶，在同一台機上上進行壓力測試，必須設定限制高於 4000 以上</p>
+
+<ul>
+  <li>Linux : ulimit -n 16000</li>
+</ul>
+
+<p>shaper 是設定查詢允許的流量速度…應該被受限在硬體的效能上…</p>
+
+<ul>
+  <li>shaper normal &amp; fast</li>
+</ul>
+
+<p>在 ejabberdctl.cfg 中，可設定 ERL_MAX_PORTS &amp; ERL_MAX_ETS_TABLES</p>
+
+<ul>
+  <li>ERL_MAX_PORTS : Maximum number of simultaneously open Erlang ports
+    <ul>
+      <li>ejabberd consumes two or three ports for every connection, either from a client or from another Jabber server. So take this into account when setting this limit.</li>
+    </ul>
+  </li>
+  <li>ERL_MAX_ETS_TABLES : Maximum number of Erlang processes
+    <ul>
+      <li>The number of concurrent ETS and Mnesia tables is limited. When the limit is reached, errors will appear in the logs: ** Too many db tables **. You can safely increase this limit when starting ejabberd. It impacts memory consumption but the difference will be quite small.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>什麼是 ETS =&gt; Erlang Term Storage
+什麼是 DETS =&gt; Disk Erlang Term Storage</p>
+
+<h1 id="查詢壓力測試數據">查詢壓力測試數據</h1>
+
+<ul>
+  <li>記憶體
+    <ol>
+      <li>測試前 : <code class="highlighter-rouge">free -k</code></li>
+      <li>測試後 : <code class="highlighter-rouge">free -k</code></li>
+    </ol>
+  </li>
+  <li>使用 top 指令</li>
+  <li>可參考 : http://fecbob.pixnet.net/blog/post/39256167-linux%E4%B8%AD%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%B5%B1%E8%B3%87%E6%BA%90%E4%BD%94%E7%94%A8%E6%83%85%E6%B3%81%E7%9A%84%E5%91%BD%E4%BB%A4</li>
+</ul>
+
+<h1 id="壓力測試數據參考">壓力測試數據參考</h1>
+<p>在 t2.micro 底下約 7500 人，同時在線</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND                                                                                                                      
+12022 root      20   0   84416  68836   4084 R 66.0  6.8   0:30.64 jab_simul 
+</code></pre></div></div>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://jhaoheng.github.io/blogpost/ejabberd/Ejabberd-Jabsimul/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://jhaoheng.github.io/blogpost/ejabberd/Ejabberd-Jabsimul/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://jhaoheng.github.io/blogpost/ejabberd/Ejabberd-Jabsimul/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://jhaoheng.github.io/blogpost/through-github-slack-subscription-release-rss/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
+      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Max Hu. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://jhaoheng.github.io/blogpost/assets/js/scripts.min.js"></script>
+
+
+
+	        
+
+</body>
+</html>

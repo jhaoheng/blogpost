@@ -1,0 +1,374 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>【iOS】ARC  &#8211; Max 乎~</title>
+<meta name="description" content="修煉!">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【iOS】ARC ">
+<meta property="og:description" content="修煉!">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/ios-arc-a/">
+<meta property="og:site_name" content="Max 乎~">
+
+
+
+
+
+<link rel="canonical" href="https://jhaoheng.github.io/blogpost/ios-arc-a/">
+<link href="https://jhaoheng.github.io/blogpost/feed.xml" type="application/atom+xml" rel="alternate" title="Max 乎~ Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://jhaoheng.github.io/blogpost/assets/css/main.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="https://jhaoheng.github.io/blogpost/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="https://jhaoheng.github.io/blogpost/images/avatar2.jpg" alt="Max Hu photo" class="author-photo">
+					<h4>Max Hu</h4>
+					<p>developer</p>
+				</li>
+				<li><a href="https://jhaoheng.github.io/blogpost/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				<li>
+					<a href="mailto:jhaoheng@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/https://github.com/jhaoheng"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="https://jhaoheng.github.io/blogpost/posts/">All Posts</a></li>
+				<li><a href="https://jhaoheng.github.io/blogpost/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/ios-arc-a/" rel="bookmark" title="【iOS】ARC ">【iOS】ARC </a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2016-05-18T15:36:00+08:00">May 18, 2016</time></span></h2>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+Reading time ~3 minutes
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h1 id="transitioning-to-arc-release-notes">Transitioning to ARC Release Notes</h1>
+
+<p><a href="https://developer.apple.com/library/ios/releasenotes/ObjectiveC/RN-TransitioningToARC/Introduction/Introduction.html#//apple_ref/doc/uid/TP40011226-CH1-SW4">Transitioning to ARC Release Notes</a></p>
+
+<blockquote>
+  <p>為啥會寫這篇，原因在於，寫其他文章，莫名其妙整理這些東西，就順便註記了一下大綱</p>
+</blockquote>
+
+<ul>
+  <li>ARC is supported in Xcode 4.2 for OS X v10.6 and v10.7 (64-bit applications) and for iOS 4 and iOS 5. Weak references are not supported in OS X v10.6 and iOS 4.</li>
+  <li>
+    <p>Under ARC, strong is the default for object types.</p>
+
+    <p><!--more--></p>
+  </li>
+</ul>
+
+<h2 id="arc-enforces-new-rules">ARC Enforces New Rules</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 不能明確的調用 `dealloc`，與直接使用 `retain`, `retainCount` 或者 `autorelease`。
+	- 但一樣可以使用 `dealloc` 來管理資源，在 ARC 中客製化使用 `dealloc`，不需要使用 `[super delloc]`
+	- 可以使用 `CFRetain`, `CFRelease` 與其他 **Core Foundation-style objects** 相關的功能 (參考 Managing Toll-Free Bridging)
+- 不能使用 `NSAllocateObject`, `NSDeallocateObject`
+	- 可使用 `alloc`，runtime 會自動幫你處理需要 deallocating 的物件
+- You cannot use object pointers in C structures.
+	- Rather than using a struct, you can create an Objective-C class to manage the data instead.
+- 必須使用特殊的類別轉換來告訴編輯器物件的生命週期，在 Objective-C 物件與 Core Foundatin 類型中傳遞參數。
+- 不能使用 `NSAutoreleasePool` 物件
+- You cannot use memory zones.
+	- 不能使用 NSZone，現在在 Objective-C 運行下，會自動被忽略
+</code></pre></div></div>
+
+<h3 id="arc-強化在命名方法上的限制">ARC 強化在命名方法上的限制</h3>
+<p>不能給予存取器開頭為 new 的物件名稱，若要給予一個開頭為 new 的物件名稱，則必須用 getter 指定不同的</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Won't work:
+@property NSString *newTitle; //Xcode 會給予錯誤
+ 
+// Works:
+@property (getter=theNewTitle) NSString *newTitle;
+</code></pre></div></div>
+
+<h2 id="arc-introduces-new-lifetime-qualifiers">ARC Introduces New Lifetime Qualifiers</h2>
+
+<h3 id="property-attributes">Property Attributes</h3>
+
+<ul>
+  <li>weak / strong : 有別於 MRC，是 ARC 下的新的宣告屬性
+    <ul>
+      <li>Under ARC, strong is the default for object types.</li>
+      <li>strong = retain</li>
+      <li>weak 相似於 assign，不同之處在於當 instance 被釋放後，property value 會被設定為 nil (assign remaining as a dangling pointer.)</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="variable-qualifiers">Variable Qualifiers</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>__strong : 預設
+__weak : 當未被使用後，會被設定為 nil
+__unsafe_unretained : 當沒被使用，且沒被設為 nil，若引用對象被釋放後，the pointer is left dangling.
+__autoreleasing : 用來代表當參數通過 id * 傳遞後，在 return 會被 autoreleased
+</code></pre></div></div>
+
+<p>使用方法 <code class="highlighter-rouge">ClassName * qualifier variableName;</code></p>
+
+<h4 id="使用-__weak-測試">使用 __weak 測試</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *ref = @"test";
+NSString * __weak string = ref;
+NSLog(@"string: %@", string);  // test
+    
+NSString * __weak string2 = [[NSString alloc] initWithFormat:@"First Name: 123"]; //no other strong reference
+NSLog(@"string: %@", string2); // null
+</code></pre></div></div>
+
+<h4 id="use-lifetime-qualifiers-to-avoid-strong-reference-cycles">Use Lifetime Qualifiers to Avoid Strong Reference Cycles</h4>
+<p>參考官方範例
+主要在講 manual reference counting 與 使用 __block qualifier 的調用</p>
+
+<blockquote>
+  <ul>
+    <li>In manual reference counting mode, __block id x; has the effect of not retaining x.</li>
+    <li>In ARC mode, __block id x; defaults to retaining x (just like all other values).</li>
+    <li>To get the manual reference counting mode behavior under ARC, you could use __unsafe_unretained __block id x; 但建議用 __weak 取代(if you don’t need to support iOS 4 or OS X v10.6)</li>
+  </ul>
+</blockquote>
+
+<ul>
+  <li>範例一：沒使用 __block</li>
+  <li>範例二：使用 __block</li>
+  <li>範例三：使用 __weak 替代 __block</li>
+  <li>範例四：特殊使用 __weak 方法</li>
+</ul>
+
+<h2 id="arc-uses-a-new-statement-to-manage-autorelease-pools">ARC Uses a New Statement to Manage Autorelease Pools</h2>
+
+<p>在 ARC 下，不能使用 <code class="highlighter-rouge">NSAutoreleasePool </code>，但可以用 <code class="highlighter-rouge">@autoreleasepool blocks</code> 替代</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@autoreleasepool {
+     // Code, such as a loop that creates a large number of temporary objects.
+}
+</code></pre></div></div>
+
+<h2 id="stack-variables-are-initialized-with-nil">Stack Variables Are Initialized with nil</h2>
+
+<p>ARC 下，strong, weak, autoreleasing 的堆疊變數初始化都為 nil</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *name;
+NSLog(@"name: %@", name);// nil
+</code></pre></div></div>
+
+<h2 id="use-compiler-flags-to-enable-and-disable-arc">Use Compiler Flags to Enable and Disable ARC</h2>
+
+<p>ARC 下，對某個檔案</p>
+
+<ul>
+  <li>使用 <code class="highlighter-rouge">-fobjc-arc</code> 的旗標，開啟 ARC</li>
+  <li>使用 <code class="highlighter-rouge">-fno-objc-arc</code>，來取消 ARC</li>
+</ul>
+
+<blockquote>
+  <p>ARC is supported in Xcode 4.2 and later OS X v10.6 and later (64-bit applications) and for iOS 4 and later. Weak references are not supported in OS X v10.6 and iOS 4. There is no ARC support in Xcode 4.1 and earlier.</p>
+</blockquote>
+
+<h2 id="managing-toll-free-bridging">Managing Toll-Free Bridging</h2>
+<p>(管理 <a href="http://maxhu.logdown.com/posts/734140-objc-c-toll-free-bridging-non-destructive-bridge">無損橋接</a>)</p>
+
+<p>在多數的 Cocoa application 中，需要使用 Core Foundation-style 的物件，無論是直接 Core Foundation framework (如 CFArrayRef or CFMutableDictionaryRef) 或者 採用 Core Foundation 的 frameworks 如 Core Graphics (CGColorSpaceRed 與 CGGradientRef)</p>
+
+<p>因編輯器不會自動化的管理 Core Foundation 物件的生命週期，所以必須呼叫使用 CFRetain 與 CFRelease 來處理使用 Core Foundation 記憶體的規則
+<a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Conceptual/CFMemoryMgmt/CFMemoryMgmt.html#//apple_ref/doc/uid/10000127i">see Memory Management Programming Guide for Core Foundation</a></p>
+
+<p>如果轉換 Objective-C 與 Core Foundation，需要告知編輯器相關的定義 (defined in objc/runtime.h) 或者 Core Foundation-style 巨集 (defined in NSObject.h):</p>
+
+<ul>
+  <li>__bridge transfers a pointer between Objective-C and Core Foundation with no transfer of ownership.</li>
+  <li>__bridge_retained or CFBridgingRetain casts an Objective-C pointer to a Core Foundation pointer and also transfers ownership to you. You are responsible for calling CFRelease or a related function to relinquish ownership of the object.</li>
+  <li>__bridge_transfer or CFBridgingRelease moves a non-Objective-C pointer to Objective-C and also transfers ownership to ARC. ARC is responsible for relinquishing ownership of the object.</li>
+</ul>
+
+<p>EX:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)logFirstNameOfPerson:(ABRecordRef)person {
+ 
+    NSString *name = (NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
+    NSLog(@"Person's first name: %@", name);
+    [name release];
+}
+</code></pre></div></div>
+<p>轉換為</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)logFirstNameOfPerson:(ABRecordRef)person {
+ 
+    NSString *name = (NSString *)CFBridgingRelease(ABRecordCopyValue(person, kABPersonFirstNameProperty));
+    NSLog(@"Person's first name: %@", name);
+}
+</code></pre></div></div>
+
+<h2 id="the-compiler-handles-cf-objects-returned-from-cocoa-methods">The Compiler Handles CF Objects Returned From Cocoa Methods</h2>
+<p>轉換成適當的類別，不能直接使用 UIColor 放入 NSMutableArray 中，要轉換成 CGColor。</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSMutableArray *colors = [NSMutableArray arrayWithObject:(id)[[UIColor darkGrayColor] CGColor]];
+[colors addObject:(id)[[UIColor lightGrayColor] CGColor]];
+</code></pre></div></div>
+
+<h2 id="cast-function-parameters-using-ownership-keywords">Cast Function Parameters Using Ownership Keywords</h2>
+
+<p>接下來的範例中，陣列 array 透過 CGGradientCreateWithColors 進行轉換</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSArray *colors = &lt;#An array of colors#&gt;;
+CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)colors, locations);
+</code></pre></div></div>
+
+<p>完整的範例如下</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)drawRect:(CGRect)rect {
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+    CGFloat locations[2] = {0.0, 1.0};
+    NSMutableArray *colors = [NSMutableArray arrayWithObject:(id)[[UIColor darkGrayColor] CGColor]];
+    [colors addObject:(id)[[UIColor lightGrayColor] CGColor]];
+    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)colors, locations);
+    CGColorSpaceRelease(colorSpace);  // Release owned Core Foundation object.
+    CGPoint startPoint = CGPointMake(0.0, 0.0);
+    CGPoint endPoint = CGPointMake(CGRectGetMaxX(self.bounds), CGRectGetMaxY(self.bounds));
+    CGContextDrawLinearGradient(ctx, gradient, startPoint, endPoint,
+                                kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);
+    CGGradientRelease(gradient);  // Release owned Core Foundation object.
+}
+</code></pre></div></div>
+
+<h1 id="common-issues-while-converting-a-project">Common Issues While Converting a Project</h1>
+
+<h1 id="frequently-asked-questions">Frequently Asked Questions</h1>
+
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://jhaoheng.github.io/blogpost/ios-arc-a/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://jhaoheng.github.io/blogpost/ios-arc-a/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://jhaoheng.github.io/blogpost/ios-arc-a/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://jhaoheng.github.io/blogpost/sslsssls-with-synology-web/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
+      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Max Hu. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://jhaoheng.github.io/blogpost/assets/js/scripts.min.js"></script>
+
+
+
+	        
+
+</body>
+</html>

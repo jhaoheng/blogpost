@@ -1,0 +1,331 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>【Golang】Go module &#8211; Max 乎~</title>
+<meta name="description" content="修煉!">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Golang】Go module">
+<meta property="og:description" content="修煉!">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/golang/gomod/">
+<meta property="og:site_name" content="Max 乎~">
+
+
+
+
+
+<link rel="canonical" href="https://jhaoheng.github.io/blogpost/golang/gomod/">
+<link href="https://jhaoheng.github.io/blogpost/feed.xml" type="application/atom+xml" rel="alternate" title="Max 乎~ Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://jhaoheng.github.io/blogpost/assets/css/main.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="https://jhaoheng.github.io/blogpost/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="https://jhaoheng.github.io/blogpost/images/avatar2.jpg" alt="Max Hu photo" class="author-photo">
+					<h4>Max Hu</h4>
+					<p>developer</p>
+				</li>
+				<li><a href="https://jhaoheng.github.io/blogpost/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				<li>
+					<a href="mailto:jhaoheng@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/https://github.com/jhaoheng"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="https://jhaoheng.github.io/blogpost/posts/">All Posts</a></li>
+				<li><a href="https://jhaoheng.github.io/blogpost/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/golang/gomod/" rel="bookmark" title="【Golang】Go module">【Golang】Go module</a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2019-08-31T20:14:00+08:00">August 31, 2019</time></span></h2>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+Reading time ~1 minute
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h1 id="環境">環境</h1>
+<ul>
+  <li>go version go1.12.9 darwin/amd64</li>
+  <li>官方教學 : https://github.com/golang/go/wiki/Modules#quick-start</li>
+</ul>
+
+<!--more-->
+
+<h1 id="啟用方式">啟用方式</h1>
+
+<ul>
+  <li>支援 GO 1.11 以後版本
+    <ul>
+      <li>確認版本 <code class="highlighter-rouge">go version</code>，檢查環境變數 : <code class="highlighter-rouge">go env</code></li>
+    </ul>
+  </li>
+  <li>調用方式有兩種
+    <ul>
+      <li>在 GOPATH 外，確定 GO111MODULE 沒有設定或者設定為 auto，並在專案中建立 go.mod</li>
+      <li>在 GOPAHT 中，設定 <code class="highlighter-rouge">export GO111MODULE=on</code>，就可直接在 GOPATH 中使用</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="使用">使用</h1>
+
+<blockquote>
+  <p>可參考快速使用 https://github.com/golang/go/wiki/Modules#quick-start</p>
+</blockquote>
+
+<h2 id="1-建立-repo">1. 建立 repo</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ mkdir -p /tmp/scratchpad/repo
+$ cd /tmp/scratchpad/repo
+$ git init -q
+$ git remote add origin https://github.com/my/repo
+</code></pre></div></div>
+
+<h2 id="2-初始化-go-module">2. 初始化 go module</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ go mod init github.com/my/repo
+</code></pre></div></div>
+
+<ul>
+  <li>{github.com/my/repo} : 只是一個對應的名稱</li>
+</ul>
+
+<h2 id="3-設定-maingo">3. 設定 main.go</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">$</span> <span class="n">cat</span> <span class="p">&lt;&lt;</span><span class="n">EOF</span> <span class="p">&gt;</span> <span class="n">hello</span><span class="p">.</span><span class="n">go</span>
+<span class="k">package</span> <span class="n">main</span>
+
+<span class="n">import</span> <span class="p">(</span>
+    <span class="s2">"fmt"</span>
+    <span class="s2">"rsc.io/quote"</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="nf">quote</span><span class="p">.</span><span class="n">Hello</span><span class="p">())</span>
+<span class="p">}</span>
+<span class="n">EOF</span>
+</code></pre></div></div>
+
+<h2 id="4-建立-hello-執行檔">4. 建立 hello 執行檔</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ go build -o hello
+$ ./hello
+</code></pre></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">go build|test|install</code> : 都會下載 pkg 到 <code class="highlighter-rouge">$GOPATH/pkg/mod</code> 目錄下
+    <ul>
+      <li>使用 <code class="highlighter-rouge">go mod download</code></li>
+    </ul>
+  </li>
+  <li>因為並沒有明確設定 go.mod 中 <code class="highlighter-rouge">rsc.io/quote</code> 的版本，會自動下載最新版本，可以去 go.mod 中檢查變動</li>
+  <li>可以注意到並沒有用 <code class="highlighter-rouge">go get</code> 的指令</li>
+  <li>當想要變更版本，可以使用 <code class="highlighter-rouge">go get foo@v1.2.3</code>, <code class="highlighter-rouge">go get foo@master</code>, <code class="highlighter-rouge">go get foo@e3702bed2</code>, 或者直接編輯 <code class="highlighter-rouge">go.mod</code> 然後執行下載.</li>
+</ul>
+
+<h1 id="一個標準的-gomod">一個標準的 go.mod</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module maxtest
+require (
+	github.com/joho/godotenv v1.3.0
+	rsc.io/quote v1.5.2
+)
+go 1.12	
+</code></pre></div></div>
+
+<ul>
+  <li>下載的 go pkg 都會放在 <code class="highlighter-rouge">GOPATH/pkg/mod/...</code> 路徑中</li>
+  <li>gomod 不會在 <code class="highlighter-rouge">$GOPATH/src</code> 目錄下保存 pkg 包的源碼，而是包源碼和鏈接庫保存在 <code class="highlighter-rouge">$GOPATH/pkg/mod</code> 目錄下。</li>
+</ul>
+
+<h1 id="一些會用到的相關指令">一些會用到的相關指令</h1>
+<blockquote>
+  <p>https://github.com/golang/go/wiki/Modules#daily-workflow</p>
+</blockquote>
+
+<ul>
+  <li><code class="highlighter-rouge">go list -m all</code>
+    <ul>
+      <li>查看所有目前 build 後有使用的相依版本(direct and indirect 都會列出)</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">go list -u -m all</code>
+    <ul>
+      <li>對所有的 direct 與 indirect 相依，查看有效的最小版本與補丁升級。(details)</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">go list -u -m -json all</code>
+    <ul>
+      <li>用 json 格式顯示詳細資料</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">go get -u</code> or <code class="highlighter-rouge">go get -u=patch</code>
+    <ul>
+      <li>更新所有相依到最新的版本號或者補丁升級(pre-releases 會被忽略)</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">go build ./...</code> or <code class="highlighter-rouge">go test ./...</code>
+    <ul>
+      <li>在根目錄執行 build 與 test 會下載 module</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">go mod tidy</code>
+    <ul>
+      <li>從 go.mod 中，新增或移除沒用的 modules</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">go mod vendor</code>
+    <ul>
+      <li>若你有在使用 vendor, 可使用此指令, 將 modules 複製到 vendor 目錄下</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="其他">其他</h1>
+<ul>
+  <li>go list 只是把 cache 更新, 要用 go mod download 才會下載</li>
+  <li><code class="highlighter-rouge">go mod edit -fmt</code> : 重新格式化 go.mod 的格式, ex : 如果版本不是 3 位數，會補齊</li>
+  <li>清除下載的 pkg &amp; cache : <code class="highlighter-rouge">go clean -i -x -modcache</code></li>
+</ul>
+
+<h2 id="gomod-與-gosum">go.mod 與 go.sum</h2>
+
+<ul>
+  <li>確保 go.sum 與 go.mod 一起遞交到 git 中</li>
+  <li>For validation purposes, go.sum contains the expected cryptographic checksums of the content of specific module versions.</li>
+  <li>go.sum 是為了驗證目的，go.sum 包含所有指定版本的 cryptographic checksums</li>
+  <li>此外，go.sum 紀錄的 checksums 包含所有 direct 與 indriect 的相依庫，曾經建立過的。因此 go.sum 算是一種歷史紀錄。</li>
+</ul>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://jhaoheng.github.io/blogpost/golang/gomod/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://jhaoheng.github.io/blogpost/golang/gomod/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://jhaoheng.github.io/blogpost/golang/gomod/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://jhaoheng.github.io/blogpost/ubuntu/log/logrotate/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
+      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Max Hu. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://jhaoheng.github.io/blogpost/assets/js/scripts.min.js"></script>
+
+
+
+	        
+
+</body>
+</html>

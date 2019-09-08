@@ -1,0 +1,280 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>【Raspberry】bonjour broadcast &#8211; Max 乎~</title>
+<meta name="description" content="修煉!">
+<meta name="keywords" content="">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Raspberry】bonjour broadcast">
+<meta property="og:description" content="修煉!">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/raspberry/bonjour/raspberry-bonjour/">
+<meta property="og:site_name" content="Max 乎~">
+
+
+
+
+
+<link rel="canonical" href="https://jhaoheng.github.io/blogpost/raspberry/bonjour/raspberry-bonjour/">
+<link href="https://jhaoheng.github.io/blogpost/feed.xml" type="application/atom+xml" rel="alternate" title="Max 乎~ Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://jhaoheng.github.io/blogpost/assets/css/main.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="https://jhaoheng.github.io/blogpost/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="https://jhaoheng.github.io/blogpost/images/avatar2.jpg" alt="Max Hu photo" class="author-photo">
+					<h4>Max Hu</h4>
+					<p>developer</p>
+				</li>
+				<li><a href="https://jhaoheng.github.io/blogpost/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				<li>
+					<a href="mailto:jhaoheng@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/https://github.com/jhaoheng"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="https://jhaoheng.github.io/blogpost/posts/">All Posts</a></li>
+				<li><a href="https://jhaoheng.github.io/blogpost/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/raspberry/bonjour/raspberry-bonjour/" rel="bookmark" title="【Raspberry】bonjour broadcast">【Raspberry】bonjour broadcast</a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2018-02-03T04:30:00+08:00">February 03, 2018</time></span></h2>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+Reading time ~1 minute
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h1 id="synopsis">SYNOPSIS</h1>
+<blockquote>
+  <p>目的 : 透過 bonjour 的服務註冊，讓開發者能在同一個網路下，進行 bonjour 服務的搜尋，就不用找尋特定的 ip</p>
+</blockquote>
+
+<ol>
+  <li>安裝 avahi-daemon 與測試連線</li>
+  <li>註冊 bonjour 廣播的服務內容</li>
+  <li>在 osx 上，透過 command 進行 bonjour 的服務搜尋</li>
+  <li>更新 raspberry 上的 host</li>
+</ol>
+
+<!--more-->
+
+<h1 id="raspberry-install-bonjour">raspberry install bonjour</h1>
+<blockquote>
+  <p>以往安裝的 Raspberry Pi 都輸入了固定 IP 地址，在家使用沒有問題；但拿到別的地方用時，由於網域不同，造成無法連線。最好的方法是利用 DHCP 分派 IP 地址。但這又衍生另一問題，怎樣知道 Raspberry Pi 的地址呢？尤其是沒有接上顯示屏的情況。要解決以上問題，只要安裝 Bonjour 就可以。安裝方法如下：</p>
+</blockquote>
+
+<ol>
+  <li>sudo apt-get update</li>
+  <li>sudo apt-get upgrade</li>
+  <li>sudo apt-get install avahi-daemon</li>
+</ol>
+
+<p>成功安裝後，便能以「ssh pi@raspberrypi.local」來遙距登入 Raspberry Pi。</p>
+
+<ul>
+  <li>安裝完畢後，可透過 <code class="highlighter-rouge">avahi-daemon -h</code> 進行功能查詢，基本上已經正在跑，可以用 <code class="highlighter-rouge">avahi-daemon</code> 可以知道服務正在執行
+    <ul>
+      <li>可測試把服務刪除後，是否可透過 host 進行連線</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="使用-avahi-daemon-進行-bonjour-的服務註冊">使用 avahi-daemon 進行 bonjour 的服務註冊</h1>
+<blockquote>
+  <p>目的是讓 client 可以透過 bonjour 的方式進行搜尋</p>
+</blockquote>
+
+<ol>
+  <li>在 raspberry 中，<code class="highlighter-rouge">vi /etc/avahi/services/multiple.service</code>，編輯內容如下，意思就是建立 bonjour 的搜尋內容，若無定義，則找不到服務</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" standalone='no'?&gt;</span>
+<span class="cp">&lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;</span>
+<span class="nt">&lt;service-group&gt;</span>
+        <span class="nt">&lt;name</span> <span class="na">replace-wildcards=</span><span class="s">"yes"</span><span class="nt">&gt;</span>%h<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;service&gt;</span>
+                <span class="nt">&lt;type&gt;</span>_device-info._tcp<span class="nt">&lt;/type&gt;</span>
+                <span class="nt">&lt;port&gt;</span>0<span class="nt">&lt;/port&gt;</span>
+                <span class="nt">&lt;txt-record&gt;</span>model=RackMac<span class="nt">&lt;/txt-record&gt;</span>
+        <span class="nt">&lt;/service&gt;</span>
+        <span class="nt">&lt;service&gt;</span>
+                <span class="nt">&lt;type&gt;</span>_ssh._tcp<span class="nt">&lt;/type&gt;</span>
+                <span class="nt">&lt;port&gt;</span>22<span class="nt">&lt;/port&gt;</span>
+        <span class="nt">&lt;/service&gt;</span>
+        <span class="nt">&lt;service&gt;</span>
+                <span class="nt">&lt;type&gt;</span>_http._tcp<span class="nt">&lt;/type&gt;</span>
+                <span class="nt">&lt;port&gt;</span>80<span class="nt">&lt;/port&gt;</span>
+        <span class="nt">&lt;/service&gt;</span>
+<span class="nt">&lt;/service-group&gt;</span>
+</code></pre></div></div>
+
+<ul>
+  <li>完成後，請執行 <code class="highlighter-rouge">/etc/init.d/avahi-daemon restart</code> or <code class="highlighter-rouge">avahi-daemon -r</code></li>
+  <li>基本上只要安裝好 avahi 後，就可以直接透過該預設的 host : raspberry.local 連到該機器，以上的設定，只是為了讓 bonjour client 在 lan 下，搜尋是否搜尋到服務的一個廣播
+    <ul>
+      <li>應用實例 : 安裝後，透過 osx command : <code class="highlighter-rouge">dns-sd</code> 進行 bonjour 註冊服務的搜尋，若 raspberry 沒有設定 ‘multiple.service’ 則找不到該機器</li>
+      <li>問題，如果有兩個相同的 raspberry.local 那該如何判別？</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="在-osx-上透過-dns-sd-進行搜尋-bonjour-的服務">在 osx 上，透過 dns-sd 進行搜尋 bonjour 的服務</h1>
+<ul>
+  <li>執行 <code class="highlighter-rouge">dns-sd -B &lt;type&gt;</code>, type 可以是 <code class="highlighter-rouge">_http._tcp</code> or <code class="highlighter-rouge">_ssh._tcp</code>，回應結果如下
+    <pre><code class="language-return">Browsing for _http._tcp
+DATE: ---Sat 03 Feb 2018---
+ 4:12:37.611  ...STARTING...
+Timestamp     A/R    Flags  if Domain               Service Type         Instance Name
+ 4:12:37.612  Add        2   5 local.               _http._tcp.          raspberrypi
+</code></pre>
+  </li>
+  <li>找到裝置後，就可以透過  <code class="highlighter-rouge">raspberrypi.local</code> 進行連線 … ，至於服務端的定義，如 80 port, 22 port, 就看設定檔如何設定</li>
+</ul>
+
+<h1 id="更新-host">更新 host</h1>
+<blockquote>
+  <p>更新「raspberrypi.local」這個名稱</p>
+</blockquote>
+
+<ol>
+  <li>可以在 SSH 登入之後輸入「sudo nano /etc/hosts」。把 127.0.1.1 那行後方的「raspberrypi」改成想要的名字；</li>
+  <li>儲存後輸入「sudo nano /etc/hostname」，同樣把「raspberrypi」改成想要的名字並儲存。</li>
+  <li>最後輸入「sudo /etc/init.d/hostname.sh」把以上改動生效</li>
+  <li>再以「sudo reboot」重新啟動便能完成。</li>
+</ol>
+
+      <footer class="entry-meta">
+        <span class="entry-tags"></span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://jhaoheng.github.io/blogpost/raspberry/bonjour/raspberry-bonjour/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://jhaoheng.github.io/blogpost/raspberry/bonjour/raspberry-bonjour/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://jhaoheng.github.io/blogpost/raspberry/bonjour/raspberry-bonjour/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://jhaoheng.github.io/blogpost/raspberry/rtmp/raspi-gstreamer/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
+      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Max Hu. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://jhaoheng.github.io/blogpost/assets/js/scripts.min.js"></script>
+
+
+
+	        
+
+</body>
+</html>
