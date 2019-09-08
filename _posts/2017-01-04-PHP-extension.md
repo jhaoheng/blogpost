@@ -3,7 +3,7 @@ layout: post
 title: "【php 7.x】/private/tmp/pear/install/yaml/php_yaml.h:56:10: fatal error: 'ext/standard/php_smart_str.h' file not found"
 date: 2017-01-04 09:40
 comments: true
-categories: 
+categories: PHP
 ---
 
 ## install ymal.so

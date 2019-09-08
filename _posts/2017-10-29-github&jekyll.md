@@ -2,7 +2,7 @@
 layout: post
 title: "【Github&jekyll】設定"
 date: 2017-10-29 02:25
-categories:
+categories: Github Jekyll
 ---
 # First
 > 從 2009 年開始，從 blogger -> 其他的服務 -> HEXO -> blogger -> logdown，

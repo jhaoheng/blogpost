@@ -3,7 +3,7 @@ layout: post
 title: '【php】memcached'
 date: 2017-01-15 15:24
 comments: true
-categories: 
+categories: PHP
 ---
 # ENV
 - php 7.x 

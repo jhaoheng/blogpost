@@ -3,7 +3,7 @@ layout: post
 title: '【xcode】Configurations/ Preprocessor Macros/ scheme'
 date: 2016-08-31 06:26
 comments: true
-categories: 
+categories: Xcode
 ---
 # why
 

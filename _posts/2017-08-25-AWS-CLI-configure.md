@@ -3,7 +3,7 @@ layout: post
 title: "【AWS CLI】profile : configure"
 date: 2017-08-25 03:59
 comments: true
-categories: 
+categories: AWS
 ---
 # PURPOSE
 1. 了解 aws cli profile 運作方式

@@ -3,7 +3,7 @@ layout: post
 title: '【ejabberd stress】use Jabsimul'
 date: 2017-08-06 06:26
 comments: true
-categories: 
+categories: Ejabberd
 ---
 # 【ejabberd stress】use Jabsimul
 

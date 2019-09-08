@@ -3,7 +3,7 @@ layout: post
 title: "【IOS】AWS Cognito sample test"
 date: 2017-05-20 16:31
 comments: true
-categories: 
+categories: AWS Cognito iOS
 ---
 # aws cognito with ios
 

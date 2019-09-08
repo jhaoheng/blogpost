@@ -3,7 +3,7 @@ layout: post
 title: '【EJABBERD 17.07】dockerfile'
 date: 2017-08-17 10:16
 comments: true
-categories: 
+categories: Ejabberd
 ---
 ```
 FROM        ubuntu:16.04

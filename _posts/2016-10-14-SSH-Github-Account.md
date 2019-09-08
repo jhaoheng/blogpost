@@ -3,7 +3,7 @@ layout: post
 title: '【SSH】多個 github 帳號下的 git clone'
 date: 2016-10-14 07:30
 comments: true
-categories: 
+categories: SSH Github
 ---
 # readme
 

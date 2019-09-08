@@ -3,7 +3,7 @@ layout: post
 title: '【docker : mariadb】container 建立後，初始化 schema'
 date: 2017-09-05 06:07
 comments: true
-categories: 
+categories: Docker MariaDB
 ---
 ## first
 

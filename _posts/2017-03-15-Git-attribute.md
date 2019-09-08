@@ -3,7 +3,7 @@ layout: post
 title: '【Git】attribute, 合併後保留原本的設定檔'
 date: 2017-03-15 09:41
 comments: true
-categories: 
+categories: Git
 ---
 # git : [.gitattributes]
 

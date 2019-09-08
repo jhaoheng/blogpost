@@ -3,7 +3,7 @@ layout: post
 title: "【log tool】papertrial+logspout"
 date: 2017-08-18 07:51
 comments: true
-categories: 
+categories: Papertrial Logspout
 ---
 ## papertrail
 

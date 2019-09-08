@@ -3,7 +3,7 @@ layout: post
 title: '【SSH】設定簡易遠端登入'
 date: 2016-10-14 08:01
 comments: true
-categories: 
+categories: SSH
 ---
 # readme
 

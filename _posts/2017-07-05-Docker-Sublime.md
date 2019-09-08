@@ -3,7 +3,7 @@ layout: post
 title: '【Docker】use sublime to edit file in docker'
 date: 2017-07-05 03:56
 comments: true
-categories: 
+categories: Docker Sublime
 ---
 # sublime 編輯 docker 中的檔案
 

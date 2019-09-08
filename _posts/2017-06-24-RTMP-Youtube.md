@@ -3,7 +3,7 @@ layout: post
 title: '【RTMP】youtube to rtmp'
 date: 2017-06-24 12:55
 comments: true
-categories: 
+categories: RTMP
 ---
 # 目的
 將 youtube 的影片傳給 rtmp server 進行串流

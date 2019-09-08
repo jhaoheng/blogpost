@@ -2,7 +2,7 @@
 layout: post
 title: "【Docker】papertrail+remote_syslog"
 date: 2017-09-14 07:47
-categories: 
+categories: Docker Papertrail RemoteSysLog
 ---
 
 # 目標

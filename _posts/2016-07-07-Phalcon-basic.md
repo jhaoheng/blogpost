@@ -3,7 +3,7 @@ layout: post
 title: '【Phalcon】basic'
 date: 2016-07-07 09:35
 comments: true
-categories: 
+categories: Phalcon
 ---
 # ㄧ、install phalcon
 

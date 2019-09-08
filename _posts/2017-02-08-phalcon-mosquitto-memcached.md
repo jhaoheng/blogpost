@@ -3,7 +3,7 @@ layout: post
 title: '【AWS-centos7-php7.x】phalcon / memcached / mosquitto'
 date: 2017-02-08 09:55
 comments: true
-categories: 
+categories: Phalcon Memcached Mosquitto MQTT
 ---
 # 完整的 bash script
 **base on AWS centos7** : git@github.com:jhaoheng/centos-nginx-php7.x-extension.git

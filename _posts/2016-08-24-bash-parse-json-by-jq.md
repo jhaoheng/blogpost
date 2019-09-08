@@ -3,7 +3,7 @@ layout: post
 title: '【bash】parse json by jq'
 date: 2016-08-24 17:10
 comments: true
-categories: 
+categories: Bash
 ---
 
 # parse json by jq

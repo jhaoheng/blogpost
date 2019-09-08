@@ -3,7 +3,7 @@ layout: post
 title: '【Raspberry pi 3】安裝 facebook_atc'
 date: 2017-09-08 14:08
 comments: true
-categories: 
+categories: Raspberry FacebookATC
 ---
 ## install & setting
 

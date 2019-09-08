@@ -3,7 +3,7 @@ layout: post
 title: "【SRS-release2.0】docker with centos7.3"
 date: 2017-05-31 03:50
 comments: true
-categories: 
+categories: SRS Docker
 ---
 # 環境
 - srs 2.0

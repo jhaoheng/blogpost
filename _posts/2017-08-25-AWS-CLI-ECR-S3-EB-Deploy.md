@@ -3,7 +3,7 @@ layout: post
 title: '【AWS CLI】ECR & S3 & EB deploy'
 date: 2017-08-25 17:11
 comments: true
-categories: 
+categories: AWS
 ---
 ## 建立 aws docker image repo
 1. 建立 ECR 
