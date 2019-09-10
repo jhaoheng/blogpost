@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【AWS DynamoDB】localhost">
 <meta property="og:url" content="/2017/05/22/aws-dynamodblocalhost/">
-<meta property="og:site_name" content="MAX HU">
+<meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="dynamodb 環境 osx 10.11 如何連接本地端 dynamodb 下載 http://docs.aws.amazon.com/zh_cn/amazondynamodb/latest/developerguide/DynamoDBLocal.html 確認 java 版本 http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html 要 1.7 以上版本，不然無法啟動，會有錯誤訊息 在 localhost dynamodb 的路徑下執行 : java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb 測試 : aws dynamodb list-tables --endpoint-url http://localhost:8000 透過 GUI 進行連線 下載 RazorSQL 左邊視窗選擇 connect to a database add connection profile -&amp;gt; choose DynamoDB(Amazon) RazorSQL DynamoDB Driver set Profile Name AWS Access Key : 任意參數 AWS Secret Key : 任意參數 勾選 Local DynamoDB 設定 Max Rows per Query : 10 連線即可 先隨意建立一個 table 透過 terminal cli 查看 : aws dynamodb list-tables --endpoint-url http://localhost:8000 透過 code 進行本地端 dynamodb 連線 http://docs.aws.amazon.com/zh_cn/amazondynamodb/latest/developerguide/DynamoDBLocal.Endpoint.html#w1ab1b9b9c13c11 java .net php php : 記得要先安裝 aws sdk for php $sdk = new Aws\Sdk([ &apos;endpoint&apos; =&amp;gt; &apos;http://localhost:8000&apos;, // Use DynamoDB running locally &apos;region&apos; =&amp;gt; &apos;us-west-2&apos;, // US West (Oregon) Region &apos;version&apos; =&amp;gt; &apos;latest&apos; // Use the latest version of the AWS SDK for PHP ]); // Create a new DynamoDB client $dynamodb = $sdk-&amp;gt;createDynamoDb();">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【AWS DynamoDB】localhost | MAX HU</title>
+  <title>【AWS DynamoDB】localhost | MAX 呼~</title>
   
 
 
@@ -188,7 +188,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MAX HU</span>
+        <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,7 +287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX HU">
+      <meta itemprop="name" content="MAX 呼~">
     </span>
 
     

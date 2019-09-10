@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【php】memcached">
 <meta property="og:url" content="/php/2017/01/15/PHP-Memcached/">
-<meta property="og:site_name" content="MAX HU">
+<meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="ENV php 7.x mac osx 編譯好的 memcache.so github : https://github.com/majksner/php-memcached-mamp 下載 memcached.so brew install memcached brew install libmemcached php –ini vim php.ini extension=memcached.so php -i grep memcached 自己 compile git clone https://github.com/php-memcached-dev/php-memcached.git brew install memcached brew install libmemcached git checkout php7 phpize ./configure --with-memcached=/usr/local/Cellar/libmemcached/1.0.18_1/lib/libmemcached Notice : the libmemcached path is brew install path make sudo make install mv memcached.so to extension path, you could get path with php -i | grep extension_dir vim php.ini, add extension=memcached.so 如何使用 前提 安裝好 memcached 在電腦中 : brew install memcached 至於 libmemcached 則為編譯成 .so 時使用 執行 memcached 即可 man memcached - memcached -l 127.0.0.1 -P 11211 -m 128 -d : for deamon - memcached -l 127.0.0.1 -P 11211 -m 128 -vv : for debug 檢查 memcached 是否有執行 : ps aux | grep memcached 判斷 php 是否安裝好支援的 memcached.so php -i grep memcached php -m grep memcached test &amp;lt;? php $mem = new Memcached(); $mem-&amp;gt;addServer(&apos;localhost&apos;,11211); if( $mem-&amp;gt;add(&quot;key&quot;,&quot;value&quot;,3600)){ echo &apos;cached!&apos;; }else{ echo &apos;cached data：&apos;.$mem-&amp;gt;get(&quot;key&quot;); } ?&amp;gt; console admin git@github.com:jhaoheng/phpmemcacheadmin.git">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【php】memcached | MAX HU</title>
+  <title>【php】memcached | MAX 呼~</title>
   
 
 
@@ -188,7 +188,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MAX HU</span>
+        <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,7 +287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX HU">
+      <meta itemprop="name" content="MAX 呼~">
     </span>
 
     

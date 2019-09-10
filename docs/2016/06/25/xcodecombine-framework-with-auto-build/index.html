@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【xcode】combine 'framework' with auto build">
 <meta property="og:url" content="/2016/06/25/xcodecombine-framework-with-auto-build/">
-<meta property="og:site_name" content="MAX HU">
+<meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="Thanks Steven Shen share his knowledge Demo code Create a new project(select framework item) and workspace. Put the project to the workspace Workspace and project name should be the same. Create a New Target from your framework project Select Other -&amp;gt; Aggregate -&amp;gt; set Name is xxx-Universal Copy below code, and paste to New Target:Aggregate script Go to scheme manager and Click the [shared] with project name and xxx-Universal name Run the New Target:Aggregate, and folder include universal-framework will be open. ps : If xcode alert No find xxx.framework from Debug-iphoneos and Debug-iphonesimulator Go to check the name of workspace and project, the name should be the same. ###################### # Options ###################### REVEAL_ARCHIVE_IN_FINDER=true FRAMEWORK_NAME=&quot;${PROJECT_NAME}&quot; SIMULATOR_LIBRARY_PATH=&quot;${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${FRAMEWORK_NAME}.framework&quot; DEVICE_LIBRARY_PATH=&quot;${BUILD_DIR}/${CONFIGURATION}-iphoneos/${FRAMEWORK_NAME}.framework&quot; UNIVERSAL_LIBRARY_DIR=&quot;${BUILD_DIR}/${CONFIGURATION}-iphoneuniversal&quot; FRAMEWORK=&quot;${UNIVERSAL_LIBRARY_DIR}/${FRAMEWORK_NAME}.framework&quot; ###################### # Build Frameworks ###################### xcodebuild -workspace ${PROJECT_NAME}.xcworkspace -scheme ${PROJECT_NAME} -sdk iphonesimulator -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator 2&amp;gt;&amp;amp;1 xcodebuild -workspace ${PROJECT_NAME}.xcworkspace -scheme ${PROJECT_NAME} -sdk iphoneos -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos 2&amp;gt;&amp;amp;1 ###################### # Create directory for universal ###################### rm -rf &quot;${UNIVERSAL_LIBRARY_DIR}&quot; mkdir &quot;${UNIVERSAL_LIBRARY_DIR}&quot; mkdir &quot;${FRAMEWORK}&quot; ###################### # Copy files Framework ###################### cp -r &quot;${DEVICE_LIBRARY_PATH}/.&quot; &quot;${FRAMEWORK}&quot; ###################### # Make an universal binary ###################### lipo &quot;${SIMULATOR_LIBRARY_PATH}/${FRAMEWORK_NAME}&quot; &quot;${DEVICE_LIBRARY_PATH}/${FRAMEWORK_NAME}&quot; -create -output &quot;${FRAMEWORK}/${FRAMEWORK_NAME}&quot; | echo # For Swift framework, Swiftmodule needs to be copied in the universal framework if [ -d &quot;${SIMULATOR_LIBRARY_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/&quot; ]; then cp -f ${SIMULATOR_LIBRARY_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule//* &quot;${FRAMEWORK}/Modules/${FRAMEWORK_NAME}.swiftmodule/&quot; | echo fi if [ -d &quot;${DEVICE_LIBRARY_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/&quot; ];then cp -f ${DEVICE_LIBRARY_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule//* &quot;${FRAMEWORK}/Modules/${FRAMEWORK_NAME}.swiftmodule/&quot; | echo fi ###################### # On Release, copy the result to release directory ###################### OUTPUT_DIR=&quot;${PROJECT_DIR}/Output/${FRAMEWORK_NAME}-${CONFIGURATION}-iphoneuniversal/&quot; rm -rf &quot;$OUTPUT_DIR&quot; mkdir -p &quot;$OUTPUT_DIR&quot; cp -r &quot;${FRAMEWORK}&quot; &quot;$OUTPUT_DIR&quot; if [ ${REVEAL_ARCHIVE_IN_FINDER} = true ]; then open &quot;${OUTPUT_DIR}/&quot; fi">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【xcode】combine 'framework' with auto build | MAX HU</title>
+  <title>【xcode】combine 'framework' with auto build | MAX 呼~</title>
   
 
 
@@ -188,7 +188,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MAX HU</span>
+        <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,7 +287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX HU">
+      <meta itemprop="name" content="MAX 呼~">
     </span>
 
     

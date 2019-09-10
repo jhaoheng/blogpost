@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【SSH】多個 github 帳號下的 git clone">
 <meta property="og:url" content="/ssh/github/2016/10/14/SSH-Github-Account/">
-<meta property="og:site_name" content="MAX HU">
+<meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="readme env : osx 10.11 使用 github 時，根據兩個不同的帳號進行切換 ssh-key 產生 ssh-key $ ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot; .ssh/config 所有的參數列表 https://linux.die.net/man/5/ssh_config，see PATTERNS Host {本機辨識的名稱} HostName 主機位置 User 登入帳號 IdentityFile 憑證位置 參數 Host : 此為此組 ssh 的名稱，讓本機辨識專用，故可任意取名，當 git clone git@{Host}:{your_group_name}/{project}.git 則會依照 {Host} 取得相關 key HostName : github.com User : git IdentityFile : 此為 ssh private key 存放位置 範例 有兩個不同帳號，user_A &amp;amp; user_B 產生 key 設定 config user_A # user_A@gmail.com Host gitlab.com-user_A HostName github.com User git IdentityFile ~/.ssh/user_A/id_rsa user_B # user_B@gmail.com Host gitlab.com-user_B HostName github.com User git IdentityFile ~/.ssh/user_B/id_rsa 使用，將原本的 git@github.com:jhaoheng/APNS_cer_build.git ，github 的部分，改為 Host 的參數名稱 ex : git clone git@github.com-user_A:jhaoheng/APNS_cer_build.git 注意上傳的 name 與 email 使用 git config --local -l : 查看目前該 git repo 的基本設定 可用 git config --local user.name 與 git config --local user.email 設定">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【SSH】多個 github 帳號下的 git clone | MAX HU</title>
+  <title>【SSH】多個 github 帳號下的 git clone | MAX 呼~</title>
   
 
 
@@ -188,7 +188,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MAX HU</span>
+        <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,7 +287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX HU">
+      <meta itemprop="name" content="MAX 呼~">
     </span>
 
     

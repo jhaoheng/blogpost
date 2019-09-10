@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Phalcon】basic">
 <meta property="og:url" content="/phalcon/2016/07/07/Phalcon-basic/">
-<meta property="og:site_name" content="MAX HU">
+<meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="ㄧ、install phalcon 官方 github : https://github.com/phalcon/cphalcon install from github git clone cd cphalcon/build sudo ./install 遇到問題，參考 troubleshoot check phpinfo(); 找 phalcon extension，沒意外的話是 2.0.13 安裝環境 環境 - `php -m | grep -i phalcon` - if output `phalcon` mean it is ok to use phalcon cmd - `apachectl -v` - output : `apache/2.4.16` - `php -v` - output : `php 5.6.23` - `mysql --version` - output : `mysql ver 14.14` troubleshoot 若 gcc 編譯失敗，free -g，查看 memory or swap 是否有 1g 可供 compile 1g memory https://github.com/phalcon/cphalcon/issues/10478 因為目前僅支援 5.4/5.5/5.6 版本，故如果用 7.x 版本編譯時，會產生名稱錯誤 設定 extension=phalcon.so，出現 PHP Warning: Module &apos;phalcon&apos; already loaded in Unknown on line 0 info 在 php.ini 中，將 extension=phalcon.so 前面加 ; -&amp;gt; ;extension=phalcon.so 執行 php -m | grep -i phalcon，正常 二、安裝 Phalcon develop-tool 介紹 總之就是透過指令可以快速建立模組，連大小寫都處理好，另外還會結合資料庫建立 mode : getter / setter install installation via Git sudo ln -s ~/path/phalcon.php /usr/local/bin/phalcon mac 要放在 /usr/local/bin 下 執行 phalcon Phalcon DevTools (2.0.13) Help: Lists the commands available in Phalcon devtools Available commands: commands (alias of: list, enumerate) controller (alias of: create-controller) module (alias of: create-module) model (alias of: create-model) all-models (alias of: create-all-models) project (alias of: create-project) scaffold (alias of: create-scaffold) migration (alias of: create-migration) webtools (alias of: create-webtools) 查看語法，直接執行 phalcon [command] 即可 phalcon controller phalcon webtools 啟用 WebTools 在影片中，可以用 browser 的方式，進行設定，在網頁資料夾下，phalcon webtools --action=enable 有新舊版本的問題，查看 github readme 快速建立一個基本的 project : phalcon create-project store 檢視網頁 : localhost:[yourport]/store">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【Phalcon】basic | MAX HU</title>
+  <title>【Phalcon】basic | MAX 呼~</title>
   
 
 
@@ -188,7 +188,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MAX HU</span>
+        <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,7 +287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX HU">
+      <meta itemprop="name" content="MAX 呼~">
     </span>
 
     

@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Objc-C】Toll-Free Bridging : 無損橋接 ">
 <meta property="og:url" content="/2016/05/23/objc-c-toll-free-bridging-non-destructive-bridge/">
-<meta property="og:site_name" content="MAX HU">
+<meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="Toll-Free Bridging : 無損橋接 在 ARC 管理中，常會看到這個名詞 簡單來說就是因為 OC 是 C 的執行庫，而為了讓 OC 可以與 C 進行資料交換，就得利用 Toll-Free Bridging 進行資料格式的交換 如 NSArray 與 CFArray 參考 CFArray is “toll-free bridged” with its Cocoa Foundation counterpart, NSArray. This means that the Core Foundation type is interchangeable in function or method calls with the bridged Foundation object. Therefore, in a method where you see an NSArray * parameter, you can pass in a CFArrayRef, and in a function where you see a CFArrayRef parameter, you can pass in an NSArray instance. This also applies to concrete subclasses of NSArray. See Toll-Free Bridged Types for more information on toll-free bridging. Toll-Free Bridged Types NSArray *_array = [[NSArray alloc]init]; NSString *values = {@&quot;foo&quot;,@&quot;bar&quot;}; CFArrayRef arrayRef = CFArrayCreate(kCFAllocatorDefault, (void *)values, (CFIndex)2,NULL); NSArray *array = (__bridgeNSArray *)arrayRef;//注意這一行的__bridge NSDa NSString -&amp;gt; CFString NSString *foo = @&quot;bar&quot;; CFStringRef bar = (__bridge CFStringRef)(foo); NSLog(@&quot;%ld&quot;, CFStringGetLength(bar)); CFString -&amp;gt; NSString CFStringRef foo = CFStringCreateWithCString(kCFAllocatorDefault, &quot;foo&quot;, kCFStringEncodingUTF8); NSString *bar = (__bridge NSString *)(foo); NSLog(@&quot;%ld&quot;, bar.length); CFRelease(foo); __bridge 目的在於處理 ARC &amp;lt;-&amp;gt; MRC 間的溝通 而 『MRC 下的 Toll－Free Bridging 因為不涉及記憶體管理的轉移，相互之間可以直接交換使用。』 Toll-Free Bridged Types 中，有支援 Toll-Free Bridging 的對照表">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【Objc-C】Toll-Free Bridging : 無損橋接  | MAX HU</title>
+  <title>【Objc-C】Toll-Free Bridging : 無損橋接  | MAX 呼~</title>
   
 
 
@@ -188,7 +188,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MAX HU</span>
+        <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,7 +287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX HU">
+      <meta itemprop="name" content="MAX 呼~">
     </span>
 
     

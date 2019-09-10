@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【ipa】check Provision">
 <meta property="og:url" content="/ios/ipa/2016/09/20/iOS-ipa/">
-<meta property="og:site_name" content="MAX HU">
+<meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="手動檢查 將輸出的 .ipa，改為 .zip，解壓縮。 開啟 Terminal 並移動到該 解壓縮後的 Payload 中，會看到 embedded.mobileprovision security cms -D -i embedded.mobileprovision 解析結構就可發現不同點 code NSData *provisioningProfile = nil; NSData *raw = [NSData dataWithContentsOfURL:[NSBundle.mainBundle URLForResource:@&quot;embedded&quot; withExtension:@&quot;mobileprovision&quot;]]; char *start = memmem(raw.bytes, raw.length, &quot;&amp;lt;!DOCTYPE plist PUBLIC \&quot;-//Apple//DTD PLIST 1.0&quot;, 47); if (start) { char *end = memmem(start, (uintptr_t)start - raw.length, &quot;&amp;lt;/plist&amp;gt;&quot;, 8); if (end) { provisioningProfile = [NSData dataWithBytes:start length:8 + end - start]; } } if (provisioningProfile) { NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:provisioningProfile options:NSPropertyListImmutable format:0 error:0]; NSLog(@&quot; Team name: %@&quot;, plist[@&quot;TeamName&quot;]); if ([plist[@&quot;ProvisionsAllDevices&quot;] boolValue]) { NSLog(@&quot;Enterprise&quot;); } else if ([plist[@&quot;ProvisionedDevices&quot;] count] &amp;gt; 0) { if ([plist[@&quot;Entitlements&quot;][@&quot;get-task-allow&quot;] boolValue]) { NSLog(@&quot;Development&quot;); } else { NSLog(@&quot;Ad Hoc&quot;); } } else { NSLog(@&quot;App Store&quot;); } } 分析結構 Dev 若是 Dev build app，會看到 &amp;lt;key&amp;gt;get-task-allow&amp;lt;/key&amp;gt; &amp;lt;true/&amp;gt; Ad-Hoc 若是 Ad-Hoc &amp;lt;key&amp;gt;get-task-allow&amp;lt;/key&amp;gt; &amp;lt;false/&amp;gt; 且 &amp;lt;key&amp;gt;ProvisionedDevices&amp;lt;/key&amp;gt; &amp;lt;array&amp;gt; &amp;lt;string&amp;gt;abcdef01234567890abcdef01234567890abacde&amp;lt;/string&amp;gt; &amp;lt;string&amp;gt;1abcdef01234567890abcdef01234567890abacd&amp;lt;/string&amp;gt; &amp;lt;string&amp;gt;2abcdef01234567890abcdef01234567890abacd&amp;lt;/string&amp;gt; &amp;lt;/array&amp;gt;">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【ipa】check Provision | MAX HU</title>
+  <title>【ipa】check Provision | MAX 呼~</title>
   
 
 
@@ -188,7 +188,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MAX HU</span>
+        <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,7 +287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX HU">
+      <meta itemprop="name" content="MAX 呼~">
     </span>
 
     

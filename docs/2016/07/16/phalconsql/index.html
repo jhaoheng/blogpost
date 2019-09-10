@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【phalcon】sql">
 <meta property="og:url" content="/2016/07/16/phalconsql/">
-<meta property="og:site_name" content="MAX HU">
+<meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="使用 phql + Avoid sql injection select $conditions = &quot;Users.id = :id:&quot;; $parameters = array( &quot;aid&quot; =&amp;gt; &apos;31&apos; ); $phql = &quot;SELECT b.* FROM Users as a RIGHT JOIN Devices as b on a.id=:aid:&quot;; $result = $app-&amp;gt;modelsManager-&amp;gt;executeQuery($phql,$parameters); 其中的 $app 為 Micro 建立的物件 modelsManager 為 model 的 method insert $parameters = array( &quot;key&quot; =&amp;gt; &quot;123&quot;, &quot;user_id&quot; =&amp;gt; 3, ); $phql = &quot;INSERT INTO tableName (key, user_id) VALUES (:key:, :user_id:)&quot;; $result = $app-&amp;gt;modelsManager-&amp;gt;executeQuery($phql, $parameters); if ($result==true) { echo &quot;success \r&quot;; } 使用 抽象層 建立 sql 語法，記錄 log 因若透過抽象層建立 sql，很難直接看出 sql 是否正確，可透過 phalcon 建立 log，並將 db 的所有動作記錄 use Phalcon\Mvc\Model\Criteria; use Phalcon\Logger; use Phalcon\Logger\Adapter\File as FileLogger; use Phalcon\Events\Manager; $logger = new FileLogger(&quot;logs/debug.log&quot;); $eventsManager = new Manager(); $connection = $app[&apos;db&apos;]; $eventsManager-&amp;gt;attach(&apos;db&apos;, function ($event, $connection) use ($logger) { if ($event-&amp;gt;getType() == &apos;beforeQuery&apos;) { $logger-&amp;gt;log($connection-&amp;gt;getSQLStatement(), Logger::INFO); } }); $app[&apos;db&apos;]-&amp;gt;setEventsManager($eventsManager);// 儲存所有 db 動作 $conditions = &quot;Users.id = :id:&quot;; $parameters = array( &quot;id&quot; =&amp;gt; &apos;31&apos; ); $result = $app-&amp;gt;modelsManager-&amp;gt;createBuilder() -&amp;gt;columns(array(&apos;Devices.*&apos;)) -&amp;gt;from(&apos;Devices&apos;) -&amp;gt;rightJoin(&apos;Users&apos;) -&amp;gt;where($conditions,$parameters) -&amp;gt;getQuery() -&amp;gt;execute();">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【phalcon】sql | MAX HU</title>
+  <title>【phalcon】sql | MAX 呼~</title>
   
 
 
@@ -188,7 +188,7 @@
     <div class="custom-logo-site-title">
       <a href="/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MAX HU</span>
+        <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,7 +287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX HU">
+      <meta itemprop="name" content="MAX 呼~">
     </span>
 
     

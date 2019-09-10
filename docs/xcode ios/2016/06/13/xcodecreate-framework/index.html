@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【xcode】create framework">
 <meta property="og:url" content="/xcode%20ios/2016/06/13/xcodecreate-framework/">
-<meta property="og:site_name" content="MAX HU">
+<meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="Why 直接在 xcode 中，產生出適合 armv7 -arch armv7s 與 x86_64 的 framework 若透過預設的方法產出，會有兩種版本，必須再使用 lipo create 進行合併 此方法是透過 script 在 compile 時，直接進行 build 與 lipo create 的動作 基本設定 設置靜態庫，將 Mach-o type 從動態設定為 Static Library |-MyFirstFramework |-TARGETS |-Build Settings |-Linking |-Mach-o Type How open xcode and select [Framework &amp;amp; Library] -&amp;gt; [Cocoa Touch Framework] Build Phases Target Dependencies Compile Sources Link Binary With Library 連接使用其他 framework Headers 讓 framework 中的檔案開放程度 Copy Bundle Resources 要使用的 bundle 物件檔 產生 framework x2（真機運行與模擬機運行） 要注意的是 xxx-name.framework，只是一包資料夾，要進行合併的是底下的 [xxx-name] - 真機路徑(path_1) : Debug-iphoneos/[name].framework/[name] - 模擬機路徑(path_2) : Debug-iphonesimulator/[name].framework/[name] - lipo -create path_1 path_2 -output [name] - 產生出的 name 為執行檔，copy Debug-iphoneos/[name].framework 到適當位置 - 將剛剛產生出的 [name]，取代掉上一行 framwork 中原本的 [name] - lipo -info [name] - 將整包調整過後的 framework 放入 xcode 測試">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【xcode】create framework | MAX HU</title>
+  <title>【xcode】create framework | MAX 呼~</title>
   
 
 
@@ -188,7 +188,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MAX HU</span>
+        <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,7 +287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX HU">
+      <meta itemprop="name" content="MAX 呼~">
     </span>
 
     

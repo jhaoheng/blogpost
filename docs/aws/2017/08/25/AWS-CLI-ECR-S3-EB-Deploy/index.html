@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【AWS CLI】ECR &amp; S3 &amp; EB deploy">
 <meta property="og:url" content="/aws/2017/08/25/AWS-CLI-ECR-S3-EB-Deploy/">
-<meta property="og:site_name" content="MAX HU">
+<meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="建立 aws docker image repo 建立 ECR 開啟 AWS console -&amp;gt; 選擇 Amazon ECS 的服務 -&amp;gt; 選擇 Repositories 選擇 create repository 建立完成後，會看到上傳的方法 按照 ecs 中，的說明 aws ecr get-login 後，會產生出 docker login … 的語法，透過這個進行 docker login aws ecr get-login --no-include-email --region us-east-1 : 取得 docker login -u AWS -p .... 依據 1 中取得的 login 指令，進行 docker login 上傳 docker image 到 ECR 中 docker build -t xxx {image} docker tag xxx your-ecr-position/your-repo-name:latest docker push your-ecr-position/your-repo-name:latest 透過 beanstalk 部署 建立好一個 eb application 設定好 Dockerrun.aws.json envsubst 可善用此指令 壓縮 含有設定檔的 folder，並上傳到 aws s3 cd folder &amp;amp;&amp;amp; zip -r $folder.zip ./ &amp;amp;&amp;amp; aws s3 cp $folder.zip s3://{bucket_name}/{folder.zip} 建立 eb 新的版本 aws elasticbeanstalk create-application-version \ --application-name {your-eb-application-name} \ --version-label {your-eb-version-label}\ --source-bundle S3Bucket={bucket_name},S3Key={folder.zip} 部署新版本 aws elasticbeanstalk update-environment \ --environment-name {your-eb-application-name} \ --version-label {your-eb-version-label}">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【AWS CLI】ECR & S3 & EB deploy | MAX HU</title>
+  <title>【AWS CLI】ECR & S3 & EB deploy | MAX 呼~</title>
   
 
 
@@ -188,7 +188,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MAX HU</span>
+        <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,7 +287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX HU">
+      <meta itemprop="name" content="MAX 呼~">
     </span>
 
     

@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【AWS-S3】多檔案上傳">
 <meta property="og:url" content="/2017/06/07/aws-s3-multiple-file-upload/">
-<meta property="og:site_name" content="MAX HU">
+<meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="env aws sdk php v3 php 7.0x ex require &apos;./vendor/autoload.php&apos;; use Aws\S3\S3Client; use Aws\Exception\AwsException; use Aws\CommandPool; $access_key = &quot;&quot;; $secret_access_key = &quot;&quot;; $bucket = &quot;&quot;; $client = S3Client::factory([ &quot;region&quot; =&amp;gt; &quot;ap-northeast-1&quot;, // tokyo &quot;version&quot; =&amp;gt; &quot;latest&quot;, &apos;credentials&apos; =&amp;gt; [ &apos;key&apos; =&amp;gt; $access_key, &apos;secret&apos; =&amp;gt; $secret_access_key, ], ] ); $commands = array(); $binary = file_get_contents(&apos;./images/1.jpg&apos;); $commands[] = $client-&amp;gt;getCommand(&apos;PutObject&apos;, [ &apos;Bucket&apos; =&amp;gt; $bucket, &apos;Key&apos; =&amp;gt; &apos;photos/photo01.jpg&apos;, &apos;Body&apos; =&amp;gt; $binary ] ); $commands[] = $client-&amp;gt;getCommand(&apos;PutObject&apos;, [ &apos;Bucket&apos; =&amp;gt; $bucket, &apos;Key&apos; =&amp;gt; &apos;photos/photo02.jpg&apos;, &apos;Body&apos; =&amp;gt; $binary ] ); $pool = new CommandPool($client, $commands); // Initiate the pool transfers $promise = $pool-&amp;gt;promise(); // Force the pool to complete synchronously try { $result = $promise-&amp;gt;wait(); } catch (AwsException $e) { // handle the error. }">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【AWS-S3】多檔案上傳 | MAX HU</title>
+  <title>【AWS-S3】多檔案上傳 | MAX 呼~</title>
   
 
 
@@ -188,7 +188,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MAX HU</span>
+        <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,7 +287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX HU">
+      <meta itemprop="name" content="MAX 呼~">
     </span>
 
     

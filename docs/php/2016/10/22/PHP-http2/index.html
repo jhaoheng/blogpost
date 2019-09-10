@@ -114,7 +114,7 @@
 <meta property="og:type" content="article">
 <meta property="og:title" content="【PHP】push with http2">
 <meta property="og:url" content="/php/2016/10/22/PHP-http2/">
-<meta property="og:site_name" content="MAX HU">
+<meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="env mac, osx , 10.11 config php -i , check config : [curl] cURL support =&amp;gt; enabled cURL Information =&amp;gt; 7.47.1 ... HTTP2 =&amp;gt; Yes ... SSL Version =&amp;gt; OpenSSL/1.0.2g if php no include these config, reinstall : brew install php70 --with-homebrew-curl code send method /** * @param $http2ch the curl connection * @param $http2_server the Apple server url * @param $apple_cert the path to the certificate * @param $app_bundle_id the app bundle id * @param $message the payload to send (JSON) * @param $token the token of the device * @return mixed the status code */ function sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token) { // url (endpoint) $url = &quot;{$http2_server}/3/device/{$token}&quot;; // certificate $cert = realpath($apple_cert); // headers $headers = array( &quot;apns-topic: {$app_bundle_id}&quot;, &quot;User-Agent: My Sender&quot; ); // other curl options curl_setopt_array($http2ch, array( CURLOPT_URL =&amp;gt; $url, CURLOPT_PORT =&amp;gt; 443, CURLOPT_HTTPHEADER =&amp;gt; $headers, CURLOPT_POST =&amp;gt; TRUE, CURLOPT_POSTFIELDS =&amp;gt; $message, CURLOPT_RETURNTRANSFER =&amp;gt; TRUE, CURLOPT_TIMEOUT =&amp;gt; 30, CURLOPT_SSL_VERIFYPEER =&amp;gt; false, CURLOPT_SSLCERT =&amp;gt; $cert, CURLOPT_HEADER =&amp;gt; 1 )); // go... $result = curl_exec($http2ch); if ($result === FALSE) { throw new Exception(&quot;Curl failed: &quot; . curl_error($http2ch)); } // get response $status = curl_getinfo($http2ch, CURLINFO_HTTP_CODE); return $status; } use // this is only needed with php prior to 5.5.24 if (!defined(&apos;CURL_HTTP_VERSION_2_0&apos;)) { define(&apos;CURL_HTTP_VERSION_2_0&apos;, 3); } // open connection $http2ch = curl_init(); curl_setopt($http2ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0); // send push $apple_cert = &apos;/certificates/samplepush/development.pem&apos;; $message = &apos;{&quot;aps&quot;:{&quot;alert&quot;:&quot;Hi!&quot;,&quot;sound&quot;:&quot;default&quot;}}&apos;; $token = &apos;dbdaeae86abcde56rtyww1859fb41b2cby053ec48987847&apos;; $http2_server = &apos;https://api.development.push.apple.com&apos;; // or &apos;api.push.apple.com&apos; if production $app_bundle_id = &apos;it.tabasoft.samplepush&apos;; $status = sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token); echo &quot;Response from apple -&amp;gt; {$status} &quot;; // close connection curl_close($http2ch); response 200 Success 400 Bad request 403 There was an error with the certificate. 405 The request used a bad :method value. Only POST requests are supported. 410 The device token is no longer active for the topic. 413 The notification payload was too large. 429 The server received too many requests for the same device token. 500 Internal server error 503 The server is shutting down and unavailable. multi token send // open connection // send all the pushes for ($i = 0; $i &amp;lt; $totSends; $i++) { // send push } // close connection">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【PHP】push with http2 | MAX HU</title>
+  <title>【PHP】push with http2 | MAX 呼~</title>
   
 
 
@@ -188,7 +188,7 @@
     <div class="custom-logo-site-title">
       <a href="/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
-        <span class="site-title">MAX HU</span>
+        <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
       </a>
     </div>
@@ -287,7 +287,7 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX HU">
+      <meta itemprop="name" content="MAX 呼~">
     </span>
 
     

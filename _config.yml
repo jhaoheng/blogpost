@@ -3,6 +3,8 @@
 ## Docs: https://jekyllrb.com/docs/configuration/
 # ---------------------------------------------------------------
 
+destination: ./docs
+
 # Site
 title: MAX 呼~
 subtitle: Spare No Effort, Leave No Regret
