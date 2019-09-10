@@ -124,6 +124,48 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-08-03T14:46:00+08:00"><a href="https://jhaoheng.github.io/blogpost/through-github-slack-subscription-release-rss/">August 03, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/through-github-slack-subscription-release-rss/" rel="bookmark" title="透過 slack 訂閱 github release RSS" itemprop="url">透過 slack 訂閱 github release RSS</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h2 id="目的">目的</h2>
+
+<p>當使用越來越多的工具時，有時新版的 release 來不及跟上，變成版本落差極大，透過 slack rss bot 的幫忙，當 release 有更新時，透過 msg 通知</p>
+
+<h2 id="需要工具">需要工具</h2>
+
+<ul>
+  <li>slack rss bot install : https://slack.com/apps/A0F81R7U7-rss</li>
+  <li>github release rss
+    <ol>
+      <li>找到一個你想要訂閱的 github</li>
+      <li>點選 release 的 item</li>
+      <li>在 url 的尾端加上 <code class="language-html highlighter-rouge">.atom</code> 即可。ex: https://github.com/xxxx/yyyy/releases.atom</li>
+      <li>copy url to slack rss</li>
+    </ol>
+  </li>
+</ul>
+
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/through-github-slack-subscription-release-rss/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2017-07-15T00:33:00+08:00"><a href="https://jhaoheng.github.io/blogpost/docker-docker-machine-operation/">July 15, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -396,85 +438,6 @@ Reading time ~1 minute
 </ul>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/playerhls-rtmp/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2017-06-07T16:45:00+08:00"><a href="https://jhaoheng.github.io/blogpost/aws-s3-multiple-file-upload/">June 07, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/aws-s3-multiple-file-upload/" rel="bookmark" title="【AWS-S3】多檔案上傳" itemprop="url">【AWS-S3】多檔案上傳</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="env">env</h1>
-<ul>
-  <li>aws sdk php v3</li>
-  <li>php 7.0x</li>
-</ul>
-
-<h1 id="ex">ex</h1>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>require './vendor/autoload.php';
-use Aws\S3\S3Client;
-use Aws\Exception\AwsException;
-use Aws\CommandPool;
-
-$access_key = "";
-$secret_access_key = "";
-$bucket = "";
-
-$client = S3Client::factory([
-        "region" =&gt; "ap-northeast-1", // tokyo
-        "version" =&gt; "latest", 
-        'credentials' =&gt; [
-            'key'    =&gt; $access_key,
-            'secret' =&gt; $secret_access_key,
-        ],
-    ]
-);
-
-$commands = array();
-
-$binary = file_get_contents('./images/1.jpg');
-$commands[] = $client-&gt;getCommand('PutObject', [
-        'Bucket' =&gt; $bucket,
-        'Key'    =&gt; 'photos/photo01.jpg',
-        'Body'   =&gt; $binary
-    ]
-);
-
-$commands[] = $client-&gt;getCommand('PutObject', [
-        'Bucket' =&gt; $bucket,
-        'Key'    =&gt; 'photos/photo02.jpg',
-        'Body'   =&gt; $binary
-    ]
-);
-
-$pool = new CommandPool($client, $commands);
-// Initiate the pool transfers
-$promise = $pool-&gt;promise();
-
-// Force the pool to complete synchronously
-try {
-    $result = $promise-&gt;wait();
-} catch (AwsException $e) {
-    // handle the error.
-}
-</code></pre></div></div>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/aws-s3-multiple-file-upload/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

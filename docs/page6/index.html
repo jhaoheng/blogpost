@@ -124,6 +124,32 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-10-29T00:05:22+08:00"><a href="https://jhaoheng.github.io/blogpost/jekyll/update/welcome-to-jekyll/">October 29, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/jekyll/update/welcome-to-jekyll/" rel="bookmark" title="Welcome to Jekyll!" itemprop="url">Welcome to Jekyll!</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <p>You’ll find this post in your <code class="language-html highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="language-html highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
+
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/jekyll/update/welcome-to-jekyll/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2017-09-14T07:47:00+08:00"><a href="https://jhaoheng.github.io/blogpost/docker/papertrail/remotesyslog/Docker-Papertrial-RemoteSyslog/">September 14, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -469,82 +495,6 @@ services:
 </ol>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/docker/mariadb/Docker-MariaDB/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2017-08-25T17:11:00+08:00"><a href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-ECR-S3-EB-Deploy/">August 25, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-ECR-S3-EB-Deploy/" rel="bookmark" title="【AWS CLI】ECR & S3 & EB deploy" itemprop="url">【AWS CLI】ECR & S3 & EB deploy</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h2 id="建立-aws-docker-image-repo">建立 aws docker image repo</h2>
-<ol>
-  <li>建立 ECR
-    <ol>
-      <li>開啟 AWS console -&gt; 選擇 Amazon ECS 的服務 -&gt; 選擇 Repositories</li>
-      <li>選擇 create repository</li>
-      <li>建立完成後，會看到上傳的方法</li>
-    </ol>
-  </li>
-  <li>按照 ecs 中，的說明 aws ecr get-login 後，會產生出 docker login … 的語法，透過這個進行 docker login
-    <ol>
-      <li><code class="language-html highlighter-rouge">aws ecr get-login --no-include-email --region us-east-1</code> : 取得 <code class="language-html highlighter-rouge">docker login -u AWS -p .... </code></li>
-      <li>依據 1 中取得的 login 指令，進行 docker login</li>
-    </ol>
-  </li>
-  <li>上傳 docker image 到 ECR 中
-    <ol>
-      <li><code class="language-html highlighter-rouge">docker build -t xxx {image}</code></li>
-      <li><code class="language-html highlighter-rouge">docker tag xxx your-ecr-position/your-repo-name:latest</code></li>
-      <li><code class="language-html highlighter-rouge">docker push your-ecr-position/your-repo-name:latest</code></li>
-    </ol>
-  </li>
-</ol>
-
-<h2 id="透過-beanstalk-部署">透過 beanstalk 部署</h2>
-
-<ol>
-  <li>建立好一個 eb application</li>
-  <li>設定好 <code class="language-html highlighter-rouge">Dockerrun.aws.json</code>
-    <ul>
-      <li><code class="language-html highlighter-rouge">envsubst</code> 可善用此指令</li>
-    </ul>
-  </li>
-  <li>壓縮 含有設定檔的 folder，並上傳到 aws s3
-    <ul>
-      <li><code class="language-html highlighter-rouge">cd folder <span class="err">&amp;&amp;</span> zip -r $folder.zip ./ <span class="err">&amp;&amp;</span> aws s3 cp $folder.zip s3://{bucket_name}/{folder.zip}</code></li>
-    </ul>
-  </li>
-  <li>建立 eb 新的版本
-    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws elasticbeanstalk create-application-version \
---application-name {your-eb-application-name} \
-  --version-label {your-eb-version-label}\
-  --source-bundle S3Bucket={bucket_name},S3Key={folder.zip}
-</code></pre></div>    </div>
-  </li>
-  <li>部署新版本
-    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws elasticbeanstalk update-environment \
---environment-name {your-eb-application-name} \
-  --version-label {your-eb-version-label}
-</code></pre></div>    </div>
-  </li>
-</ol>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-ECR-S3-EB-Deploy/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

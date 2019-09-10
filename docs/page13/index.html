@@ -124,6 +124,150 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2016-10-22T17:05:00+08:00"><a href="https://jhaoheng.github.io/blogpost/php/PHP-http2/">October 22, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/php/PHP-http2/" rel="bookmark" title="【PHP】push with http2" itemprop="url">【PHP】push with http2</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h2 id="env">env</h2>
+
+<p>mac, osx , 10.11</p>
+
+<h2 id="config">config</h2>
+
+<ul>
+  <li><code class="language-html highlighter-rouge">php -i</code> , check config :
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[curl]
+cURL support =&gt; enabled
+cURL Information =&gt; 7.47.1
+...
+HTTP2 =&gt; Yes
+...
+SSL Version =&gt; OpenSSL/1.0.2g
+</code></pre></div>    </div>
+  </li>
+  <li>if php no include these config, reinstall : <code class="language-html highlighter-rouge">brew install php70 --with-homebrew-curl</code></li>
+</ul>
+
+<h2 id="code">code</h2>
+
+<h3 id="send-method">send method</h3>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/**
+ * @param $http2ch          the curl connection
+ * @param $http2_server     the Apple server url
+ * @param $apple_cert       the path to the certificate
+ * @param $app_bundle_id    the app bundle id
+ * @param $message          the payload to send (JSON)
+ * @param $token            the token of the device
+ * @return mixed            the status code
+ */
+function sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token) {
+
+    // url (endpoint)
+    $url = "{$http2_server}/3/device/{$token}";
+
+    // certificate
+    $cert = realpath($apple_cert);
+
+    // headers
+    $headers = array(
+        "apns-topic: {$app_bundle_id}",
+        "User-Agent: My Sender"
+    );
+
+    // other curl options
+    curl_setopt_array($http2ch, array(
+        CURLOPT_URL =&gt; $url,
+        CURLOPT_PORT =&gt; 443,
+        CURLOPT_HTTPHEADER =&gt; $headers,
+        CURLOPT_POST =&gt; TRUE,
+        CURLOPT_POSTFIELDS =&gt; $message,
+        CURLOPT_RETURNTRANSFER =&gt; TRUE,
+        CURLOPT_TIMEOUT =&gt; 30,
+        CURLOPT_SSL_VERIFYPEER =&gt; false,
+        CURLOPT_SSLCERT =&gt; $cert,
+        CURLOPT_HEADER =&gt; 1
+    ));
+
+    // go...
+    $result = curl_exec($http2ch);
+    if ($result === FALSE) {
+      throw new Exception("Curl failed: " .  curl_error($http2ch));
+    }
+
+    // get response
+    $status = curl_getinfo($http2ch, CURLINFO_HTTP_CODE);
+
+    return $status;
+}
+</code></pre></div></div>
+
+<h3 id="use">use</h3>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// this is only needed with php prior to 5.5.24
+if (!defined('CURL_HTTP_VERSION_2_0')) {
+  define('CURL_HTTP_VERSION_2_0', 3);
+}
+// open connection 
+$http2ch = curl_init();
+curl_setopt($http2ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
+
+// send push
+$apple_cert = '/certificates/samplepush/development.pem';
+$message = '{"aps":{"alert":"Hi!","sound":"default"}}';
+$token = 'dbdaeae86abcde56rtyww1859fb41b2cby053ec48987847';
+$http2_server = 'https://api.development.push.apple.com'; // or 'api.push.apple.com' if production
+$app_bundle_id = 'it.tabasoft.samplepush';
+
+$status = sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token);
+echo "Response from apple -&gt; {$status}\n";
+
+// close connection
+curl_close($http2ch);
+</code></pre></div></div>
+
+<h3 id="response">response</h3>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>200 Success
+400 Bad request
+403 There was an error with the certificate.
+405 The request used a bad :method value. Only POST requests are supported.
+410 The device token is no longer active for the topic.
+413 The notification payload was too large.
+429 The server received too many requests for the same device token.
+500 Internal server error
+503 The server is shutting down and unavailable.
+</code></pre></div></div>
+
+<h3 id="multi-token-send">multi token send</h3>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// open connection
+// send all the pushes
+for ($i = 0; $i <span class="nt">&lt;</span> <span class="err">$</span><span class="na">totSends</span><span class="err">;</span> <span class="err">$</span><span class="na">i</span><span class="err">++)</span> <span class="err">{</span>
+   <span class="err">//</span> <span class="na">send</span> <span class="na">push</span>
+<span class="err">}</span>
+<span class="err">//</span> <span class="na">close</span> <span class="na">connection</span>
+</code></pre></div></div>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/php/PHP-http2/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2016-10-19T10:00:00+08:00"><a href="https://jhaoheng.github.io/blogpost/redis/Redis/">October 19, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -606,65 +750,6 @@ Do not need to maintain twice version between code and document.
 When developer write down comment in code context, it mean that you finish the document at the same time.</p>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/docgenerate-program-converting-comments-help-file/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2016-09-30T03:06:00+08:00"><a href="https://jhaoheng.github.io/blogpost/phalcon-modelsqlstatehy000-2002/">September 30, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/phalcon-modelsqlstatehy000-2002/" rel="bookmark" title="【phalcon model】SQLSTATE[HY000] [2002]" itemprop="url">【phalcon model】SQLSTATE[HY000] [2002]</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h2 id="env">env</h2>
-
-<ul>
-  <li>phalcon DevTools (3.0.1)</li>
-  <li>MAMP 3.5.2
-    <ul>
-      <li>php 7.0.8</li>
-      <li>mysql</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="trouble">Trouble</h2>
-
-<ul>
-  <li>cmd : <code class="language-html highlighter-rouge">phalcon model --name [table_name]</code></li>
-  <li>error : <code class="language-html highlighter-rouge">ERROR: SQLSTATE[HY000] [2002] No such file or directory</code></li>
-</ul>
-
-<h2 id="fix">Fix</h2>
-
-<p>Because the phalcon-DevTools [php version] does not set MAMP mysql source</p>
-
-<p>use</p>
-
-<ul>
-  <li><code class="language-html highlighter-rouge">php -ini</code></li>
-  <li><code class="language-html highlighter-rouge">vim php.ini</code></li>
-  <li>search <code class="language-html highlighter-rouge">mysql.default_socket</code> 填入 <code class="language-html highlighter-rouge">/Applications/MAMP/tmp/mysql/mysql.sock</code>
-    <ul>
-      <li><code class="language-html highlighter-rouge">pdo_mysql.default_socket = /Applications/MAMP/tmp/mysql/mysql.sock</code></li>
-    </ul>
-  </li>
-  <li>restart MAMP</li>
-</ul>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/phalcon-modelsqlstatehy000-2002/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

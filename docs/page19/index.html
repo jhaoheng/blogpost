@@ -124,6 +124,48 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2016-05-31T16:18:00+08:00"><a href="https://jhaoheng.github.io/blogpost/dynamic-programming/">May 31, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/dynamic-programming/" rel="bookmark" title="Dynamic Programming" itemprop="url">Dynamic Programming</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="動態規劃dynamic-programming">動態規劃(Dynamic Programming)</h1>
+
+<p><a href="http://wangyung.blogspot.tw/2016/05/blog-post.html?utm_content=bufferd71fd&amp;utm_medium=social&amp;utm_source=facebook.com&amp;utm_campaign=buffer">Line 面試</a>
+中有一題，提到『動態規劃』一詞與 Fibonacci 的設計方法</p>
+
+<p>稍微 review 一下，『為何 Fibonacci 中單純用遞迴，效率不高』
+透過『動態規劃』，把每一次計算出的結果 儲存起來，之後重複的運算，就取出之前暫存的(cached)結果即可</p>
+
+<p>感覺有點類似之前在做數據分析時，在 cached 相同，或者相似資料時，所做的處理
+避免重複性的計算，增加程式的效率</p>
+
+<p>Dynamic Programming Approaches:</p>
+<ul>
+  <li>Bottom-Up</li>
+  <li>Top-Down</li>
+</ul>
+
+<p><a href="http://algorithms.tutorialhorizon.com/introduction-to-dynamic-programming-fibonacci-series/">參考資料</a></p>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/dynamic-programming/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2016-05-23T03:55:00+08:00"><a href="https://jhaoheng.github.io/blogpost/objc-c-toll-free-bridging-non-destructive-bridge/">May 23, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -350,84 +392,6 @@ Reading time ~1 minute
 </ol>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/sslsssls-with-synology-web/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2016-05-10T13:27:00+08:00"><a href="https://jhaoheng.github.io/blogpost/ioshls/">May 10, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/ioshls/" rel="bookmark" title="【iOS】HLS & m3u8" itemprop="url">【iOS】HLS & m3u8</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="播放-線上串流-hls">播放 線上串流 HLS</h1>
-
-<ul>
-  <li>格式 : m3u8
-    <ul>
-      <li>測試檔案 : https://mega.nz/#F!ugxGEBaZ!z7OI0twEpBYdgGxUH7G5zw</li>
-    </ul>
-  </li>
-  <li>
-    <p>github : <a href="https://github.com/jhaoheng/HLS_sample">https://github.com/jhaoheng/HLS_sample</a></p>
-  </li>
-  <li><a href="https://developer.apple.com/streaming/">apple HTTP Live Streaming</a></li>
-</ul>
-
-<h2 id="apple-支援">apple 支援</h2>
-<ul>
-  <li>
-    <p>https://developer.apple.com/streaming/#streaming</p>
-  </li>
-  <li>
-    <p>使用 framework</p>
-    <ul>
-      <li>&lt;AVKit/AVKit.h&gt; : ios9 only</li>
-      <li>&lt;AVFoundation/AVFoundation.h&gt;</li>
-      <li>&lt;MediaPlayer/MediaPlayer.h&gt; : ios8 以下</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="mp4---m3u8轉換工具--ffmpeg">mp4 -&gt; m3u8轉換工具 : ffmpeg</h2>
-
-<p>因已安裝 homebrew 故</p>
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install ffmpeg
-</code></pre></div></div>
-
-<h2 id="格式轉換">格式轉換</h2>
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg -i <span class="nt">&lt;filename&gt;</span>.mp4 -c:v libx264 -c:a copy -f hls <span class="nt">&lt;outputNmae&gt;</span>.m3u8
-</code></pre></div></div>
-
-<h2 id="透過-safari-播放測試-m3u8">透過 safari 播放測試 m3u8</h2>
-
-<ol>
-  <li>開啟 safari</li>
-  <li>將 url 放入即可</li>
-</ol>
-
-<h2 id="hls-server">HLS Server</h2>
-
-<ul>
-  <li>Web Server：提供 m3u8 播放清單。</li>
-  <li>Transcoder：若檔案內容並非 H.264 + AAC，那麼便需要進行轉檔。</li>
-  <li>Media Stream Segmenter：將欲播放的檔案切成 segment。</li>
-</ul>
-
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/ioshls/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

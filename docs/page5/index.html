@@ -124,6 +124,43 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-11-03T12:01:00+08:00"><a href="https://jhaoheng.github.io/blogpost/docker/mairadb/docker&mariadb/">November 03, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/docker/mairadb/docker&mariadb/" rel="bookmark" title="【Docker:mariadb】set init when first running" itemprop="url">【Docker:mariadb】set init when first running</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="目標">目標</h1>
+
+<ol>
+  <li>為了讓每次測試更加快速的建立 db 中的資料環境，分開 schema.sql &amp; init_value.sql 兩個檔案，方便修改</li>
+  <li>步驟
+    <ol>
+      <li>透過 docker-compose 建立 container:mariadb</li>
+      <li>透過 volume 的方式，掛載 base_schema.sql &amp; init_value.sql 檔案</li>
+      <li>建立的過程中，讓 container:mariadb 自行初始化 (2) 的檔案</li>
+    </ol>
+  </li>
+</ol>
+
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/docker/mairadb/docker&mariadb/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2017-11-02T08:12:00+08:00"><a href="https://jhaoheng.github.io/blogpost/ubuntu/rsyslog/log/docker/rsyslog&docker/">November 02, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -240,32 +277,6 @@ Reading time ~1 minute
 
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/github/jekyll/github&jekyll/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2017-10-29T00:05:22+08:00"><a href="https://jhaoheng.github.io/blogpost/jekyll/update/welcome-to-jekyll/">October 29, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/jekyll/update/welcome-to-jekyll/" rel="bookmark" title="Welcome to Jekyll!" itemprop="url">Welcome to Jekyll!</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <p>You’ll find this post in your <code class="language-html highlighter-rouge">_posts</code> directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run <code class="language-html highlighter-rouge">jekyll serve</code>, which launches a web server and auto-regenerates your site when a file is updated.</p>
-
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/jekyll/update/welcome-to-jekyll/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

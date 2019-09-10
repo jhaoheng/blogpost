@@ -124,6 +124,82 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-08-25T17:11:00+08:00"><a href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-ECR-S3-EB-Deploy/">August 25, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-ECR-S3-EB-Deploy/" rel="bookmark" title="【AWS CLI】ECR & S3 & EB deploy" itemprop="url">【AWS CLI】ECR & S3 & EB deploy</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h2 id="建立-aws-docker-image-repo">建立 aws docker image repo</h2>
+<ol>
+  <li>建立 ECR
+    <ol>
+      <li>開啟 AWS console -&gt; 選擇 Amazon ECS 的服務 -&gt; 選擇 Repositories</li>
+      <li>選擇 create repository</li>
+      <li>建立完成後，會看到上傳的方法</li>
+    </ol>
+  </li>
+  <li>按照 ecs 中，的說明 aws ecr get-login 後，會產生出 docker login … 的語法，透過這個進行 docker login
+    <ol>
+      <li><code class="language-html highlighter-rouge">aws ecr get-login --no-include-email --region us-east-1</code> : 取得 <code class="language-html highlighter-rouge">docker login -u AWS -p .... </code></li>
+      <li>依據 1 中取得的 login 指令，進行 docker login</li>
+    </ol>
+  </li>
+  <li>上傳 docker image 到 ECR 中
+    <ol>
+      <li><code class="language-html highlighter-rouge">docker build -t xxx {image}</code></li>
+      <li><code class="language-html highlighter-rouge">docker tag xxx your-ecr-position/your-repo-name:latest</code></li>
+      <li><code class="language-html highlighter-rouge">docker push your-ecr-position/your-repo-name:latest</code></li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="透過-beanstalk-部署">透過 beanstalk 部署</h2>
+
+<ol>
+  <li>建立好一個 eb application</li>
+  <li>設定好 <code class="language-html highlighter-rouge">Dockerrun.aws.json</code>
+    <ul>
+      <li><code class="language-html highlighter-rouge">envsubst</code> 可善用此指令</li>
+    </ul>
+  </li>
+  <li>壓縮 含有設定檔的 folder，並上傳到 aws s3
+    <ul>
+      <li><code class="language-html highlighter-rouge">cd folder <span class="err">&amp;&amp;</span> zip -r $folder.zip ./ <span class="err">&amp;&amp;</span> aws s3 cp $folder.zip s3://{bucket_name}/{folder.zip}</code></li>
+    </ul>
+  </li>
+  <li>建立 eb 新的版本
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws elasticbeanstalk create-application-version \
+--application-name {your-eb-application-name} \
+  --version-label {your-eb-version-label}\
+  --source-bundle S3Bucket={bucket_name},S3Key={folder.zip}
+</code></pre></div>    </div>
+  </li>
+  <li>部署新版本
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws elasticbeanstalk update-environment \
+--environment-name {your-eb-application-name} \
+  --version-label {your-eb-version-label}
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-ECR-S3-EB-Deploy/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2017-08-25T03:59:00+08:00"><a href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-configure/">August 25, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -508,48 +584,6 @@ Reading time ~1 minute
 </code></pre></div></div>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/ejabberd/Ejabberd-Jabsimul/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2017-08-03T14:46:00+08:00"><a href="https://jhaoheng.github.io/blogpost/through-github-slack-subscription-release-rss/">August 03, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/through-github-slack-subscription-release-rss/" rel="bookmark" title="透過 slack 訂閱 github release RSS" itemprop="url">透過 slack 訂閱 github release RSS</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h2 id="目的">目的</h2>
-
-<p>當使用越來越多的工具時，有時新版的 release 來不及跟上，變成版本落差極大，透過 slack rss bot 的幫忙，當 release 有更新時，透過 msg 通知</p>
-
-<h2 id="需要工具">需要工具</h2>
-
-<ul>
-  <li>slack rss bot install : https://slack.com/apps/A0F81R7U7-rss</li>
-  <li>github release rss
-    <ol>
-      <li>找到一個你想要訂閱的 github</li>
-      <li>點選 release 的 item</li>
-      <li>在 url 的尾端加上 <code class="language-html highlighter-rouge">.atom</code> 即可。ex: https://github.com/xxxx/yyyy/releases.atom</li>
-      <li>copy url to slack rss</li>
-    </ol>
-  </li>
-</ul>
-
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/through-github-slack-subscription-release-rss/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

@@ -124,6 +124,65 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2016-09-30T03:06:00+08:00"><a href="https://jhaoheng.github.io/blogpost/phalcon-modelsqlstatehy000-2002/">September 30, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/phalcon-modelsqlstatehy000-2002/" rel="bookmark" title="【phalcon model】SQLSTATE[HY000] [2002]" itemprop="url">【phalcon model】SQLSTATE[HY000] [2002]</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h2 id="env">env</h2>
+
+<ul>
+  <li>phalcon DevTools (3.0.1)</li>
+  <li>MAMP 3.5.2
+    <ul>
+      <li>php 7.0.8</li>
+      <li>mysql</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="trouble">Trouble</h2>
+
+<ul>
+  <li>cmd : <code class="language-html highlighter-rouge">phalcon model --name [table_name]</code></li>
+  <li>error : <code class="language-html highlighter-rouge">ERROR: SQLSTATE[HY000] [2002] No such file or directory</code></li>
+</ul>
+
+<h2 id="fix">Fix</h2>
+
+<p>Because the phalcon-DevTools [php version] does not set MAMP mysql source</p>
+
+<p>use</p>
+
+<ul>
+  <li><code class="language-html highlighter-rouge">php -ini</code></li>
+  <li><code class="language-html highlighter-rouge">vim php.ini</code></li>
+  <li>search <code class="language-html highlighter-rouge">mysql.default_socket</code> 填入 <code class="language-html highlighter-rouge">/Applications/MAMP/tmp/mysql/mysql.sock</code>
+    <ul>
+      <li><code class="language-html highlighter-rouge">pdo_mysql.default_socket = /Applications/MAMP/tmp/mysql/mysql.sock</code></li>
+    </ul>
+  </li>
+  <li>restart MAMP</li>
+</ul>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/phalcon-modelsqlstatehy000-2002/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2016-09-20T14:59:00+08:00"><a href="https://jhaoheng.github.io/blogpost/projectnotification-package/">September 20, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -475,108 +534,6 @@ Reading time ~1 minute
 <p>Notice <code class="language-html highlighter-rouge">#if</code> and <code class="language-html highlighter-rouge">#ifdef</code> is diff.</p>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/xcode/xcode-macros-scheme/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2016-08-24T17:10:00+08:00"><a href="https://jhaoheng.github.io/blogpost/bash/bash-parse-json-by-jq/">August 24, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/bash/bash-parse-json-by-jq/" rel="bookmark" title="【bash】parse json by jq" itemprop="url">【bash】parse json by jq</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="parse-json-by-jq">parse json by jq</h1>
-
-<p><a href="http://xmodulo.com/how-to-parse-json-string-via-command-line-on-linux.html">source from</a></p>
-
-<h2 id="install-on-mac">install on mac</h2>
-
-<ul>
-  <li>mac : <code class="language-html highlighter-rouge">brew install jq</code></li>
-</ul>
-
-<h2 id="install-on-linux">install on linux</h2>
-
-<ul>
-  <li>linux(32bit) : <code class="language-html highlighter-rouge">wget http://stedolan.github.io/jq/download/linux32/jq</code></li>
-  <li>linux(64bit) : <code class="language-html highlighter-rouge">wget http://stedolan.github.io/jq/download/linux64/jq</code></li>
-  <li><code class="language-html highlighter-rouge">chmod +x ./jq</code></li>
-  <li><code class="language-html highlighter-rouge">sudo cp jq /usr/bin</code></li>
-</ul>
-
-<h2 id="example-file">example file</h2>
-
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
-        "name": "Google",
-        "location":
-                {
-                        "street": "1600 Amphitheatre Parkway",
-                        "city": "Mountain View",
-                        "state": "California",
-                        "country": "US"
-                },
-        "employees":
-                [
-                        {
-                                "name": "Michael",
-                                "division": "Engineering"
-                        },
-                        {
-                                "name": "Laura",
-                                "division": "HR"
-                        },
-                        {
-                                "name": "Elise",
-                                "division": "Marketing"
-                        }
-                ]
-}
-</code></pre></div></div>
-
-<h2 id="use">use</h2>
-
-<ul>
-  <li>To parse a JSON object: <code class="language-html highlighter-rouge">cat json.txt | jq '.name'</code>
-    <ul>
-      <li>output : “Google”</li>
-    </ul>
-  </li>
-  <li>To parse a nested JSON object: <code class="language-html highlighter-rouge">cat json.txt | jq '.location.city'</code>
-    <ul>
-      <li>output : “Mountain View”</li>
-    </ul>
-  </li>
-  <li>To parse a JSON array: <code class="language-html highlighter-rouge">cat json.txt | jq '.employees[0].name'</code>
-    <ul>
-      <li>output : “Michael”</li>
-    </ul>
-  </li>
-  <li>To extract specific fields from a JSON object: <code class="language-html highlighter-rouge">cat json.txt | jq '.location | {street, city}'</code>
-    <ul>
-      <li>output :
-        <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
-"city": "Mountain View",
-"street": "1600 Amphitheatre Parkway"
-}
-</code></pre></div>        </div>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/bash/bash-parse-json-by-jq/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

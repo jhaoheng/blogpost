@@ -124,6 +124,108 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2016-08-24T17:10:00+08:00"><a href="https://jhaoheng.github.io/blogpost/bash/bash-parse-json-by-jq/">August 24, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/bash/bash-parse-json-by-jq/" rel="bookmark" title="【bash】parse json by jq" itemprop="url">【bash】parse json by jq</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="parse-json-by-jq">parse json by jq</h1>
+
+<p><a href="http://xmodulo.com/how-to-parse-json-string-via-command-line-on-linux.html">source from</a></p>
+
+<h2 id="install-on-mac">install on mac</h2>
+
+<ul>
+  <li>mac : <code class="language-html highlighter-rouge">brew install jq</code></li>
+</ul>
+
+<h2 id="install-on-linux">install on linux</h2>
+
+<ul>
+  <li>linux(32bit) : <code class="language-html highlighter-rouge">wget http://stedolan.github.io/jq/download/linux32/jq</code></li>
+  <li>linux(64bit) : <code class="language-html highlighter-rouge">wget http://stedolan.github.io/jq/download/linux64/jq</code></li>
+  <li><code class="language-html highlighter-rouge">chmod +x ./jq</code></li>
+  <li><code class="language-html highlighter-rouge">sudo cp jq /usr/bin</code></li>
+</ul>
+
+<h2 id="example-file">example file</h2>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+        "name": "Google",
+        "location":
+                {
+                        "street": "1600 Amphitheatre Parkway",
+                        "city": "Mountain View",
+                        "state": "California",
+                        "country": "US"
+                },
+        "employees":
+                [
+                        {
+                                "name": "Michael",
+                                "division": "Engineering"
+                        },
+                        {
+                                "name": "Laura",
+                                "division": "HR"
+                        },
+                        {
+                                "name": "Elise",
+                                "division": "Marketing"
+                        }
+                ]
+}
+</code></pre></div></div>
+
+<h2 id="use">use</h2>
+
+<ul>
+  <li>To parse a JSON object: <code class="language-html highlighter-rouge">cat json.txt | jq '.name'</code>
+    <ul>
+      <li>output : “Google”</li>
+    </ul>
+  </li>
+  <li>To parse a nested JSON object: <code class="language-html highlighter-rouge">cat json.txt | jq '.location.city'</code>
+    <ul>
+      <li>output : “Mountain View”</li>
+    </ul>
+  </li>
+  <li>To parse a JSON array: <code class="language-html highlighter-rouge">cat json.txt | jq '.employees[0].name'</code>
+    <ul>
+      <li>output : “Michael”</li>
+    </ul>
+  </li>
+  <li>To extract specific fields from a JSON object: <code class="language-html highlighter-rouge">cat json.txt | jq '.location | {street, city}'</code>
+    <ul>
+      <li>output :
+        <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+"city": "Mountain View",
+"street": "1600 Amphitheatre Parkway"
+}
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/bash/bash-parse-json-by-jq/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2016-08-05T02:57:00+08:00"><a href="https://jhaoheng.github.io/blogpost/mampcant-connect-to-local-mysql-server-through-socket/">August 05, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -320,35 +422,6 @@ Reading time ~1 minute
 </ol>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/mac-appbasic-demo/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2016-07-29T16:52:00+08:00"><a href="https://jhaoheng.github.io/blogpost/phalconphpstorm-ide/">July 29, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/phalconphpstorm-ide/" rel="bookmark" title="【Phalcon】phpstorm ide" itemprop="url">【Phalcon】phpstorm ide</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <p>讓 ide 支援 phalcon-devtools 的語法
-<code class="language-html highlighter-rouge">/phalcon-devtools/ide/phpstorm/phalcon.sh</code></p>
-
-<p>讓 ide 支援 phalcon 的語法
-<code class="language-html highlighter-rouge">/phalcon-devtools/ide/stubs/Phalcon</code></p>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/phalconphpstorm-ide/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

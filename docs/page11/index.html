@@ -124,6 +124,47 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-04-05T01:07:00+08:00"><a href="https://jhaoheng.github.io/blogpost/php-mamp-pcntl-installation/">April 05, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/php-mamp-pcntl-installation/" rel="bookmark" title="【PHP-MAMP】pcntl 安裝" itemprop="url">【PHP-MAMP】pcntl 安裝</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="環境">環境</h1>
+<ul>
+  <li>osx</li>
+  <li>php7.0.8</li>
+  <li>MAMP 3.5.2</li>
+</ul>
+
+<h1 id="flow">flow</h1>
+<ol>
+  <li><code class="language-html highlighter-rouge">brew search pcntl</code>，找尋要安裝的版本</li>
+  <li><code class="language-html highlighter-rouge">brew install php70-pcntl</code>，得到 pcntl 的安裝位置 =&gt; pcntl__path</li>
+  <li>安裝完畢後，確認 php, <code class="language-html highlighter-rouge">which php</code>，得到路徑 =&gt; php__path</li>
+  <li>ls -al 路徑(php__path)，確認 php 的 source 指到的是 MAMP 的 php 路徑</li>
+  <li>在 pcntl__path 中，取得 pcntl.so 的檔案，copy 到 MAMP 的 extension 中</li>
+  <li>編輯 localhost 的 php.ini 與 MAMP 的 php.ini，加入 <code class="language-html highlighter-rouge">extension=pcntl.so</code></li>
+  <li>在 terminal 中，<code class="language-html highlighter-rouge">php -i | grep pcntl</code>，可看到版本訊息</li>
+</ol>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/php-mamp-pcntl-installation/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2017-03-15T09:41:00+08:00"><a href="https://jhaoheng.github.io/blogpost/git/Git-attribute/">March 15, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -573,54 +614,6 @@ Reading time ~1 minute
 </ol>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/php/mqtt/PHP-MQTT/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2017-01-04T13:54:00+08:00"><a href="https://jhaoheng.github.io/blogpost/line-flash-back-fix-201701/">January 04, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/line-flash-back-fix-201701/" rel="bookmark" title="【line】閃退，修復" itemprop="url">【line】閃退，修復</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <ul>
-  <li>嘗試網路上的許多操作方法包含
-    <ul>
-      <li>關閉 app 後，重新開啟 (失敗)</li>
-      <li>開啟飛航模式，開啟 app 後，任意傳訊息給任一人，關閉飛航模式 (失敗)</li>
-      <li>重新安裝 app (失敗)</li>
-      <li>透過另一支手機撥 line 電話給該 app (失敗)</li>
-    </ul>
-  </li>
-  <li>猜測是 資料庫問題，可能為轉移資料時，產生的問題
-    <ul>
-      <li>飛航模式可開啟，代表 app 沒問題，可能是網路問題</li>
-      <li>此手機的 line 登入另一個帳號，正常可使用，故非此 app or ios 版本的問題</li>
-      <li>猜測是資料庫中的帳號，認為此手機為非該用戶，故故意不讓使用</li>
-    </ul>
-  </li>
-  <li>解決方法
-    <ol>
-      <li>找出另一支手機，登入該帳號，目的在於重新設定此帳號對於 mobile 的認證</li>
-      <li>進入 line 中，開啟轉移</li>
-      <li>拿出原本的手機，登入帳號，即可正常使用</li>
-    </ol>
-  </li>
-</ul>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/line-flash-back-fix-201701/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

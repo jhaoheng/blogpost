@@ -124,6 +124,58 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2019-09-06T14:31:00+08:00"><a href="https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/">September 06, 2019</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/" rel="bookmark" title="【Golang】Diff - slice & array" itemprop="url">【Golang】Diff - slice & array</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="slice--array-差別">slice &amp; array 差別</h1>
+<blockquote>
+  <p>https://blog.golang.org/go-slices-usage-and-internals</p>
+</blockquote>
+
+<h1 id="array">Array</h1>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value.
+- An array's size is fixed;
+- Arrays do not need to be initialized
+</code></pre></div></div>
+
+<h1 id="slice">Slice</h1>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length.
+A slice can be created with the built-in function called make, which has the signature,
+`func make([]T, len, cap) []T`
+</code></pre></div></div>
+
+<h1 id="glance--difference-between-both">Glance : Difference between both</h1>
+
+<ul>
+  <li>兩者在宣告方式不同</li>
+  <li>兩者 type 不同</li>
+  <li>兩者 kind 不同</li>
+  <li>兩者在宣告後, 不設定 content, 印出內容</li>
+  <li>兩者在新增/修改值上不同</li>
+  <li>兩者 func 中，使用原理方式不同</li>
+</ul>
+
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2019-08-31T20:14:00+08:00"><a href="https://jhaoheng.github.io/blogpost/golang/gomod/">August 31, 2019</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -329,60 +381,6 @@ Reading time ~1 minute
 
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Kubernetes&Minikube/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2018-03-01T07:30:00+08:00"><a href="https://jhaoheng.github.io/blogpost/kubenetes/docker/Kubernetes&Docker/">March 01, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/kubenetes/docker/Kubernetes&Docker/" rel="bookmark" title="【Deploy Test】Use Kubernetes & Docker(local)" itemprop="url">【Deploy Test】Use Kubernetes & Docker(local)</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h2 id="synopsis">SYNOPSIS</h2>
-<ul>
-  <li>透過本地端，練習 kubenetes client
-    <ul>
-      <li>在 mac 上，建立本地端的 kubernetes server &amp; client</li>
-      <li>透過本地部署測試來降低雲端部署的錯誤</li>
-    </ul>
-  </li>
-  <li>安裝 kubernetes server
-    <ul>
-      <li>實踐日期 20180301, 未來或許會有更好的方法進行測試</li>
-      <li>docker for mac 這個應用程式本身就包含 kubernetes server 的建立</li>
-      <li>關於 minikube，須先安裝 vm 服務 (virtualbox) 才能使用 [參考另一篇關於 kubenetes &amp; minikube)</li>
-    </ul>
-  </li>
-  <li>安裝 kubenetes client 則透過<a href="https://kubernetes.io/docs/imported/release/notes/">官網安裝</a>即可</li>
-</ul>
-
-<h2 id="environment">Environment</h2>
-<ul>
-  <li>osx</li>
-  <li>docker community edition version 18.03.0-ce, channel:edge. 此版本在 20180301 支援 kubernetes 的整合.</li>
-  <li>kubectl version
-    <ul>
-      <li>Client Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.1”, GitCommit:”3a1c9449a956b6026f075fa3134ff92f7d55f812”, GitTreeState:”clean”, BuildDate:”2018-01-04T11:52:23Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”darwin/amd64”}</li>
-      <li>Server Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.2”, GitCommit:”5fa2db2bd46ac79e5e00a4e6ed24191080aa463b”, GitTreeState:”clean”, BuildDate:”2018-01-18T09:42:01Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”linux/amd64”}</li>
-    </ul>
-  </li>
-</ul>
-
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/kubenetes/docker/Kubernetes&Docker/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

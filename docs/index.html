@@ -124,6 +124,51 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2019-09-10T19:11:00+08:00"><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/">September 10, 2019</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/" rel="bookmark" title="【Go】利用 struct 優化（二）:interface" itemprop="url">【Go】利用 struct 優化（二）:interface</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="sypnosis">Sypnosis</h1>
+
+<p>在上一個程式碼經過第一階段優化後</p>
+
+<div>
+    <iframe src="https://play.golang.org/p/D0_Jvfq5da8" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<p>接下來的問題是</p>
+<ol>
+  <li>兩邊都有相同的 method, read(), 如何建立一個統一的接口, 再執行某 func, for ex:
+    <ul>
+      <li>‘db read’ : 不同的 db 都會有 read 的 method</li>
+      <li>‘sign in’ : 不同的登入方法, 但可能是 jwt,facebook, email 等</li>
+      <li>‘notification’ : 不同的 notification 進行設計 (ios,android,aws,極光…)</li>
+    </ul>
+  </li>
+  <li>接續 1, 在實踐上, 能夠把 func 寫成 method 嗎? 讓可讀性變高</li>
+</ol>
+
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2019-09-10T13:51:00+08:00"><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">September 10, 2019</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -304,58 +349,6 @@ Reading time ~1 minute
 
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2019-09-06T14:31:00+08:00"><a href="https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/">September 06, 2019</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/" rel="bookmark" title="【Golang】Diff - slice & array" itemprop="url">【Golang】Diff - slice & array</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="slice--array-差別">slice &amp; array 差別</h1>
-<blockquote>
-  <p>https://blog.golang.org/go-slices-usage-and-internals</p>
-</blockquote>
-
-<h1 id="array">Array</h1>
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value.
-- An array's size is fixed;
-- Arrays do not need to be initialized
-</code></pre></div></div>
-
-<h1 id="slice">Slice</h1>
-<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length.
-A slice can be created with the built-in function called make, which has the signature,
-`func make([]T, len, cap) []T`
-</code></pre></div></div>
-
-<h1 id="glance--difference-between-both">Glance : Difference between both</h1>
-
-<ul>
-  <li>兩者在宣告方式不同</li>
-  <li>兩者 type 不同</li>
-  <li>兩者 kind 不同</li>
-  <li>兩者在宣告後, 不設定 content, 印出內容</li>
-  <li>兩者在新增/修改值上不同</li>
-  <li>兩者 func 中，使用原理方式不同</li>
-</ul>
-
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

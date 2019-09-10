@@ -124,6 +124,62 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2016-06-29T05:14:00+08:00"><a href="https://jhaoheng.github.io/blogpost/bash-package-file-build-executable/">June 29, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/bash-package-file-build-executable/" rel="bookmark" title="【bash】archive.command" itemprop="url">【bash】archive.command</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h2 id="目的">目的</h2>
+
+<ol>
+  <li>有幾個要封裝的檔案 : 在 xocde 中 build 三個 封裝好的 framework，另外還需封裝 file/document</li>
+  <li>直接在 folder 中，執行後，直接封裝</li>
+</ol>
+
+<h2 id="env">ENV</h2>
+
+<ul>
+  <li>mac</li>
+  <li>bash</li>
+</ul>
+
+<h2 id="流程">流程</h2>
+
+<ol>
+  <li><code class="language-html highlighter-rouge">vim archive.sh</code>
+```
+DIR=”$( cd “$( dirname “${BASH_SOURCE[0]}” )” &amp;&amp; pwd )”
+#echo ${DIR}
+cd ${DIR}</li>
+</ol>
+
+<p>productName=$( printf ‘%s\n’ ${PWD##<em>/} )
+#echo $productName
+zip -r “archive-$(date +”%Y-%m-%d”).zip” ./youfile_1/</em> ./yourfilw_2/*
+```</p>
+<ol>
+  <li><code class="language-html highlighter-rouge">mv archive.sh archive.command</code></li>
+  <li><code class="language-html highlighter-rouge">chmod 755 archive.command</code></li>
+</ol>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/bash-package-file-build-executable/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2016-06-26T06:21:00+08:00"><a href="https://jhaoheng.github.io/blogpost/xcode-framework-dynamic-static-diff/">June 26, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -454,48 +510,6 @@ Reading time ~1 minute
 </ol>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/xcode%20ios/xcodecreate-framework/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2016-05-31T16:18:00+08:00"><a href="https://jhaoheng.github.io/blogpost/dynamic-programming/">May 31, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/dynamic-programming/" rel="bookmark" title="Dynamic Programming" itemprop="url">Dynamic Programming</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="動態規劃dynamic-programming">動態規劃(Dynamic Programming)</h1>
-
-<p><a href="http://wangyung.blogspot.tw/2016/05/blog-post.html?utm_content=bufferd71fd&amp;utm_medium=social&amp;utm_source=facebook.com&amp;utm_campaign=buffer">Line 面試</a>
-中有一題，提到『動態規劃』一詞與 Fibonacci 的設計方法</p>
-
-<p>稍微 review 一下，『為何 Fibonacci 中單純用遞迴，效率不高』
-透過『動態規劃』，把每一次計算出的結果 儲存起來，之後重複的運算，就取出之前暫存的(cached)結果即可</p>
-
-<p>感覺有點類似之前在做數據分析時，在 cached 相同，或者相似資料時，所做的處理
-避免重複性的計算，增加程式的效率</p>
-
-<p>Dynamic Programming Approaches:</p>
-<ul>
-  <li>Bottom-Up</li>
-  <li>Top-Down</li>
-</ul>
-
-<p><a href="http://algorithms.tutorialhorizon.com/introduction-to-dynamic-programming-fibonacci-series/">參考資料</a></p>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/dynamic-programming/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->
