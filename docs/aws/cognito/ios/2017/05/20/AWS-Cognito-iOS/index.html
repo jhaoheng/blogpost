@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【IOS】AWS Cognito sample test">
-<meta property="og:url" content="/aws/cognito/ios/2017/05/20/AWS-Cognito-iOS/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/aws/cognito/ios/2017/05/20/AWS-Cognito-iOS/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="aws cognito with ios 設定 ios aws sdk : http://docs.aws.amazon.com/zh_cn/mobile/sdkforios/developerguide/setup-aws-sdk-for-ios.html 在側邊欄也有基礎的 cognito 設定/使用方法 Cognito 說明與介紹 : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/what-is-amazon-cognito.html sdk 下載 : https://github.com/aws/aws-sdk-ios sample 下載 : https://github.com/awslabs/aws-sdk-ios-samples CognitoSync-Sample 需禁用 bitcode 才可以正常使用 環境 xcode : 8.3.2 ios 10.3.2 objective c use cocoapod 使用授權的 flow : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/authentication-flow.html 關於 STS : Security token service 的文章簡介 : https://blog.clifflu.net/2014/05/iam-role-%E8%88%87-sts/ 比較 STS API : http://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison 1: 設定 aws cognito user pool 設定 user pool 要建立 app client =&amp;gt; 提供 identity pool 設定用 2: Cognito User pool login, step 參考 step 1~6 : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/tutorial-integrating-user-pools-ios.html#tutorial-integrating-user-pools-get-aws-resource-cred-for-app-user 參考 sample 中的 CognitoYourUserPools-Sample 在 Constants.m 中設定相關參數 實機測試時，進行註冊，可在 aws cognito console 中，看到相關註冊資訊 註冊完畢後，在使用 Federated Identities 進行暫行憑證的取得 3: 設定 AWS Congito Federated Identity Console 設定 identity pool 提供多種授權方法 : Cognito, Amazon, Facebook, Google+, Twitter, Custom - http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/external-identity-providers.html 完成後，會有各個平台的 sample code 可參考 在 (1:) 中取得設定好的 user pool id , app client id 填入 Authentication providers 中的 cognito 4: Cognito Federated Identities login , step 取得 Cognito 授權登入，需先註冊完 cognito user pool 參考 : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/tutorial-integrating-user-pools-ios.html#tutorial-integrating-user-pools-get-aws-resource-cred-for-app-user http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/amazon-cognito-integrating-user-pools-with-identity-pools.html // 設定 1 AWSServiceConfiguration *serviceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:nil]; // 設定 2 AWSCognitoIdentityUserPoolConfiguration *userPoolConfiguration = [[AWSCognitoIdentityUserPoolConfiguration alloc] initWithClientId:@&quot;YOUR_CLIENT_ID&quot; clientSecret:@&quot;YOUR_CLIENT_SECRET&quot; poolId:@&quot;YOUR_USER_POOL_ID&quot;]; // 設定 3 [AWSCognitoIdentityUserPool registerCognitoIdentityUserPoolWithConfiguration:serviceConfiguration userPoolConfiguration:userPoolConfiguration forKey:@&quot;UserPool&quot;]; // 取得 user pool, 從 &apos;設定 3&apos; 中 AWSCognitoIdentityUserPool *pool = [AWSCognitoIdentityUserPool CognitoIdentityUserPoolForKey:@&quot;UserPool&quot;]; // 取得 credentailsProvider AWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProvider alloc] initWithRegionType:AWSRegionUSEast1 identityPoolId:@&quot;YOUR_IDENTITY_POOL_ID&quot; identityProviderManager:pool]; 將憑證放入 serviceManager 中 AWSServiceConfiguration *defaultServiceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:credentialsProvider]; AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultServiceConfiguration; ex: facebook 授權登入，此為 sample 既有的範例 參考 sample 中的 CognitoSync-Sample sample 中，記得關閉 bitcode (預設是開啟)，否則實機測試會失敗(測試時間 20170520) compile error : linker command failed with exit code 1 在 app 中，設定好 facebook 的參數。在 cognito federated identities console 中開啟 facebook 的授權驗證。 安裝 app 後就可以登入，並拿到 臨時的憑證(預設一小時)，可操作包含 synchronize data with Amazon Cognito Sync Amazon DynamoDB Amazon S3, and Amazon API Gateway 4: Using Tokens with User Pools 成功取得授權後，會得到三把 token : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html ID token Access token Refresh token 5: Cognito Federated Identities 其他操作 Getting Credentials http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/getting-credentials.html Accessing AWS Services : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/accessing-aws-services.html 6: Amazon Cognito Sync 透過 user pool 來同步手機資料，將用戶的某些資料放到 aws console 中，避免遺失，也可用於跨多裝置的使用">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/aws/cognito/ios/2017/05/20/AWS-Cognito-iOS/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/aws/cognito/ios/2017/05/20/AWS-Cognito-iOS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -336,7 +336,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/AWS" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/AWS" itemprop="url" rel="index">
                     <span itemprop="name">AWS</span>
                   </a>
                 </span>
@@ -348,7 +348,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/Cognito" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/Cognito" itemprop="url" rel="index">
                     <span itemprop="name">Cognito</span>
                   </a>
                 </span>
@@ -360,7 +360,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/iOS" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/iOS" itemprop="url" rel="index">
                     <span itemprop="name">iOS</span>
                   </a>
                 </span>
@@ -598,7 +598,7 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/05/22/aws-dynamodblocalhost/" rel="next" title="【AWS DynamoDB】localhost">
+              <a href="/blogpost/2017/05/22/aws-dynamodblocalhost/" rel="next" title="【AWS DynamoDB】localhost">
                 <i class="fa fa-chevron-left"></i> 【AWS DynamoDB】localhost
               </a>
             
@@ -608,7 +608,7 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/hls/aws/2017/05/18/HLS-AWS/" rel="prev" title="【AWS S3】播放 HLS 時，發生 crossdomain access denied">
+              <a href="/blogpost/hls/aws/2017/05/18/HLS-AWS/" rel="prev" title="【AWS S3】播放 HLS 時，發生 crossdomain access denied">
                 【AWS S3】播放 HLS 時，發生 crossdomain access denied <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -679,7 +679,7 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -690,7 +690,7 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -701,7 +701,7 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -712,7 +712,7 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -844,64 +844,64 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

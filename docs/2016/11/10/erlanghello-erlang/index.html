@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【erlang】Hello Erlang!">
-<meta property="og:url" content="/2016/11/10/erlanghello-erlang/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/2016/11/10/erlanghello-erlang/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="hello_erlang_1 hello.erl code -module(hello). -export([print/0]). print() -&amp;gt; io:format(&quot;World!~n&quot;). 解析 -module -export [print/0] : 函數名稱 print , 參數 0 個 io:format : 格式化標準輸出函數，參考 io : Available control sequences: ~n : Writes a new line. test 流程 erl pwd(). ls(). c(hello). : hello 為 hello.erl 的檔案名稱, c() 為編譯此檔案 -&amp;gt; 會產生 hello.beam 的執行擋 hello:print(). 基本 . : 每一句皆以此，作為一個斷句 hello_erlang_2 hello2.erl -module(hello2). -compile(export_all). square(N) -&amp;gt; N*N. sum([]) -&amp;gt; 0; sum([Num|Ns]) -&amp;gt; Num + sum(Ns). sum_square([]) -&amp;gt; 0; sum_square([Num|Ns]) -&amp;gt; square(Num) + sum_square(Ns). test hello2:square(2). : 4 hello2:sum([1,2,3,4,5]). : 15 ; : 代表 or , : 代表 and hello_erlang_3 hello3.erl solve(1) -&amp;gt; [1]; solve(N) when N rem 2 == 0 -&amp;gt; [N|solve(N div 2)]; solve(N) -&amp;gt; [N|solve(N*3+1)]. set(N) -&amp;gt; {ok, [H|T] = solve(N)}. hello_erlang_4 : regular expressions hello4.erl ``` -module(do). -compile(export_all). multire([],_) -&amp;gt; nomatch; multire([RE|RegExps],String) -&amp;gt; case re:run(String,RE,[{capture,none}]) of match -&amp;gt; RE; nomatch -&amp;gt; multire(RegExps,String) end. % 開頭為 Hello, 結尾有 world, 均符合 test(Foo) -&amp;gt; test2(multire([“^Hello”,”world$”,”^….$”],Foo),Foo). test2(“^Hello”,Foo) -&amp;gt; io:format(“~p matched the hello pattern~n”,[Foo]); test2(“world$”,Foo) -&amp;gt; io:format(“~p matched the world pattern~n”,[Foo]); test2(“^….$”,Foo) -&amp;gt; io:format(“~p matched the four chars pattern~n”,[Foo]); test2(nomatch,Foo) -&amp;gt; io:format(“~p failed to match~n”,[Foo]). -define (Email_pattern, “\b[a-zA-Z0-9.!#$%&amp;amp;’+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)\b”). -define (Mac_address_pattern, “^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$”). checkPattern(Foo) -&amp;gt; checkPattern2(multire([[?Email_pattern], [?Mac_address_pattern]],Foo),Foo). checkPattern2([?Email_pattern], Foo) -&amp;gt; io:format(“email format : ~p ~n”, [Foo]); checkPattern2([?Mac_address_pattern], Foo) -&amp;gt; io:format(“device format : ~p ~n”, [Foo]); checkPattern2(nomatch, Foo) -&amp;gt; io:format(“nomatch : ~p ~n”, [Foo]). ```">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/2016/11/10/erlanghello-erlang/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/11/10/erlanghello-erlang/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -534,7 +534,7 @@ checkPattern2(nomatch, Foo) -&gt;
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/11/16/erlangsplit-from-str/" rel="next" title="【erlang】split from str">
+              <a href="/blogpost/2016/11/16/erlangsplit-from-str/" rel="next" title="【erlang】split from str">
                 <i class="fa fa-chevron-left"></i> 【erlang】split from str
               </a>
             
@@ -544,7 +544,7 @@ checkPattern2(nomatch, Foo) -&gt;
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/10/24/gclouddocker-push-pull-delete/" rel="prev" title="【gcloud】docker push/pull/delete">
+              <a href="/blogpost/2016/10/24/gclouddocker-push-pull-delete/" rel="prev" title="【gcloud】docker push/pull/delete">
                 【gcloud】docker push/pull/delete <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -615,7 +615,7 @@ checkPattern2(nomatch, Foo) -&gt;
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -626,7 +626,7 @@ checkPattern2(nomatch, Foo) -&gt;
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -637,7 +637,7 @@ checkPattern2(nomatch, Foo) -&gt;
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -648,7 +648,7 @@ checkPattern2(nomatch, Foo) -&gt;
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -780,64 +780,64 @@ checkPattern2(nomatch, Foo) -&gt;
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

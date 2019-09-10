@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Docker】ENV">
-<meta property="og:url" content="/2017/06/07/dockerenv/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/2017/06/07/dockerenv/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="env 環境變數 當用 docker 設定環境變數 docker 會將變數透過 bash 建立變數，並將 變數 export 故在設定 docker env 後，運行 docker，可以透過 export -p 查看所有環境變數 index.php &amp;lt;?php echo getenv(&quot;helloEnv&quot;).PHP_EOL; echo getenv(&quot;go&quot;).PHP_EOL; step docker pull jhaoheng/php_env:v1.2 // 建立 container, 設定 env docker run -dt -e &quot;helloEnv=sure&quot; -e &quot;go=ok&quot; [image_id] // 查看 container 中的環境變數 docker exec d11d88d32 bash -c export -p // 放入 index.php docker cp index.php [container_id]:/home // 透過 php 取得環境變數 docker exec [container_id] php /home/index.php 設計模式 設定好環境變數 設定好取得環境變數的模板 在運行 docker container 時，自動依據環境變數，建立起 config">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/2017/06/07/dockerenv/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/06/07/dockerenv/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -439,7 +439,7 @@ docker exec [container_id] php /home/index.php
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/07/aws-s3-multiple-file-upload/" rel="next" title="【AWS-S3】多檔案上傳">
+              <a href="/blogpost/2017/06/07/aws-s3-multiple-file-upload/" rel="next" title="【AWS-S3】多檔案上傳">
                 <i class="fa fa-chevron-left"></i> 【AWS-S3】多檔案上傳
               </a>
             
@@ -449,7 +449,7 @@ docker exec [container_id] php /home/index.php
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/srs/docker/2017/05/31/SRS-docker/" rel="prev" title="【SRS-release2.0】docker with centos7.3">
+              <a href="/blogpost/srs/docker/2017/05/31/SRS-docker/" rel="prev" title="【SRS-release2.0】docker with centos7.3">
                 【SRS-release2.0】docker with centos7.3 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -520,7 +520,7 @@ docker exec [container_id] php /home/index.php
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -531,7 +531,7 @@ docker exec [container_id] php /home/index.php
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -542,7 +542,7 @@ docker exec [container_id] php /home/index.php
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -553,7 +553,7 @@ docker exec [container_id] php /home/index.php
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -685,64 +685,64 @@ docker exec [container_id] php /home/index.php
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

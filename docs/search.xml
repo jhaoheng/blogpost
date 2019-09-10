@@ -3,7 +3,7 @@
   
     <entry>
       <title><![CDATA[【Go】利用 struct 優化（二）:interface]]></title>
-      <url>/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/</url>
+      <url>/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/</url>
       <content type="text"><![CDATA[Sypnosis【Go】利用 struct 優化（一）後，可以得知  使用 struct 讓物件統一，更容易理解  使用 pointer 來提高 memory 的使用效率  使用 func as method 讓程式碼更容易被閱讀以下為相關程式碼        接下來的問題是  兩邊都有相同的 method, read(), 如何建立一個統一的接口, 再執行某 func, for ex:          db read : 不同的 db 都會有 read 的 method      sign in : 不同的登入方法, 但可能是 jwt, facebook, email 等      notification : 不同的 notification 進行設計 (ios,android,aws,極光…)        接續 1, 在實踐上, 再把 func 變成 method, 讓可讀性變高1. 發現兩者都有 area() 的 method  在程式中, 我們可以用 interface{} 來將兩者的 method 包在一起, 以方便一起處理某些事情  範例程式碼1-1 定義 interface  在 struct 中, 定義 fields  在 interface 中, 定義 method set.type Shape interface {	area() float64}  定義好 interface, 接下來就是透過 func 來實踐『特定功能』, 這邊舉一個簡單的例子 showArea()          其他例子的使用，例如 : 發送 notification 後，驗證錯誤訊息        在 func 中使用 interfcae type 當作參數送給 functionfunc showArea(shapes ...Shape) {	for _, s := range shapes {		fmt.Println(s.area())	}}// mainfunc main() {	// init	c := Circle{5}	r := Rectangle{Coordinate{0, 0}, Coordinate{10, 10}}	// Show	showArea(&amp;c, &amp;r)}1-2 範例程式碼        2. 將 func 定義成 method  定義一個新的類型 type MultiShape struct{}, 負責存放所有的 shapes  將 func -&gt; method  範例程式碼2-1 定義 MultiShapetype MultiShape struct {	shapes []Shape}2-2 接下來將 func 改成 method, 並宣告物件 mfunc (m *MultiShape) showArea() {	for _, s := range m.shapes {		fmt.Println(s.area())	}}// mainfunc main() {	// init	c := Circle{5}	r := Rectangle{Coordinate{0, 0}, Coordinate{10, 10}}	// Show	m := MultiShape{		[]Shape{&amp;c, &amp;r},	}	m.showArea()}2-3 範例程式碼  額外添加添加 name()        延伸問題  如何添加周長?]]></content>
       <categories>
         
@@ -20,7 +20,7 @@
   
     <entry>
       <title><![CDATA[【Go】利用 struct 優化（一）]]></title>
-      <url>/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96/</url>
+      <url>/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96/</url>
       <content type="text"><![CDATA[Synopsis  透過 struct 方式，容易看懂程式  透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)  使用 func as method 方式，讓程式碼在 func 使用上更容易被理解Example一般來說，如果要用程式碼計算『圓形面積』、『長方形面積』，可以用一些簡單的方式攥寫        但回頭看這個程式碼，會發現  如果要追蹤『rx1, ry1, rx2, ry2』或者『cx, cy, cr』當程式碼一長 or 複雜，就很難理解這個參數的意義  儘管有寫註解，在 function 中，一樣很難快速理解解決方案 : 使用 struct 來幫助理解use structstruct 是一種 type, 它包含了名稱的欄位, 例如：可以把 Rectangle 寫成如下方式type Coordinate struct {	x float64	y float64}type Rectangle struct {	start Coordinate	end   Coordinate}  新增一個 Coordinate 的物件, 類型(type)是 struct, 裡面夾帶 (x,y) 欄位  新增一個 Rectangle, 類型(type)是 struct 的物件, 裡面夾帶 ‘起始座標’ 與 ‘結束座標’  宣告方法可以有以下幾種  以下都相同，跟 (2) 不同的是，返回是一個指標          r := new(Rectangle), 而 new 的主要作用是為 type 申請 memory，並返回指向 memory 的指標。      r := &amp;Rectangle{}        以下也都相同          var r Rectangle      r := Rectangle{}      r := Rectangle{Coordinate{}, Coordinate{}}      r := Rectangle{ start: Coordinate{}, end:   Coordinate{},}      優化開始  steps          將 func() 參數物件改為傳遞 struct      將 func() 中 strct 設定為指標      function as a method      1. 將 func() 參數物件改為傳遞 struct從上面的基本操作，建立了 Rectangle 物件, type 是 struct所以將 rectangleArea() 與 distance() 變更為func rectangleArea(r Rectangle) float64 {	l := r.end.x - r.start.x	w := r.end.y - r.start.y	return l * w}在 main 中, 可以改為, 如此可以輕鬆地理解 r 來自於 Rectangle 這個結構中的欄位r := Rectangle{	start: Coordinate{		x: 1,		y: 1,	},	end: Coordinate{		x: 10,		y: 10,	},}fmt.Println(rectangleArea(r))2. 將 func() 中 strct 設定為指標以上 func 中, 重新宣告了一個 Rectangle 的物件可以使用 fmt.Printf("%p\n", ThePointer) 查看記憶體位置的變化for example0xc00009c000 &lt;= main 中的 Rectangle0xc00009c020 &lt;= func 中的 Rectangle但可以用 pointer, 避免重複宣告並佔用 memory, 浪費資源func rectangleArea(r *Rectangle) float64 {    fmt.Printf("%p", r) // 因為這邊的 r 已經是 pointer	l := r.end.x - r.start.x	w := r.end.y - r.start.y	return l * w}在 main 中r := Rectangle{	start: Coordinate{		x: 1,		y: 1,	},	end: Coordinate{		x: 10,		y: 10,	},}fmt.Printf("%p\n", &amp;r)fmt.Println(rectangleArea(&amp;r))3. function as a method解決了以上的問題，會發現  rectangle 與 circle 都有 area, 雖然可以在命名上作區別, 但有更好的方法且可以透過 . 的方式, 快速地在編輯器上引用此 method  在 main 中，帶入的物件是 &amp;r 會有點難以理解  將 rectangleArea() 改為 rectangle 的 methodfunc (r *Rectangle) area() float64 {	fmt.Printf("%p\n", r)	l := r.end.x - r.start.x	w := r.end.y - r.start.y	return l * w}在 main 中fmt.Println(r.area())優化結束        這是一個簡短的例子，當我們將功能越寫越多時，程式碼會越複雜我們可以透過此方法達成以下三個目的  透過 struct 方式，容易看懂程式  透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)  使用 func as method 方式，讓程式碼在 func 使用上更容易被理解結論  過於複雜的參數傳遞，雖然我們可以用命名方式來釐清，但名稱越長，也會使程式碼難以理解  優化並非將程式碼縮短(但的確在大型架構下，可以縮短，並更容易理解)問題一個人裡有各種資訊物件，身分證、健保卡、護照，都用在不同的地方，也都有各自的 ID可以透過 struct 將 『身分證、健保卡、護照』 各自建立起來，用在不同的目的上但是否有方法整合這些物件？參考下篇: struct優化（二）:interface]]></content>
       <categories>
         
@@ -37,7 +37,7 @@
   
     <entry>
       <title><![CDATA[【Go】Drill interface{}]]></title>
-      <url>/golang/2019/09/07/Go-drill-interface/</url>
+      <url>/blogpost/golang/2019/09/07/Go-drill-interface/</url>
       <content type="text"><![CDATA[interface{}Explore  When set object is an interface{}  Set object is an interface{}  Use pointer to set object value is int / string / struct / slice  Print kind / address / type / valueconclusion  The interface{} is changed by each time setting, but the address is not changed.for example        sourcepackage mainimport (	"fmt"	"reflect")type S struct {	x int	y int}func main() {	var i interface{}	printInfo(&amp;i)	setInt(&amp;i)	setStr(&amp;i)	setStruct(&amp;i)	setSlice(&amp;i)}func setInt(i *interface{}) {	*i = 999	printInfo(i)}func setStr(i *interface{}) {	*i = "str"	printInfo(i)}func setStruct(i *interface{}) {	*i = S{		x: 1,		y: 2,	}	printInfo(i)}func setSlice(i *interface{}) {	*i = []int{1, 2, 3, 4}	printInfo(i)}func printInfo(i *interface{}) {	objKind := reflect.ValueOf(*i).Kind()	objType := fmt.Sprintf("%T", *i)	objAddress := fmt.Sprintf("%p", *&amp;i)	objValue := *i	fmt.Printf("[Kind is : %v]\n", objKind)	fmt.Printf("% 15v %v\n", "Address =&gt;", objAddress)	fmt.Printf("% 15s %v\n", "Type =&gt;", objType)	fmt.Printf("% 15s %+v\n", "Value =&gt;", objValue)}]]></content>
       <categories>
         
@@ -54,7 +54,7 @@
   
     <entry>
       <title><![CDATA[【Apache】Proxy & Use Expressions To Restricted Access]]></title>
-      <url>/kubenetes/minikube/2019/09/06/Apache-Proxy&UseExpressions/</url>
+      <url>/blogpost/kubenetes/minikube/2019/09/06/Apache-Proxy&UseExpressions/</url>
       <content type="text"><![CDATA[Goal  80 port proxy to 8080 port. If work, will show ‘proxy’  http://localhost:8080 can’t access, must return 404.          Use &lt;If "%{SERVER_PORT} != '80'"&gt; Redirect 404 / &lt;/If&gt;      Repo &amp; Env Set  source code : https://github.com/jhaoheng/apacheProxy&amp;UseExpressions  docker-compose up -d &amp;&amp; docker exec -it ubuntu /bin/bash  apt-get update  apt-get install -y libapache2-mod-proxy-html libxml2-dev apache2 build-essential  Proxy Modules          a2enmod proxy proxy_http proxy_ajp rewrite proxy_balancer proxy_connect proxy_html xml2enc      Steps  ref ./default.conf &amp; ports.confstep1 : enable port 8080  update ports.conf in the ‘/etc/apache2/ports’  Listen 8080step2 : set VirtualHost  echo "proxy" &gt; /var/www/proxy/index.html  set VirtualHost```&lt;VirtualHost *:8080&gt;        ServerName localhost        DocumentRoot /var/www/proxy/&lt;/VirtualHost&gt;## step3 : set proxyProxyProxyRequests OffProxyPass / http://localhost:8080ProxyPassReverse / http://localhost:8080ProxyPreserveHost On## step4 : restricted direct connect localhost:8080&gt; Write below into `&lt;VirtualHost *:8080&gt; ... &lt;/VirtualHost&gt;`AllowCONNECT 80&lt;If “%{SERVER_PORT} != ‘80’”&gt;        Redirect 404 /&lt;/If&gt;```  Expressions in Apache HTTP Server          https://httpd.apache.org/docs/current/expr.html      step5 : restart &amp; check it  apache2ctl restart  http://localhost:80, will show ‘proxy’  http://localhost:8080, be restricted to access]]></content>
       <categories>
         
@@ -73,7 +73,7 @@
   
     <entry>
       <title><![CDATA[【Golang】func & pointer]]></title>
-      <url>/golang/2019/09/06/Go-func&pointer/</url>
+      <url>/blogpost/golang/2019/09/06/Go-func&pointer/</url>
       <content type="text"><![CDATA[kind  Different kinds use a pointer to change the value in Func.  map  slice  array  string  struct        package mainimport "fmt"func main() {	// map	var mapObj = map[int]string{}	mapObj[0] = "max"	updateMapObj(mapObj)	fmt.Println("   map =&gt;", mapObj)	// slice	sliceObj := []string{		0: "max",	}	updateSliceObj(sliceObj)	fmt.Println(" slice =&gt;", sliceObj) // [sunny]	// array	arrayObject := [1]string{"max"}	updateArrayObj(&amp;arrayObject)	fmt.Println(" array =&gt;", arrayObject) // [sunny]	// string	var stringObj string	stringObj = "max"	updateStringObj(&amp;stringObj)	fmt.Println("string =&gt;", stringObj) // 999	// struct	var srtuctObj StructObject	srtuctObj.name = "max"	updateStructObj(&amp;srtuctObj)	fmt.Println("struct =&gt;", srtuctObj) // {sunny}}func updateMapObj(mapObj map[int]string) {	mapObj[0] = "sunny"}func updateArrayObj(arrayObject *[1]string) {	arrayObject[0] = "sunny"}func updateSliceObj(sliceObj []string) {	sliceObj[0] = "sunny"}func updateStringObj(stringObj *string) {	*stringObj = "sunny"}type StructObject struct {	name string}func updateStructObj(srtuctObj *StructObject) {	srtuctObj.name = "sunny"}]]></content>
       <categories>
         
@@ -90,7 +90,7 @@
   
     <entry>
       <title><![CDATA[【Golang】Diff - slice & array]]></title>
-      <url>/golang/2019/09/06/Go-diff-slice&array/</url>
+      <url>/blogpost/golang/2019/09/06/Go-diff-slice&array/</url>
       <content type="text"><![CDATA[slice &amp; array 差別  https://blog.golang.org/go-slices-usage-and-internalsArrayGo's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value.- An array's size is fixed;- Arrays do not need to be initializedSliceThe type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length.A slice can be created with the built-in function called make, which has the signature,`func make([]T, len, cap) []T`Glance : Difference between both  兩者在宣告方式不同  兩者 type 不同  兩者 kind 不同  兩者在宣告後, 不設定 content, 印出內容  兩者在新增/修改值上不同  兩者 func 中，使用原理方式不同兩者在宣告方式不同 :  array : Go’s arrays are values.          var arrObject [4]int      arrObject := [4]int{0, 1, 2, 3}      arrObject := [...]int{0, 1, 2, 3}        slice : 用 make 建立          var sliceObject []int      sliceObject := []int{}      sliceObject := []int{1,2,3,4}      兩者 type 不同  array : fmt.Println(reflect.TypeOf(arrObject)), 顯示 [4]int  slice : fmt.Println(reflect.TypeOf(sliceObject)), 顯示 []int        兩者 kind 不同 :  array : fmt.Println(reflect.TypeOf(arrObject).Kind()), 顯示 array  slice : fmt.Println(reflect.TypeOf(sliceObject).Kind()), 顯示 slice        兩者在宣告後, 不設定 content, 印出內容  array : An array’s size is fixed  slice : A slice type has no specified length.        兩者在新增/修改值上不同  array          arr 長度固定, 無法新增      新增、修改 : arrObject[0] = 999        slice          新增 : sliceObject = append(sliceObject, 1,2,3,4)      修改 : sliceObject[0] = 999              兩者 func 中，使用原理方式不同  範例中用到的 func, 需要注意 pointer  array 在 func 中, 是用 copy 的方式. 故最好用 pointer 的方式在傳遞 array  slice 本身就是一個 pointer, 故可以在 func 中, 看到 address 相同        The same兩者在切割方式上相同 :  arr[:2] = sliceObject[:2]顯示長度上  array : fmt.Println(len(arrayObject)), 顯示 4  slice : fmt.Println(len(sliceObject)) 顯示 0]]></content>
       <categories>
         
@@ -107,7 +107,7 @@
   
     <entry>
       <title><![CDATA[【Golang】Go module]]></title>
-      <url>/golang/2019/08/31/gomod/</url>
+      <url>/blogpost/golang/2019/08/31/gomod/</url>
       <content type="text"><![CDATA[環境  go version go1.12.9 darwin/amd64  官方教學 : https://github.com/golang/go/wiki/Modules#quick-start啟用方式  支援 GO 1.11 以後版本          確認版本 go version，檢查環境變數 : go env        調用方式有兩種          在 GOPATH 外，確定 GO111MODULE 沒有設定或者設定為 auto，並在專案中建立 go.mod      在 GOPAHT 中，設定 export GO111MODULE=on，就可直接在 GOPATH 中使用      使用  可參考快速使用 https://github.com/golang/go/wiki/Modules#quick-start1. 建立 repo$ mkdir -p /tmp/scratchpad/repo$ cd /tmp/scratchpad/repo$ git init -q$ git remote add origin https://github.com/my/repo2. 初始化 go module$ go mod init github.com/my/repo  {github.com/my/repo} : 只是一個對應的名稱3. 設定 main.go$ cat &lt;&lt;EOF &gt; hello.gopackage mainimport (    "fmt"    "rsc.io/quote")func main() {    fmt.Println(quote.Hello())}EOF4. 建立 hello 執行檔$ go build -o hello$ ./hello  go build|test|install : 都會下載 pkg 到 $GOPATH/pkg/mod 目錄下          使用 go mod download        因為並沒有明確設定 go.mod 中 rsc.io/quote 的版本，會自動下載最新版本，可以去 go.mod 中檢查變動  可以注意到並沒有用 go get 的指令  當想要變更版本，可以使用 go get foo@v1.2.3, go get foo@master, go get foo@e3702bed2, 或者直接編輯 go.mod 然後執行下載.一個標準的 go.modmodule maxtestrequire (	github.com/joho/godotenv v1.3.0	rsc.io/quote v1.5.2)go 1.12	  下載的 go pkg 都會放在 GOPATH/pkg/mod/... 路徑中  gomod 不會在 $GOPATH/src 目錄下保存 pkg 包的源碼，而是包源碼和鏈接庫保存在 $GOPATH/pkg/mod 目錄下。一些會用到的相關指令  https://github.com/golang/go/wiki/Modules#daily-workflow  go list -m all          查看所有目前 build 後有使用的相依版本(direct and indirect 都會列出)        go list -u -m all          對所有的 direct 與 indirect 相依，查看有效的最小版本與補丁升級。(details)        go list -u -m -json all          用 json 格式顯示詳細資料        go get -u or go get -u=patch          更新所有相依到最新的版本號或者補丁升級(pre-releases 會被忽略)        go build ./... or go test ./...          在根目錄執行 build 與 test 會下載 module        go mod tidy          從 go.mod 中，新增或移除沒用的 modules        go mod vendor          若你有在使用 vendor, 可使用此指令, 將 modules 複製到 vendor 目錄下      其他  go list 只是把 cache 更新, 要用 go mod download 才會下載  go mod edit -fmt : 重新格式化 go.mod 的格式, ex : 如果版本不是 3 位數，會補齊  清除下載的 pkg &amp; cache : go clean -i -x -modcachego.mod 與 go.sum  確保 go.sum 與 go.mod 一起遞交到 git 中  For validation purposes, go.sum contains the expected cryptographic checksums of the content of specific module versions.  go.sum 是為了驗證目的，go.sum 包含所有指定版本的 cryptographic checksums  此外，go.sum 紀錄的 checksums 包含所有 direct 與 indriect 的相依庫，曾經建立過的。因此 go.sum 算是一種歷史紀錄。]]></content>
       <categories>
         
@@ -124,7 +124,7 @@
   
     <entry>
       <title><![CDATA[【Log】Use Logrotate at ubuntu16.04]]></title>
-      <url>/ubuntu/log/2018/10/25/logrotate/</url>
+      <url>/blogpost/ubuntu/log/2018/10/25/logrotate/</url>
       <content type="text"><![CDATA[env &amp; 注意  ubuntu  必須確認有 cron 服務  doc : https://linux.die.net/man/8/logrotate  必須確定已經有 log, 若無 log file, 系統會報錯 error: stat of /root/xxxx.log failed: No such file or directory說明  apt-get install -y logrotate  配置文件 : /etc/logrotate.conf  設定檔為至 : /etc/logrotate.d/          若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 /etc/logrotate.d/ 中, 建立相關的設定        檢查設定 sudo logrotate /etc/logrotate.conf --debug  logrotate 歷史紀錄 cat /var/lib/logrotate/status  強迫 logrotate 立即執行 : logrotate -f /etc/logrotate.conf          透過 [logrotate 歷史紀錄] 可查看執行時間      主要設定  compress             –&gt; 壓縮日誌文件的所有非當前版本  daily,weekly,monthly –&gt; 按指定計劃輪換日誌文件  delaycompress        –&gt; 壓縮所有版本，除了當前和下一個最近的  errors “emailid”     –&gt; 給指定郵箱發送錯誤通知  missingok            –&gt; 如果日誌文件丟失，不要顯示錯誤  notifempty           –&gt; 如果日誌文件為空，則不輪換日誌文件  olddir “dir”         –&gt; 指定日誌文件的舊版本放在 「dir」 中  postrotate           –&gt; 引入一個在日誌被輪換後執行的腳本  prerotate            –&gt; 引入一個在日誌被輪換前執行的腳本  endscript            –&gt; 標記 prerotate 或 postrotate 腳本的結束  rotate ‘n’           –&gt; 在輪換方案中包含日誌的 n 個版本  sharedscripts        –&gt; 對於整個日誌組只運行一次腳本  size=’logsize’       –&gt; 在日誌大小大於 logsize（例如 100K，4M）時輪換ex :/tmp/sample_output.log {	size 1k	create 700 root root	rotate 4	compress}ex : nginx/var/log/nginx/*.log {    daily    missingok    rotate 52    compress    delaycompress    notifempty    create 640 nginx adm    sharedscripts    postrotate            if [ -f /var/run/nginx.pid ]; then                    kill -USR1 `cat /var/run/nginx.pid`            fi    endscript}]]></content>
       <categories>
         
@@ -145,7 +145,7 @@
   
     <entry>
       <title><![CDATA[【AWS-Redis】How to Access to AWS-ElastiCache]]></title>
-      <url>/aws/redis/2018/07/06/AWS-ElastiCache-Access/</url>
+      <url>/blogpost/aws/redis/2018/07/06/AWS-ElastiCache-Access/</url>
       <content type="text"><![CDATA[透過 redis-cli 連線 elasticache限制  必須透過 aws ec2 進行連線 :          From AWS FAQ: (http://aws.amazon.com/elasticache/faqs/)Please note that IP-range based access control is currently not enabled for Cache Clusters. All clients to a Cache Cluster must be within the EC2 network, and authorized via security groups as described above.        確定 elasticache 建立時的          endpoint      Subnet Group      Security Group        確定 aws ec2          確保 instance 的 vpc 與 elasticache 的 Subnet Group 相同      安裝 redis-cli, 連線  先 access 進 ec2 instance  apt-get update &amp;&amp; apt-get install gcc make -y  wget http://download.redis.io/redis-stable.tar.gz &amp;&amp; tar xvzf redis-stable.tar.gz &amp;&amp; cd redis-stable &amp;&amp; make distclean &amp;&amp; make  (optional) ln -s $(pwd)/src/redis-cli /bin/redis-cli  connect :          if (3) redis-cli -c -h {endpoint} -p 6379      ./src/redis-cli -c -h {endpoint} -p 6379      透過 GUI 訪問  先 access 進 ec2 instance  apt-get update &amp;&amp; apt-get install nodejs npm -y &amp;&amp; ln -s $(which nodejs) /usr/bin/node &amp;&amp; npm install -g redis-commander  執行服務 : redis-commander --redis-host &lt;elasticache endpoint&gt;  確定 ec2 security 8081 port 可讓你目前的 ip 進行連線  瀏覽器輸入 : :8081]]></content>
       <categories>
         
@@ -166,7 +166,7 @@
   
     <entry>
       <title><![CDATA[【Deploy Test】Use Kubernetes & Minikube(local)]]></title>
-      <url>/kubenetes/minikube/2018/03/02/Kubernetes&Minikube/</url>
+      <url>/blogpost/kubenetes/minikube/2018/03/02/Kubernetes&Minikube/</url>
       <content type="text"><![CDATA[Synopsis  透過本地端，練習 kubenetes client  使用 minikube&amp;virtual 當作 kube server  minikube 本身提供像 gcloud 一樣 GUI 介面，方便具有既視感          docker 本身提供的 kubernetes server 目前沒有 GUI 介面      Environment  osx  minikube &amp; virtualbox  kubernetes clientInstall  安裝 virtual box          此次安裝的版本為 5.2.8      mac 安裝失敗問題 : http://blog.csdn.net/u013247765/article/details/78176079        osx 安裝 minikube : brew cask install minikube          minikube start      若遇到失敗 : minikube delete      操作方法      Github      開啟 web dashboard : minikube dashboard        安裝 kubernetes client 官網安裝          進入安裝頁面      選擇 client binaries      確定自己電腦的 linux 安裝即可 : osx amd64                  uname -a : 看是否是 x86_64          shasum -a 256 {the file} | grep {hash} : 在 osx 驗證 hash                    放入 bash_profile, source ~/.bash_profile 即可      ]]></content>
       <categories>
         
@@ -183,7 +183,7 @@
   
     <entry>
       <title><![CDATA[【Deploy Test】Use Kubernetes & Docker(local)]]></title>
-      <url>/kubenetes/docker/2018/03/01/Kubernetes&Docker/</url>
+      <url>/blogpost/kubenetes/docker/2018/03/01/Kubernetes&Docker/</url>
       <content type="text"><![CDATA[SYNOPSIS  透過本地端，練習 kubenetes client          在 mac 上，建立本地端的 kubernetes server &amp; client      透過本地部署測試來降低雲端部署的錯誤        安裝 kubernetes server          實踐日期 20180301, 未來或許會有更好的方法進行測試      docker for mac 這個應用程式本身就包含 kubernetes server 的建立      關於 minikube，須先安裝 vm 服務 (virtualbox) 才能使用 [參考另一篇關於 kubenetes &amp; minikube)        安裝 kubenetes client 則透過官網安裝即可Environment  osx  docker community edition version 18.03.0-ce, channel:edge. 此版本在 20180301 支援 kubernetes 的整合.  kubectl version          Client Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.1”, GitCommit:”3a1c9449a956b6026f075fa3134ff92f7d55f812”, GitTreeState:”clean”, BuildDate:”2018-01-04T11:52:23Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”darwin/amd64”}      Server Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.2”, GitCommit:”5fa2db2bd46ac79e5e00a4e6ed24191080aa463b”, GitTreeState:”clean”, BuildDate:”2018-01-18T09:42:01Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”linux/amd64”}      install  安裝 docker edge          說明 : kubernetes in docker      下載      注意，如果原本使用 stable 版本，既有的 image 全部都會被清空        安裝 kubernetes client 官網安裝即可設定 kubenetes server  安裝好 docker for mac edge  進入 Perference  選擇 Kubernetes  勾選          : Enable Kubennetes      : Show system containers(advanced)        apply 後，如下圖設定 kubenetes client  安裝好 client 後，執行 kubectl version，會出現 server 並沒有指定的錯誤  執行 kubectl config get-contexts  設定 kubectl config use-context docker-for-desktop  再執行一次 kubectl version檢查 docker  此時透過 docker ps，會看到以下資訊，這些都是掛載的 kube server  回到 docker kube perference 下，將以下取消勾選          : Show system containers(advanced)        在執行一次，就會發現相關服務被隱藏起來]]></content>
       <categories>
         
@@ -200,7 +200,7 @@
   
     <entry>
       <title><![CDATA[【CI&CD】Use DRONE]]></title>
-      <url>/drone/2018/02/04/Drone/</url>
+      <url>/blogpost/drone/2018/02/04/Drone/</url>
       <content type="text"><![CDATA[SYNOPSIS  目的 : 使用 Drone 來佈建 CI &amp; CD, 輕量化, 好操作, 分布式建構  buid Drone with docker  code coverage with Drone  notify with Drone ]]></content>
       <categories>
         
@@ -215,7 +215,7 @@
   
     <entry>
       <title><![CDATA[【Raspberry】bonjour broadcast]]></title>
-      <url>/raspberry/bonjour/2018/02/03/raspberry-bonjour/</url>
+      <url>/blogpost/raspberry/bonjour/2018/02/03/raspberry-bonjour/</url>
       <content type="text"><![CDATA[SYNOPSIS  目的 : 透過 bonjour 的服務註冊，讓開發者能在同一個網路下，進行 bonjour 服務的搜尋，就不用找尋特定的 ip  安裝 avahi-daemon 與測試連線  註冊 bonjour 廣播的服務內容  在 osx 上，透過 command 進行 bonjour 的服務搜尋  更新 raspberry 上的 hostraspberry install bonjour  以往安裝的 Raspberry Pi 都輸入了固定 IP 地址，在家使用沒有問題；但拿到別的地方用時，由於網域不同，造成無法連線。最好的方法是利用 DHCP 分派 IP 地址。但這又衍生另一問題，怎樣知道 Raspberry Pi 的地址呢？尤其是沒有接上顯示屏的情況。要解決以上問題，只要安裝 Bonjour 就可以。安裝方法如下：  sudo apt-get update  sudo apt-get upgrade  sudo apt-get install avahi-daemon成功安裝後，便能以「ssh pi@raspberrypi.local」來遙距登入 Raspberry Pi。  安裝完畢後，可透過 avahi-daemon -h 進行功能查詢，基本上已經正在跑，可以用 avahi-daemon 可以知道服務正在執行          可測試把服務刪除後，是否可透過 host 進行連線      使用 avahi-daemon 進行 bonjour 的服務註冊  目的是讓 client 可以透過 bonjour 的方式進行搜尋  在 raspberry 中，vi /etc/avahi/services/multiple.service，編輯內容如下，意思就是建立 bonjour 的搜尋內容，若無定義，則找不到服務&lt;?xml version="1.0" standalone='no'?&gt;&lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;&lt;service-group&gt;        &lt;name replace-wildcards="yes"&gt;%h&lt;/name&gt;        &lt;service&gt;                &lt;type&gt;_device-info._tcp&lt;/type&gt;                &lt;port&gt;0&lt;/port&gt;                &lt;txt-record&gt;model=RackMac&lt;/txt-record&gt;        &lt;/service&gt;        &lt;service&gt;                &lt;type&gt;_ssh._tcp&lt;/type&gt;                &lt;port&gt;22&lt;/port&gt;        &lt;/service&gt;        &lt;service&gt;                &lt;type&gt;_http._tcp&lt;/type&gt;                &lt;port&gt;80&lt;/port&gt;        &lt;/service&gt;&lt;/service-group&gt;  完成後，請執行 /etc/init.d/avahi-daemon restart or avahi-daemon -r  基本上只要安裝好 avahi 後，就可以直接透過該預設的 host : raspberry.local 連到該機器，以上的設定，只是為了讓 bonjour client 在 lan 下，搜尋是否搜尋到服務的一個廣播          應用實例 : 安裝後，透過 osx command : dns-sd 進行 bonjour 註冊服務的搜尋，若 raspberry 沒有設定 ‘multiple.service’ 則找不到該機器      問題，如果有兩個相同的 raspberry.local 那該如何判別？      在 osx 上，透過 dns-sd 進行搜尋 bonjour 的服務  執行 dns-sd -B &lt;type&gt;, type 可以是 _http._tcp or _ssh._tcp，回應結果如下    Browsing for _http._tcpDATE: ---Sat 03 Feb 2018--- 4:12:37.611  ...STARTING...Timestamp     A/R    Flags  if Domain               Service Type         Instance Name 4:12:37.612  Add        2   5 local.               _http._tcp.          raspberrypi    找到裝置後，就可以透過  raspberrypi.local 進行連線 … ，至於服務端的定義，如 80 port, 22 port, 就看設定檔如何設定更新 host  更新「raspberrypi.local」這個名稱  可以在 SSH 登入之後輸入「sudo nano /etc/hosts」。把 127.0.1.1 那行後方的「raspberrypi」改成想要的名字；  儲存後輸入「sudo nano /etc/hostname」，同樣把「raspberrypi」改成想要的名字並儲存。  最後輸入「sudo /etc/init.d/hostname.sh」把以上改動生效  再以「sudo reboot」重新啟動便能完成。]]></content>
       <categories>
         
@@ -232,7 +232,7 @@
   
     <entry>
       <title><![CDATA[【Raspberry】use rtmp to media-server]]></title>
-      <url>/raspberry/rtmp/2018/01/18/raspi-gstreamer/</url>
+      <url>/blogpost/raspberry/rtmp/2018/01/18/raspi-gstreamer/</url>
       <content type="text"><![CDATA[SYNOPSIS  目的 : 透過 gstreamer 將，picamera 的 stream 透過 rtmp 傳給 media-server  安裝主程式  安裝 pulgin 套件          下載 gst-rpicamsrc 編譯      推送 rtmp 到 media-server        觀看 livegstreamer  主程式 : apt-get install gstreamer1.0-tools  plugin repo : use https://github.com/thaytan/gst-rpicamsrc          透過 apt-get install gstreamer1.0-tools 安裝的方式，無法抓取 picamera 的 stream        install dep          apt-get install autoconf automake libtool      apt-get install libgstreamer1.0-dev      apt-get install libgstreamer-plugins-base1.0-dev      apt-get install libraspberrypi-dev        build gst-rpicamsrc          git clone https://github.com/thaytan/gst-rpicamsrc.git      cd gst-rpicamsrc/      ./autogen.sh --prefix=/usr --libdir=/usr/lib/arm-linux-gnueabihf/      make      reboot        start push streamgst-launch-1.0 -v rpicamsrc \ !'video/x-h264,width=1280,height=720,framerate=15/1' \ ! h264parse ! flvmux \ ! rtmpsink location="rtmp://yourstreamserver/live/pi"建立 media-server  可使用 nginx rtmp-module 進行架設, demo觀看 live  可用 vlc 觀看 rtmp  或者用簡易版的 docker-player參考文章  How to stream from RaspberryPi PiCamera]]></content>
       <categories>
         
@@ -249,7 +249,7 @@
   
     <entry>
       <title><![CDATA[【AWS-Polly】start]]></title>
-      <url>/aws/polly/2017/12/02/AWS-Polly-start/</url>
+      <url>/blogpost/aws/polly/2017/12/02/AWS-Polly-start/</url>
       <content type="text"><![CDATA[SYNOPSIS  了解 AWS Polly 基礎  執行基本 cli 測試可設定的  各類型不同地區的語言  聲音類型 : 有男女、老少不同的語調          客製化發音        輸入的文字格式 : Plain text, SSML(speech synthesis markup language)  Lexicons : 客製化詞庫與發音下載的格式有以下幾種(主要看播放器支援哪種格式的播放吧)  File format : MP3, OGG, PCM, Speech Marks          Speech Marks Types : Viseme, Word, Sentence, SSML(speech synthesis markup language)        Rate : 22050Hz, 16000Hz, 8000Hz, 可自訂也可系統預設使用方式  AWS Console  AWS SDKS  AWS CLI : 這邊使用 cli 當做範例  API reference : http://docs.aws.amazon.com/polly/latest/dg/API_Reference.htmlAWS CLI  必須先安裝且設定 AWS CLI : http://docs.aws.amazon.com/polly/latest/dg/setup-aws-cli.html  這邊的範例使用 aws polly synthesize-speech          執行指令      取得下載的語音檔案      進行播放      POLLOY 可用的指令# 輸入 aws polly helpdelete-lexicondescribe-voicesget-lexiconhelplist-lexiconsput-lexiconsynthesize-speechPOLLY : SynthesizeSpeech  如果你在 aws-cli 中設定的地區不支援 polly, 則你必須使用 --region polly-supported-aws-region 來指定使用 polly 服務的地區如 : 你用了某個地區的服務，但該地區並不支援 polly，則若你要使用 polly，則必須額外指定地區，來讓你的服務正常aws polly synthesize-speech help# 輸入, 以下為必要選項aws polly synthesize-speech \    --output-format mp3 \    --voice-id Joanna \    --text 'Hello, my name is Joanna. I learned about the W3C on 10/3 of last year.' \    hello.mp3    # 輸出{    "ContentType": "audio/mpeg",     "RequestCharacters": "71"}執行指令後，會取得 hello.mp3，在你的應用程式進行播放POLLY : Describe Voices  取得所有可以用的聲音設定，會有不同的語調與速度，可在 aws polly console 測試# 輸入aws polly describe-voices# 輸出{    "Voices": [        {            "Gender": "Female",            "Name": "Salli",            "LanguageName": "US English",            "Id": "Salli",            "LanguageCode": "en-US"        },        {            "Gender": "Female",            "Name": "Joanna",            "LanguageName": "US English",            "Id": "Kendra",            "LanguageCode": "en-US"        }        ...    ]}  除此之外，describe-voice 還可取得其他的設定，如 --language-code : aws polly describe-voices --language-code pt-BR(Brazilian Portuguese. 巴西葡萄牙語)  使用 aws polly describe-voices help 取得更多的幫助]]></content>
       <categories>
         
@@ -266,7 +266,7 @@
   
     <entry>
       <title><![CDATA[【GOLANG】viper parse yaml]]></title>
-      <url>/golang/yaml/2017/11/28/go-viper-yaml/</url>
+      <url>/blogpost/golang/yaml/2017/11/28/go-viper-yaml/</url>
       <content type="text"><![CDATA[synopsis  source : https://github.com/spf13/viper  透過 viper 解析 yaml 格式  將 yaml 格式放到 struct 中example# databasedatabase:   - host: "localhost"    port: "6612"    username: "root"    password: "root"    dbname: "demo"package mainimport (    "fmt"    "github.com/spf13/viper")type mysql struct {    Host     string    Port     string    Username string    Password string    Dbname   string}type Config struct {    Database []mysql}func main() {    viper.SetConfigName("config") // name of config file (without extension)    viper.AddConfigPath(".")    // optionally look for config in the working directory    err := viper.ReadInConfig() // Find and read the config file    if err != nil {             // Handle errors reading the config file        panic(fmt.Errorf("Fatal error config file: %s \n", err))    }    fmt.Println(viper.Get("database"))    var config Config    viper.Unmarshal(&amp;config)    fmt.Println(config)    var database []mysql    viper.UnmarshalKey("database", &amp;database)    fmt.Println(database)}]]></content>
       <categories>
         
@@ -283,7 +283,7 @@
   
     <entry>
       <title><![CDATA[【rtmpts】透過 ffmpeg 推送 rtmpts 實踐]]></title>
-      <url>/rtmpts/rtmpt/nginx/2017/11/07/rtmpts/</url>
+      <url>/blogpost/rtmpts/rtmpt/nginx/2017/11/07/rtmpts/</url>
       <content type="text"><![CDATA[synopsis  rtmpt + ssl          ngx_rtmpt_proxy_module.so      ngx_rtmp_module.so      ssl certificate        利用 ffmpeg 傳送給 rtmpts://{host}/demo/videoadd nginx module  參考 https://jhaoheng.github.io/blogpost/docker/nginx/module/nginx_add_dynamic_module/  ngx_rtmpt_proxy_module.so  ngx_rtmp_module.sossl 自簽  參考 : https://gist.github.com/jhaoheng/c0a19690da10dda9db9beda1c8a812a3  下載後，執行 sh generate-CA.sh          產生 xxxx.crt &amp; xxxx.key  (非 ca 開頭)        將 (3) 產生的 crt &amp; key 路徑，放到 nginx.conf 中nginx.confuser  nginx;worker_processes  1;# should add this to enable rtmpt : # https://github.com/kwojtek/nginx-rtmpt-proxy-moduleload_module modules/ngx_rtmpt_proxy_module.so;load_module modules/ngx_rtmp_module.so;error_log  /var/log/nginx/error.log warn;pid        /var/run/nginx.pid;events {    worker_connections  1024;}http {    keepalive_requests  4294967295;    access_log  /var/log/nginx/access.log;    server {            listen              443 ssl;        ssl_certificate     ssl/server.crt;        ssl_certificate_key ssl/server.key;        ssl_protocols       TLSv1 TLSv1.1 TLSv1.2;        ssl_ciphers         HIGH:!aNULL:!MD5;        location ~ (^/open/1$|^/idle/.*/.*$|^/send/.*/.*$|^/close/.*/.*$) {            rtmpt_proxy 				on;            rtmpt_proxy_target 			localhost:1935;            rtmpt_proxy_rtmp_timeout 	2;             rtmpt_proxy_http_timeout 	5;            add_header 					Cache-Control no-cache;            access_log 					on;            proxy_buffers               32 4m;            proxy_busy_buffers_size     25m;            proxy_buffer_size           512k;            proxy_ignore_headers        "Cache-Control" "Expires";            proxy_max_temp_file_size    0;            proxy_set_header            Host $host;            proxy_set_header            X-Real-IP $remote_addr;            proxy_set_header            X-Forwarded-For $proxy_add_x_forwarded_for;            client_max_body_size        1024m;            client_body_buffer_size     4m;            proxy_connect_timeout       300;            proxy_read_timeout          300;            proxy_send_timeout          300;            proxy_intercept_errors      off;        }            location /fcs/ident2 {            return 200;        }        location /stat {            rtmpt_proxy_stat on;            rtmpt_proxy_stylesheet stat.xsl;        }        location /stat.xsl {            root /var/www/dirwithstat;        }   }} rtmp {    access_log  /var/log/nginx/access.log;    server {        listen 1935;        chunk_size 4096;        application demo {                live on;                record off;        }    }}]]></content>
       <categories>
         
@@ -302,7 +302,7 @@
   
     <entry>
       <title><![CDATA[【haproxy】rtmps by haproxy]]></title>
-      <url>/docker/haproxy/nginx/proxy/rtmp/rtmps/2017/11/06/haproxy/</url>
+      <url>/blogpost/docker/haproxy/nginx/proxy/rtmp/rtmps/2017/11/06/haproxy/</url>
       <content type="text"><![CDATA[synopsis  因 nginx-rtmp-module 並沒有支援 ssl 的方式，透過 proxy 的方式也無法使用  故使用 haproxy 的方法，透過 rtmps:// 轉送到 rtmp:1935，加入 ssl，進行驗證。  本文透過 docker 建立環境與設定 : haproxy / rtmp container  再透過 ffmpeg 進行推送env  osx  docker : haproxy 1.7          haproxy.cfg        docker : nginx 1.13.6          nginx.conf      haproxy.cfgfrontend rtmp_https         bind *:443 #ssl crt /path/to/cert         mode                    tcp         # log                     global         maxconn                 99999         timeout client          600000         use_backend             rtmpbackend_tcp_ipvANY if         default_backend         rtmpbackend_tcp_ipvANYbackend rtmpbackend_tcp_ipvANY         mode                    tcp         balance                 leastconn         timeout connect         30000         timeout server          30000         retries                 3         option                  httpchk GET /         server                  rtmp nginx-rtmp:1935 #check-ssl verify nonenginx.confuser  nginx;worker_processes  1;load_module modules/ngx_rtmp_module.so;error_log  /var/log/nginx/error.log warn;pid        /var/run/nginx.pid;events {    worker_connections  1024;}rtmp {    access_log  /var/log/nginx/access.log;    server {        listen 1935;        chunk_size 4096;        application demo {                live on;                record off;        }    }}docker-composeversion: "3.2"services:  nginx-rtmp:    image: nginx:latest    container_name: nginx-rtmp    ports:      - 1935:1935/tcp    tty: true    volumes:      - ./nginx/ngx_rtmp_module.so:/etc/nginx/modules/ngx_rtmp_module.so      - ./nginx/nginx-rtmp.conf:/etc/nginx/nginx.conf    command: [nginx, '-g', 'daemon off;']    networks:      - srs_net_test  haproxy:    image: haproxy    container_name: haproxy    ports:      - 443:443/tcp    tty: true    volumes:      - ./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg    networks:      - srs_net_testnetworks:  srs_net_test:    driver: bridgeffmpeg testffmpeg -f avfoundation -i "1" -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp://localhost:443/demo/desktop]]></content>
       <categories>
         
@@ -327,7 +327,7 @@
   
     <entry>
       <title><![CDATA[【nginx】rtmpt(tunnel by http:80) to rtmp:1935]]></title>
-      <url>/docker/nginx/rtmpt/rtmp/ossrs/2017/11/05/rtmpt&rtmp/</url>
+      <url>/blogpost/docker/nginx/rtmpt/rtmp/ossrs/2017/11/05/rtmpt&rtmp/</url>
       <content type="text"><![CDATA[目標  透過 nginx，將 流 透過 rtmpt:80 的 protocol 轉送給 rtmp:1935 protocol  推流 ffmpeg / OBS, protocol : rtmpt  收流 VLC player, protocol : rtmp  額外測試 : 送 rtmpt 給 ossrs  延伸          透過 rtmpts (tunnel by https)，加入 ssl      透過 rtmps，直接接收 rtmps 流，並 proxy 轉送給 ossrs      env  push streaming tool          ffmpeg 3.4 :                  將桌面影像上傳 : ffmpeg -f avfoundation -i "1" -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmpt://localhost/demo/desktop                    OBS                  將制式的 mp4 檔案丟到 rtmpt://localhost/demo/video                    wrong : [tcp @ 0x7f830d5153c0] Connection to tcp://localhost:80 failed (Connection refused), trying next address                  會自動檢查 127.0.0.1                      watch streaming tool          VLC player        docker :          ossrs      nginx:latest (1.13.6)                  rtmp server          rtmpt server                      compiler first          nginx-rtmp-module : https://github.com/arut/nginx-rtmp-module      nginx-rtmpt-proxy-module : https://github.com/kwojtek/nginx-rtmpt-proxy-module      nginx. conf : rtmpt &amp; rtmpuser  nginx;worker_processes  1;# should add this to enable rtmpt : # https://github.com/kwojtek/nginx-rtmpt-proxy-moduleload_module modules/ngx_rtmpt_proxy_module.so;load_module modules/ngx_rtmp_module.so;error_log  /var/log/nginx/error.log warn;pid        /var/run/nginx.pid;events {    worker_connections  1024;}http {    keepalive_requests  4294967295;    access_log  /var/log/nginx/access.log;    server {        listen       80;        location ~ (^/open/1$|^/idle/.*/.*$|^/send/.*/.*$|^/close/.*/.*$) {            rtmpt_proxy on;            rtmpt_proxy_target localhost:1935; # 轉給 ossrs 請設定於此            rtmpt_proxy_rtmp_timeout 2;             rtmpt_proxy_http_timeout 5;            add_header Cache-Control no-cache;            access_log on;            proxy_buffers               32 4m;            proxy_busy_buffers_size     25m;            proxy_buffer_size           512k;            proxy_ignore_headers        "Cache-Control" "Expires";            proxy_max_temp_file_size    0;            proxy_set_header            Host $host;            proxy_set_header            X-Real-IP $remote_addr;            proxy_set_header            X-Forwarded-For $proxy_add_x_forwarded_for;            client_max_body_size        1024m;            client_body_buffer_size     4m;            proxy_connect_timeout       300;            proxy_read_timeout          300;            proxy_send_timeout          300;            proxy_intercept_errors      off;        }            location /fcs/ident2 {            return 200;        }   }} rtmp {    access_log  /var/log/nginx/access.log;    server {        listen 1935;        chunk_size 4096;        application demo {                live on;                record off;        }    }}]]></content>
       <categories>
         
@@ -350,7 +350,7 @@
   
     <entry>
       <title><![CDATA[【nginx】add dynamic module to an existing nginx]]></title>
-      <url>/docker/nginx/module/2017/11/04/nginx_add_dynamic_module/</url>
+      <url>/blogpost/docker/nginx/module/2017/11/04/nginx_add_dynamic_module/</url>
       <content type="text"><![CDATA[目標  首先這是一個替 nginx 動態增加 module 的程序  利用 docker : nginx 來建立已經安裝好 nginx 的環境  因為動態安裝 module，必須要相同的 nginx 版本，與相同的設定資訊    環境          osx      docker, nginx:latest      安裝的 module : https://github.com/kwojtek/nginx-rtmpt-proxy-module      first at alldocker run -it -p 80:80 -p 443:443 nginx:latest /bin/bash可能會用到的套件apt-get update &amp;&amp; \apt-get install iputils-ping -y &amp;&amp; \apt-get install procps -y &amp;&amp; \apt-get install vim -y &amp;&amp; \apt-get install lsof -y &amp;&amp; \apt-get install curl -y &amp;&amp; \apt-get install git -y &amp;&amp; \apt-get install wget -y安裝 gccapt-get install build-essential -y檢查 nginx, 取得nginx -V  版本號  設定參數 : 編譯時，需要用到，否則會有二進制不相容問題, ex : configure arguments: –prefix=/etc/nginx ….下載 nginx : 依照版本號碼wget http://nginx.org/download/nginx-{version}.tar.gztar xvf nginx-{version}.tar.gz下載 modulegit clone https://github.com/kwojtek/nginx-rtmpt-proxy-module.git取得編譯時需要的 dependencyPCRE  wget https://ftp.pcre.org/pub/pcre/pcre-8.40.tar.gz &amp;&amp; tar xzvf pcre-8.40.tar.gz  編譯時加上 : --with-pcre=&lt;path&gt;    zlib    wget http://www.zlib.net/zlib-1.2.11.tar.gz &amp;&amp; tar xzvf zlib-1.2.11.tar.gz  編譯時加上 : --with-zlib=&lt;path&gt;openssl  wget https://www.openssl.org/source/openssl-1.1.0f.tar.gz &amp;&amp; tar xzvf openssl-1.1.0f.tar.gz  編譯時加上 : --with-openssl=&lt;path&gt;開始編譯./configure --add-dynamic-module=/root/nginx-rtmpt-proxy-module \--with-openssl=/root/openssl-1.1.0f/ \--with-pcre=/root/pcre-8.40/ \--with-zlib=/root/zlib-1.2.11/ \{--prefix=/etc/nginx --sbin-path=....} &lt;---- 加入設定參數ex:./configure --add-dynamic-module=/root/nginx-rtmpt-proxy-module \--with-openssl=/root/openssl-1.1.0f/ \--with-pcre=/root/pcre-8.40/ \--with-zlib=/root/zlib-1.2.11/ \--prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-compat --with-file-aio --with-threads --with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module --with-cc-opt='-g -O2 -fdebug-prefix-map=/data/builder/debuild/nginx-1.13.6/debian/debuild-base/nginx-1.13.6=. -specs=/usr/share/dpkg/no-pie-compile.specs -fstack-protector-strong -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fPIC' --with-ld-opt='-specs=/usr/share/dpkg/no-pie-link.specs -Wl,-z,relro -Wl,-z,now -Wl,--as-needed -pie'產生 modulesmake modules將 moduels 放到目前版本的 nginx/module 下cp {path}/nginx-{version}/objs/ngx_rtmpt_proxy_module.so /etc/nginx/modules更改 nginx.conf : 在最上層加入此行  not within the http or stream contextload_module modules/ngx_rtmpt_proxy_module.so;]]></content>
       <categories>
         
@@ -369,7 +369,7 @@
   
     <entry>
       <title><![CDATA[【Docker:mariadb】set init when first running]]></title>
-      <url>/docker/mairadb/2017/11/03/docker&mariadb/</url>
+      <url>/blogpost/docker/mairadb/2017/11/03/docker&mariadb/</url>
       <content type="text"><![CDATA[目標  為了讓每次測試更加快速的建立 db 中的資料環境，分開 schema.sql &amp; init_value.sql 兩個檔案，方便修改  步驟          透過 docker-compose 建立 container:mariadb      透過 volume 的方式，掛載 base_schema.sql &amp; init_value.sql 檔案      建立的過程中，讓 container:mariadb 自行初始化 (2) 的檔案        docker              hub : https://hub.docker.com/_/mariadb/  Initializing a fresh instance  When a container is started for the first time, a new database with the specified name will be created and initialized with the provided configuration variables. Furthermore, it will execute files with extensions .sh, .sql and .sql.gz that are found in /docker-entrypoint-initdb.d. Files will be executed in alphabetical order. You can easily populate your mariadb services by mounting a SQL dump into that directory and provide custom images with contributed data. SQL files will be imported by default to the database specified by the MYSQL_DATABASE variable.測試  sqlfile 檔案名稱，不能用數字代替英文字母  所有的檔案要放在 container 中的 /docker-entrypoint-initdb.d 位置sql file  schemaCREATE DATABASE IF NOT EXISTS `test` DEFAULT CHARACTER SET latin1 DEFAULT COLLATE latin1_swedish_ci;USE `test`;SET @PREVIOUS_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS;SET FOREIGN_KEY_CHECKS = 0;CREATE TABLE `demo` (  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,  PRIMARY KEY (`id`),) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;SET FOREIGN_KEY_CHECKS = @PREVIOUS_FOREIGN_KEY_CHECKS;  init valueCREATE DATABASE IF NOT EXISTS `test` DEFAULT CHARACTER SET latin1 DEFAULT COLLATE latin1_swedish_ci;USE `test`;SET @PREVIOUS_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS;SET FOREIGN_KEY_CHECKS = 0;LOCK TABLES `demo` WRITE;ALTER TABLE `demo` DISABLE KEYS;INSERT INTO `demo` (`id`, `name`) VALUES (1,'maxhu');ALTER TABLE `demo` ENABLE KEYS;UNLOCK TABLES;SET FOREIGN_KEY_CHECKS = @PREVIOUS_FOREIGN_KEY_CHECKS;docker-composeversion: '3.2'services:  mariadb:    image: mariadb    container_name: mariadb    ports:      - 3306:3306/tcp    environment:      - MYSQL_ROOT_PASSWORD=root    volumes:      # 依照 字母順序 依序執行，不能用數字      - ./databse/schema.sql:/docker-entrypoint-initdb.d/base_schema.sql      - ./databse/init_values.sql:/docker-entrypoint-initdb.d/init_values.sql]]></content>
       <categories>
         
@@ -386,7 +386,7 @@
   
     <entry>
       <title><![CDATA[【log centralized】use rsyslog in docker]]></title>
-      <url>/ubuntu/rsyslog/log/docker/2017/11/02/rsyslog&docker/</url>
+      <url>/blogpost/ubuntu/rsyslog/log/docker/2017/11/02/rsyslog&docker/</url>
       <content type="text"><![CDATA[目標code print log to syslog, and then put sent log to outside(log centralized)環境  ubuntu 16.04  docker  php&amp;nginx安裝 rsyslog  在 docker:container 中，安裝 apt-get install rsyslog -y  設定檔          rsyslog.conf : 設定檔      rsyslog.d/ : 啟動預載檔        log 位置 : /var/log，可參考啟動預載檔docker  做法有兩種          一種是使用 docker:remote_syslog 將 syslog 的檔案丟到外面系統中央化                  詳情參考 https://jhaoheng.github.io/blogpost/2458676/                    另一種是用 rsyslog 本身支援直接指定目標位置        另外 docker log 使用預設的即可支援 syslog測試bash  方法一 : 直接寫到 syslog          進入 container      找到 syslog 的位置      直接寫入 echo "hello" &gt;&gt; syslog        方法二 : 透過 logger          進入 container      logger -s "world"        檢查 :          找到 syslog 的位置      tail -f syslog      php codeopenlog("response", LOG_PID, LOG_SYSLOG);syslog(LOG_INFO, json_encode($log));closelog();此方法會自動將 log 寫到 syslog（透過 rsyslog）中，再透過其他工具（remote_log/rsyslog）放到 log centralized(papertrail) pool]]></content>
       <categories>
         
@@ -407,7 +407,7 @@
   
     <entry>
       <title><![CDATA[【facebook】建立 facebook oauth app]]></title>
-      <url>/facebook/app/mobile/web/oauth/2017/10/31/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8Bfacebook_oauth/</url>
+      <url>/blogpost/facebook/app/mobile/web/oauth/2017/10/31/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8Bfacebook_oauth/</url>
       <content type="text"><![CDATA[目標mobile/web 端，透過 fb 進階 oauth 的方式，mobile/web 的 登入/註冊當然 web 可以透過簡易的方式，透過 javascript 取得授權的 token，但此方法不在這邊討論建立 fb app  前期準備      你的 server，可架設簡易的 server，並做出一個 api 接口，在 browser 上印出以下參數(測試方法 : 在 browser 上填入 api 即可)              Headers        Method        Rawbody        Scheme        URI        Fragment : "&lt;script&gt;document.write(window.location.hash);&lt;/script&gt;";，只有透過 js 才能取得此參數                      URL 組成 : scheme://host:port/path?query#fragment                                首先登入 https://developers.facebook.com/  建立一個新的 fb app  在左側 sidebar 中，選擇 新增產品 -&gt; Facebook 登入 -&gt; 設定，這樣就完成了新增  在左側中，商品下會看到 『Facebook 登入』選擇設定  在步驟四後的右側，關閉『對重新導向 URI 使用 Strict 模式』（原因在於此方法並沒有使用任何 SDK）  在步驟四後的右側，『有效的 OAuth 重新導向 URI』中設定 網站的 Host，ex:http://localhost，注意，若你要轉址到 localhost，也是要設定 http://localhost          為何要設定此方法，主要在於使用的方式會需要透過 facebook redirect 到你的伺服器，進行 註冊/登入，等行為，所以必須要驗證。      OAuth coding 部分  前期準備      在剛剛建立好的主控版取得以下參數              應用程式編號        應用程式密鑰        API 版本              正式開始取得授權 token : https://jhaoheng.github.io/blogpost/facebook/app/mobile/web/facebook-%E9%80%B2%E9%9A%8E-%E7%99%BB%E5%85%A5/          mobile / web 端，呼叫 fb oauth(其中包含 redirect_uri)      透過 redirect_uri 轉到『你的 server』，這邊因 (1) 中的 response_type 設定方式，而有所不同      驗證 oauth_token      判斷『登入』、『註冊』，若無需用到 oauth_token 則，無須理會      透過 OAuth 使用 facebook graph-api  更多請參考 facebook graph api可使用 https://developers.facebook.com/tools/explorer/  me          url : https://graph.facebook.com/{fb_api_version}/me?access_token={oauth_token}&amp;fields={fields}      {fb_api_version} : 請注意你的 fb_app 版本      {oauth_token} :      {fields} : email,name,id,picture.width(320).height(320)      授權的用戶如何手動刪除 fb_app  登入你的 facebook -&gt; 設定  左側選擇『應用程式』-&gt; 搜尋  彈出的視窗可看到 『移除應用程式』]]></content>
       <categories>
         
@@ -430,7 +430,7 @@
   
     <entry>
       <title><![CDATA[【facebook】進階：OAuth code flow]]></title>
-      <url>/facebook/app/mobile/web/2017/10/29/facebook-%E9%80%B2%E9%9A%8E-OAuth-code-flow/</url>
+      <url>/blogpost/facebook/app/mobile/web/2017/10/29/facebook-%E9%80%B2%E9%9A%8E-OAuth-code-flow/</url>
       <content type="text"><![CDATA[First at all官方 : https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow  手動建立的流程中，有分兩個方式取得 token          直接在要求 oauth 的授權 url 中 加入參數 response_type=token，但返回的 token 會夾帶在 fragment(hashtag) 中，可透過 js 取得(因為在 url 的解析中，無法直接取得 fragment 的參數)。      透過 oauth default 方法取得 code，把 code 送去交換取得 token      方法一 : 直接取得 token -&gt; 驗證 token      URL 組成 : scheme://host:port/path?query#fragment    fragment : fragment 片段 網頁中可能會分為不同的片段，如果想訪問網頁後直接到達指定位置(tag)，可以在這部分設置    https://www.facebook.com/v2.10/dialog/oauth?client_id={your_app_id}&amp;response_type=token&amp;redirect_uri={redirect_uri}          parameters                  client_id          response_type = token          redirect_uri                    response url : {redirect_uri}?#access_token={token}&amp;expires_in={expires_in} : 注意 token 是放在 fragment 的字串中                  php 透過 javascript 取得 fragment string : $fragment = "&lt;script&gt;document.write(window.location.hash);&lt;/script&gt;";                      驗證 :          取得 your_app_token : https://graph.facebook.com/oauth/access_token?client_id={your_app_id}&amp;client_secret={your_app_secret}&amp;grant_type=client_credentials                  parameters                          client_id              client_secret              grant_type=client_credentials                                response json : {"access_token": {your_app_token}, "token_type": "bearer"}                    驗證 : https://graph.facebook.com/debug_token?input_token={token}&amp;access_token={app-token-or-admin-token}                  parameters                          input_token              access_token : 此為 上步驟中 respone 的 access_token                                response : 請參考 附註:javascript pass value to php                    先取得 code -&gt; 使用 code 來取得 token -&gt; 驗證 token  https://www.facebook.com/v2.10/dialog/oauth?client_id={your_app_id}&amp;redirect_uri={redirect_url}          parameters                  client_id          redirect_uri                    response url : {reditect_url}?code={code}#_=_        https://graph.facebook.com/v2.10/oauth/access_token?client_id={your_app_id}&amp;client_secret={your_app_secret}&amp;redirect_uri={redirect_url}&amp;code={code}          parameters                  client_id          client_secret          redirect_uri : 在索取 code 時，使用的 redirect_uri，兩者必須相同          code : 步驟 1 中取得的 code                    response json : { "access_token": {access-token}, "token_type": {type}, "expires_in": {seconds-til-expiration} }        驗證 :          取得 your_app_token : https://graph.facebook.com/oauth/access_token?client_id={your_app_id}&amp;client_secret={your_app_secret}&amp;grant_type=client_credentials                  parameters                          client_id              client_secret              grant_type=client_credentials                                response json : {"access_token": {your_app_token}, "token_type": "bearer"}                    驗證 : https://graph.facebook.com/debug_token?input_token={token}&amp;access_token={app-token-or-admin-token}                  parameters                          input_token              access_token : 此為 上步驟中 respone 的 access_token                                response : 請參考 https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow#checktoken                    附註 : javascript pass value to php&lt;script type="text/javascript"&gt;var protocol = window.location.protocol;var hostname = window.location.hostname;var pathname = window.location.pathname; baseUrl = protocol+'//'+hostname+pathname;// alert(baseUrl);fragment = window.location.hash.substr(1);if (fragment) {    // alert(fragment);    state = fragment.substr(fragment.indexOf('state='))                  .split('&amp;')[0]                  .split('=')[1];    // alert(state);    access_token = fragment.substr(fragment.indexOf('access_token='))                  .split('&amp;')[0]                  .split('=')[1];    // alert(access_token);        // alert("do it");    location.href = baseUrl+"?state=" + state + '&amp;access_token=' + access_token;} else     exit();&lt;/script&gt;&lt;?php  echo $_GET['access_token'];]]></content>
       <categories>
         
@@ -451,7 +451,7 @@
   
     <entry>
       <title><![CDATA[【Github&jekyll】設定]]></title>
-      <url>/github/jekyll/2017/10/29/github&jekyll/</url>
+      <url>/blogpost/github/jekyll/2017/10/29/github&jekyll/</url>
       <content type="text"><![CDATA[First  從 2009 年開始，從 blogger -&gt; 其他的服務 -&gt; HEXO -&gt; blogger -&gt; logdown，從浪費時間，到專注核心（寫文、po 文），決定了託管(server+頁面的管理)會比較輕鬆，最後選擇了 logdown沒想到 logdown 也會有服務出問題，甚至讓我覺得可能會中斷服務，讓我覺得挺可惜最後還是又回到了 github 中，不過這次用的服務是 jekyll  環境 : osx  index          安裝 jekyll      建立 github blog repo      在 repo 中，初始化 jekyll                  資料夾結構                    為了 github 所調整的設定 (avoid css no render)                  _config.yml          branch : master / gh-pages                    版本控管與測試      Note_1 : 更新 osx ruby      Note_2 : 建立草稿與預覽      安裝 jekyll  若 ruby 版本須更新，請參考下方 [Note_1 : 更新 osx ruby]官方 https://jekyllrb.com/  gem install jekyll建立 github blog repo  create a github repo  git clone repo在 repo 中，初始化 jekyllcd {your-repo}jekyll new . # 建立一個新專案bundle exec jekyll serve在啟動 service 的過程中，發生問題  kernel_require.rb:55:in `require’: cannot load such file – bundler (LoadError)解決方法gem install bundlerbundle installjekyll 資料夾結構  官方 : https://jekyllrb.com/docs/structure/  第一次建立 jekyll 時，某些資料夾並不會一起建立，需要手動建立          _drafts : 請參考 [Note_2 : 建立草稿與預覽]      _layouts      _sass      _data      _includes      為了 github 所調整的基本設定_config.yml  目的是為了讓正式版版本，推送到 github 上時，可以找到正確的相關檔案路徑  baseurl : 請設定為你的 repo 專案名稱  url : 請設定 https://{username}.github.io  其他設定對第一次使用部會影響太多branch : master / gh-pages  master : 負責原始的文件檔gh-pages : html 靜態頁面，就是 _site/ 的資料夾如何分開兩個 branch 與設定，以下說明如何操作  當使用 jekyll 產生新的樣板時，在 .gitignore 中，會發現 _site/ 已經被自動忽略  設定好 _config.yml 後，執行 jekyll build 會建立 _site/ 此為正式要推送到 gp-pages 的版本，cd _site  在 _site 中執行 git init，新增 git remote add origin {your_blog_repo}  git checkout -b gh-pages  git add . -&gt; git commit -m "jekyll first build" -&gt; git push origin gh-pages  記得要到 repo 中將 GitHub Pages 的 source 設定成 gh-pages branch  開啟 GiHub Pages 中顯示的網址即可測試與正式發佈的版本  推送錯誤的版本到 github 上，會讓 css 的路徑錯誤  測試 : jekyll serve，會在 _site/xxx.html 的 canonical 中使用 localhost 的位置  正式 : jekyll build，在 _site/xxx.html 則是用 _config.yml 中的 url 設定  推送正式版本到 github 上          cd _site/      git push -u origin gh-pages        無論使用 serve or build 等指令，都會重新在 _site/ 中，重新建立相關資料，我在猜，當文章過多，速度應該會比較慢。Note_1 : 更新 osx ruby\curl -sSL https://get.rvm.io | bash -s stablervm list knownrvm install ruby-2.4rvm use ruby-2.4 --defaultruby -vNote_2 : 建立草稿與預覽  因為預設不會產生 _drafts/ 的資料夾，所以需要手動建立  預覽草稿 : 使用 jekyll serve or jekyll build 時，加入 --drafts 參數， ex : jekyll build --drafts]]></content>
       <categories>
         
@@ -468,7 +468,7 @@
   
     <entry>
       <title><![CDATA[Welcome to Jekyll!]]></title>
-      <url>/jekyll/update/2017/10/29/welcome-to-jekyll/</url>
+      <url>/blogpost/jekyll/update/2017/10/29/welcome-to-jekyll/</url>
       <content type="text"><![CDATA[You’ll find this post in your _posts directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run jekyll serve, which launches a web server and auto-regenerates your site when a file is updated.To add new posts, simply add a file in the _posts directory that follows the convention YYYY-MM-DD-name-of-post.ext and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.Jekyll also offers powerful support for code snippets:def print_hi(name)  puts "Hi, #{name}"endprint_hi('Tom')#=&gt; prints 'Hi, Tom' to STDOUT.Check out the Jekyll docs for more info on how to get the most out of Jekyll. File all bugs/feature requests at Jekyll’s GitHub repo. If you have questions, you can ask them on Jekyll Talk.]]></content>
       <categories>
         
@@ -485,7 +485,7 @@
   
     <entry>
       <title><![CDATA[【Docker】papertrail+remote_syslog]]></title>
-      <url>/docker/papertrail/remotesyslog/2017/09/14/Docker-Papertrial-RemoteSyslog/</url>
+      <url>/blogpost/docker/papertrail/remotesyslog/2017/09/14/Docker-Papertrial-RemoteSyslog/</url>
       <content type="text"><![CDATA[目標  透過 remote_syslog 將 app log 送到 papertrail 中  官方建議的 docker image : https://github.com/octohost/remote_syslog          說明 : https://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-docker/#mount      如何使用  ex :          建立一個 file.log，並得知路徑位置 $path      取得你的 papertrail 的 destination path, 像是 logs.papertrailapp.com:10000      組合指令 docker run -d -v=... --name remote_syslog octohost/remote_syslog {remote_syslog 指令串}      finish : docker run -d -v=$path/file.log:/file.log --name remote_syslog octohost/remote_syslog --hostname  -p 10000 -d logs.papertrailapp.com /file.log      docker-composeversion: '3.0'services:  remote_syslog:    image: octohost/remote_syslog:latest    container_name: remote_syslog    volumes:      - $path/file.log:/file.log    entrypoint: /usr/local/bin/remote_syslog -D --hostname max -p 44444 -d logs.papertrailapp.com /file.log    restart: alwaysremote_syslog referenceUsage: remote_syslog [OPTION]... &lt;FILE&gt;...Options:    -c, --configfile PATH            Path to config (/etc/log_files.yml)    -d, --dest-host HOSTNAME         Destination syslog hostname or IP (logs.papertrailapp.com)    -p, --dest-port PORT             Destination syslog port (514)    -D, --no-detach                  Don't daemonize and detach from the terminal    -f, --facility FACILITY          Facility (user)        --hostname HOST              Local hostname to send from    -P, --pid-dir DIRECTORY          DEPRECATED: Directory to write .pid file in        --pid-file FILENAME          Location of the PID file (default /var/run/remote_syslog.pid)        --parse-syslog               Parse file as syslog-formatted file    -s, --severity SEVERITY          Severity (notice)        --strip-color                Strip color codes        --tcp                        Connect via TCP (no TLS)        --tls                        Connect via TCP with TLS        --new-file-check-interval INTERVAL                                     Time between checks for new filesAdvanced options:        --[no-]eventmachine-tail     Enable or disable using eventmachine-tail        --debug-log FILE             Log internal debug messages        --debug-level LEVEL          Log internal debug messages at levelCommon options:    -h, --help                       Show this message        --version                    Show versionExample:    $ remote_syslog -c configs/logs.yml -p 12345 /var/log/mysqld.log]]></content>
       <categories>
         
@@ -504,7 +504,7 @@
   
     <entry>
       <title><![CDATA[【Raspberry pi 3】安裝 facebook_atc]]></title>
-      <url>/raspberry/facebookatc/2017/09/08/Raspberry-FacebookATC/</url>
+      <url>/blogpost/raspberry/facebookatc/2017/09/08/Raspberry-FacebookATC/</url>
       <content type="text"><![CDATA[install &amp; setting  建立好 wifi ap  安裝 ATC : http://facebook.github.io/augmented-traffic-control/docs/install.html  安裝完畢 atc django-ui 後，在執行 atcd 前，必須先知道 wan &amp; lan 的端口          透過 route 查詢      啟動 sudo atcd --atcd-lan xxxx --atcd-wan xxxx        執行 python manage.py runserver 0.0.0.0:8000  開啟瀏覽器，會看到成功畫面          若你的 atcd server 執行失敗，會產生授權錯誤的推播通知      use  開啟瀏覽器並打開 atc_demo_ui 的管理介面  主要設置的參數有：          網絡帶寬（bandwidth）      延遲（latency）      丟包率（packet loss）      錯包率（corrupted packets）      亂序率（packets ordering）        新增 new profile 與 shaping settings 後，可在 Profiles 中看到設定的參數值，選擇後再開啟最上方的 trun on 即可  Network Condition Profiles 參考          https://github.com/tylertreat/Comcast#network-condition-profiles      - https://github.com/facebook/augmented-traffic-control/tree/master/utils/profiles        測試 : 連上 wifi，設定 bandwidth=1，turn on，此時若網路沒有延遲，則可能是你的 atcd wan&amp;lan 設定相反測試心得  因為 atc 可以個別針對各類型的裝置進行限速的行為，所以今天要限制某台 iphone，請透過該台 iphone 連到 atcd-ui 中，選擇 profile (需要的網路情境)，再開啟，即可，根據測試，不同的裝置，可以設定不同的情境，不會互相影響  如何遠端控制它台裝置？          需要先授權，授權完畢，重新整理頁面，就會看到授權的電腦        參考 : https://github.com/facebook/augmented-traffic-control/tree/master/atc/django-atc-api  關於設定的 json 設定，我是先在 ui 的頁面中，copy 設定檔，再透過 api 的方式進行設定]]></content>
       <categories>
         
@@ -521,7 +521,7 @@
   
     <entry>
       <title><![CDATA[【Raspberry pi 3】wifi ap mode]]></title>
-      <url>/raspberry/2017/09/08/RPI3-wifiAp/</url>
+      <url>/blogpost/raspberry/2017/09/08/RPI3-wifiAp/</url>
       <content type="text"><![CDATA[initial check  檢查網路是否支援 AP : iw list，須找到支援 AP 的選項  檢察網路 : ifconfig -a，會看到          eth0 : 在我的 pi3 下顯示的是 enxb87ebbb66cf，在 iptables 的 package transfer 將 eth0 設定成此值      lo      wlan0        接上 乙太網路線，先測試 raspberry pi 上的網路是否正常，透過 route 指令檢查 default 的 gateway，可得知 Iface 的名稱，也就是 eth0  整個目標就是透過 iptable 的方式，交換 wifi 與乙太網路的資訊設定 wifi 的資訊  目的 : 接收用戶端連線，設定 raspberry wifi gateway 的位置  編輯 DHCP Client 設定資訊 : vim /etc/dhcpcd.conf  在最下方，新增          interface  wlan0      static ip_address=10.0.7.1/24 : 指定 wlan0 的 ip 位置      啟用 NAT  目的 : 透過 iptable 的設定，交換 wifi ap(wlan0) 與 eth0 的網路資訊  開啟 ipv4 路由轉發功能，檔案位置 /etc/sysctl.conf          查詢 : cat /etc/sysctl.conf | grep ip_forward      變更設定 : 至 /etc/sysctl.conf，找到 net.ipv4.ip_forward 並設定為 1                  或透過指令變更 : sudo sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf                      更新 iptable，將內部的 wlan0 封包轉給 eth0，詳細原理可參考 : http://web.mit.edu/rhel-doc/4/RH-DOCS/rhel-sg-zh_tw-4/s1-firewall-ipt-fwd.html          sudo iptables -F      sudo iptables -F -t nat      sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE      sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT      sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT        儲存設定，讓每次開機都自動設定          vim /etc/rc.local      在 exit 0 之前，加入sudo iptables-save &gt; /etc/network/iptables.ipv4.nat        查看 iptable          sudo iptables -t nat -S      sudo iptables -S      sudo iptables -L      架設 DHCP Server  sudo apt-get -y install dnsmasq  sudo vim /etc/dnsmasq.conf，在最下方編輯    interface=wlan0dhcp-range=10.0.7.101,10.0.7.200,255.255.255.0,12h        重新啟動 dnsmasq : sudo systemctl restart dnsmasq &amp;&amp; sudo systemctl enable dnsmasq設定 hostapd  sudo apt-get install hostapd -y  cp /usr/share/doc/hostapd/examples/hostapd.conf.gz /etc/hostapd/  gunzip /usr/share/doc/hostapd/examples/hostapd.conf.gz  編輯 hostapd.conf          interface=wlan0      driver=nl80211      ssid=RPI-AP      hw_mode=g      channel=11      macaddr_acl=0      auth_algs=1      ignore_broadcast_ssid=0      wpa=2      wpa_passphrase=12345678 : 設定無線網路密碼      wpa_key_mgmt=WPA-PSK      rsn_pairwise=CCMP        測試 : sudo hostapd -dd /etc/hostapd/hostapd.conf          測試時，可以透過其他裝置，並連接上 wifi ap      如果連接得上，但沒有辦法看網頁，為 iptables 設定錯誤，請檢查你的 iptables : iptables -L        指定 hostapd daemon 的位置 : sudo sed -i 's/#DAEMON_CONF=""/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/g' /etc/default/hostapd重新開機讓所有的設定值都生效  sudo systemctl enable hostapd &amp;&amp; sudo reboottroubleshooting  找不到 ssid          請重新啟動 hostapd        連上 ssid，卻無法連到外部網路          請檢查 iptables      檢查錯誤訊息  /var/log/syslog如何關閉 wifi ap  停掉 hostapd 服務即可 : sudo systemctl hostapd stop]]></content>
       <categories>
         
@@ -536,7 +536,7 @@
   
     <entry>
       <title><![CDATA[【docker : mariadb】container 建立後，初始化 schema]]></title>
-      <url>/docker/mariadb/2017/09/05/Docker-MariaDB/</url>
+      <url>/blogpost/docker/mariadb/2017/09/05/Docker-MariaDB/</url>
       <content type="text"><![CDATA[first  目的 : 在 docker 架構下，解決 mariadb container 建立後，自動加入 schema 到 db 中  可參考 https://stackoverflow.com/questions/36617682/docker-compose-mysql-import-sql  解決 : 在 mariadb 起來後，會自動去執行 /docker-entrypoint-initdb.d/ 底下的 sql 指令，就會自動建立好預設的 database &amp; tableexample : docker-composesql file : save as test.sql## SQL Export# Created by Querious (1068)# Created: 2017年9月5日 GMT+8 上午9:27:31# Encoding: Unicode (UTF-8)#CREATE DATABASE IF NOT EXISTS `test` DEFAULT CHARACTER SET latin1 DEFAULT COLLATE latin1_swedish_ci;USE `test`;SET @PREVIOUS_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS;SET FOREIGN_KEY_CHECKS = 0;CREATE TABLE `event` (  `id` int(11) NOT NULL AUTO_INCREMENT,  `user_id` varchar(128) DEFAULT NULL,  `type` varchar(128) DEFAULT NULL,  `created_timestamp` timestamp NULL DEFAULT NULL,  PRIMARY KEY (`id`)) ENGINE=InnoDB DEFAULT CHARSET=utf8;SET FOREIGN_KEY_CHECKS = @PREVIOUS_FOREIGN_KEY_CHECKS;docker-compose.ymlversion: '3.0'services:  mariadb:    image: mariadb    container_name: some-mariadb    ports:      - 3306:3306/tcp    environment:      - MYSQL_ROOT_PASSWORD=1234    volumes:      - test.sql:/docker-entrypoint-initdb.d/test.sql驗證  docker exec some-mariadb mysql -u root --password=1234 --database=test -e "show tables;"]]></content>
       <categories>
         
@@ -553,7 +553,7 @@
   
     <entry>
       <title><![CDATA[【AWS CLI】ECR & S3 & EB deploy]]></title>
-      <url>/aws/2017/08/25/AWS-CLI-ECR-S3-EB-Deploy/</url>
+      <url>/blogpost/aws/2017/08/25/AWS-CLI-ECR-S3-EB-Deploy/</url>
       <content type="text"><![CDATA[建立 aws docker image repo  建立 ECR          開啟 AWS console -&gt; 選擇 Amazon ECS 的服務 -&gt; 選擇 Repositories      選擇 create repository      建立完成後，會看到上傳的方法        按照 ecs 中，的說明 aws ecr get-login 後，會產生出 docker login … 的語法，透過這個進行 docker login          aws ecr get-login --no-include-email --region us-east-1 : 取得 docker login -u AWS -p ....       依據 1 中取得的 login 指令，進行 docker login        上傳 docker image 到 ECR 中          docker build -t xxx {image}      docker tag xxx your-ecr-position/your-repo-name:latest      docker push your-ecr-position/your-repo-name:latest      透過 beanstalk 部署  建立好一個 eb application  設定好 Dockerrun.aws.json          envsubst 可善用此指令        壓縮 含有設定檔的 folder，並上傳到 aws s3          cd folder &amp;&amp; zip -r $folder.zip ./ &amp;&amp; aws s3 cp $folder.zip s3://{bucket_name}/{folder.zip}        建立 eb 新的版本    aws elasticbeanstalk create-application-version \--application-name {your-eb-application-name} \  --version-label {your-eb-version-label}\  --source-bundle S3Bucket={bucket_name},S3Key={folder.zip}        部署新版本    aws elasticbeanstalk update-environment \--environment-name {your-eb-application-name} \  --version-label {your-eb-version-label}      ]]></content>
       <categories>
         
@@ -568,7 +568,7 @@
   
     <entry>
       <title><![CDATA[【AWS CLI】profile : configure]]></title>
-      <url>/aws/2017/08/25/AWS-CLI-configure/</url>
+      <url>/blogpost/aws/2017/08/25/AWS-CLI-configure/</url>
       <content type="text"><![CDATA[PURPOSE  了解 aws cli profile 運作方式  了解 aws cli configure 操作方法aws cli  github : https://github.com/aws/aws-cli/releases  安裝 &amp; 更新 &amp; 反安裝 : http://docs.aws.amazon.com/cli/latest/userguide/installing.html  cli 中指令的參考 : http://docs.aws.amazon.com/cli/latest/index.html          aws help : 可看到所有指令        查詢各類指令說明 :          aws help      aws {command} help      aws {command} {sub-cmd} help        aws Command Completion : http://docs.aws.amazon.com/cli/latest/userguide/cli-command-completion.html          透過 tab 搜尋 aws 相關指令, install :                  echo $SHELL          find path : which aws_completer          enable : complete -C '/usr/local/bin/aws_completer' aws                    設定 profile  resource : http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html  請到 iam 取得以下          AWS Access Key ID      AWS Secret Access Key        aws configure help : 查詢在 configure 中的指令有哪些可用  設定 profile          aws configure      aws configure --profile user2        列出 profile          aws configure list : 預設      aws configure list --profile default : 指定身份        使用 profile          aws ec2 describe-instance      aws ec2 describe-instance --profile user2        指定使用哪一個 profile          export AWS_PROFILE=user2 : AWS_PROFILE 為 Environment Variables      unset AWS_PROFILE : 回到預設值      Profile Environment Variables                  AWS_ACCESS_KEY_ID          AWS_SECRET_ACCESS_KEY          AWS_SESSION_TOKEN          AWS_DEFAULT_REGION          AWS_DEFAULT_OUTPUT          AWS_PROFILE          AWS_CA_BUNDLE          AWS_SHARED_CREDENTIALS_FILE          AWS_CONFIG_FILE                      Options          --profile		: 指定使用 profile      --region 		: 指定地區                  顯示地區列表 : aws ec2 describe-regions --output table                                                                --output 		: json              text              table                                          --endpoint-url : 指定      ex : aws ec2 describe-instances --output table --region ap-northeast-2      example  想要列出目前預設使用的 profile 使哪一張          aws configure list        想指定預設的 profile          export AWS_PROFILE=xxx        想取消指定 profile，回到 default          unset AWS_PROFILE      ]]></content>
       <categories>
         
@@ -583,7 +583,7 @@
   
     <entry>
       <title><![CDATA[【log tool】papertrial+logspout]]></title>
-      <url>/papertrial/logspout/2017/08/18/Papertrial-logspout/</url>
+      <url>/blogpost/papertrial/logspout/2017/08/18/Papertrial-logspout/</url>
       <content type="text"><![CDATA[papertrail  申請一個 papertrail 帳號  建立一個 Log Destinations : 會得到 logsx.papertrailapp.com:46888logspout  建立 docker container    docker run --name="logspout" \-d \-e SYSLOG_HOSTNAME=test_name \--volume=/var/run/docker.sock:/var/run/docker.sock \gliderlabs/logspout \{your_papertrail_log_destination}        測試          以下兩種方法可以在 papertrial 的 log 中看到                  docker run -p 80:80 centos /bin/echo hello =&gt; 在 papertrial 印出 hello          docker run -p 81:81 centos /bin/date =&gt; 在 papertrial 印出 日期          docker run -i -d -p 80:80 centos /bin/bash                          docker exec -it [container_id] /bin/bash                                      echo hello » /proc/1/fd/1 =&gt; 在 papertrial 印出 hello                                          注意 : docker run 用 -t 啟用的話，就不會被 logspout 給監聽到      注意 : logging driver 只支援 journald, json-file      ]]></content>
       <categories>
         
@@ -600,7 +600,7 @@
   
     <entry>
       <title><![CDATA[【EJABBERD 17.07】dockerfile]]></title>
-      <url>/ejabberd/2017/08/17/Ejabberd-docker/</url>
+      <url>/blogpost/ejabberd/2017/08/17/Ejabberd-docker/</url>
       <content type="text"><![CDATA[FROM        ubuntu:16.04EXPOSE      5222 5280 5269 4560WORKDIR     /homeENV         DL=https://www.process-one.net/downloads/ejabberd/17.07/ejabberd_17.07-0_amd64.debENV			EJABBERD_HOME_NAME=ejabberd-17.07ENV         DL_FILENAME=$EJABBERD_HOME_NAME.deb RUN         apt-get updateRUN 		apt-get install libexpat1 apt-utils -yRUN         apt-get install wget vim -yRUN         wget -O $DL_FILENAME $DLRUN         dpkg -i $DL_FILENAME]]></content>
       <categories>
         
@@ -615,7 +615,7 @@
   
     <entry>
       <title><![CDATA[【ejabberd stress】use Jabsimul]]></title>
-      <url>/ejabberd/2017/08/06/Ejabberd-Jabsimul/</url>
+      <url>/blogpost/ejabberd/2017/08/06/Ejabberd-Jabsimul/</url>
       <content type="text"><![CDATA[【ejabberd stress】use Jabsimul環境  aws instance t2.micro  ubuntu 16.04安裝  安裝 ejabberd 本體          apt-get update      到安裝頁面，選擇 deb，wget {download source}      dpkg -i {download file}      su ejabberd &amp;&amp; cd ~      檢查你的 host 請更改為 localhost : vi ./conf/ejabberd.yml      先記錄 {host}      啟動 ejabberd, ./bin/ejabberdctl start      建立管理者 : ./bin/ejabberdctl register admin {host} admin        安裝壓力測試編譯時需要的套件 : apt-get install cvs make gcc libexpat1-dev libncurses5-dev libssl-dev bison byacc flex -y  安裝 Jabber Test Suite，官方 : http://jabbertest.sourceforge.net/          確定切換回 root, cd /home/ubuntu      cvs -z3 -d:pserver:anonymous@jabbertest.cvs.sourceforge.net:/cvsroot/jabbertest co testsuite      cd testsuite/ &amp;&amp; cp Makefile.linux Makefile &amp;&amp; make userreg      查詢 ./userreg -? 的使用方法      ./userreg -h 127.0.0.1 -u 3000 -n 1 -o ./output      cat ./output 如果成功會顯示類似，無意外會有 3000 筆資訊      如果沒有，請將 ejabberd stop then start        安裝 Jabsimul          確定切換回 root, cd /home/ubuntu      wget http://www.ejabberd.im/files/other/jabsimul.tar.gz      tar xzf jabsimul.tar.gz      cp jab_simul.xml.example jab_simul.xml      ./configure &amp;&amp; make      調整設定值，開啟 jab_simul.xml : 參考 http://tkabber.jabber.ru/files/badlop/jab_simul.xml.chat60      注意 jab_simul.xml 中，server 的位置，必須是可解析的 DNS，不能用 ip      開始執行壓力測試 ./jab_simul      請壓到你預設的數據人數，再去查看現在的資源狀態        如何檢查你的壓力測試 user login 正常?          檢查你的 ejabberd.log      檢查 /tmp 底下的 xml testuser 中的訊息        jab_simul 執行後的錯誤訊息          Socket creation error ! (Too many open files) : 請調整 ulimit 參考其他參數調整      Segmentation fault (core dumped) : 伺服器超載      其他參數調整如果要模擬 2000 個用戶，在同一台機上上進行壓力測試，必須設定限制高於 4000 以上  Linux : ulimit -n 16000shaper 是設定查詢允許的流量速度…應該被受限在硬體的效能上…  shaper normal &amp; fast在 ejabberdctl.cfg 中，可設定 ERL_MAX_PORTS &amp; ERL_MAX_ETS_TABLES  ERL_MAX_PORTS : Maximum number of simultaneously open Erlang ports          ejabberd consumes two or three ports for every connection, either from a client or from another Jabber server. So take this into account when setting this limit.        ERL_MAX_ETS_TABLES : Maximum number of Erlang processes          The number of concurrent ETS and Mnesia tables is limited. When the limit is reached, errors will appear in the logs: ** Too many db tables **. You can safely increase this limit when starting ejabberd. It impacts memory consumption but the difference will be quite small.      什麼是 ETS =&gt; Erlang Term Storage什麼是 DETS =&gt; Disk Erlang Term Storage查詢壓力測試數據  記憶體          測試前 : free -k      測試後 : free -k        使用 top 指令  可參考 : http://fecbob.pixnet.net/blog/post/39256167-linux%E4%B8%AD%E6%9F%A5%E7%9C%8B%E7%B3%BB%E7%B5%B1%E8%B3%87%E6%BA%90%E4%BD%94%E7%94%A8%E6%83%85%E6%B3%81%E7%9A%84%E5%91%BD%E4%BB%A4壓力測試數據參考在 t2.micro 底下約 7500 人，同時在線  PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND                                                                                                                      12022 root      20   0   84416  68836   4084 R 66.0  6.8   0:30.64 jab_simul ]]></content>
       <categories>
         
@@ -630,7 +630,7 @@
   
     <entry>
       <title><![CDATA[透過 slack 訂閱 github release RSS]]></title>
-      <url>/2017/08/03/through-github-slack-subscription-release-rss/</url>
+      <url>/blogpost/2017/08/03/through-github-slack-subscription-release-rss/</url>
       <content type="text"><![CDATA[目的當使用越來越多的工具時，有時新版的 release 來不及跟上，變成版本落差極大，透過 slack rss bot 的幫忙，當 release 有更新時，透過 msg 通知需要工具  slack rss bot install : https://slack.com/apps/A0F81R7U7-rss  github release rss          找到一個你想要訂閱的 github      點選 release 的 item      在 url 的尾端加上 .atom 即可。ex: https://github.com/xxxx/yyyy/releases.atom      copy url to slack rss      ]]></content>
       <categories>
         
@@ -643,7 +643,7 @@
   
     <entry>
       <title><![CDATA[【Docker】docker-machine 部署到 aws]]></title>
-      <url>/2017/07/15/docker-docker-machine-operation/</url>
+      <url>/blogpost/2017/07/15/docker-docker-machine-operation/</url>
       <content type="text"><![CDATA[使用 docker-machine 部署 docker 到 aws  參考 : https://docs.docker.com/machine/drivers/aws/  指令參數表 : https://docs.docker.com/machine/drivers/aws/#options          有些預設的參數要注意，如果沒有指定的情況下，會依照預設參數來建立 aws instance                  ex : ami, region, zone, group, instance-type, device-name, root-size, volume-type, ssh-user, request-spot-instance, spot-price, use-private-address, private-address-only, monitoring, use-ebs-optimized-instance, retries                    其他部署文章參考  nvidia-docker Deploy on Amazon EC2 : https://github.com/NVIDIA/nvidia-docker/wiki/Deploy-on-Amazon-EC2aws credentials  登入 aws  進入 IAM  選擇 user  給予需要使用的權限，在這邊選擇 ec2  取得該 user 的 AWS Access Key ID 與 AWS Secret Access Key  在使用 docker-machine 前，可使用以下兩種方法          通過 aws credentials 來設定 AWS Access Key ID 與 AWS Secret Access Key，建立的方法也有兩種                  可透過 awscli，通過指令 aws configure 可協助設定好          也可直接建立 ~/.aws/credentials，顯示格式如下            [default]aws_access_key_id = AKID1234567890aws_secret_access_key = MY-SECRET-KEY                                          可透過 docker-machine : $ docker-machine create --driver amazonec2 --amazonec2-access-key AKI******* --amazonec2-secret-key 8T93C*******  aws01 來建立 docker-machine 的機器        測試建立          docker-machine create --driver [instance_Name] : 注意 default 參數值                  zone : us-east-1          instance-type : t2.micro          root-size : 16          volume-type : gp2          ssh-user : ubuntu          其他資訊請參考 docker-machine 說明                    指定部分的參數操作 :        docker-machine create --driver amazonec2 \                --amazonec2-region us-west-2 \                --amazonec2-zone b \                --amazonec2-ami ami-efd0428f \                --amazonec2-instance-type p2.xlarge \                --amazonec2-vpc-id vpc-*** \                --amazonec2-access-key AKI*** \                --amazonec2-secret-key *** \                aws01                    未完待續]]></content>
       <categories>
         
@@ -656,7 +656,7 @@
   
     <entry>
       <title><![CDATA[【Docker】use sublime to edit file in docker]]></title>
-      <url>/docker/sublime/2017/07/05/Docker-Sublime/</url>
+      <url>/blogpost/docker/sublime/2017/07/05/Docker-Sublime/</url>
       <content type="text"><![CDATA[sublime 編輯 docker 中的檔案docker 是個好物的原因在於，環境的穩定，無論遷移到哪個環境中，都可以保持穩定性，debug 也方便許多但如何直接編輯 docker 建立後的 file？透過 docker 中的 volume 設定好 application 與 docker 中的位置，就可以直接動態變更 docker 中的檔案資訊ex : php / phalcon / dockerDocker Engine &gt;= 1.10.0 * Docker Compose &gt;= 1.6.2  git clone git@github.com:phalcon/phalcon-compose.git  cp variables.env.example variables.env  docker-compose up -d  開啟網頁 localhost:80  建立檔案 ./phalcon-compose/application/public/hello.php          &lt;?php echo "world"; ?&gt;        開啟網頁 localhost/hello.php]]></content>
       <categories>
         
@@ -673,7 +673,7 @@
   
     <entry>
       <title><![CDATA[【RTMP】youtube to rtmp]]></title>
-      <url>/rtmp/2017/06/24/RTMP-Youtube/</url>
+      <url>/blogpost/rtmp/2017/06/24/RTMP-Youtube/</url>
       <content type="text"><![CDATA[目的將 youtube 的影片傳給 rtmp server 進行串流how  找到 youtube 的影片  進行轉檔為 mp4 : https://www.onlinevideoconverter.com/zh/success?id=b1d3e4d3e4d3g6b1          或者利用各種轉檔方式      可下載為 file 也可直接抓取 url (但注意 url 會過期)      或者把影片存成 mp4 後，放到 server 上        docker run --rm jrottenberg/ffmpeg:ubuntu -re -i http://... -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp:...          -re : Read input at native frame rate. Mainly used to simulate a grab device.  or live input stream (e.g. when reading from a file). Should not be used with actual grab devices or live input streams (where it can cause packet loss).  By default ffmpeg attempts to read the input(s) as fast as possible.  This option will slow down the reading of the input(s) to the native frame rate of the input(s). It is useful for real-time output (e.g. live streaming).      http://... : 輸入的 mp4 影片位置，也可用 file 來替代      rmpt://... : 要串流的 rtmp server 位置      ]]></content>
       <categories>
         
@@ -688,7 +688,7 @@
   
     <entry>
       <title><![CDATA[【Player】HLS.js / video.js / jwplayer]]></title>
-      <url>/2017/06/21/playerhls-rtmp/</url>
+      <url>/blogpost/2017/06/21/playerhls-rtmp/</url>
       <content type="text"><![CDATA[rtmp live使用 video.js 的 issue播放後，影片會在左上角，與 player size 不符合  bug fixed : https://github.com/videojs/video-js-swf/issues/55          下載 https://github.com/digitalStyx/video-js-swf/blob/master/bin-debug/VideoJS.swf 到本地後      在 head 中加入         &lt;script&gt;   videojs.options.flash.swf = "VideoJS.swf"; &lt;/script&gt;                    使用參考 : https://coolestguidesontheplanet.com/videodrome/videojs/      hls playback如何進行 offset  document : https://tools.ietf.org/html/draft-pantos-http-live-streaming-18#section-4.3.5.2  version 6 以上  use like below : #EXT-X-START:TIME-OFFSET=2#EXTM3U#EXT-X-VERSION:7#EXT-X-ALLOW-CACHE:YES#EXT-X-TARGETDURATION:7#EXT-X-MEDIA-SEQUENCE:1#EXT-X-START:TIME-OFFSET=2#EXTINF:7, 1498008625670.ts#EXTINF:6, 1498008631711.ts#EXTINF:6, 1498008637927.ts  注意播放器要支援解析, EX: https://github.com/jhaoheng/html5_hls_test/blob/master/hls.htmljwplayer 使用 flash 播放 hls / rtmp  jwplayer 提供 http / https 的網頁測試          http  : http://demo.jwplayer.com/developer-tools/http-stream-tester/      https : https://developer.jwplayer.com/tools/stream-tester/        要讓 jwplayer 透過 flash 支援 hls 的播放，需要加入 crossdomain.xml 檔案          要注意的是，crossdomain.xml 的檔案內容，請勿一次全部 copy，盡量用輸入的，輸入完畢後，透過 browser 顯示，不然有可能會發生，檢查 cros 正確，但 jwplayer 會無法解析的問題，猜測應該是 copy 時，貼上帶入了奇怪的字元        若用 jwplayer，不指定類型，則 jwplayer 會自動根據內容自動切換 flash / html5 的播放類型，如此一來就不用特別使用 crossdomain.xml，只需在 nginx.conf 中設定 crossdomain 即可]]></content>
       <categories>
         
@@ -701,7 +701,7 @@
   
     <entry>
       <title><![CDATA[【AWS-S3】多檔案上傳]]></title>
-      <url>/2017/06/07/aws-s3-multiple-file-upload/</url>
+      <url>/blogpost/2017/06/07/aws-s3-multiple-file-upload/</url>
       <content type="text"><![CDATA[env  aws sdk php v3  php 7.0xexrequire './vendor/autoload.php';use Aws\S3\S3Client;use Aws\Exception\AwsException;use Aws\CommandPool;$access_key = "";$secret_access_key = "";$bucket = "";$client = S3Client::factory([        "region" =&gt; "ap-northeast-1", // tokyo        "version" =&gt; "latest",         'credentials' =&gt; [            'key'    =&gt; $access_key,            'secret' =&gt; $secret_access_key,        ],    ]);$commands = array();$binary = file_get_contents('./images/1.jpg');$commands[] = $client-&gt;getCommand('PutObject', [        'Bucket' =&gt; $bucket,        'Key'    =&gt; 'photos/photo01.jpg',        'Body'   =&gt; $binary    ]);$commands[] = $client-&gt;getCommand('PutObject', [        'Bucket' =&gt; $bucket,        'Key'    =&gt; 'photos/photo02.jpg',        'Body'   =&gt; $binary    ]);$pool = new CommandPool($client, $commands);// Initiate the pool transfers$promise = $pool-&gt;promise();// Force the pool to complete synchronouslytry {    $result = $promise-&gt;wait();} catch (AwsException $e) {    // handle the error.}]]></content>
       <categories>
         
@@ -714,7 +714,7 @@
   
     <entry>
       <title><![CDATA[【Docker】ENV]]></title>
-      <url>/2017/06/07/dockerenv/</url>
+      <url>/blogpost/2017/06/07/dockerenv/</url>
       <content type="text"><![CDATA[env 環境變數當用 docker 設定環境變數docker 會將變數透過 bash 建立變數，並將 變數 export故在設定 docker env 後，運行 docker，可以透過 export -p 查看所有環境變數index.php&lt;?php  echo getenv("helloEnv").PHP_EOL;echo getenv("go").PHP_EOL;stepdocker pull jhaoheng/php_env:v1.2// 建立 container, 設定 envdocker run -dt -e "helloEnv=sure" -e "go=ok" [image_id]// 查看 container 中的環境變數docker exec d11d88d32 bash -c export -p// 放入 index.phpdocker cp index.php [container_id]:/home// 透過 php 取得環境變數docker exec [container_id] php /home/index.php設計模式  設定好環境變數  設定好取得環境變數的模板  在運行 docker container 時，自動依據環境變數，建立起 config]]></content>
       <categories>
         
@@ -727,7 +727,7 @@
   
     <entry>
       <title><![CDATA[【SRS-release2.0】docker with centos7.3]]></title>
-      <url>/srs/docker/2017/05/31/SRS-docker/</url>
+      <url>/blogpost/srs/docker/2017/05/31/SRS-docker/</url>
       <content type="text"><![CDATA[環境  srs 2.0  centos7.3完成品  https://hub.docker.com/r/jhaoheng/srs-release2.0/  docker run -d -t -p 1935:1935 {image}  位置 : /opt/srs/trunk，執行 srs 即可base  docker pull centos:latest  docker run -d -t -p 1935:1935 [centos:latest]  docker exec -it [container] /bin/bash安裝  yum update  required          yum install -y gcc      yum install -y gcc-c++      yum install -y make      yum install -y patch      yum install -y unzip      yum install -y pcre-devel      yum install -y automake      yum install -y libtool      yum install -y zlib-devel        git clone [source]  安裝 ./trunk/3rdparty/CherryPy-3.2.4          unzip ./trunk/3rdparty/CherryPy-3.2.4.zip &amp;&amp; mv CherryPy-3.2.4 ../objs/        compile srs : ./configure --full --with-ffmpeg --with-research &amp;&amp; make          ./configure -h : 可查看所有安裝選項        start srs : ./objs/srs -c conf/srs.conf測試  tail -f ./trunk/srs.log  將桌面的畫面推送給 docker:srs          ffmpeg -f avfoundation -i "1" -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp://localhost:1935/live/desktop        透過 VLC 播放 rtmp://localhost:1935/live/desktop]]></content>
       <categories>
         
@@ -744,7 +744,7 @@
   
     <entry>
       <title><![CDATA[【HLS】m3u8 在直播上，播放器詢問次數測試]]></title>
-      <url>/hls/2017/05/28/HLS-m3u8/</url>
+      <url>/blogpost/hls/2017/05/28/HLS-m3u8/</url>
       <content type="text"><![CDATA[hls m3u8 詢問次數測試  目的 : 確認 播放器 在播放 hls 時，更新 m3u8 的機制與時間點環境  php  nginx  aws s3  aws dynamoDB  VLC player流程設計  預先儲存          影片(.ts)到 aws s3      資訊到 aws dynamoDB        從 api 給予時間與 key，搜尋影片片段，建立 m3u8 檔案，回傳給播放器          每次 播放器，進行要求建立 m3u8 時，寫入 log 紀錄要求的時間        查詢 log第一次建立的 m3u8 file, 每次詢問時都給予相同的 m3u8 檔案#EXTM3U#EXT-X-VERSION:3#EXT-X-ALLOW-CACHE:YES#EXT-X-TARGETDURATION:8.334EXT-X-MEDIA-SEQUENCE:1#EXTINF:8.334, playback{DNS}/1495615390360.ts#EXTINF:8.3, playback{DNS}/1495615398698.ts#EXTINF:8.3, playback{DNS}/1495615407037.ts#EXTINF:8.3, playback{DNS}/1495615415376.ts#EXTINF:8.333, playback{DNS}/1495615423720.ts寫入的 log[Sun, 28 May 17 20:11:56 +0800][INFO] 找尋 m3u8 +1 : 1495973516.44[Sun, 28 May 17 20:12:12 +0800][INFO] 找尋 m3u8 +1 : 1495973532.82[Sun, 28 May 17 20:12:20 +0800][INFO] 找尋 m3u8 +1 : 1495973540.66[Sun, 28 May 17 20:12:28 +0800][INFO] 找尋 m3u8 +1 : 1495973548.69[Sun, 28 May 17 20:12:36 +0800][INFO] 找尋 m3u8 +1 : 1495973556.76結論每次的 log 的時間、間隔，log_2 - log_1 , duration = 16log_3 - log_2 , duration = 8log_4 - log_3 , duration = 8log_5 - log_4 , duration = 8log_1 : 第一次開始詢問, 開始播放第一個, 應該包含播放器的準備時間log_2 : 第一個 ts 播放完畢, 開始播放第二個log_3 : 第二個 ts 播放完畢, 開始播放第三個log_4 : 第三個 ts 播放完畢, 開始播放第四個log_5 : 第四個 ts 播放完畢, 開始播放第五個播放器在每次播放完 ts 的檔案後，都會進行 api 的詢問，透過詢問，可產生下一次的 m3u8 檔案，若更新 m3u8 後，記得需同時 EXT-X-MEDIA-SEQUENCE 進行 +1]]></content>
       <categories>
         
@@ -759,7 +759,7 @@
   
     <entry>
       <title><![CDATA[【AWS DynamoDB】localhost]]></title>
-      <url>/2017/05/22/aws-dynamodblocalhost/</url>
+      <url>/blogpost/2017/05/22/aws-dynamodblocalhost/</url>
       <content type="text"><![CDATA[dynamodb環境  osx 10.11如何連接本地端 dynamodb  下載 http://docs.aws.amazon.com/zh_cn/amazondynamodb/latest/developerguide/DynamoDBLocal.html  確認 java 版本          http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html      要 1.7 以上版本，不然無法啟動，會有錯誤訊息        在 localhost dynamodb 的路徑下執行 : java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb  測試 : aws dynamodb list-tables --endpoint-url http://localhost:8000  透過 GUI 進行連線          下載 RazorSQL      左邊視窗選擇 connect to a database                  add connection profile -&gt; choose DynamoDB(Amazon)          RazorSQL DynamoDB Driver          set                          Profile Name              AWS Access Key : 任意參數              AWS Secret Key : 任意參數              勾選 Local DynamoDB              設定 Max Rows per Query : 10                                連線即可                    先隨意建立一個 table      透過 terminal cli 查看 : aws dynamodb list-tables --endpoint-url http://localhost:8000      透過 code 進行本地端 dynamodb 連線  http://docs.aws.amazon.com/zh_cn/amazondynamodb/latest/developerguide/DynamoDBLocal.Endpoint.html#w1ab1b9b9c13c11          java      .net      php      php : 記得要先安裝 aws sdk for php$sdk = new Aws\Sdk([    'endpoint'   =&gt; 'http://localhost:8000',  // Use DynamoDB running locally    'region'   =&gt; 'us-west-2',  // US West (Oregon) Region    'version'  =&gt; 'latest'  // Use the latest version of the AWS SDK for PHP]);// Create a new DynamoDB client$dynamodb = $sdk-&gt;createDynamoDb();]]></content>
       <categories>
         
@@ -772,7 +772,7 @@
   
     <entry>
       <title><![CDATA[【IOS】AWS Cognito sample test]]></title>
-      <url>/aws/cognito/ios/2017/05/20/AWS-Cognito-iOS/</url>
+      <url>/blogpost/aws/cognito/ios/2017/05/20/AWS-Cognito-iOS/</url>
       <content type="text"><![CDATA[aws cognito with ios  設定 ios aws sdk : http://docs.aws.amazon.com/zh_cn/mobile/sdkforios/developerguide/setup-aws-sdk-for-ios.html          在側邊欄也有基礎的 cognito 設定/使用方法        Cognito 說明與介紹 : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/what-is-amazon-cognito.html  sdk 下載 : https://github.com/aws/aws-sdk-ios  sample 下載 : https://github.com/awslabs/aws-sdk-ios-samples          CognitoSync-Sample 需禁用 bitcode 才可以正常使用                  環境                          xcode : 8.3.2              ios 10.3.2              objective c              use cocoapod                                            使用授權的 flow : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/authentication-flow.html  關於 STS : Security token service 的文章簡介 : https://blog.clifflu.net/2014/05/iam-role-%E8%88%87-sts/  比較 STS API : http://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison1: 設定 aws cognito user pool  設定 user pool          要建立 app client =&gt; 提供 identity pool 設定用      2: Cognito User pool login, step參考 step 1~6 : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/tutorial-integrating-user-pools-ios.html#tutorial-integrating-user-pools-get-aws-resource-cred-for-app-user  參考 sample 中的 CognitoYourUserPools-Sample  在 Constants.m 中設定相關參數  實機測試時，進行註冊，可在 aws cognito console 中，看到相關註冊資訊  註冊完畢後，在使用 Federated Identities 進行暫行憑證的取得3: 設定 AWS Congito Federated Identity Console  設定 identity pool          提供多種授權方法 : Cognito, Amazon, Facebook, Google+, Twitter, Custom  	- http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/external-identity-providers.html      完成後，會有各個平台的 sample code 可參考        在 (1:) 中取得設定好的 user pool id , app client id 填入 Authentication providers 中的 cognito4: Cognito Federated Identities login , step取得 Cognito 授權登入，需先註冊完 cognito user pool  參考 :          http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/tutorial-integrating-user-pools-ios.html#tutorial-integrating-user-pools-get-aws-resource-cred-for-app-user      http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/amazon-cognito-integrating-user-pools-with-identity-pools.html      // 設定 1AWSServiceConfiguration *serviceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:nil];// 設定 2AWSCognitoIdentityUserPoolConfiguration *userPoolConfiguration = [[AWSCognitoIdentityUserPoolConfiguration alloc] initWithClientId:@"YOUR_CLIENT_ID"  clientSecret:@"YOUR_CLIENT_SECRET" poolId:@"YOUR_USER_POOL_ID"];// 設定 3[AWSCognitoIdentityUserPool registerCognitoIdentityUserPoolWithConfiguration:serviceConfiguration userPoolConfiguration:userPoolConfiguration forKey:@"UserPool"];// 取得 user pool, 從 '設定 3' 中AWSCognitoIdentityUserPool *pool = [AWSCognitoIdentityUserPool CognitoIdentityUserPoolForKey:@"UserPool"];// 取得 credentailsProviderAWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProvider alloc] initWithRegionType:AWSRegionUSEast1 identityPoolId:@"YOUR_IDENTITY_POOL_ID" identityProviderManager:pool];將憑證放入 serviceManager 中AWSServiceConfiguration *defaultServiceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1        credentialsProvider:credentialsProvider];AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultServiceConfiguration;ex: facebook 授權登入，此為 sample 既有的範例  參考 sample 中的 CognitoSync-Sample  sample 中，記得關閉 bitcode (預設是開啟)，否則實機測試會失敗(測試時間 20170520)          compile error : linker command failed with exit code 1        在 app 中，設定好 facebook 的參數。在 cognito federated identities console 中開啟 facebook 的授權驗證。  安裝 app 後就可以登入，並拿到 臨時的憑證(預設一小時)，可操作包含          synchronize data with Amazon Cognito Sync      Amazon DynamoDB      Amazon S3, and Amazon API Gateway      4: Using Tokens with User Pools  成功取得授權後，會得到三把 token : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html          ID token      Access token      Refresh token      5: Cognito Federated Identities 其他操作            Getting Credentials      http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/getting-credentials.html        Accessing AWS Services : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/accessing-aws-services.html6: Amazon Cognito Sync透過 user pool 來同步手機資料，將用戶的某些資料放到 aws console 中，避免遺失，也可用於跨多裝置的使用]]></content>
       <categories>
         
@@ -791,7 +791,7 @@
   
     <entry>
       <title><![CDATA[【AWS S3】播放 HLS 時，發生 crossdomain access denied]]></title>
-      <url>/hls/aws/2017/05/18/HLS-AWS/</url>
+      <url>/blogpost/hls/aws/2017/05/18/HLS-AWS/</url>
       <content type="text"><![CDATA[環境  player : http://video-dev.github.io/hls.js/demo/  aws s3          將 ts 與 m3u8 均放在上面      問題描述  VLC 可播放  丟入其他播放器，無法播放          某些播放器會說明 crossdomain access denied      持續轉圈圈      解決 crossdomain access denied  aws file : http://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html  console 設定          進入 bucket      進入所選定的 folder 中      選擇 Permissions      看到 AllowedHeader      寫入 *      ]]></content>
       <categories>
         
@@ -808,7 +808,7 @@
   
     <entry>
       <title><![CDATA[【ossrs】compile ffmpeg]]></title>
-      <url>/2017/05/17/ossrscompile-ffmpeg/</url>
+      <url>/blogpost/2017/05/17/ossrscompile-ffmpeg/</url>
       <content type="text"><![CDATA[env  osx : 10.11.6question  ./configure --osx --full --with-ffmpegerror : Libtool library uesd but ‘LIBTOOL’ is undefined  fixed brew install libtool]]></content>
       <categories>
         
@@ -821,7 +821,7 @@
   
     <entry>
       <title><![CDATA[【MongoDB-php7-drive】centos7]]></title>
-      <url>/2017/05/11/mongo-php7-drivecentos7/</url>
+      <url>/blogpost/2017/05/11/mongo-php7-drivecentos7/</url>
       <content type="text"><![CDATA[環境php7centos7MongoDB.so , 非 mongo.so安裝 mongodb  yum install openssl-devel -y  wget http://pear.php.net/go-pear.phar  php go-pear.phar  vi which pecl =&gt; 拿掉 -n , 原因 https://serverfault.com/questions/589877/pecl-command-produces-long-list-of-errors  pecl install mongodb  echo “extension=mongodb.so” » /etc/php.d/20-mongodb.ini                              驗證 php -m          grep mongodb                    docker  https://hub.docker.com/r/jhaoheng/php_env/  docker pull jhaoheng/php_env:1.1]]></content>
       <categories>
         
@@ -834,7 +834,7 @@
   
     <entry>
       <title><![CDATA[【PHP-OSX】mongodb / php-drive / client-lib]]></title>
-      <url>/2017/05/09/phpmongodb/</url>
+      <url>/blogpost/2017/05/09/phpmongodb/</url>
       <content type="text"><![CDATA[環境  osx  php7.0.8  mongod 3.3.4  mongodb : http://php.net/manual/en/set.mongodb.php          勿與 舊版的 Mongo drive 混淆，因為使用上會有極大差別        php-mongodbClient 1.2.8安裝 mongodb  $ brew install mongodb  可在 $ cat /usr/local/etc/mongod.conf，看到 mongodb 設定          注意位置 /data/db，確定是否存在，若不存在則建立一個，記得打開權限        $ mongod 啟動 mongodb設定 php drive      有分 mongo.so 與 mongodb.so 版本    mongodb.so 支援 php7, 用 MongoDB\Driver\xxxxxx 來進行 new 的動作。http://stackoverflow.com/a/38007889    mongo.so 是用 MongoClient 來進行管理    $ brew install php70-mongodb  $ cd /usr/local/Cellar/php70-mongodb =&gt; 找到 mongodb.so  $ php -i | grep extension =&gt; 找到 extension 的位置  $ mv mongodb.so {extension 位置}  $ php --ini =&gt; 找到 php.ini  $ vim php.ini          在 extension 中，加入 extension=mongodb.so        驗證在 $ php -i | grep mongo 驗證版本應該跟下載的相同當執行 mongo 提取資料時出現dyld: lazy symbol binding failed: Symbol not found: _clock_gettime  Referenced from: /usr/local/opt/php70-mongodb/mongodb.so  Expected in: /usr/lib/libSystem.B.dylibdyld: Symbol not found: _clock_gettime  Referenced from: /usr/local/opt/php70-mongodb/mongodb.so  Expected in: /usr/lib/libSystem.B.dylib解決方法 : https://github.com/perftools/xhgui/issues/198#issuecomment-286711319設定 MAMP  一樣將 mongodb.so 拷貝到 mamp extension 的位置底下  編輯 mamp 的 php.ini  透過 phpinfo() 來檢查php 使用 mongodb drive  http://php.net/manual/en/class.mongodb-driver-manager.php更有效率地使用 mongodb drive  https://docs.mongodb.com/php-library/master/tutorial/install-php-library/  MongoDB client-libraby github : https://github.com/mongodb/mongo-php-library  搜尋的碼    $client = new MongoDB\Client;$collection = $client-&gt;selectCollection('db', 'collection');$cursor = $collection-&gt;find();foreach ($cursor as $restaurant) { var_dump($restaurant);};      ]]></content>
       <categories>
         
@@ -847,7 +847,7 @@
   
     <entry>
       <title><![CDATA[【PHP-MAMP】pcntl 安裝]]></title>
-      <url>/2017/04/05/php-mamp-pcntl-installation/</url>
+      <url>/blogpost/2017/04/05/php-mamp-pcntl-installation/</url>
       <content type="text"><![CDATA[環境  osx  php7.0.8  MAMP 3.5.2flow  brew search pcntl，找尋要安裝的版本  brew install php70-pcntl，得到 pcntl 的安裝位置 =&gt; pcntl__path  安裝完畢後，確認 php, which php，得到路徑 =&gt; php__path  ls -al 路徑(php__path)，確認 php 的 source 指到的是 MAMP 的 php 路徑  在 pcntl__path 中，取得 pcntl.so 的檔案，copy 到 MAMP 的 extension 中  編輯 localhost 的 php.ini 與 MAMP 的 php.ini，加入 extension=pcntl.so  在 terminal 中，php -i | grep pcntl，可看到版本訊息]]></content>
       <categories>
         
@@ -860,7 +860,7 @@
   
     <entry>
       <title><![CDATA[【Git】attribute, 合併後保留原本的設定檔]]></title>
-      <url>/git/2017/03/15/Git-attribute/</url>
+      <url>/blogpost/git/2017/03/15/Git-attribute/</url>
       <content type="text"><![CDATA[git : [.gitattributes]合併策略  在 project 的路徑下，同一層有 .git，建立 .gitattributes  建立要維持固定不變的設定檔 : config.json  在 .gitattributes 中新增合併策略 config.json merge=ours  完成後，查詢 git config --global -l，是否有 merge.ours.driver=true 的參數設定  若無則下指令 : git config --global merge.ours.driver truestep flow  git checkout -b [branch]  edit config.json &amp; commit  git checkout master  edit config.json &amp; commit  此時下 git log --all --graph --pretty=format:'%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)'，會看到 branch 分別在兩條線，若是在同一條線上，並不會產生 conflict  git merge [branch]，讓兩條合併，此時產生 conflict，但因為設定的 .gitattributes 的規則，會讓每個分支合併後，以原本分支的檔案為主  查看 git log --all --graph --pretty=format:'%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)']]></content>
       <categories>
         
@@ -875,7 +875,7 @@
   
     <entry>
       <title><![CDATA[【AWS-centos7-php7.x】phalcon / memcached / mosquitto]]></title>
-      <url>/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/</url>
+      <url>/blogpost/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/</url>
       <content type="text"><![CDATA[完整的 bash scriptbase on AWS centos7 : git@github.com:jhaoheng/centos-nginx-php7.x-extension.git執行 sh env.sh 即可，整體安裝約 20 分鐘start  至 aws  launch new instance  market search centos  choose centos7centos7 安裝 nginx  yum -y install epel-release  yum install nginx  驗證在瀏覽器開啟 ip, 注意 port 80 是否有開啟操作/bin/systemctl restart nginxcentos7 安裝 php7.x  yum -y install epel-release  yum install wget  wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm  rpm -ivh ./remi-release-7.rpm  yum install –enablerepo=remi,remi-php70 php-fpm php-devel php-mbstring php-pdo php-gd php-xml php-curl php-mysqlnd php-pdo_mysql php-mysqli php-json php-soap php-zip php-sockets php-session php-mcrypt php-date php-openssl php-yamlsource  下載位置 http://php.net/downloads.php  可參考目前的 ext  手動新增 ext, ex:          cd xml      phpize      ./configure      make &amp;&amp; make install        查看 module 是否有此套件操作/bin/systemctl restart php-fpm測試  找出 nginx.conf : nginx -h  vi {$path}/nginx.conf  server 設定參數可參考 https://docs.phalconphp.com/zh/latest/reference/nginx.html          請將 fastcgi 設定為 127.0.0.1:9000 &lt;— 必須符合 php-fpm 的 listen 位置        在適當位置建立  的 index.php  在 browser 輸入 ip 與 index.phpcentos7 安裝 phalcon with php7.x  yun install git  yum install php-devel pcre-devel gcc make re2c  安裝編譯工具 : git clone https://github.com/phalcon/zephir  cd zephir/  ./install-nosudo  下載 phalcon source : git clone git://github.com/phalcon/cphalcon.git  cd cphalcon/  git checkout 適當的版本  {$Path}/zephir build  將 extension=phalcon.so 放入 php.ini                              php -i          grep phalcon                    trouble  undefined symbol: php_json_decode_ex in Unknown on line 0          原因在於此 extension=phalcon.so 不能直接放在 php.ini 中，請放置 /etc/php.d/      centos7 安裝 libmemcached 編譯 memcached.so安裝 libmemcached  至官網下載 https://launchpad.net/libmemcached  wget ….  cd /libmemcached-1.x.x  yum groupinstall “Development Tools”  yum install zlib-static  ./configure –disable-memcached-sasl  make &amp;&amp; make install編譯 memcached.so  git clone https://github.com/php-memcached-dev/php-memcached.git  git checkout php7  phpize  ./configure  make &amp;&amp; make install  確定是否將 .so 放入 module 中 :          php -i | grep extension_dir      cd {dir}      檢查是否有 memcached.so        確定 extension 是否有加入到 php.ini                              驗證 php -i          grep memcached                    centos7 安裝 libmosquitto 編譯 mosquitto.so安裝 libmosquitto  進入官網 : https://mosquitto.org/download/  找到 centos7 的 re 的 conf  將檔案 mosquitto.repo 放入 /etc/yum.repos.d 即可The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto.  安裝 : yum install libmosquitto-devel  安裝後的 lib 路徑, 系統安裝後會提示, 無意外是 /usr/lib64/libmosquitto.so…..編譯 mosquitto.so  下載 git source 後 : https://github.com/mgdm/Mosquitto-PHP  cd Mosquitto-PHP  phpize  ./configure --with-mosquitto=/usr/lib64/libmosquitto.so  make &amp;&amp; make install  驗證 module 是否有 mosquitto.so  在 php.ini 中設定 extension=mosquitto.so                              驗證 : php -i          grep mosquitto                    ]]></content>
       <categories>
         
@@ -896,7 +896,7 @@
   
     <entry>
       <title><![CDATA[【php】memcached]]></title>
-      <url>/php/2017/01/15/PHP-Memcached/</url>
+      <url>/blogpost/php/2017/01/15/PHP-Memcached/</url>
       <content type="text"><![CDATA[ENV  php 7.x  mac osx編譯好的 memcache.so  github : https://github.com/majksner/php-memcached-mamp  下載 memcached.so  brew install memcached  brew install libmemcached  php –ini  vim php.ini  extension=memcached.so                              php -i          grep memcached                    自己 compile  git clone https://github.com/php-memcached-dev/php-memcached.git  brew install memcached  brew install libmemcached  git checkout php7  phpize  ./configure --with-memcached=/usr/local/Cellar/libmemcached/1.0.18_1/lib/libmemcached          Notice : the libmemcached path is brew install path        make  sudo make install  mv memcached.so to extension path, you could get path with php -i | grep extension_dir  vim php.ini, add extension=memcached.so如何使用前提  安裝好 memcached 在電腦中 : brew install memcached          至於 libmemcached 則為編譯成 .so 時使用        執行 memcached 即可          man memcached      - memcached -l 127.0.0.1 -P 11211 -m 128 -d : for deamon      - memcached -l 127.0.0.1 -P 11211 -m 128 -vv : for debug        檢查 memcached 是否有執行 : ps aux | grep memcached判斷 php 是否安裝好支援的 memcached.so            php -i      grep memcached              php -m      grep memcached      test&lt;? php$mem  = new Memcached();$mem-&gt;addServer('localhost',11211);if( $mem-&gt;add("key","value",3600)){    echo  'cached!';}else{    echo 'cached data：'.$mem-&gt;get("key");}?&gt;console admingit@github.com:jhaoheng/phpmemcacheadmin.git]]></content>
       <categories>
         
@@ -911,7 +911,7 @@
   
     <entry>
       <title><![CDATA[【php+mqtt】basic]]></title>
-      <url>/php/mqtt/2017/01/12/PHP-MQTT/</url>
+      <url>/blogpost/php/mqtt/2017/01/12/PHP-MQTT/</url>
       <content type="text"><![CDATA[php 透過 mqtt 進行發送與監聽install  env : mac osx, php 7.0.8  確定已安裝 mosquitto 在 mac 中 : brew install mosquitto          取得 path : /usr/local/Cellar/mosquitto/1.4.9/lib/libmosquitto        下載 github : https://github.com/mgdm/Mosquitto-PHP  產生 mosquitto.so          cd Mosquitto-PHP      phpize      ./configure --with-mosquitto=/usr/local/Cellar/mosquitto/1.4.9/lib/libmosquitto      make      sudo make install      得到 mosquitto.so 安裝的位置        開啟 php.ini，設定 extension=mosquitto.so 與驗證          MAMP，請用套件管理 php.ini                  用 phpinfo();                    手動                  php --ini          cat {path}/php.ini | grep extension_dir          將 mosquitto.so 放入此路徑          在 php.ini 中設定 extension=mosquitto.so          驗證 php -i | grep mosquitto                    測試  https://github.com/mqtt/mqtt.github.io/wiki/mosquitto-php問題  訂閱問題          若針對所有的 topic 進行訂閱，則開兩台 instance，就會收到兩次，無法做 loading balance….所以還是分段訂閱會比較清楚      當有新的必須訂閱的事件進來…就產生一個新的監聽 client(php sub.php topic)，訂閱的 topic 寫到 json 中。(or mongodb)      若取消該訂閱，則從 json 中移除該 topic      判斷 process 的狀態，bash file + crontab，定時檢查掛載上去的 sub topic process 與 json file 是否一致        用 php or cmd:mosquitto?          優點在 今天 sub 進來，直接處理，不用在 bash 這邊取得監聽內容後，丟給 php 處理      ]]></content>
       <categories>
         
@@ -928,7 +928,7 @@
   
     <entry>
       <title><![CDATA[【line】閃退，修復]]></title>
-      <url>/2017/01/04/line-flash-back-fix-201701/</url>
+      <url>/blogpost/2017/01/04/line-flash-back-fix-201701/</url>
       <content type="text"><![CDATA[  嘗試網路上的許多操作方法包含          關閉 app 後，重新開啟 (失敗)      開啟飛航模式，開啟 app 後，任意傳訊息給任一人，關閉飛航模式 (失敗)      重新安裝 app (失敗)      透過另一支手機撥 line 電話給該 app (失敗)        猜測是 資料庫問題，可能為轉移資料時，產生的問題          飛航模式可開啟，代表 app 沒問題，可能是網路問題      此手機的 line 登入另一個帳號，正常可使用，故非此 app or ios 版本的問題      猜測是資料庫中的帳號，認為此手機為非該用戶，故故意不讓使用        解決方法          找出另一支手機，登入該帳號，目的在於重新設定此帳號對於 mobile 的認證      進入 line 中，開啟轉移      拿出原本的手機，登入帳號，即可正常使用      ]]></content>
       <categories>
         
@@ -941,7 +941,7 @@
   
     <entry>
       <title><![CDATA[【php 7.x】/private/tmp/pear/install/yaml/php_yaml.h:56:10: fatal error: 'ext/standard/php_smart_str.h' file not found]]></title>
-      <url>/php/2017/01/04/PHP-extension/</url>
+      <url>/blogpost/php/2017/01/04/PHP-extension/</url>
       <content type="text"><![CDATA[install ymal.sosudo pecl insatll yamlinstall Error/private/tmp/pear/install/yaml/php_yaml.h:56:10: fatal error: 'ext/standard/php_smart_str.h' file not foundfixed  sudo pecl install yaml-2.0.0  add yaml.so to php.ini extension          use MAMP  	1. mv yaml.so to /Applications/MAMP/bin/php/php7.0.8/lib/php/extensions/no-debug-non-zts-xxxxxxxxxx                  edit php.ini of php7.0.8                          others : echo "extension=yaml.so" &gt; /usr/local/etc/php/conf.d/ext-yaml.ini                                          ]]></content>
       <categories>
         
@@ -956,7 +956,7 @@
   
     <entry>
       <title><![CDATA[【erlang】split from str]]></title>
-      <url>/2016/11/16/erlangsplit-from-str/</url>
+      <url>/blogpost/2016/11/16/erlangsplit-from-str/</url>
       <content type="text"><![CDATA[-module(split).-compile(export_all).foo() -&gt; 	Topic = "/a/b/c/d/e/f/g/h",	Test = splitTopic(Topic),	io:format("===&gt;final company is : ~p~n",[Test]).splitTopic(Topic) -&gt;     Keys = string:tokens(Topic, "/"),    [Company, Dtype, Etype, Sid | Others] = Keys,    io:format("~n~n===Split Topic===~n"),    io:format("- Company = ~p~n- DeviceType = ~p~n- Event_type = ~p~n- Sid = ~p~n- Others = ~p~n~n", [Company, Dtype, Etype, Sid, Others]),    rsplit(Company).rsplit(Company) -&gt;     Company.]]></content>
       <categories>
         
@@ -969,7 +969,7 @@
   
     <entry>
       <title><![CDATA[【erlang】Hello Erlang!]]></title>
-      <url>/2016/11/10/erlanghello-erlang/</url>
+      <url>/blogpost/2016/11/10/erlanghello-erlang/</url>
       <content type="text"><![CDATA[hello_erlang_1  hello.erl          code        -module(hello).-export([print/0]).print() -&gt; io:format("World!~n").                    解析                  -module          -export          [print/0] : 函數名稱 print , 參數 0 個          io:format : 格式化標準輸出函數，參考 io : Available control sequences:                          ~n : Writes a new line.                                            test          流程                  erl          pwd().          ls().          c(hello). : hello 為 hello.erl 的檔案名稱, c() 為編譯此檔案 -&gt; 會產生 hello.beam 的執行擋          hello:print().                    基本                  . : 每一句皆以此，作為一個斷句                    hello_erlang_2  hello2.erl    -module(hello2).-compile(export_all).square(N) -&gt; N*N.sum([]) -&gt; 0;sum([Num|Ns]) -&gt; Num + sum(Ns).sum_square([]) -&gt; 0;sum_square([Num|Ns]) -&gt; square(Num) + sum_square(Ns).        test          hello2:square(2). : 4      hello2:sum([1,2,3,4,5]). : 15      ; : 代表 or      , : 代表 and      hello_erlang_3  hello3.erl    solve(1) -&gt; [1];solve(N) when N rem 2 == 0 -&gt; [N|solve(N div 2)];solve(N) -&gt; [N|solve(N*3+1)].set(N) 	-&gt; {ok, [H|T] = solve(N)}.      hello_erlang_4 : regular expressions  hello4.erl```-module(do).-compile(export_all).multire([],_) -&gt;    nomatch;multire([RE|RegExps],String) -&gt;    case re:run(String,RE,[{capture,none}]) of    match -&gt;        RE;    nomatch -&gt;        multire(RegExps,String)    end.% 開頭為 Hello, 結尾有 world, 均符合test(Foo) -&gt;    test2(multire([“^Hello”,”world$”,”^….$”],Foo),Foo).test2(“^Hello”,Foo) -&gt;    io:format(“~p matched the hello pattern~n”,[Foo]);test2(“world$”,Foo) -&gt;    io:format(“~p matched the world pattern~n”,[Foo]);test2(“^….$”,Foo) -&gt;    io:format(“~p matched the four chars pattern~n”,[Foo]);test2(nomatch,Foo) -&gt;    io:format(“~p failed to match~n”,[Foo]).-define (Email_pattern, “\b[a-zA-Z0-9.!#$%&amp;’+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)\b”).-define (Mac_address_pattern, “^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$”).checkPattern(Foo) -&gt;   checkPattern2(multire([[?Email_pattern], [?Mac_address_pattern]],Foo),Foo).checkPattern2([?Email_pattern], Foo) -&gt;  io:format(“email format : ~p ~n”, [Foo]);checkPattern2([?Mac_address_pattern], Foo) -&gt;  io:format(“device format : ~p ~n”, [Foo]);checkPattern2(nomatch, Foo) -&gt;  io:format(“nomatch : ~p ~n”, [Foo]).```]]></content>
       <categories>
         
@@ -982,7 +982,7 @@
   
     <entry>
       <title><![CDATA[【gcloud】docker push/pull/delete]]></title>
-      <url>/2016/10/24/gclouddocker-push-pull-delete/</url>
+      <url>/blogpost/2016/10/24/gclouddocker-push-pull-delete/</url>
       <content type="text"><![CDATA[basic  先 login gcloud  安裝 dockerpush to registry  檢查目前 images : docker images  對要上傳的 image 設定 tag : docker tag [image_id] [location]/[project_id]/[image_name]          [location] : [‘gcr.io’, ‘us.gcr.io’, ‘eu.gcr.io’, ‘asia.gcr.io’, ‘b.gcr.io’, ‘bucket.gcr.io’, ‘appengine.gcr.io’, ‘gcr.kubernetes.io’]        檢查 docker images 會發現多了一個 images  push : gcloud docker push [location]/[project_id]/[image_name]移除掉 [image_id] [location]/[project_id]/[image_name]  本機 : docker rmi [image_id] [location]/[project_id]/[image_name]  gcloud : 可直接到 consonle 的 registry 中，進入 image，將該版本刪除pull  登入 console  進入 registry  選擇 images，取得 pull 指令]]></content>
       <categories>
         
@@ -995,7 +995,7 @@
   
     <entry>
       <title><![CDATA[【PHP】push with http2]]></title>
-      <url>/php/2016/10/22/PHP-http2/</url>
+      <url>/blogpost/php/2016/10/22/PHP-http2/</url>
       <content type="text"><![CDATA[envmac, osx , 10.11config  php -i , check config :    [curl]cURL support =&gt; enabledcURL Information =&gt; 7.47.1...HTTP2 =&gt; Yes...SSL Version =&gt; OpenSSL/1.0.2g        if php no include these config, reinstall : brew install php70 --with-homebrew-curlcodesend method/** * @param $http2ch          the curl connection * @param $http2_server     the Apple server url * @param $apple_cert       the path to the certificate * @param $app_bundle_id    the app bundle id * @param $message          the payload to send (JSON) * @param $token            the token of the device * @return mixed            the status code */function sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token) {    // url (endpoint)    $url = "{$http2_server}/3/device/{$token}";    // certificate    $cert = realpath($apple_cert);    // headers    $headers = array(        "apns-topic: {$app_bundle_id}",        "User-Agent: My Sender"    );    // other curl options    curl_setopt_array($http2ch, array(        CURLOPT_URL =&gt; $url,        CURLOPT_PORT =&gt; 443,        CURLOPT_HTTPHEADER =&gt; $headers,        CURLOPT_POST =&gt; TRUE,        CURLOPT_POSTFIELDS =&gt; $message,        CURLOPT_RETURNTRANSFER =&gt; TRUE,        CURLOPT_TIMEOUT =&gt; 30,        CURLOPT_SSL_VERIFYPEER =&gt; false,        CURLOPT_SSLCERT =&gt; $cert,        CURLOPT_HEADER =&gt; 1    ));    // go...    $result = curl_exec($http2ch);    if ($result === FALSE) {      throw new Exception("Curl failed: " .  curl_error($http2ch));    }    // get response    $status = curl_getinfo($http2ch, CURLINFO_HTTP_CODE);    return $status;}use// this is only needed with php prior to 5.5.24if (!defined('CURL_HTTP_VERSION_2_0')) {  define('CURL_HTTP_VERSION_2_0', 3);}// open connection $http2ch = curl_init();curl_setopt($http2ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);// send push$apple_cert = '/certificates/samplepush/development.pem';$message = '{"aps":{"alert":"Hi!","sound":"default"}}';$token = 'dbdaeae86abcde56rtyww1859fb41b2cby053ec48987847';$http2_server = 'https://api.development.push.apple.com'; // or 'api.push.apple.com' if production$app_bundle_id = 'it.tabasoft.samplepush';$status = sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token);echo "Response from apple -&gt; {$status}\n";// close connectioncurl_close($http2ch);response200 Success400 Bad request403 There was an error with the certificate.405 The request used a bad :method value. Only POST requests are supported.410 The device token is no longer active for the topic.413 The notification payload was too large.429 The server received too many requests for the same device token.500 Internal server error503 The server is shutting down and unavailable.multi token send// open connection// send all the pushesfor ($i = 0; $i &lt; $totSends; $i++) {   // send push}// close connection]]></content>
       <categories>
         
@@ -1010,7 +1010,7 @@
   
     <entry>
       <title><![CDATA[【redis】basic 心得]]></title>
-      <url>/redis/2016/10/19/Redis/</url>
+      <url>/blogpost/redis/2016/10/19/Redis/</url>
       <content type="text"><![CDATA[安裝 redis  http://redis.io/  下載後，執行網頁上安裝方法將 redis 安裝到 /usr/local/bin 的方法  make install          更改預設安裝位置 : make PREFIX=/some/other/directory install        此方法會安裝 binaries 到系統中，但相關的 script 與配置檔，並不會放到是到的位置，因為只是 play  若需要安裝到正式的系統中，請使用          cd utils      ./install_server.sh      此種安裝方式會詢問幾個設定的問題，並且在 sys reboot 後會自動重新啟動      手動停止與啟動 : /etc/init.d/redis_&lt;portnumber&gt;      use  啟用伺服器          直接啟用 : src/redis-server      制定設定檔 : ./src/redis-server /path/to/redis.conf      透過指令直接覆蓋設定檔 :                  ./redis-server --port 9999 --slaveof 127.0.0.1 6379          ./redis-server /etc/redis/6379.conf --loglevel debug          在 redis.conf 中的參數名稱，全部都支援使用 command line 進行設定。                      啟用 client          src/redis-cli，進入互動介面      測試                  ping          set foo bar          get foo                    可直接下指令 ./redis_cli get foo 取得參數        ./redis_cli --help : 查看一般指令  ./redis_cli help {cmd} : 取得指令相關資訊  ./redis_cli command : 取得全部指令特性  redis 是一個 key-value 的資料庫  資料結構儲存的特性          儲存於 disk 上，儘管修改是透過 server memory。代表 redis 是快速的，也代表儲存是持久性的。      在相同的高階編程語言下，redis 的效能結構儲存，相對優秀      Redis 提供很多 database 上習慣性的方法，如複製、tunable levels of durability、叢集、高度擴展        Redis 提供更多複雜的使用方法，在 memcached 上。  more          Introduction to Redis data types. http://redis.io/topics/data-types-intro      Try Redis directly inside your browser. http://try.redis.io      The full list of Redis commands. http://redis.io/commands      There is much more inside the Redis official documentation. http://redis.io/documentation        資料類型 : strings, arrays, integers, NULL, errors and so forth測試  將 server 關閉後，依然取得到 key-valueredis-clibasic  計數 : redis-cli incr {變數名稱}  寫入檔案 : redis-cli incr {變數名稱} &gt; ./output.txt  取得 : redis-cli get {變數名稱}          指定輸出為 raw redis-cli --raw get {變數名稱}        刪除 :          ./redis-cli del {變數名稱}      ./redis-cli flushall : 刪除全部 keys from all db      ./redis-cli flushdb : 從目前的 db 刪除掉所有的 keys        設定 : redis-cli set {變數名稱}  查看變數編碼屬性 : OBJECT ENCODING {變數名稱}          int      raw      embstr      more : http://redisbook.com/preview/object/string.html        接續 : redis-cli append {變數名稱} "{延伸內容}"  列出所有的 {變數名稱} : KEYS *          列出指定內容的 {變數名稱} : KEYS *o*        查看 {變數名稱} 是否存在 : ./redis-cli exists {變數名稱} ...Host, port, password and database  Host, port          預設的 ./redis-cli 設定為                  server : 127.0.0.1          port : 6379                    specify -h &amp; -p : ./redis-cli -h redis15.localnet.org -p 6390 ping        password          ./redis-cli a {password} ping        database          預設會有 16 個 db，db 的名稱是用數字表達      basic                  查詢 db 數量 : ./redis-cli CONFIG GET databases          查詢每個 db 中的內存 : ./redis-cli INFO keyspace          指定 db 設定參數 : ./redis-cli -n 1 set {變數名稱} {內容}                          n 預設為 0                                顯示目前此 db 的 key 數量 : ./redis-cli dbsize          移動 key 到另一個 db : ./redis-cli move {db_number}                    Special modes of operation : ./redis-cli --help  即時查看系統狀態 : ./redis-cli --stat  分析 key : redis-cli --bigkeys  Getting a list of keys :          ./redis-cli --scan | head -10      ./redis-cli --scan --pattern '*-11*'      redis-cli --scan --pattern 'user:*' | wc -l        Pub/sub mode          publish {channel} {message}      subscribe {channel} ...      psubscribe {pattern} : 設定 pattern 直接訂閱相關的頻道                  pattern : ?, * , [ab]                          h?llo 訂閱所有 h?ll0 相關頻道，只有一個字元              h*llo 訂閱所有 h*llo 相關頻道，* 可以是多個字元              h[ae]llo 訂閱 hallo 與 hello 頻道                                            即時監控目前 redis 所有的參數 : ./redis-cli monitor  測試＋模擬 redis 的延遲 (以毫秒計):          基本 : ./redis-cli --latency -h {host} -p {port}，可跨伺服器測試，預設為 localhost:6390      每 15 秒 重新產生一次測試 : ./redis-cli --latency-history      圖像化顯示 : ./redis-cli --latency-dist      測試 redis 內部延遲，此依賴 cpu 效能                  ./redis-cli --intrinsic-latency {秒數} : 在 {秒數} 內測試                    文章                  淺談 Redis 超時          Redis性能調優：保存SNAPSHOT對性能的影響                      Remote backups of RDB files          ./redis-cli --rdb /tmp/dump.rdb        透過此指令，會複製 redis 上面載入的指令，到 slave，可清楚的看到下的指令順序是否正確          redis-cli --slave        Performing an LRU simulation          使用 LRU 測試，模擬效能      透過設定 memory 與測試的 keys，來觀察效率 miss 的比例      http://redis.io/topics/rediscli#performing-an-lru-simulation 此篇有測試的過程      ]]></content>
       <categories>
         
@@ -1025,7 +1025,7 @@
   
     <entry>
       <title><![CDATA[【SSH】設定簡易遠端登入]]></title>
-      <url>/ssh/2016/10/14/SSH-Remote-Access/</url>
+      <url>/blogpost/ssh/2016/10/14/SSH-Remote-Access/</url>
       <content type="text"><![CDATA[readme  env : osx 10.11  使用 ssh 配置，便易登入遠端 server.ssh/config  所有的參數列表 https://linux.die.net/man/5/ssh_config，see PATTERNS  Host  {本機辨識的名稱}  HostName  Port  User相關參數  Host  HostNmae  User  Port : 連線端口  DynamicForward : 本地端口範例  登入遠端主機  設定檔    # serverHost devHostName dev.max.comPort 8888User root        ssh dev金鑰  若需設定伺服器金鑰，進行遠端登入  在本機端生成金鑰 $ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"  上傳 pub_key 到伺服器端  將 key 匯入 ~/.ssh/authorized_keys  chmod 600 ~/.ssh/authorized_keys  設定伺服器端配置，/etc/ssh/sshd_config          PubkeyAuthentication yes      - PasswordAuthentication no        重啟 sshd 服務]]></content>
       <categories>
         
@@ -1040,7 +1040,7 @@
   
     <entry>
       <title><![CDATA[【SSH】多個 github 帳號下的 git clone]]></title>
-      <url>/ssh/github/2016/10/14/SSH-Github-Account/</url>
+      <url>/blogpost/ssh/github/2016/10/14/SSH-Github-Account/</url>
       <content type="text"><![CDATA[readme  env : osx 10.11  使用 github 時，根據兩個不同的帳號進行切換 ssh-key產生 ssh-key$ ssh-keygen -t rsa -b 4096 -C "your_email@example.com".ssh/config  所有的參數列表 https://linux.die.net/man/5/ssh_config，see PATTERNS  Host {本機辨識的名稱}  HostName 主機位置  User 登入帳號  IdentityFile 憑證位置參數  Host : 此為此組 ssh 的名稱，讓本機辨識專用，故可任意取名，當 git clone git@{Host}:{your_group_name}/{project}.git 則會依照 {Host} 取得相關 key  HostName : github.com  User : git  IdentityFile : 此為 ssh private key 存放位置範例  有兩個不同帳號，user_A &amp; user_B  產生 key  設定 config          user_A        # user_A@gmail.comHost gitlab.com-user_AHostName github.comUser gitIdentityFile ~/.ssh/user_A/id_rsa                    user_B        # user_B@gmail.comHost gitlab.com-user_BHostName github.comUser gitIdentityFile ~/.ssh/user_B/id_rsa                      使用，將原本的 git@github.com:jhaoheng/APNS_cer_build.git ，github 的部分，改為 Host 的參數名稱          ex : git clone git@github.com-user_A:jhaoheng/APNS_cer_build.git        注意上傳的 name 與 email          使用 git config --local -l : 查看目前該 git repo 的基本設定                  可用 git config --local user.name 與 git config --local user.email 設定                    ]]></content>
       <categories>
         
@@ -1057,7 +1057,7 @@
   
     <entry>
       <title><![CDATA[【docGenerate】程式註解轉換成說明檔]]></title>
-      <url>/2016/10/01/docgenerate-program-converting-comments-help-file/</url>
+      <url>/blogpost/2016/10/01/docgenerate-program-converting-comments-help-file/</url>
       <content type="text"><![CDATA[sourcehttps://github.com/jhaoheng/docGenerate/tree/master使用環境  v0.1-release : 單純支援bash script 的環境  v0.2-release : 支援 config.json (需安裝 jq)目的不論是寫何種語言，都希望能把當下程式中的註解，直接轉譯為 .md，並且能最小化註解風格格式化方便性為，若為 restful-api 對外的文件，則可直接將要公開的文件內容輸出為 .md 檔案降低文件的重複編輯性，加速工程人員對於文件註解的習慣與完整性Hope this script could help accelerate development and persist in good comment habit.Do not need to maintain twice version between code and document.When developer write down comment in code context, it mean that you finish the document at the same time.]]></content>
       <categories>
         
@@ -1070,7 +1070,7 @@
   
     <entry>
       <title><![CDATA[【phalcon model】SQLSTATE[HY000] [2002]]]></title>
-      <url>/2016/09/30/phalcon-modelsqlstatehy000-2002/</url>
+      <url>/blogpost/2016/09/30/phalcon-modelsqlstatehy000-2002/</url>
       <content type="text"><![CDATA[env  phalcon DevTools (3.0.1)  MAMP 3.5.2          php 7.0.8      mysql      Trouble  cmd : phalcon model --name [table_name]  error : ERROR: SQLSTATE[HY000] [2002] No such file or directoryFixBecause the phalcon-DevTools [php version] does not set MAMP mysql sourceuse  php -ini  vim php.ini  search mysql.default_socket 填入 /Applications/MAMP/tmp/mysql/mysql.sock          pdo_mysql.default_socket = /Applications/MAMP/tmp/mysql/mysql.sock        restart MAMP]]></content>
       <categories>
         
@@ -1083,7 +1083,7 @@
   
     <entry>
       <title><![CDATA[【Project】iOS Notification Package]]></title>
-      <url>/2016/09/20/projectnotification-package/</url>
+      <url>/blogpost/2016/09/20/projectnotification-package/</url>
       <content type="text"><![CDATA[目的每次處理 apns，總是會發生很多意外，token 錯誤，憑證搞錯….此兩個 app，主要就是在解決測試環境的問題application  APNS_cer_build          收納憑證                  建立憑證          測試憑證          測試 apns server          測試推播                      apnsReceiver          查看目前 ipa 的版本為                  developement          Ad-Hoc          App Store          Enterprise                    查看 token      寄送 token      接收 push      ]]></content>
       <categories>
         
@@ -1096,7 +1096,7 @@
   
     <entry>
       <title><![CDATA[【ipa】check Provision]]></title>
-      <url>/ios/ipa/2016/09/20/iOS-ipa/</url>
+      <url>/blogpost/ios/ipa/2016/09/20/iOS-ipa/</url>
       <content type="text"><![CDATA[手動檢查  將輸出的 .ipa，改為 .zip，解壓縮。  開啟 Terminal 並移動到該 解壓縮後的 Payload 中，會看到 embedded.mobileprovision  security cms -D -i embedded.mobileprovision  解析結構就可發現不同點codeNSData *provisioningProfile = nil;NSData *raw = [NSData dataWithContentsOfURL:[NSBundle.mainBundle URLForResource:@"embedded" withExtension:@"mobileprovision"]];char *start = memmem(raw.bytes,                     raw.length,                     "&lt;!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0",                     47);if (start) {    char *end = memmem(start,                       (uintptr_t)start - raw.length,                       "&lt;/plist&gt;",                       8);    if (end) {        provisioningProfile = [NSData dataWithBytes:start length:8 + end - start];    }}if (provisioningProfile) {    NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:provisioningProfile                                                                    options:NSPropertyListImmutable                                                                     format:0                                                                      error:0];    NSLog(@"\n\n\nTeam name: %@", plist[@"TeamName"]);    if ([plist[@"ProvisionsAllDevices"] boolValue]) {        NSLog(@"Enterprise");    } else if ([plist[@"ProvisionedDevices"] count] &gt; 0) {        if ([plist[@"Entitlements"][@"get-task-allow"] boolValue]) {            NSLog(@"Development");        } else {            NSLog(@"Ad Hoc");        }    } else {        NSLog(@"App Store");    }}分析結構Dev若是 Dev build app，會看到&lt;key&gt;get-task-allow&lt;/key&gt;&lt;true/&gt;Ad-Hoc若是 Ad-Hoc&lt;key&gt;get-task-allow&lt;/key&gt;&lt;false/&gt;且&lt;key&gt;ProvisionedDevices&lt;/key&gt;&lt;array&gt;    &lt;string&gt;abcdef01234567890abcdef01234567890abacde&lt;/string&gt;    &lt;string&gt;1abcdef01234567890abcdef01234567890abacd&lt;/string&gt;    &lt;string&gt;2abcdef01234567890abcdef01234567890abacd&lt;/string&gt;&lt;/array&gt;]]></content>
       <categories>
         
@@ -1113,7 +1113,7 @@
   
     <entry>
       <title><![CDATA[【MQTT】Login mqtt:8883 SSL/TLS with certificate authority (CA)]]></title>
-      <url>/2016/09/07/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/</url>
+      <url>/blogpost/2016/09/07/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/</url>
       <content type="text"><![CDATA[login mqtt:8883 SSL/TLS (certificate authority (CA))  githubrequired fileuse below file and cmd[mosquitto_sub] to connect MQTT:8883  ca.crt – The CA (Certificate Authority, who published the host certificate) public certificate.  ssl.crt – The hostname, public certificate.  ssl.key – The hostname, private key.Generate_1 : use generate-CA.sh to generate  Download generate-CA.sh and create local server CA, and will generate….          ca.srl / ca.crt / ca.key      xxx is local server name, xxx.crt / xxx.csr / xxx.key        cp xxx.crt ssl.crt and cp xxx.key ssl.keyGenerate_2 : use cmd [openssl] to generate  Generate ca.crt and ca.key          openssl req -newkey rsa:2048 -x509 -nodes -sha512 -days 365 -extensions v3_ca -keyout ca.key -out ca.crt      check : openssl x509 -in ca.crt -nameopt multiline -subject -noout        Generate server.key          openssl genrsa -out server.key 2048        Generate server.csr          openssl req -new -sha512 -out server.csr -key server.key        Generate server.crt by server.csr, ca.crt, cae.key, ca.srl          openssl x509 -req -sha512 -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -CAserial ca.srl -out server.crt -days 365 -extensions JPMextensions      check : openssl x509 -in server.crt -nameopt multiline -subject -noout      note : ca.crt and server.crt, their commonName should not be the same.Verify: check server.crt is generated by ca.crt  openssl verify -CAfile ca.crt server.crt          output ssl.crt: OK      Test  mv ssl* to /emqttd/etc/ssl/  Test : mosquitto_sub -h [server_ip] -p 8883 -t [topic] -i [clientId] -u [username] -P [password] --cafile ca.crt          Notice where is your ca.crt file        go to your emqttd console, emqttd:18083, and watch Clientsex : server.crtsubject=     countryName               = TW    stateOrProvinceName       = TAIWAN    localityName              = TAIPEI    organizationName          = COMPANY    organizationalUnitName    = DEV    commonName                = dev-mqtt.com    emailAddress              = max.hu@mailex : ca.crtsubject=     commonName                = An MQTT broker    organizationName          = COMPANY    organizationalUnitName    = DEV    emailAddress              = max.hu@mail]]></content>
       <categories>
         
@@ -1126,7 +1126,7 @@
   
     <entry>
       <title><![CDATA[【xcode】Configurations/ Preprocessor Macros/ scheme]]></title>
-      <url>/xcode/2016/08/31/xcode-macros-scheme/</url>
+      <url>/blogpost/xcode/2016/08/31/xcode-macros-scheme/</url>
       <content type="text"><![CDATA[whyIn dev / release env, switch the default global variable :  url  other env variablexcode setting  PROJECT -&gt; info -&gt; Configurations，default only have “Debug” &amp; “Release” tag          Use scheme to switch the tag        goto Targets，choose the “Macros” from target          Build Setting -&gt; Preprocessor Macros, you can find “Debug” &amp; “Release” tag      In Macros, set your tag &amp; value      scheme switchDebug &amp; Realese tags are set by xcode Configuration  edit scheme.  select Run tag, switch the “Build Configuration” tag to change your build setting.coding exampleyou can create a config.h or .pch to set your info.#if DEBUG#define a symbol#elseif RELEASE#define a symbol#else#define a symbol#endif#if DEBUG==1#define debug_only YES#else#define debug_only NO#endifNotice #if and #ifdef is diff.]]></content>
       <categories>
         
@@ -1141,7 +1141,7 @@
   
     <entry>
       <title><![CDATA[【bash】parse json by jq]]></title>
-      <url>/bash/2016/08/24/bash-parse-json-by-jq/</url>
+      <url>/blogpost/bash/2016/08/24/bash-parse-json-by-jq/</url>
       <content type="text"><![CDATA[parse json by jqsource frominstall on mac  mac : brew install jqinstall on linux  linux(32bit) : wget http://stedolan.github.io/jq/download/linux32/jq  linux(64bit) : wget http://stedolan.github.io/jq/download/linux64/jq  chmod +x ./jq  sudo cp jq /usr/binexample file{        "name": "Google",        "location":                {                        "street": "1600 Amphitheatre Parkway",                        "city": "Mountain View",                        "state": "California",                        "country": "US"                },        "employees":                [                        {                                "name": "Michael",                                "division": "Engineering"                        },                        {                                "name": "Laura",                                "division": "HR"                        },                        {                                "name": "Elise",                                "division": "Marketing"                        }                ]}use  To parse a JSON object: cat json.txt | jq '.name'          output : “Google”        To parse a nested JSON object: cat json.txt | jq '.location.city'          output : “Mountain View”        To parse a JSON array: cat json.txt | jq '.employees[0].name'          output : “Michael”        To extract specific fields from a JSON object: cat json.txt | jq '.location | {street, city}'          output :        {"city": "Mountain View","street": "1600 Amphitheatre Parkway"}                    ]]></content>
       <categories>
         
@@ -1156,7 +1156,7 @@
   
     <entry>
       <title><![CDATA[【MAMP】Can't connect to local mySql server through socket]]></title>
-      <url>/2016/08/05/mampcant-connect-to-local-mysql-server-through-socket/</url>
+      <url>/blogpost/2016/08/05/mampcant-connect-to-local-mysql-server-through-socket/</url>
       <content type="text"><![CDATA[MAMP  3.5.2SituationUse third app to access MAMP mysql : [Querious](In general, you can use phpMyAdmin…..)troubleshootCan’t connect to local mySql server through socket /tmp/mysql.sockln -s /Application/MAMP/tmp/mysql/mysql.sock /tmp/mysql.sock]]></content>
       <categories>
         
@@ -1169,7 +1169,7 @@
   
     <entry>
       <title><![CDATA[【phalcon】install 'cphalcon', 'phalcon-tool' by brew & mamp]]></title>
-      <url>/2016/08/04/phalconinstall-cphalcon-phalcon-tool-by-brew/</url>
+      <url>/blogpost/2016/08/04/phalconinstall-cphalcon-phalcon-tool-by-brew/</url>
       <content type="text"><![CDATA[brew install  env          homebrew 0.9.9      php 7.0.9      phalcon 3.0.0      brew install php70brew install php70-phalconcheck  php -m | grep -i phalcon -&gt; should output phalcon  cmd phalcon -&gt; should output phalcon cmd info, include phalcon versionphp_info()&lt;?php\_info();?&gt;mamp install phalcon  env          mamp : 3.5.2      php 7.0.8      phalcon 3.0.0        use brew’s php70-phalcon/phalcon.somove to /Applications/MAMP/bin/php/php7.0.8/lib/php/extensions/no-debug-non-zts-xxxxxxxxxxx/]]></content>
       <categories>
         
@@ -1182,7 +1182,7 @@
   
     <entry>
       <title><![CDATA[【$PATH】]]></title>
-      <url>/2016/08/04/path/</url>
+      <url>/blogpost/2016/08/04/path/</url>
       <content type="text"><![CDATA[env  mac osx 10.11.6  mac miniecho $PATH可能存放的位置有/etc/paths/etc/profile/etc/bashrc~/.bash\_profile~/.bash\_login~/.profile~/.bashrc或者cat /etc/profile]]></content>
       <categories>
         
@@ -1195,7 +1195,7 @@
   
     <entry>
       <title><![CDATA[【mac app】basic demo]]></title>
-      <url>/2016/08/04/mac-appbasic-demo/</url>
+      <url>/blogpost/2016/08/04/mac-appbasic-demo/</url>
       <content type="text"><![CDATA[Feature  NSStatusBar add menu.  When app launched , no any window controller init.(service hidden in back)  Don’t show app on the dock.how  demo  Use          NSStatusBar *statusBar      - NSStatusItem *statusItem      - NSMenu *theMenu        storyboard -&gt; select window controller -&gt; attributes inspector -&gt; 取消 is initial controller  in plist，set key ‘Application is agent (UIElement)’ = YES]]></content>
       <categories>
         
@@ -1208,7 +1208,7 @@
   
     <entry>
       <title><![CDATA[【Phalcon】phpstorm ide]]></title>
-      <url>/2016/07/29/phalconphpstorm-ide/</url>
+      <url>/blogpost/2016/07/29/phalconphpstorm-ide/</url>
       <content type="text"><![CDATA[讓 ide 支援 phalcon-devtools 的語法/phalcon-devtools/ide/phpstorm/phalcon.sh讓 ide 支援 phalcon 的語法/phalcon-devtools/ide/stubs/Phalcon]]></content>
       <categories>
         
@@ -1221,7 +1221,7 @@
   
     <entry>
       <title><![CDATA[【MAMP】DDNS]]></title>
-      <url>/2016/07/22/mampddns/</url>
+      <url>/blogpost/2016/07/22/mampddns/</url>
       <content type="text"><![CDATA[MAMP 設定 DDNS  Dynamic DNS : 選擇想要的服務，註冊，並且登入          我選擇 no-ip -&gt; Manage hosts -&gt; add a host -&gt; 設定 redirect_name，選擇免費 DNS，直接按下確認即可(此必須設定在 MAMP-alias)        回到 MAMP -&gt; Dynamic DNS -&gt; 登入該服務帳密          啟用上選擇『自動』        MAMP -&gt; Hosts，選擇服務          General -&gt; Dynamic DNS 選擇 no-ip.com      下方的 alias name 輸入                  之前在 no-ip 上設定好的 ddns                    ]]></content>
       <categories>
         
@@ -1234,7 +1234,7 @@
   
     <entry>
       <title><![CDATA[【phalcon】migration]]></title>
-      <url>/2016/07/19/phalconmigration/</url>
+      <url>/blogpost/2016/07/19/phalconmigration/</url>
       <content type="text"><![CDATA[migration  phalcon 2.0.13 : https://github.com/phalcon/cphalcon  Phalcon DevTools (2.0.13) : https://github.com/phalcon/phalcon-devtoolsmain cmd  phalcon migration --help  phalcon migration generate : 產生 migration file          migration generate 1.0.1 : 1.0.1 為產生的版本號，預設為 1.0.0      預設路徑為 app/migrations/        phalcon migration run : 執行產生的 migration]]></content>
       <categories>
         
@@ -1247,7 +1247,7 @@
   
     <entry>
       <title><![CDATA[【phalcon】sql]]></title>
-      <url>/2016/07/16/phalconsql/</url>
+      <url>/blogpost/2016/07/16/phalconsql/</url>
       <content type="text"><![CDATA[使用 phql + Avoid sql injectionselect$conditions = "Users.id = :id:";$parameters = array(    "aid" =&gt; '31');$phql = "SELECT b.* FROM Users as a RIGHT JOIN Devices as b on a.id=:aid:";$result = $app-&gt;modelsManager-&gt;executeQuery($phql,$parameters);  其中的 $app 為 Micro 建立的物件  modelsManager 為 model 的 methodinsert$parameters = array(    "key" =&gt; "123",    "user_id" =&gt; 3,);$phql = "INSERT INTO tableName (key, user_id) VALUES (:key:, :user_id:)";$result = $app-&gt;modelsManager-&gt;executeQuery($phql, $parameters);if ($result==true) {	echo "success\n\r";}使用 抽象層 建立 sql 語法，記錄 log  因若透過抽象層建立 sql，很難直接看出 sql 是否正確，可透過 phalcon 建立 log，並將 db 的所有動作記錄use Phalcon\Mvc\Model\Criteria;use Phalcon\Logger;use Phalcon\Logger\Adapter\File as FileLogger;use Phalcon\Events\Manager;$logger = new FileLogger("logs/debug.log");$eventsManager = new Manager();$connection = $app['db'];$eventsManager-&gt;attach('db', function ($event, $connection) use ($logger) {        if ($event-&gt;getType() == 'beforeQuery') {			$logger-&gt;log($connection-&gt;getSQLStatement(), Logger::INFO);        }});$app['db']-&gt;setEventsManager($eventsManager);// 儲存所有 db 動作$conditions = "Users.id = :id:";$parameters = array(    "id" =&gt; '31');$result = $app-&gt;modelsManager-&gt;createBuilder()	-&gt;columns(array('Devices.*'))	-&gt;from('Devices')	-&gt;rightJoin('Users')	-&gt;where($conditions,$parameters)	-&gt;getQuery()	-&gt;execute();]]></content>
       <categories>
         
@@ -1260,7 +1260,7 @@
   
     <entry>
       <title><![CDATA[【phalcon】Di]]></title>
-      <url>/2016/07/12/phalcondi/</url>
+      <url>/blogpost/2016/07/12/phalcondi/</url>
       <content type="text"><![CDATA[Dependency Injection/Service Location  Phalcon\Di 是一個實現 Dependency Injection/Service Location 的組件，而且它本身就是一個裝載它們的容器。  透過 Phalcon\Di 可以註冊許多的服務，放在 Di 中，也可以透過 Di 進行傳遞參數的行為          可以很容易的使用自己建立的組件，或者第三方組件，還有進行替換的動作                  ex : 替換掉 db 的 config 連線資訊                    支援『延遲加載』：主要就是等到需要用到的時候，才會進行加載的行為，使用方法可參考官方文件        可在 Class Phalcon\Di 中查看 methods  FactoryDefault 是延伸 class Phalcon\Di，也可以從 Phalcon/Di 中自己建立自己的 Di          底下有介紹        FactoryDefault 作為一個 Di 的延伸，並且預載了許多已經加入過的服務          若不想要預載過多服務，則直接使用 Di 把需要的服務手動加載進去        要看很多範例關於 Di 的設定的話，可參考 https://github.com/phalcon?tab=repositories初始化 Di  初始化後，才可以使用 Di set 與 get    use Phalcon\Di$di = new Phalcon\Di();        初始化後，若要在 mvc 或者其他的控制器中使用該 Di          ex1 : MVC，可用 phalcon-devtools 建立一個 Project 與 Scaffold 可看到範例                  $application = new \Phalcon\Mvc\Application($di);                    並 echo $application-&gt;handle()-&gt;getContent();      註冊服務  第一種    $di-&gt;set('request', 'Phalcon\Http\Request');        第二種    use Phalcon\Http\Request;  $di-&gt;set('request', new Request());        第三種：通過外部參數 $config 變更 di 中的設定。透過 use 協助    use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql;// 把當前域的$config變量傳遞給匿名函數使用$di-&gt;set("db", function () use ($config) {  return new PdoMysql(      array(          "host"     =&gt; $config-&gt;host,          "username" =&gt; $config-&gt;username,          "password" =&gt; $config-&gt;password,          "dbname"   =&gt; $config-&gt;name      )  );});        其他還有 : 範例至官方參考          如果要求不用實例化/解析服務，就可以改變定義服務的話，我們需要使用數組的方式去定義服務。      Constructor Injection      Setter Injection      Properties Injection        所有的都是服務註冊，有比較簡易的註冊方式，也有複雜（詳細）的設定方法從 di 中取回服務  在 di 中設定好 request    $di = new Phalcon\Di();$di-&gt;set("request", 'Phalcon\Http\Request'); // 第一個參數是『類別名稱』，第二個是『definition』// use Phalcon\Http\Request; 使用這兩種方式建立服務也行// $di-&gt;set("request", new Request());         &lt;?php $request = $di-&gt;get("request"); or $request = $di-&gt;getRequest();  通過容器的方式傳遞參數    $component = $di-&gt;get("MyComponent", array("some-parameter", "other"));      共享服務（Shared services）  setShared : 意指可以被註冊成 共享，意味被解析後，此實例將被保存在系統中，每次請求都可以從系統中找回，無需從新註冊或者重新解析    use Phalcon\Session\Adapter\Files as SessionFiles;// 把session服務註冊成「shared」類型$di-&gt;setShared('session', function () {  $session = new SessionFiles();  $session-&gt;start();  return $session;});$session = $di-&gt;get('session'); // 第一次獲取session服務時，session服務將實例化$session = $di-&gt;getSession();   // 第二次獲取時，不再實例化，直接返回第一次實例化的對象        如果服務註冊時，並非註冊成 shared 時，又想從 Di 中獲取 shared 的 instance，可使用 getShared          意指，若以註冊成 shared 類型時，則使用 get 即可      Manipulating services individually這邊的 resolve() 方法不知從哪邊定義，找了 di 沒發現到目前正在請教 gitter 的群組將 未註冊的服務 從 Di 中取出  當服務尚未被註冊時（Di 找不到相同名稱的服務），則可以在當下設定該服務    $di-&gt;set('IndexController', function () {  $component = new Component();  return $component;}, true);        通過此方法，可以隨意註冊一個沒有被定義過的服務，甚至有同樣的服務內容，卻用不同的服務名稱          A 有 abc 服務      B 有 abc 服務      但 A 與 B 裝的資訊內容可能不同，如 db config      在類別或組件 自動注入 Di  當類別或組件，本身需要用到 Di 的服務時，可直接在該類別或者組件中，導入 Di 的服務，不用在外部引入該類別或組件利用 Di 來避免服務重複的解析  某些服務應用於每次的 request，如此可能會產生重複的解析，故放入 Di 前，先解析一次後，再放入 Di 中，可稍微提升效能          ex : $router = new MyRouter();        通過 Di 的服務設定，就不用重新再 new 一次（把已解析的對象設置到註冊服務中）          ex : $di-&gt;set('router', $router);      ex : $di-&gt;get('router');        Q:不確定這種方式跟 shared 差別倒底在哪使用文件方式定義服務(Organizing services in files)  透過獨立的文件，設定服務內容    $di-&gt;set('router', function () {  return include "../app/config/routes.php";});        在 routes.php 中    $router = new MyRouter();$router-&gt;post('/login');return $router;        使用此方式，可以簡化需設定的服務內容使用靜態方法存取 Di（Accessing the DI in a static way）use Phalcon\Di;$session = Di::getDefault()-&gt;getSession();Factory Default DI  這是一開始所提到的 FactoryDefault  這個服務器擴展了 Phalcon\Di ，會自動註冊相應的服務  the developer does not need to register each service individually.預設的服務名稱  預設名稱自定義自己的 Di  Phalcon\DiInterface 必須被實現]]></content>
       <categories>
         
@@ -1273,7 +1273,7 @@
   
     <entry>
       <title><![CDATA[【Phalcon】develop tool]]></title>
-      <url>/2016/07/11/phalcondevelop-tool/</url>
+      <url>/blogpost/2016/07/11/phalcondevelop-tool/</url>
       <content type="text"><![CDATA[使用 Phalcon-devtools  這是一種透過 cmd 的方式來自動建立某些模組版本  執行 phalcon 確認版本 : Phalcon DevTools (2.0.13)建立專案  快速建立一個基本的 project : phalcon create-project store          檢視網頁 : localhost:[yourport]/store        在非 phalcon direction，只能使用 phalcon project 的指令建立 project 的結構  在該 project 下，可以使用其他的指令          phalcon webtools enable                  啟用 web 介面的 phalcon 編輯器          http://[localhost]/[project_name]/webtools.php                    資料庫設定  PATH : store/app/config 中的 config.php          若在 create 專案時，有特別指定使用 .ini 為其擴展名，才會特別使用。(--use-config-ini)      使用 phalcon project --help 查詢指令      models  建立模型，目的在於制式化處理某些事情，或者驗證，如每次呼叫模型的某個 method，都希望得到『用戶名稱』  建立 model 前，須先把 db 與 schema 建立完成          建立完成後，才可以建立 phalcon model [model_name]                  如果沒有該 table name : [Error: Table “people” does not exist.]                    Troubleshoot : ERROR: SQLSTATE[HY000] [2002] No such file or directory                  php --ini          vim php.ini          搜尋 mysql.default_socket                          因我使用 mamp 所以填入 : /Applications/MAMP/tmp/mysql/mysql.sock              查詢 socket                                  mysql -u root -p                  show variables like '%socket%'; 填入該路徑即可                                                                          在專案的根目錄下 : phalcon model，有基本的 UsageScaffold a CRUD  Phalcon-devtool 可以快速生成整套的 CRUD 框架 : controller / model / view          Notice : 注意 model 產生時，必須要有對應的 table-name        phalcon scaffold --table-name products 會產生          app/controllers/ProductsController.php      app/models/Products.php      app/views/layout/products.phtml      app/views/products/new.phtml      app/views/products/edit.phtml      app/views/products/search.phtml        在輸入測試資料與其他應用時，可以再進行修改啟用 WebTools  透過 web 的介面，進行操作 model / controller  路徑 : http://[localhost:port]/store/webtools.php  啟用 : phalcon webtools --action=enable]]></content>
       <categories>
         
@@ -1286,7 +1286,7 @@
   
     <entry>
       <title><![CDATA[【Phalcon】basic]]></title>
-      <url>/phalcon/2016/07/07/Phalcon-basic/</url>
+      <url>/blogpost/phalcon/2016/07/07/Phalcon-basic/</url>
       <content type="text"><![CDATA[ㄧ、install phalcon  官方  github : https://github.com/phalcon/cphalcon  install from github          git clone      cd cphalcon/build      sudo ./install        遇到問題，參考 troubleshootcheck  phpinfo();          找 phalcon extension，沒意外的話是 2.0.13        安裝環境環境- `php -m | grep -i phalcon`  - if output `phalcon` mean it is ok to use phalcon cmd- `apachectl -v`  - output : `apache/2.4.16`- `php -v`  - output : `php 5.6.23`- `mysql --version`  - output : `mysql ver 14.14`troubleshoot  若 gcc 編譯失敗，free -g，查看 memory or swap 是否有 1g 可供 compile          1g memory https://github.com/phalcon/cphalcon/issues/10478        因為目前僅支援 5.4/5.5/5.6 版本，故如果用 7.x 版本編譯時，會產生名稱錯誤  設定 extension=phalcon.so，出現 PHP Warning:  Module 'phalcon' already loaded in Unknown on line 0          info      在 php.ini 中，將 extension=phalcon.so 前面加 ; -&gt; ;extension=phalcon.so      執行 php -m | grep -i phalcon，正常      二、安裝 Phalcon develop-tool  介紹          總之就是透過指令可以快速建立模組，連大小寫都處理好，另外還會結合資料庫建立 mode : getter / setter        install          installation via Git      sudo ln -s ~/path/phalcon.php /usr/local/bin/phalcon mac 要放在 /usr/local/bin 下        執行 phalconPhalcon DevTools (2.0.13)Help:  Lists the commands available in Phalcon devtoolsAvailable commands:  commands         (alias of: list, enumerate)  controller       (alias of: create-controller)  module           (alias of: create-module)  model            (alias of: create-model)  all-models       (alias of: create-all-models)  project          (alias of: create-project)  scaffold         (alias of: create-scaffold)  migration        (alias of: create-migration)  webtools         (alias of: create-webtools)  查看語法，直接執行 phalcon [command] 即可          phalcon controller      phalcon webtools        啟用 WebTools          在影片中，可以用 browser 的方式，進行設定，在網頁資料夾下，phalcon webtools --action=enable                  有新舊版本的問題，查看 github readme                      快速建立一個基本的 project : phalcon create-project store          檢視網頁 : localhost:[yourport]/store      ]]></content>
       <categories>
         
@@ -1301,7 +1301,7 @@
   
     <entry>
       <title><![CDATA[【iOS】APNS with HTTP/2]]></title>
-      <url>/2016/07/05/iosapns-with-http-2/</url>
+      <url>/blogpost/2016/07/05/iosapns-with-http-2/</url>
       <content type="text"><![CDATA[insatll (mac)  brew install curl --with-nghttp2  brew link curl --forceuse  ./curl --versioncurl 7.48.0 (x86_64-apple-darwin15.5.0) libcurl/7.48.0 OpenSSL/1.0.2g zlib/1.2.5 nghttp2/1.9.1Protocols: dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp smb smbs smtp smtps telnet tftp Features: IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP HTTP2 UnixSockets   exec : ./curl -v -d '{"aps":{"alert":"Test Push","sound":"default"}}' --cert [xxx.pem] -H "apns-topic: [bundle_id]" --http2 https://api.development.push.apple.com/3/device/[token]]]></content>
       <categories>
         
@@ -1314,7 +1314,7 @@
   
     <entry>
       <title><![CDATA[【MAMP】install phalcon]]></title>
-      <url>/2016/07/04/mampinstall-phalcon/</url>
+      <url>/blogpost/2016/07/04/mampinstall-phalcon/</url>
       <content type="text"><![CDATA[MAC/MAMP install phalcon  sourceInstall on MAMPphalcon.so version  php5.4.34  php5.5.26  php5.6.7  php5.6.10step  Open MAMP  PHP -&gt; default version  download suitable phalcon.so from github  cd /Applications/MAMP/bin/php/php5.x.xx and lib/php/extensions/ and ‘no-debug-non-zts-xxxxxxxx’  cp phalcon.so to (4) path  open MAMP navigation bar，File -&gt; Edit template -&gt; PHP -&gt; (choose currect php version which want to use)  Add extension=phalcon.so of php.ini  restart MAMP]]></content>
       <categories>
         
@@ -1327,7 +1327,7 @@
   
     <entry>
       <title><![CDATA[【RESTFUL】basic]]></title>
-      <url>/2016/07/03/restfulbasic/</url>
+      <url>/blogpost/2016/07/03/restfulbasic/</url>
       <content type="text"><![CDATA[restful  sourceSix constraints  Uniform Interface  Stateless  Cacheable  Client-Server  Layered System  Code on DemandHTTP Verbs  Use HTTP Verbs to Mean Something          GET / POST / PUT / PATCH / DELETE        Sensible Resource Names          Resource names should be nouns—avoid verbs as resource names. It makes things more clear. Use the HTTP methods to specify the verb portion of the request.      ps: 這些動詞，在 http 中，有某些特別的屬性，若不遵循這些規則，一樣可以使用，但只是與某些淺規則相悖PUT  Update/Replace : 新增一項資料，如果存在就覆蓋過去。（還是只有一筆資料，故與 POST 有所差別）  ex : /customers -&gt; 404 (Not Found)  ex : /customers/{id} -&gt; 200 (OK) or 204 (No Content). 404 (Not Found), if ID not found or invalid.POST  Create : 新增一項資料。（如果存在會新增一個新的）  ex : /customers -&gt; 404 (Not Found). 如果預計 POST 批次的話，或許可以考慮  ex : /customers/{id} -&gt; 201 (Created).ps : 用 [GET] : /customers/{id} -&gt; 取得用戶資訊PATCH  Update/Modify : 附加新的資料在已經存在的資料後面。（資料必須已經存在，patch會擴充這項資料）DELETE  Delete : 刪除資料。  ex : /customers/ -&gt; 404 (Not Found).  ex : /customers/{id} -&gt; 200 (OK). 404 (Not Found), if ID not found or invalid.GET  Read : 讀取資料。  ex : /customers -&gt; 200 (OK), list of customers.  ex : /customers/{id} -&gt; 200 (OK), single customer. 404 (Not Found), if ID not found or invalid.HEAD  取得 get 的 http header 而不取得內容關於 safe 與 idempotent  safe : 是否安全(可以快取)。在於『定義上』是否屬於會修改資料的 method，如果『會』代表就是不安全(POST/PUT/PATCH/DELETE 都不可以快取)。  idempotent : 頁面重新整理是否會影響 request，也就是該 method 在重新整理後，是否會重送（是否可以在不確定有沒有成功送出時重新發出請求），相同的 Request 再執行一次，結果還是一樣。          在不同的情況下運用                         safe      idempotent                  PUT      [ ]      [x]              POST      [ ]      [ ]              PATCH      [ ]      [ ]              DELETE      [ ]      [x]              GET      [x]      [x]              HEAD      [X]      [x]      關於狀態回傳  http status code  status : success or failure  message : Json to describe some about response.]]></content>
       <categories>
         
@@ -1340,7 +1340,7 @@
   
     <entry>
       <title><![CDATA[【bash】archive.command]]></title>
-      <url>/2016/06/29/bash-package-file-build-executable/</url>
+      <url>/blogpost/2016/06/29/bash-package-file-build-executable/</url>
       <content type="text"><![CDATA[目的  有幾個要封裝的檔案 : 在 xocde 中 build 三個 封裝好的 framework，另外還需封裝 file/document  直接在 folder 中，執行後，直接封裝ENV  mac  bash流程  vim archive.sh```DIR=”$( cd “$( dirname “${BASH_SOURCE[0]}” )” &amp;&amp; pwd )”#echo ${DIR}cd ${DIR}productName=$( printf ‘%s\n’ ${PWD##/} )#echo $productNamezip -r “archive-$(date +”%Y-%m-%d”).zip” ./youfile_1/ ./yourfilw_2/*```  mv archive.sh archive.command  chmod 755 archive.command]]></content>
       <categories>
         
@@ -1353,7 +1353,7 @@
   
     <entry>
       <title><![CDATA[【xcode】framework 動/靜 diff]]></title>
-      <url>/2016/06/26/xcode-framework-dynamic-static-diff/</url>
+      <url>/blogpost/2016/06/26/xcode-framework-dynamic-static-diff/</url>
       <content type="text"><![CDATA[framework 靜態/動態 庫env  xcode : 7.3.1  ios 9diff  取出 bundle file          靜態庫，無法取得 framework.plist 的資訊      動態庫，可        包裝後的編譯檔，file 也會不同]]></content>
       <categories>
         
@@ -1366,7 +1366,7 @@
   
     <entry>
       <title><![CDATA[【xcode】combine 'framework' with auto build]]></title>
-      <url>/2016/06/25/xcodecombine-framework-with-auto-build/</url>
+      <url>/blogpost/2016/06/25/xcodecombine-framework-with-auto-build/</url>
       <content type="text"><![CDATA[Thanks Steven Shen share his knowledgeDemo code  Create a new project(select framework item) and workspace. Put the project to the workspace          Workspace and project name should be the same.        Create a New Target from your framework project          Select Other -&gt; Aggregate -&gt; set Name is xxx-Universal        Copy below code, and paste to New Target:Aggregate script  Go to scheme manager and Click the [shared] with project name and xxx-Universal name  Run the New Target:Aggregate, and folder include universal-framework will be open.ps : If xcode alert No find xxx.framework from Debug-iphoneos and Debug-iphonesimulatorGo to check the name of workspace and project, the name should be the same.####################### Options######################REVEAL_ARCHIVE_IN_FINDER=trueFRAMEWORK_NAME="${PROJECT_NAME}"SIMULATOR_LIBRARY_PATH="${BUILD_DIR}/${CONFIGURATION}-iphonesimulator/${FRAMEWORK_NAME}.framework"DEVICE_LIBRARY_PATH="${BUILD_DIR}/${CONFIGURATION}-iphoneos/${FRAMEWORK_NAME}.framework"UNIVERSAL_LIBRARY_DIR="${BUILD_DIR}/${CONFIGURATION}-iphoneuniversal"FRAMEWORK="${UNIVERSAL_LIBRARY_DIR}/${FRAMEWORK_NAME}.framework"####################### Build Frameworks######################xcodebuild -workspace ${PROJECT_NAME}.xcworkspace -scheme ${PROJECT_NAME} -sdk iphonesimulator -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator 2&gt;&amp;1xcodebuild -workspace ${PROJECT_NAME}.xcworkspace -scheme ${PROJECT_NAME} -sdk iphoneos -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos 2&gt;&amp;1####################### Create directory for universal######################rm -rf "${UNIVERSAL_LIBRARY_DIR}"mkdir "${UNIVERSAL_LIBRARY_DIR}"mkdir "${FRAMEWORK}"####################### Copy files Framework######################cp -r "${DEVICE_LIBRARY_PATH}/." "${FRAMEWORK}"####################### Make an universal binary######################lipo "${SIMULATOR_LIBRARY_PATH}/${FRAMEWORK_NAME}" "${DEVICE_LIBRARY_PATH}/${FRAMEWORK_NAME}" -create -output "${FRAMEWORK}/${FRAMEWORK_NAME}" | echo# For Swift framework, Swiftmodule needs to be copied in the universal frameworkif [ -d "${SIMULATOR_LIBRARY_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/" ]; then    cp -f ${SIMULATOR_LIBRARY_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule//* "${FRAMEWORK}/Modules/${FRAMEWORK_NAME}.swiftmodule/" | echofiif [ -d "${DEVICE_LIBRARY_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule/" ];then    cp -f ${DEVICE_LIBRARY_PATH}/Modules/${FRAMEWORK_NAME}.swiftmodule//* "${FRAMEWORK}/Modules/${FRAMEWORK_NAME}.swiftmodule/" | echofi####################### On Release, copy the result to release directory######################OUTPUT_DIR="${PROJECT_DIR}/Output/${FRAMEWORK_NAME}-${CONFIGURATION}-iphoneuniversal/"                                                                      rm -rf "$OUTPUT_DIR"mkdir -p "$OUTPUT_DIR"                                                                 cp -r "${FRAMEWORK}" "$OUTPUT_DIR"                                                                      if [ ${REVEAL_ARCHIVE_IN_FINDER} = true ]; then    open "${OUTPUT_DIR}/"fi]]></content>
       <categories>
         
@@ -1379,7 +1379,7 @@
   
     <entry>
       <title><![CDATA[【MQTT】Topic Level]]></title>
-      <url>/2016/06/20/mqtttopic-level/</url>
+      <url>/blogpost/2016/06/20/mqtttopic-level/</url>
       <content type="text"><![CDATA[MQTT Wildcards(萬用字元)透過 Wildcards 可以一次訂閱想要的主題，Wildcards 只能運用於 sub 不能用於 pubmyhome/ground/room/temperature每一個 / 的兩邊，代表的兩個 topic levelSingle Lever : + (單一層級萬用字元)Single Level 是指取代此一層的主題(topic level)，+ 代表此 topic level 有著 single level wildcard 的特性myhome/groundfloor/+/temperature在此標誌下，以下均為相同的主題myhome/groundfloor/a/temperaturemyhome/groundfloor/b/temperaturemyhome/groundfloor/c/temperature以下為不相同的訂閱主題myhome/ground/a/temperaturemyhome/groundfloor/a/brightnessex2:  home/[position]/[devices]/temperature : 訂閱’家中單一房間，單一個 device 的溫度’  home/+/+/temperature : 訂閱’家中所有房間中的裝置的溫度’Multi Level :Multi Level 總是放在最後 : myhome/groundfloor/#以下為相同的主題myhome/groundfloor/livingroom/temperaturemyhome/groundfloor/livingroom/brightness以下為不相同的主題myhome/outside/temperatureTopics beginning with $這是系統預設的識別符，專門 publish 給系統，client 無法使用注意  / 符號，別放在第一位，ex : /ex1/ex2  在 topic level 中，不要空白  保持你的 topic level 簡短與簡單明瞭  使用 ASC II 字符，並免使用無法印出的符號  透過在 topic level 中，使用 clientId，可有效區分『消息來源』與『訊息區別』          client1 只能被授權 publish 透過 client1/status，不被允許 publish 給 client2/status        不使用 #  注意擴展性、延展性  使用特定的 topics，取代攏統的設定          使用 myhome/livingroom/temperature,myhome/livingroom/brightness 與 myhome/livingroom/humidity，避免使用 myhome/livingroom/ 來接收所有的訊息      ]]></content>
       <categories>
         
@@ -1392,7 +1392,7 @@
   
     <entry>
       <title><![CDATA[【xcode】create framework]]></title>
-      <url>/xcode%20ios/2016/06/13/xcodecreate-framework/</url>
+      <url>/blogpost/xcode%20ios/2016/06/13/xcodecreate-framework/</url>
       <content type="text"><![CDATA[Why直接在 xcode 中，產生出適合 armv7 -arch armv7s 與 x86_64 的 framework若透過預設的方法產出，會有兩種版本，必須再使用 lipo create 進行合併此方法是透過 script 在 compile 時，直接進行 build 與 lipo create 的動作基本設定  設置靜態庫，將 Mach-o type 從動態設定為 Static Library    |-MyFirstFramework |-TARGETS  	|-Build Settings 	|-Linking   	|-Mach-o Type      How      open xcode and select [Framework &amp; Library] -&gt; [Cocoa Touch Framework]    Build Phases          Target Dependencies      Compile Sources      Link Binary With Library                  連接使用其他 framework                    Headers                  讓 framework 中的檔案開放程度                    Copy Bundle Resources                  要使用的 bundle 物件檔                      產生 framework x2（真機運行與模擬機運行）          要注意的是 xxx-name.framework，只是一包資料夾，要進行合併的是底下的 [xxx-name]       - 真機路徑(path_1) : Debug-iphoneos/[name].framework/[name]      - 模擬機路徑(path_2) : Debug-iphonesimulator/[name].framework/[name]      - lipo -create path_1 path_2 -output [name]      - 產生出的 name 為執行檔，copy Debug-iphoneos/[name].framework 到適當位置      - 將剛剛產生出的 [name]，取代掉上一行 framwork 中原本的 [name]      - lipo -info [name]      - 將整包調整過後的 framework 放入 xcode 測試      ]]></content>
       <categories>
         
@@ -1407,7 +1407,7 @@
   
     <entry>
       <title><![CDATA[Dynamic Programming]]></title>
-      <url>/2016/05/31/dynamic-programming/</url>
+      <url>/blogpost/2016/05/31/dynamic-programming/</url>
       <content type="text"><![CDATA[動態規劃(Dynamic Programming)Line 面試中有一題，提到『動態規劃』一詞與 Fibonacci 的設計方法稍微 review 一下，『為何 Fibonacci 中單純用遞迴，效率不高』透過『動態規劃』，把每一次計算出的結果 儲存起來，之後重複的運算，就取出之前暫存的(cached)結果即可感覺有點類似之前在做數據分析時，在 cached 相同，或者相似資料時，所做的處理避免重複性的計算，增加程式的效率Dynamic Programming Approaches:  Bottom-Up  Top-Down參考資料]]></content>
       <categories>
         
@@ -1420,7 +1420,7 @@
   
     <entry>
       <title><![CDATA[【Objc-C】Toll-Free Bridging : 無損橋接 ]]></title>
-      <url>/2016/05/23/objc-c-toll-free-bridging-non-destructive-bridge/</url>
+      <url>/blogpost/2016/05/23/objc-c-toll-free-bridging-non-destructive-bridge/</url>
       <content type="text"><![CDATA[Toll-Free Bridging : 無損橋接在 ARC 管理中，常會看到這個名詞簡單來說就是因為 OC 是 C 的執行庫，而為了讓 OC 可以與 C 進行資料交換，就得利用 Toll-Free Bridging 進行資料格式的交換如 NSArray 與 CFArray 參考  CFArray is “toll-free bridged” with its Cocoa Foundation counterpart, NSArray. This means that the Core Foundation type is interchangeable in function or method calls with the bridged Foundation object. Therefore, in a method where you see an NSArray * parameter, you can pass in a CFArrayRef, and in a function where you see a CFArrayRef parameter, you can pass in an NSArray instance. This also applies to concrete subclasses of NSArray. See Toll-Free Bridged Types for more information on toll-free bridging.Toll-Free Bridged TypesNSArray *_array = [[NSArray alloc]init]; NSString *values = {@"foo",@"bar"}; CFArrayRef arrayRef = CFArrayCreate(kCFAllocatorDefault, (void *)values, (CFIndex)2,NULL); NSArray *array = (__bridgeNSArray *)arrayRef;//注意這一行的__bridge NSDaNSString -&gt; CFStringNSString *foo = @"bar"; CFStringRef bar = (__bridge CFStringRef)(foo); NSLog(@"%ld", CFStringGetLength(bar));CFString -&gt; NSStringCFStringRef foo = CFStringCreateWithCString(kCFAllocatorDefault, "foo", kCFStringEncodingUTF8); NSString *bar = (__bridge NSString *)(foo);NSLog(@"%ld", bar.length); CFRelease(foo);__bridge目的在於處理 ARC &lt;-&gt; MRC 間的溝通而 『MRC 下的 Toll－Free Bridging 因為不涉及記憶體管理的轉移，相互之間可以直接交換使用。』Toll-Free Bridged Types 中，有支援 Toll-Free Bridging 的對照表]]></content>
       <categories>
         
@@ -1433,7 +1433,7 @@
   
     <entry>
       <title><![CDATA[【IoT】MQTT]]></title>
-      <url>/2016/05/20/iotmqtt/</url>
+      <url>/blogpost/2016/05/20/iotmqtt/</url>
       <content type="text"><![CDATA[今天是 AWS 高峰會，聽了很多 IoT 上的各種應用，與 AWS IoT 的互動…對於一些 protocol 使用範例概念上，還是不甚瞭解MQTT : Message Queue Telemetry Transportwiki of MQTTMQTT &amp; IoT protocols comparison  MQTT          FB Msg 也用        HTTP  CoAP  AMQP在不同的物聯網方案下，選用不同的 protocolAbstractMQTT 是一個 client server 發布/訂閱 訊息交換的 protocol。特性有 輕量、開放、簡單 容易使用。在許多受限制的環境下，適合使用(M2M / IoT)。運行 TCP/IP 協議。特色有：  Use of the publish/subscribe message pattern which provides one-to-many messagedistribution and decoupling of applications.  A messaging transport that is agnostic to the content of the payload.  Three qualities of service for message delivery:          “At most once”      “At least once”      “Exactly once”        A small transport overhead and protocol exchanges minimized to reduce network traffic.  A mechanism to notify interested parties when an abnormal disconnection occurs.]]></content>
       <categories>
         
@@ -1446,7 +1446,7 @@
   
     <entry>
       <title><![CDATA[【iOS】ARC ]]></title>
-      <url>/2016/05/18/ios-arc-a/</url>
+      <url>/blogpost/2016/05/18/ios-arc-a/</url>
       <content type="text"><![CDATA[Transitioning to ARC Release NotesTransitioning to ARC Release Notes  為啥會寫這篇，原因在於，寫其他文章，莫名其妙整理這些東西，就順便註記了一下大綱  ARC is supported in Xcode 4.2 for OS X v10.6 and v10.7 (64-bit applications) and for iOS 4 and iOS 5. Weak references are not supported in OS X v10.6 and iOS 4.      Under ARC, strong is the default for object types.      ARC Enforces New Rules- 不能明確的調用 `dealloc`，與直接使用 `retain`, `retainCount` 或者 `autorelease`。	- 但一樣可以使用 `dealloc` 來管理資源，在 ARC 中客製化使用 `dealloc`，不需要使用 `[super delloc]`	- 可以使用 `CFRetain`, `CFRelease` 與其他 **Core Foundation-style objects** 相關的功能 (參考 Managing Toll-Free Bridging)- 不能使用 `NSAllocateObject`, `NSDeallocateObject`	- 可使用 `alloc`，runtime 會自動幫你處理需要 deallocating 的物件- You cannot use object pointers in C structures.	- Rather than using a struct, you can create an Objective-C class to manage the data instead.- 必須使用特殊的類別轉換來告訴編輯器物件的生命週期，在 Objective-C 物件與 Core Foundatin 類型中傳遞參數。- 不能使用 `NSAutoreleasePool` 物件- You cannot use memory zones.	- 不能使用 NSZone，現在在 Objective-C 運行下，會自動被忽略ARC 強化在命名方法上的限制不能給予存取器開頭為 new 的物件名稱，若要給予一個開頭為 new 的物件名稱，則必須用 getter 指定不同的// Won't work:@property NSString *newTitle; //Xcode 會給予錯誤 // Works:@property (getter=theNewTitle) NSString *newTitle;ARC Introduces New Lifetime QualifiersProperty Attributes  weak / strong : 有別於 MRC，是 ARC 下的新的宣告屬性          Under ARC, strong is the default for object types.      strong = retain      weak 相似於 assign，不同之處在於當 instance 被釋放後，property value 會被設定為 nil (assign remaining as a dangling pointer.)      Variable Qualifiers__strong : 預設__weak : 當未被使用後，會被設定為 nil__unsafe_unretained : 當沒被使用，且沒被設為 nil，若引用對象被釋放後，the pointer is left dangling.__autoreleasing : 用來代表當參數通過 id * 傳遞後，在 return 會被 autoreleased使用方法 ClassName * qualifier variableName;使用 __weak 測試NSString *ref = @"test";NSString * __weak string = ref;NSLog(@"string: %@", string);  // test    NSString * __weak string2 = [[NSString alloc] initWithFormat:@"First Name: 123"]; //no other strong referenceNSLog(@"string: %@", string2); // nullUse Lifetime Qualifiers to Avoid Strong Reference Cycles參考官方範例主要在講 manual reference counting 與 使用 __block qualifier 的調用      In manual reference counting mode, __block id x; has the effect of not retaining x.    In ARC mode, __block id x; defaults to retaining x (just like all other values).    To get the manual reference counting mode behavior under ARC, you could use __unsafe_unretained __block id x; 但建議用 __weak 取代(if you don’t need to support iOS 4 or OS X v10.6)    範例一：沒使用 __block  範例二：使用 __block  範例三：使用 __weak 替代 __block  範例四：特殊使用 __weak 方法ARC Uses a New Statement to Manage Autorelease Pools在 ARC 下，不能使用 NSAutoreleasePool ，但可以用 @autoreleasepool blocks 替代@autoreleasepool {     // Code, such as a loop that creates a large number of temporary objects.}Stack Variables Are Initialized with nilARC 下，strong, weak, autoreleasing 的堆疊變數初始化都為 nilNSString *name;NSLog(@"name: %@", name);// nilUse Compiler Flags to Enable and Disable ARCARC 下，對某個檔案  使用 -fobjc-arc 的旗標，開啟 ARC  使用 -fno-objc-arc，來取消 ARC  ARC is supported in Xcode 4.2 and later OS X v10.6 and later (64-bit applications) and for iOS 4 and later. Weak references are not supported in OS X v10.6 and iOS 4. There is no ARC support in Xcode 4.1 and earlier.Managing Toll-Free Bridging(管理 無損橋接)在多數的 Cocoa application 中，需要使用 Core Foundation-style 的物件，無論是直接 Core Foundation framework (如 CFArrayRef or CFMutableDictionaryRef) 或者 採用 Core Foundation 的 frameworks 如 Core Graphics (CGColorSpaceRed 與 CGGradientRef)因編輯器不會自動化的管理 Core Foundation 物件的生命週期，所以必須呼叫使用 CFRetain 與 CFRelease 來處理使用 Core Foundation 記憶體的規則see Memory Management Programming Guide for Core Foundation如果轉換 Objective-C 與 Core Foundation，需要告知編輯器相關的定義 (defined in objc/runtime.h) 或者 Core Foundation-style 巨集 (defined in NSObject.h):  __bridge transfers a pointer between Objective-C and Core Foundation with no transfer of ownership.  __bridge_retained or CFBridgingRetain casts an Objective-C pointer to a Core Foundation pointer and also transfers ownership to you. You are responsible for calling CFRelease or a related function to relinquish ownership of the object.  __bridge_transfer or CFBridgingRelease moves a non-Objective-C pointer to Objective-C and also transfers ownership to ARC. ARC is responsible for relinquishing ownership of the object.EX:- (void)logFirstNameOfPerson:(ABRecordRef)person {     NSString *name = (NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);    NSLog(@"Person's first name: %@", name);    [name release];}轉換為- (void)logFirstNameOfPerson:(ABRecordRef)person {     NSString *name = (NSString *)CFBridgingRelease(ABRecordCopyValue(person, kABPersonFirstNameProperty));    NSLog(@"Person's first name: %@", name);}The Compiler Handles CF Objects Returned From Cocoa Methods轉換成適當的類別，不能直接使用 UIColor 放入 NSMutableArray 中，要轉換成 CGColor。NSMutableArray *colors = [NSMutableArray arrayWithObject:(id)[[UIColor darkGrayColor] CGColor]];[colors addObject:(id)[[UIColor lightGrayColor] CGColor]];Cast Function Parameters Using Ownership Keywords接下來的範例中，陣列 array 透過 CGGradientCreateWithColors 進行轉換NSArray *colors = &lt;#An array of colors#&gt;;CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)colors, locations);完整的範例如下- (void)drawRect:(CGRect)rect {    CGContextRef ctx = UIGraphicsGetCurrentContext();    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();    CGFloat locations[2] = {0.0, 1.0};    NSMutableArray *colors = [NSMutableArray arrayWithObject:(id)[[UIColor darkGrayColor] CGColor]];    [colors addObject:(id)[[UIColor lightGrayColor] CGColor]];    CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)colors, locations);    CGColorSpaceRelease(colorSpace);  // Release owned Core Foundation object.    CGPoint startPoint = CGPointMake(0.0, 0.0);    CGPoint endPoint = CGPointMake(CGRectGetMaxX(self.bounds), CGRectGetMaxY(self.bounds));    CGContextDrawLinearGradient(ctx, gradient, startPoint, endPoint,                                kCGGradientDrawsBeforeStartLocation | kCGGradientDrawsAfterEndLocation);    CGGradientRelease(gradient);  // Release owned Core Foundation object.}Common Issues While Converting a ProjectFrequently Asked Questions]]></content>
       <categories>
         
@@ -1459,7 +1459,7 @@
   
     <entry>
       <title><![CDATA[【SSLs】ssls with synology web]]></title>
-      <url>/2016/05/16/sslsssls-with-synology-web/</url>
+      <url>/blogpost/2016/05/16/sslsssls-with-synology-web/</url>
       <content type="text"><![CDATA[      進入 synology -&gt; 憑證        建立憑證 -&gt; 建立憑證簽署請求(CSR)        下載，取得server.csr , server.key        進入my ssl 輸入 server.csr 內容        會自動選取伺服器的架構 ex: apach+openssl        確認信件    下載 信件附件 ， 有四個檔案 ：          AddTrustExtenalCARoot.crt      COMODORSAAddTrustCA.crt      COMODORSADomainValidationSecureServerCA.crt              .crt              合併 *.crt -&gt; bundle.crt          cat COMODORSADomainValidationSecureServerCA.crt COMODORSAAddTrustCA.crt AddTrustExternalCARoot.crt &gt;&gt; bundle.crt            回到synology -&gt; 憑證    依序輸入          金鑰 : server.key      憑證：huder_link.crt      中繼：bundle.crt        在 website 中，插入 security seal , copy snippet code 即可。]]></content>
       <categories>
         
@@ -1472,7 +1472,7 @@
   
     <entry>
       <title><![CDATA[【iOS】HLS & m3u8]]></title>
-      <url>/2016/05/10/ioshls/</url>
+      <url>/blogpost/2016/05/10/ioshls/</url>
       <content type="text"><![CDATA[播放 線上串流 HLS  格式 : m3u8          測試檔案 : https://mega.nz/#F!ugxGEBaZ!z7OI0twEpBYdgGxUH7G5zw            github : https://github.com/jhaoheng/HLS_sample    apple HTTP Live Streamingapple 支援      https://developer.apple.com/streaming/#streaming        使用 framework          &lt;AVKit/AVKit.h&gt; : ios9 only      &lt;AVFoundation/AVFoundation.h&gt;      &lt;MediaPlayer/MediaPlayer.h&gt; : ios8 以下      mp4 -&gt; m3u8轉換工具 : ffmpeg因已安裝 homebrew 故brew install ffmpeg格式轉換ffmpeg -i &lt;filename&gt;.mp4 -c:v libx264 -c:a copy -f hls &lt;outputNmae&gt;.m3u8透過 safari 播放測試 m3u8  開啟 safari  將 url 放入即可HLS Server  Web Server：提供 m3u8 播放清單。  Transcoder：若檔案內容並非 H.264 + AAC，那麼便需要進行轉檔。  Media Stream Segmenter：將欲播放的檔案切成 segment。]]></content>
       <categories>
         
@@ -1485,7 +1485,7 @@
   
     <entry>
       <title><![CDATA[【線上教學準備】Udemy]]></title>
-      <url>/2016/05/07/online-teaching-preparation-udemy/</url>
+      <url>/blogpost/2016/05/07/online-teaching-preparation-udemy/</url>
       <content type="text"><![CDATA[首先無意間發現這個平台，覺得還不錯（應該說是版型設計深得我心），若以當講師為目標，以下歸納幾個重點。其中不論講話的速度與自信…等等，在討論與開會上，還頗有用。課程上線要檢查的 checklisthttp://udemy-images.s3.amazonaws.com/fb/email/2016/Feb_2016_Quality_Checklist.pdfPlan  Differentiated Topic : 差異化標題  Course Goals : 課程目標  Structured Teaching : 結構化教學  Practice Activities : 實踐教學， (quiz,exercise, or project)Produce  Lecture Format : 課程格式，約 2-20 分鐘。  Audio : 聲音注意必須清晰，自新、像講故事般，不要語助詞。  Video : HD，投影片必須清晰，60% 的課程必須是影片，16:9 畫面，字體必須要大，並且方便閱讀，畫面簡單，若有人在裡面，佔畫面的 1/4，不需靠太近，把手臂也放入影片中。  Instructor Delivery : 簡潔、清晰、自信，盡量少講，ㄜ….，ㄚ….等語助詞。說話語氣要有熱情，因為透過影片，故會減少一些熱度，熱情必須保持在 110%，發音清楚、強調重點。  Promo Video : 宣傳視頻，好的教學風格、目標、技巧，都會提升學生的轉換率。publish  Instructor Bio  Price : 價格將影響其他相同影片之間的競爭性  Title / Subtitle  Course Summary  Course Image : Must be 16:9; 2048 x 1152 pixels minimum; .jpg, .jpeg, .gif, .png, or .bmp format.  Lecture Descriptions  Course Complete從學生的角度思考  What are they interested in?  What are they taking the course?  What motivates them to enroll in a course?  What motivates them to complete a course?who is your target audience  search Udemy for the “board topic” of your course  search the marketplace for similar courses  This is your market analysisCourse Topic tipI want to teach Level Subject to Ideal Student who have Target Audience and want to be able to Learning Objective for Course Valueex:I want to teach Intermediate Swift 2.2 to ios developer who have basic Swift skills and want to be able to study more new things for promote self develop skill制定好自己的 schedule製作教學影片是一個長時間的專案，構思好自己的架構，並且持續打磨產品，好的產品能得到不錯的迴響，再透過數據分析學生群Outline 課程概要好的大綱能吸引學生，並且引導學生了解學習地圖的一部份文字、影像、投影片、特寫、語音 的混搭類型課程描述https://support.udemy.com/customer/portal/articles/1587916-add-lecture-descriptions?b_id=3056  簡短清晰  不要使用外部連結裝備  video : Camtasia for MAC          Select Share &gt; Advanced Export &gt; Select from Export list &gt; Export to Quicktime MPEG-4 &gt; Select Options to adjust rest of options      Quality Settings: Use high resolution 720p or HD settings      Compression Type: H.264      Aspect Ratio: 16:9      Resolution: 1280x720      Frame Rate: 10-15 (preferred)      Frame Reordering: Unchecked      Key Frames: Automatic      Data Rate: Automatic      教學        audio : 麥克風  slide : keynote上傳檔案https://www.udemy.com/tools/上傳相關資源https://support.udemy.com/customer/portal/articles/1587918?b_id=3056建立測驗https://support.udemy.com/customer/portal/articles/1507750?b_id=3056圖片 &amp; promoless is more少量的文字明確的色彩清晰的圖片promo video: 介紹你自己  Don’t Be Shy : 在介紹中露個臉，讓學員知道，他們在跟誰學習  Establish Credibility : 告知學員你的經歷與背景，並解釋為什麼這門課程比其他優秀的地方  Be Concise : 推廣影片約 2-3 分鐘或者更少  Show &amp; Tell : 影片中自信、微笑、偶爾開一些小玩笑  Keep it Moving : 別讓學員在某個影片中停留太久Coupon 促銷教學https://support.udemy.com/customer/portal/articles/1503919-how-do-i-create-a-coupon-for-my-course-?b_id=3056]]></content>
       <categories>
         
@@ -1498,7 +1498,7 @@
   
     <entry>
       <title><![CDATA[【ios】 快速檢視憑證的 plugin]]></title>
-      <url>/2016/05/05/xcode-quick-view-documents-plugin/</url>
+      <url>/blogpost/2016/05/05/xcode-quick-view-documents-plugin/</url>
       <content type="text"><![CDATA[http://kfi-apps.com/plugins/ipaql/無意間發現這個好工具通常我習慣去 developer center 中，檢查憑證與 uuid 是否正確但其實很花時間  安裝此 plugin 後，執行 qlmanage -r  輸出 .ipa 檔案，按下 quicklook 的 hotkey，就可以看到此 ipa 相關資訊如此一來就不用花時間檢查憑證到底有無安裝錯誤（相信可能也是透過 xcodebuild 進行憑證檢查吧）FEATURES  Displays app and provision information for ipa-files  Displays provision information for iOS mobileprovision and OSX provisionprofile files  Uses device names from the Developer Portal  Generates thumbnails for ipa and provision files]]></content>
       <categories>
         
@@ -1511,7 +1511,7 @@
   
     <entry>
       <title><![CDATA[【iOS】反組譯工具]]></title>
-      <url>/ios/2016/05/02/ios-disassembler/</url>
+      <url>/blogpost/ios/2016/05/02/ios-disassembler/</url>
       <content type="text"><![CDATA[ios app 反組譯事前確認  該 app 是否從 app store 上取得工具  解開 app store 的加密層工具          clutch      dumpdecrypted      gdb      AppCrackr        反組譯工具          class-dump      Hopper Disassembler      ]]></content>
       <categories>
         
@@ -1526,7 +1526,7 @@
   
     <entry>
       <title><![CDATA[【sublime text 3】basic]]></title>
-      <url>/sublime/ide/2016/04/20/sublime-text-3basic/</url>
+      <url>/blogpost/sublime/ide/2016/04/20/sublime-text-3basic/</url>
       <content type="text"><![CDATA[環境  mac osx 10.11.4  sublime test 3移除 sublime  透過 CleanMyMac3 移除檔案  檢查 ~/Application Support/Sublime Text 3 是否存在，若存在則移除安裝 sublime text 3  https://www.sublimetext.com/3  輸入序號 : 開啟 sublime text 3，help -&gt; Enter License          crack : https://gist.github.com/rockdrigo/de9a16a4c8d75d7acb32      安裝 package control 的套件  https://packagecontrol.io/          此網站也會列出所有套件                  Trending          New          Popular          Labels                      按照指示安裝完畢後，會發現新增 ~/Application Support/Sublime Text 3  開啟 sublime test 3，執行 cmd+shift+p，輸入 pack...，會看到 package control 已經被安裝，且會列出相關指令  使用 package control : install package，就會列出目前所有可安裝的 packageNavi Feature      Sublime Text        File        Edit    Selections          cmd+shift+l : 先選擇範圍，按下該按鍵，再鍵入一些文字，即可知道效果      cmd+d : file 中，第一次按下，會選擇目前的 tag，再按一次，則會選擇到下一個相同的 tag 可以在該，可快速一次修改全部名稱            Find    View          ctrl+`      cmd+ctrl+f : 全螢幕      cmd+ctrl+shift+f : 專注模式      編輯畫面切割(Split Editing) : View/Layout        GOTO : cmd+p 在命令框架中          輸入該 folder 中的檔案名稱，則會搜尋並檢視該 file，確認後可直接開啟。      輸入 @ 會列出目前 file 中的 symbols      輸入 # 會列出目前 file 中的所有文字元件      輸入 :+數字 可直接跳到該行        Tools          命令面板(Command Palette) : cmd+shift+p                  Package Control:，透過安裝套件，會出現此命令，透過此命令列，可安裝與查詢套件          Snippets:，可快速建立語法片段                    可在此建立一些自訂的語法、片段、巨集        Project          管理 Project : 將個別不同的檔案，變成一組 project      管理 Workspace : project 的集合      操作練習https://www.sublimetext.com/  依照主頁面的圖示，第一張圖與第二張圖ex1 : 快速選擇後，進行更改  選擇 file 中，相同的 tagcopy 以下片段&lt;form action="" method="get"&gt;  	&lt;input name="" type="hidden" value=''&gt;	&lt;input name="" type="hidden" value=""&gt;	&lt;input name="" type="hidden" value=""&gt;	&lt;input name="" type="hidden" value=""&gt;	&lt;input name="" type="hidden" value=""&gt;	&lt;input name="" type="hidden" value=""&gt;	&lt;input name="" type="hidden" value=""&gt;  	&lt;input type="" value="Submit"&gt;&lt;/form&gt;  游標移到 form 上，按下一次 cmd+d，會看到目前的 tag 已被圈選  再按一次 cmd+d 會發現下一個 form 也被選擇起來  此時修改內容，可看到一次修改ex2 : 快速建立格式MonTueWedThuFriSat  圈選 Mon~Sat  cmd+shift+l  shift+"  鍵盤向右方向兩次  輸入 ,  cmd+j，刪除最後一個 ,  cmd+l  輸入 []]></content>
       <categories>
         
@@ -1543,7 +1543,7 @@
   
     <entry>
       <title><![CDATA[【Mixpanel】basic]]></title>
-      <url>/growth_hacker/mixpanel/2016/04/19/mixpanelbasic/</url>
+      <url>/blogpost/growth_hacker/mixpanel/2016/04/19/mixpanelbasic/</url>
       <content type="text"><![CDATA[https://mixpanel.comfirst註冊完畢進行第一次設定js 中有 token將此 js 放入 html 中，並將 track 設定好，可於下方進行測試，完成後，即可進行下一步我個人覺得，可能多數人在第一次使用時，遇上了問題，所以 Mixpanel 才會如此進行他的流程若直接在 settings 中 Reset Project Data，則不會影響 token 的變更，只需重新在 Segmentation 中重新初始化一遍即可settings  Management          專案名稱設定      URL      時區設定      Data points : That simply means that you have sent in any events, You can send in events using track method      Number of users : set up any user people profiles, set up profiles using people.set method      Token      API Secret      Options                  reset          delete          transfer                      Team          團隊管理        Notifications          可上傳設定 GCM(API Key) / APNS(p12) 的憑證        Data Management          管理 event 與 properties 中的參數，何者不需要被監控        Access security          可啟用二階段驗證      基本：五個關鍵指標Acquisition, Activation, Retention, Referral, and Revenue.  用戶從何處知道了此服務，開發者在這些服務來源中，了解到用戶從哪些地方知道此服務，在行銷上就可強化該服務，可能是一個電影的廣告…等等  並進行了註冊  用戶持續的使用  透過用戶進行病毒式的行銷  從這些廣大的用戶中，瞭解哪些用戶是金童，並瞭解他們的喜好當服務建立好後，先從第一步放置追蹤代碼，等到部署到第三步，就可不斷的循環找尋痛點，取得第五步的收益至於第四步，若讓用戶已經很喜愛你的產品，即可使用第四步進行行銷，若尚未保證用戶對產品有一定的認同度，結果只是招來一堆蒼蠅罷了以前錯誤的例子：  err_1 : 以為只要放到 fb，就會有一堆粉絲  err_2 : 無腦的直接使用病毒式行銷，希望透過 fb 的 share 進行推廣產品的可見度  結論：無法取得用戶的回流，且可見度也有限，做了一堆無用的工Acquisition泛指強調獲取資訊的方法獲取用戶是從哪些位置或者說是來源，給予你有價值的回饋 = 表現最好的轉換通道強化這些來源可從這些來源中，取得開發團隊要取得的資訊，如年齡、性別、地域性並且可進一步的分析，是哪些搜尋關鍵字，讓你知道誰是你的客戶群Activation  happy first visit.Do they move through your app or website seamlessly?Are there certain pages or steps where you are losing or stalling a chunk of your traffic?key goal of increasing conversion.激活用戶，進行註冊等等讓這些用戶從了解到你的服務，倒變成你真正的註冊用戶不斷的優化 landing page，讓用戶無論從 app or website 的轉換過程中，是流暢的並且了解到用戶在第一次的接觸中，會想要進行註冊，並觀察是否在某一流程中，用戶進行註冊的用戶，將會取得一組 distinct_id，這將會是 mixpanel 進行分析用戶資料的判斷Retention簡言：回流率當你讓一些陌生人，變為你網站的客戶，你並需讓他們經常性的回流到你的網站The key to monitoring changes in retention is to view it by cohort groups.Q:This is all well and good, but how do I get my retention to go up舉例：可以指定在過去兩個星期中，尚未登入網站，並曾於過去多次購買的用戶，讓他們知道你在舊金山有辦活動之後使用 funnel 去觀察，這些用戶是否通過通知有回到你的網站，或者讓這些用戶帶來更多的效益讓你的用戶經常性地回到你的服務中ex : 透過某些行銷行為，讓這些用戶感興趣，並且回到你的服務中Referral  Once your product is battle-tested and beloved, it’s time for viral marketing.how many of your users send invites, and what percentage of those invites become new users.以下為用戶 A 邀請用戶 B 成為會員的追蹤(必須要學會描述故事，在此前提先畫出 flow) mixpanel.track("event", {"distinct_id": "Other ID"});(必須著重在，A 與 B 之間的對話方式)distinct_id 是讓 mixpanel 可辨別的清晰的代碼如何跟蹤發送邀請與接收邀請的比例的轉換數跟蹤工具，應該是說，因為推廣，可觀察到哪些推廣代碼，被引用，並且成功轉換為用戶  K-factor : http://en.wikipedia.org/wiki/K-factor_(marketing)          用於描述網站或者 app 的增長速度      k = i * c ; i 為每個用戶寄送的邀請數量 ; c 為轉換為新用戶的預測百分比                  ex : i=5 ; c=.2 ; k=1，若 k&gt;1 則代表正成長， k&lt;1 則代表負成長                    透過 mixpanel，可觀察到哪些 user 對於推廣有助        mixpanel.people.increment          可觀察到，哪些事件對於推廣是有助益的      例如可在 mail 中，url 的參數放入邀請者的 id 或者可將整個事件的 json 轉為 base64 掛於 url 後方//將 json 轉為 base64http://api.mixpanel.com/track/?data=ew0KICAgICJldmVudCI6ICJTaWduZWQgVXAiLA0KICAgICJwcm9wZXJ0aWVzIjogew0KICAgICAgICAiZGlzdGluY3RfaWQiOiAiMTM3OTMiLA0KICAgICAgICAidG9rZW4iOiAiZTNiYzQxMDAzMzBjMzU3MjI3NDBmYjhjNmY1YWJkZGMiLA0KICAgICAgICAiUmVmZXJyZWQgQnkiOiAiRnJpZW5kIg0KICAgIH0NCn0=//將 json 轉為 base64，json 格式// Sends an event "Signed Up", associated with user 13793,// with a property "Referred By"{    "event": "Signed Up",    "properties": {        // "distinct_id" and "token" are        // special properties, described below.        "distinct_id": "13793",        "token": "e3bc4100330c35722740fb8c6f5abddc",        "Referred By": "Friend"    }}mixpanel http 參數設定Revenue以上的四個方法，都只是為了最後的收益當你透過以上方法了解到，哪些是最有價值的用戶，就可以針對這些用戶的喜好進行開發、行銷推廣例如:可以知道，18 歲的青少年，21 歲的女性，在你的 app 中進行了哪些購買，針對這些有價值的客戶群，進行特別的推廣活動，讓你的行銷更為精準一些簡單的樣版規則http://mpdocs.s3.amazonaws.com/docs/Sample%20Mixpanel%20implementation%20Spec%20with%20People.xls區隔 develop / production 的設定  在 mixpanel 控制台中，建立兩個專案，分別為 develop 與 production，此時根據會產生個別的 token  當在 website 時，透過 js，檢查 host 是否為 productionHostvar productionHost = 'Your production Domain'; var devToken = 'Development Token';var prodToken = 'Production Token';/* If the hostname is anything other than your production domain, initialize the Mixpanel library with your Development Token */if (window.location.hostname.toLowerCase().search(productionHost) &lt; 0) {    mixpanel.init(devToken);} else {    mixpanel.init(prodToken);}  同理在 ios / android 亦可參照類似方法]]></content>
       <categories>
         
@@ -1560,7 +1560,7 @@
   
     <entry>
       <title><![CDATA[【LINE】develop intro]]></title>
-      <url>/line/2016/04/15/linedevelop/</url>
+      <url>/blogpost/line/2016/04/15/linedevelop/</url>
       <content type="text"><![CDATA[https://developers.line.me/申請與註冊開發  至 Channels，登入          若是第一次登入，會出現無 Channels 的頁面，請點選 『Business Center』                  一個商用帳號，只能選擇一種開發                    建立商用帳號後，可選三種開發                  LINE@                          LINE@ 提供針對公司或經營者使用的LINE帳號，不但能讓商業運作及訊息傳達更加活躍， 還具備了能夠將企業、品牌以及商品魅力傳達給顧客的各種功能。              群發訊息              1 對 1 聊天 : 能夠直接透過LINE聊天室溝通，回覆來自顧客              發送動態消息 : 將資訊投稿至顧客或粉絲的動態消息上              免費方案 : 每月1,000則以內              推廣方案 : 無限制                                LINE Login                          LINE Login是可與您的事業內容結合，讓用戶能夠以LINE帳號登入並使用的功能。              透過LINE SDK for iOS / Android，將能夠在Native Application使用LINE Login功能。              透過LINE所提供的OAuth2認證，將能夠在Web Application使用LINE Login功能。                                BOT API Trial Account                          BOT API Trial Account是一項能夠讓用戶針對您所提供的事業內容進行雙向溝通的功能。              BOT API將透過LINE伺服器，在您的伺服器與LINE應用程式間互相收發資訊。將活用JSON形式的API進行通訊請求。              可傳送訊息給將您帳號加為好友的用戶。將透過API收發所有的訊息。              可傳送含有網站縮圖及連結的訊息，能夠有效地將用戶引導至網站中。              使用條件                                  測試時，上限傳送人數 50 人                                                                        DevelopLINE@  透過 business center 進行申請認證若認證失敗，則會轉為一般帳號  認證帳號與一般帳號  5~7 個審核工作天Line Login  透過 business center 進行申請  App icon : 在申請帳號服務時的 name 與 image 即為此 login app 的預設資料  建立好後，可設定以下參數跟下載開發 sdk (目前 iOS 版本 3.1.17)          NATIVE_APP                  iOS Bundle ID          iOS Scheme          Android Package Name :          Android Package Signature          Android Scheme                    WEB                  Authentication domain                    Note: The download link is displayed only after the Channel status becomes DEVELOPING.Line bot  透過 business center 進行申請  basic          Name      App icon      Callback URL        Server IP WhiteList : 可針對單一的 ip 進行設定，也可以透過子網路遮罩，設定一整組的範圍]]></content>
       <categories>
         
@@ -1575,7 +1575,7 @@
   
     <entry>
       <title><![CDATA[【GPG】GNU Privacy Guard with git]]></title>
-      <url>/git/github/gpg/2016/04/09/gpggnu-privacy-guard-with-git/</url>
+      <url>/blogpost/git/github/gpg/2016/04/09/gpggnu-privacy-guard-with-git/</url>
       <content type="text"><![CDATA[GPG什麼是 GPGhttps://www.gnupg.org/index.html  可產生不同的 key，並針對這些 key 進行管理  當產生後，會依據設定的『用戶名稱』、『你設定的 mail』產生 GPG key          主要產生 public_GPG_key、subordinate private keys      而過程中會要求是否設定 passphrase，是用來保護 subordinate private keys        ex key:    pub   rsa4096/&lt;public_GPG_key&gt; 2016-04-09 [SC]uid         [ultimate&lt;設定的存活時間&gt;] maxhu&lt;設定名稱&gt; (fot github&lt;設定備註&gt;) xxxx@gmail.com&lt;設定email&gt;sub   rsa4096/&lt;subordinate private keys&gt; 2016-04-09 [E]      開源，為什麼要用 GPG?https://github.com/blog/2144-gpg-signature-verification開源開發，開發者來自世界各地，有時驗證該 commit 或 tag 來自被驗證過的來源是很重要的事若 commit 或 tag 後，就會在 repo commits 中，出現 Verified 字樣，代表此來源，有被驗證過  When you view a signed commit or tag, you will see a badge indicating if the signature could be verified using any of the contributor’s GPG keys uploaded to GitHub. You can upload your GPG keys by visiting the keys settings page.NOTICE : GitHub Desktop does not support GPG signing.安裝 GPG  homebrew 上的 gpg (GnuPG) 2.0.30 在 gpg-agent 上有問題，不建議安裝  安裝環境          mac OSX EI Capitan 10.11.4        https://sourceforge.net/p/gpgosx/docu/Download/          GnuPG-2.1.11-002.dmg      (SHA-1: 558e20f8d938f2d870aae3bab59ce98649625c01) 安裝檔中有說明，如何『驗證』與如何『移轉已存在的 gpg key』        安裝路徑 /usr/local/gnupg-2.1/  因 github 預設使用 gpg，安裝後指令為 gpg2，故ln -s /usr/local/gnupg-2.1/bin/gpg2 /usr/local/bin/gpg移除 GPGrm '/usr/local/bin/gpg*'cd /usr/localsudo rm -rf gnupg-2.1/rm -rf ~/.gnupg產生 GPG key  執行 gpg --full-gen-key ，依序選擇          (1) RSA and RSA (default)      What keysize do you want? (2048) 4096      0 = key does not expire      輸入 name      輸入指定的 email 此為設定 github 的 email        而 key 的存放位置為 /Users/&lt;user&gt;/.gnupg 下  查看 key gpg --list-keys將 GPG key 放入 github  gpg --list-keys : 找出要使用的 gpg key id : A8F99211    /Users/hubot/.gnupg/pubring.gpg------------------------------------pub   4096R/A8F99211 2016-04-05uid                  Hubot sub   4096R/Z832QR89 2016-04-05        輸出 : gpg2 --armor --export &lt;gpg key ID&gt;  複製，貼到 github gpg keys 中即可設定本機端 git 的 GPG keyTelling Git about your GPG key在設定好上述動作後，接下來需要讓 git 知道你要使用哪個 GPG key。  可以針對某個 .git 使用某個特別的 key  也可以透過 global 的方式建立通用 key  基本上在 git config 下，要有這兩個參數user.signingkey=&lt;your public key&gt;commit.gpgsign=true  git config          --global user.signingkey &lt;public GPG key&gt;      --local  user.signingkey &lt;public GPG key&gt;        git config          --global commit.gpgsign true      --local  commit.gpgsign true      Commit With GPG key  Note: GitHub Desktop does not support GPG signing.git commit -m "your commit message"# 第一次使用時，會要求輸入在建立 GPG key 時輸入的 **passphrase**# 往後無需使用查看 push 後的 verified  git push 後，登入 github 的該 repo  點選 Commits  可以看到 verified signature,tags using GPG  Note: GitHub Desktop does not support GPG signing.  git tag -s [tag-name]  驗證 git tag -v [tag-name]測試心得  只有第一次使用該 gpg 憑證時，會要求輸入 passphrase  透過 global 與 local 的設定，可分別針對不同的 git 進行是否使用該憑證的要求  但 gpg 上傳到 github 上，應該只是讓 commit 上多一個 此 commit 經過驗證，似乎無法阻止非 無通過驗證的用戶 commit]]></content>
       <categories>
         

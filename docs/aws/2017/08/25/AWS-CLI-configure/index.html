@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【AWS CLI】profile : configure">
-<meta property="og:url" content="/aws/2017/08/25/AWS-CLI-configure/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/aws/2017/08/25/AWS-CLI-configure/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="PURPOSE 了解 aws cli profile 運作方式 了解 aws cli configure 操作方法 aws cli github : https://github.com/aws/aws-cli/releases 安裝 &amp;amp; 更新 &amp;amp; 反安裝 : http://docs.aws.amazon.com/cli/latest/userguide/installing.html cli 中指令的參考 : http://docs.aws.amazon.com/cli/latest/index.html aws help : 可看到所有指令 查詢各類指令說明 : aws help aws {command} help aws {command} {sub-cmd} help aws Command Completion : http://docs.aws.amazon.com/cli/latest/userguide/cli-command-completion.html 透過 tab 搜尋 aws 相關指令, install : echo $SHELL find path : which aws_completer enable : complete -C &apos;/usr/local/bin/aws_completer&apos; aws 設定 profile resource : http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html 請到 iam 取得以下 AWS Access Key ID AWS Secret Access Key aws configure help : 查詢在 configure 中的指令有哪些可用 設定 profile aws configure aws configure --profile user2 列出 profile aws configure list : 預設 aws configure list --profile default : 指定身份 使用 profile aws ec2 describe-instance aws ec2 describe-instance --profile user2 指定使用哪一個 profile export AWS_PROFILE=user2 : AWS_PROFILE 為 Environment Variables unset AWS_PROFILE : 回到預設值 Profile Environment Variables AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_DEFAULT_REGION AWS_DEFAULT_OUTPUT AWS_PROFILE AWS_CA_BUNDLE AWS_SHARED_CREDENTIALS_FILE AWS_CONFIG_FILE Options --profile : 指定使用 profile --region : 指定地區 顯示地區列表 : aws ec2 describe-regions --output table --output : json text table --endpoint-url : 指定 ex : aws ec2 describe-instances --output table --region ap-northeast-2 example 想要列出目前預設使用的 profile 使哪一張 aws configure list 想指定預設的 profile export AWS_PROFILE=xxx 想取消指定 profile，回到 default unset AWS_PROFILE">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/aws/2017/08/25/AWS-CLI-configure/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/aws/2017/08/25/AWS-CLI-configure/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -336,7 +336,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/AWS" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/AWS" itemprop="url" rel="index">
                     <span itemprop="name">AWS</span>
                   </a>
                 </span>
@@ -558,7 +558,7 @@
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/aws/2017/08/25/AWS-CLI-ECR-S3-EB-Deploy/" rel="next" title="【AWS CLI】ECR & S3 & EB deploy">
+              <a href="/blogpost/aws/2017/08/25/AWS-CLI-ECR-S3-EB-Deploy/" rel="next" title="【AWS CLI】ECR & S3 & EB deploy">
                 <i class="fa fa-chevron-left"></i> 【AWS CLI】ECR & S3 & EB deploy
               </a>
             
@@ -568,7 +568,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/papertrial/logspout/2017/08/18/Papertrial-logspout/" rel="prev" title="【log tool】papertrial+logspout">
+              <a href="/blogpost/papertrial/logspout/2017/08/18/Papertrial-logspout/" rel="prev" title="【log tool】papertrial+logspout">
                 【log tool】papertrial+logspout <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -639,7 +639,7 @@
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -650,7 +650,7 @@
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -661,7 +661,7 @@
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -672,7 +672,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -804,64 +804,64 @@
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

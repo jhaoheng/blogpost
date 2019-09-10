@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【MQTT】Topic Level">
-<meta property="og:url" content="/2016/06/20/mqtttopic-level/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/2016/06/20/mqtttopic-level/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="MQTT Wildcards(萬用字元) 透過 Wildcards 可以一次訂閱想要的主題，Wildcards 只能運用於 sub 不能用於 pub myhome/ground/room/temperature 每一個 / 的兩邊，代表的兩個 topic level Single Lever : + (單一層級萬用字元) Single Level 是指取代此一層的主題(topic level)，+ 代表此 topic level 有著 single level wildcard 的特性 myhome/groundfloor/+/temperature 在此標誌下，以下均為相同的主題 myhome/groundfloor/a/temperature myhome/groundfloor/b/temperature myhome/groundfloor/c/temperature 以下為不相同的訂閱主題 myhome/ground/a/temperature myhome/groundfloor/a/brightness ex2: home/[position]/[devices]/temperature : 訂閱’家中單一房間，單一個 device 的溫度’ home/+/+/temperature : 訂閱’家中所有房間中的裝置的溫度’ Multi Level : Multi Level 總是放在最後 : myhome/groundfloor/# 以下為相同的主題 myhome/groundfloor/livingroom/temperature myhome/groundfloor/livingroom/brightness 以下為不相同的主題 myhome/outside/temperature Topics beginning with $ 這是系統預設的識別符，專門 publish 給系統，client 無法使用 注意 / 符號，別放在第一位，ex : /ex1/ex2 在 topic level 中，不要空白 保持你的 topic level 簡短與簡單明瞭 使用 ASC II 字符，並免使用無法印出的符號 透過在 topic level 中，使用 clientId，可有效區分『消息來源』與『訊息區別』 client1 只能被授權 publish 透過 client1/status，不被允許 publish 給 client2/status 不使用 # 注意擴展性、延展性 使用特定的 topics，取代攏統的設定 使用 myhome/livingroom/temperature,myhome/livingroom/brightness 與 myhome/livingroom/humidity，避免使用 myhome/livingroom/ 來接收所有的訊息">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/2016/06/20/mqtttopic-level/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/06/20/mqtttopic-level/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -478,7 +478,7 @@ myhome/groundfloor/livingroom/brightness
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/06/25/xcodecombine-framework-with-auto-build/" rel="next" title="【xcode】combine 'framework' with auto build">
+              <a href="/blogpost/2016/06/25/xcodecombine-framework-with-auto-build/" rel="next" title="【xcode】combine 'framework' with auto build">
                 <i class="fa fa-chevron-left"></i> 【xcode】combine 'framework' with auto build
               </a>
             
@@ -488,7 +488,7 @@ myhome/groundfloor/livingroom/brightness
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/xcode%20ios/2016/06/13/xcodecreate-framework/" rel="prev" title="【xcode】create framework">
+              <a href="/blogpost/xcode%20ios/2016/06/13/xcodecreate-framework/" rel="prev" title="【xcode】create framework">
                 【xcode】create framework <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -559,7 +559,7 @@ myhome/groundfloor/livingroom/brightness
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -570,7 +570,7 @@ myhome/groundfloor/livingroom/brightness
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -581,7 +581,7 @@ myhome/groundfloor/livingroom/brightness
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -592,7 +592,7 @@ myhome/groundfloor/livingroom/brightness
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -724,64 +724,64 @@ myhome/groundfloor/livingroom/brightness
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

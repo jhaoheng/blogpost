@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【HLS】m3u8 在直播上，播放器詢問次數測試">
-<meta property="og:url" content="/hls/2017/05/28/HLS-m3u8/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/hls/2017/05/28/HLS-m3u8/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="hls m3u8 詢問次數測試 目的 : 確認 播放器 在播放 hls 時，更新 m3u8 的機制與時間點 環境 php nginx aws s3 aws dynamoDB VLC player 流程設計 預先儲存 影片(.ts)到 aws s3 資訊到 aws dynamoDB 從 api 給予時間與 key，搜尋影片片段，建立 m3u8 檔案，回傳給播放器 每次 播放器，進行要求建立 m3u8 時，寫入 log 紀錄要求的時間 查詢 log 第一次建立的 m3u8 file, 每次詢問時都給予相同的 m3u8 檔案 #EXTM3U #EXT-X-VERSION:3 #EXT-X-ALLOW-CACHE:YES #EXT-X-TARGETDURATION:8.334 EXT-X-MEDIA-SEQUENCE:1 #EXTINF:8.334, playback {DNS}/1495615390360.ts #EXTINF:8.3, playback {DNS}/1495615398698.ts #EXTINF:8.3, playback {DNS}/1495615407037.ts #EXTINF:8.3, playback {DNS}/1495615415376.ts #EXTINF:8.333, playback {DNS}/1495615423720.ts 寫入的 log [Sun, 28 May 17 20:11:56 +0800][INFO] 找尋 m3u8 +1 : 1495973516.44 [Sun, 28 May 17 20:12:12 +0800][INFO] 找尋 m3u8 +1 : 1495973532.82 [Sun, 28 May 17 20:12:20 +0800][INFO] 找尋 m3u8 +1 : 1495973540.66 [Sun, 28 May 17 20:12:28 +0800][INFO] 找尋 m3u8 +1 : 1495973548.69 [Sun, 28 May 17 20:12:36 +0800][INFO] 找尋 m3u8 +1 : 1495973556.76 結論 每次的 log 的時間、間隔， log_2 - log_1 , duration = 16 log_3 - log_2 , duration = 8 log_4 - log_3 , duration = 8 log_5 - log_4 , duration = 8 log_1 : 第一次開始詢問, 開始播放第一個, 應該包含播放器的準備時間 log_2 : 第一個 ts 播放完畢, 開始播放第二個 log_3 : 第二個 ts 播放完畢, 開始播放第三個 log_4 : 第三個 ts 播放完畢, 開始播放第四個 log_5 : 第四個 ts 播放完畢, 開始播放第五個 播放器在每次播放完 ts 的檔案後，都會進行 api 的詢問，透過詢問，可產生下一次的 m3u8 檔案， 若更新 m3u8 後，記得需同時 EXT-X-MEDIA-SEQUENCE 進行 +1">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/hls/2017/05/28/HLS-m3u8/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/hls/2017/05/28/HLS-m3u8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -336,7 +336,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/HLS" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/HLS" itemprop="url" rel="index">
                     <span itemprop="name">HLS</span>
                   </a>
                 </span>
@@ -507,7 +507,7 @@ log_5 : 第四個 ts 播放完畢, 開始播放第五個
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/srs/docker/2017/05/31/SRS-docker/" rel="next" title="【SRS-release2.0】docker with centos7.3">
+              <a href="/blogpost/srs/docker/2017/05/31/SRS-docker/" rel="next" title="【SRS-release2.0】docker with centos7.3">
                 <i class="fa fa-chevron-left"></i> 【SRS-release2.0】docker with centos7.3
               </a>
             
@@ -517,7 +517,7 @@ log_5 : 第四個 ts 播放完畢, 開始播放第五個
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2017/05/22/aws-dynamodblocalhost/" rel="prev" title="【AWS DynamoDB】localhost">
+              <a href="/blogpost/2017/05/22/aws-dynamodblocalhost/" rel="prev" title="【AWS DynamoDB】localhost">
                 【AWS DynamoDB】localhost <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -588,7 +588,7 @@ log_5 : 第四個 ts 播放完畢, 開始播放第五個
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -599,7 +599,7 @@ log_5 : 第四個 ts 播放完畢, 開始播放第五個
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -610,7 +610,7 @@ log_5 : 第四個 ts 播放完畢, 開始播放第五個
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -621,7 +621,7 @@ log_5 : 第四個 ts 播放完畢, 開始播放第五個
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -753,64 +753,64 @@ log_5 : 第四個 ts 播放完畢, 開始播放第五個
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

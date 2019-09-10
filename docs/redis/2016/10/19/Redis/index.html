@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【redis】basic 心得">
-<meta property="og:url" content="/redis/2016/10/19/Redis/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/redis/2016/10/19/Redis/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="安裝 redis http://redis.io/ 下載後，執行網頁上安裝方法 將 redis 安裝到 /usr/local/bin 的方法 make install 更改預設安裝位置 : make PREFIX=/some/other/directory install 此方法會安裝 binaries 到系統中，但相關的 script 與配置檔，並不會放到是到的位置，因為只是 play 若需要安裝到正式的系統中，請使用 cd utils ./install_server.sh 此種安裝方式會詢問幾個設定的問題，並且在 sys reboot 後會自動重新啟動 手動停止與啟動 : /etc/init.d/redis_&amp;lt;portnumber&amp;gt; use 啟用伺服器 直接啟用 : src/redis-server 制定設定檔 : ./src/redis-server /path/to/redis.conf 透過指令直接覆蓋設定檔 : ./redis-server --port 9999 --slaveof 127.0.0.1 6379 ./redis-server /etc/redis/6379.conf --loglevel debug 在 redis.conf 中的參數名稱，全部都支援使用 command line 進行設定。 啟用 client src/redis-cli，進入互動介面 測試 ping set foo bar get foo 可直接下指令 ./redis_cli get foo 取得參數 ./redis_cli --help : 查看一般指令 ./redis_cli help {cmd} : 取得指令相關資訊 ./redis_cli command : 取得全部指令 特性 redis 是一個 key-value 的資料庫 資料結構儲存的特性 儲存於 disk 上，儘管修改是透過 server memory。代表 redis 是快速的，也代表儲存是持久性的。 在相同的高階編程語言下，redis 的效能結構儲存，相對優秀 Redis 提供很多 database 上習慣性的方法，如複製、tunable levels of durability、叢集、高度擴展 Redis 提供更多複雜的使用方法，在 memcached 上。 more Introduction to Redis data types. http://redis.io/topics/data-types-intro Try Redis directly inside your browser. http://try.redis.io The full list of Redis commands. http://redis.io/commands There is much more inside the Redis official documentation. http://redis.io/documentation 資料類型 : strings, arrays, integers, NULL, errors and so forth 測試 將 server 關閉後，依然取得到 key-value redis-cli basic 計數 : redis-cli incr {變數名稱} 寫入檔案 : redis-cli incr {變數名稱} &amp;gt; ./output.txt 取得 : redis-cli get {變數名稱} 指定輸出為 raw redis-cli --raw get {變數名稱} 刪除 : ./redis-cli del {變數名稱} ./redis-cli flushall : 刪除全部 keys from all db ./redis-cli flushdb : 從目前的 db 刪除掉所有的 keys 設定 : redis-cli set {變數名稱} 查看變數編碼屬性 : OBJECT ENCODING {變數名稱} int raw embstr more : http://redisbook.com/preview/object/string.html 接續 : redis-cli append {變數名稱} &quot;{延伸內容}&quot; 列出所有的 {變數名稱} : KEYS * 列出指定內容的 {變數名稱} : KEYS *o* 查看 {變數名稱} 是否存在 : ./redis-cli exists {變數名稱} ... Host, port, password and database Host, port 預設的 ./redis-cli 設定為 server : 127.0.0.1 port : 6379 specify -h &amp;amp; -p : ./redis-cli -h redis15.localnet.org -p 6390 ping password ./redis-cli a {password} ping database 預設會有 16 個 db，db 的名稱是用數字表達 basic 查詢 db 數量 : ./redis-cli CONFIG GET databases 查詢每個 db 中的內存 : ./redis-cli INFO keyspace 指定 db 設定參數 : ./redis-cli -n 1 set {變數名稱} {內容} n 預設為 0 顯示目前此 db 的 key 數量 : ./redis-cli dbsize 移動 key 到另一個 db : ./redis-cli move {db_number} Special modes of operation : ./redis-cli --help 即時查看系統狀態 : ./redis-cli --stat 分析 key : redis-cli --bigkeys Getting a list of keys : ./redis-cli --scan | head -10 ./redis-cli --scan --pattern &apos;*-11*&apos; redis-cli --scan --pattern &apos;user:*&apos; | wc -l Pub/sub mode publish {channel} {message} subscribe {channel} ... psubscribe {pattern} : 設定 pattern 直接訂閱相關的頻道 pattern : ?, * , [ab] h?llo 訂閱所有 h?ll0 相關頻道，只有一個字元 h*llo 訂閱所有 h*llo 相關頻道，* 可以是多個字元 h[ae]llo 訂閱 hallo 與 hello 頻道 即時監控目前 redis 所有的參數 : ./redis-cli monitor 測試＋模擬 redis 的延遲 (以毫秒計): 基本 : ./redis-cli --latency -h {host} -p {port}，可跨伺服器測試，預設為 localhost:6390 每 15 秒 重新產生一次測試 : ./redis-cli --latency-history 圖像化顯示 : ./redis-cli --latency-dist 測試 redis 內部延遲，此依賴 cpu 效能 ./redis-cli --intrinsic-latency {秒數} : 在 {秒數} 內測試 文章 淺談 Redis 超時 Redis性能調優：保存SNAPSHOT對性能的影響 Remote backups of RDB files ./redis-cli --rdb /tmp/dump.rdb 透過此指令，會複製 redis 上面載入的指令，到 slave，可清楚的看到下的指令順序是否正確 redis-cli --slave Performing an LRU simulation 使用 LRU 測試，模擬效能 透過設定 memory 與測試的 keys，來觀察效率 miss 的比例 http://redis.io/topics/rediscli#performing-an-lru-simulation 此篇有測試的過程">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/redis/2016/10/19/Redis/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/redis/2016/10/19/Redis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -336,7 +336,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/Redis" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/Redis" itemprop="url" rel="index">
                     <span itemprop="name">Redis</span>
                   </a>
                 </span>
@@ -662,7 +662,7 @@
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/php/2016/10/22/PHP-http2/" rel="next" title="【PHP】push with http2">
+              <a href="/blogpost/php/2016/10/22/PHP-http2/" rel="next" title="【PHP】push with http2">
                 <i class="fa fa-chevron-left"></i> 【PHP】push with http2
               </a>
             
@@ -672,7 +672,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/ssh/2016/10/14/SSH-Remote-Access/" rel="prev" title="【SSH】設定簡易遠端登入">
+              <a href="/blogpost/ssh/2016/10/14/SSH-Remote-Access/" rel="prev" title="【SSH】設定簡易遠端登入">
                 【SSH】設定簡易遠端登入 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -743,7 +743,7 @@
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -754,7 +754,7 @@
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -765,7 +765,7 @@
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -776,7 +776,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -908,64 +908,64 @@
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

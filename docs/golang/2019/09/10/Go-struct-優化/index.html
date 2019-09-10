@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="Golang," />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="Golang">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Go】利用 struct 優化（一）">
-<meta property="og:url" content="/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="Synopsis 透過 struct 方式，容易看懂程式 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory) 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解 Example 一般來說，如果要用程式碼計算『圓形面積』、『長方形面積』，可以用一些簡單的方式攥寫 但回頭看這個程式碼，會發現 如果要追蹤『rx1, ry1, rx2, ry2』或者『cx, cy, cr』當程式碼一長 or 複雜，就很難理解這個參數的意義 儘管有寫註解，在 function 中，一樣很難快速理解 解決方案 : 使用 struct 來幫助理解">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -336,7 +336,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/Golang" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
                     <span itemprop="name">Golang</span>
                   </a>
                 </span>
@@ -582,7 +582,7 @@ fmt.Println(rectangleArea(&amp;r))
 可以透過 struct 將 『身分證、健保卡、護照』 各自建立起來，用在不同的目的上
 但是否有方法整合這些物件？</p>
 
-<p>參考下篇: <a href="/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/">struct優化（二）:interface</a></p>
+<p>參考下篇: <a href="https://jhaoheng.github.io/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/">struct優化（二）:interface</a></p>
 
 
 
@@ -615,7 +615,7 @@ fmt.Println(rectangleArea(&amp;r))
         <div class="post-tags">
           
             
-            <a href="/tag/#/Golang" rel="tag"># Golang</a>
+            <a href="/blogpost/tag/#/Golang" rel="tag"># Golang</a>
           
         </div>
       
@@ -631,7 +631,7 @@ fmt.Println(rectangleArea(&amp;r))
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/" rel="next" title="【Go】利用 struct 優化（二）:interface">
+              <a href="/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/" rel="next" title="【Go】利用 struct 優化（二）:interface">
                 <i class="fa fa-chevron-left"></i> 【Go】利用 struct 優化（二）:interface
               </a>
             
@@ -641,7 +641,7 @@ fmt.Println(rectangleArea(&amp;r))
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/golang/2019/09/07/Go-drill-interface/" rel="prev" title="【Go】Drill interface{}">
+              <a href="/blogpost/golang/2019/09/07/Go-drill-interface/" rel="prev" title="【Go】Drill interface{}">
                 【Go】Drill interface{} <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -712,7 +712,7 @@ fmt.Println(rectangleArea(&amp;r))
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -723,7 +723,7 @@ fmt.Println(rectangleArea(&amp;r))
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -734,7 +734,7 @@ fmt.Println(rectangleArea(&amp;r))
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -745,7 +745,7 @@ fmt.Println(rectangleArea(&amp;r))
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -877,64 +877,64 @@ fmt.Println(rectangleArea(&amp;r))
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

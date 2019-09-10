@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【PHP】push with http2">
-<meta property="og:url" content="/php/2016/10/22/PHP-http2/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/php/2016/10/22/PHP-http2/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="env mac, osx , 10.11 config php -i , check config : [curl] cURL support =&amp;gt; enabled cURL Information =&amp;gt; 7.47.1 ... HTTP2 =&amp;gt; Yes ... SSL Version =&amp;gt; OpenSSL/1.0.2g if php no include these config, reinstall : brew install php70 --with-homebrew-curl code send method /** * @param $http2ch the curl connection * @param $http2_server the Apple server url * @param $apple_cert the path to the certificate * @param $app_bundle_id the app bundle id * @param $message the payload to send (JSON) * @param $token the token of the device * @return mixed the status code */ function sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token) { // url (endpoint) $url = &quot;{$http2_server}/3/device/{$token}&quot;; // certificate $cert = realpath($apple_cert); // headers $headers = array( &quot;apns-topic: {$app_bundle_id}&quot;, &quot;User-Agent: My Sender&quot; ); // other curl options curl_setopt_array($http2ch, array( CURLOPT_URL =&amp;gt; $url, CURLOPT_PORT =&amp;gt; 443, CURLOPT_HTTPHEADER =&amp;gt; $headers, CURLOPT_POST =&amp;gt; TRUE, CURLOPT_POSTFIELDS =&amp;gt; $message, CURLOPT_RETURNTRANSFER =&amp;gt; TRUE, CURLOPT_TIMEOUT =&amp;gt; 30, CURLOPT_SSL_VERIFYPEER =&amp;gt; false, CURLOPT_SSLCERT =&amp;gt; $cert, CURLOPT_HEADER =&amp;gt; 1 )); // go... $result = curl_exec($http2ch); if ($result === FALSE) { throw new Exception(&quot;Curl failed: &quot; . curl_error($http2ch)); } // get response $status = curl_getinfo($http2ch, CURLINFO_HTTP_CODE); return $status; } use // this is only needed with php prior to 5.5.24 if (!defined(&apos;CURL_HTTP_VERSION_2_0&apos;)) { define(&apos;CURL_HTTP_VERSION_2_0&apos;, 3); } // open connection $http2ch = curl_init(); curl_setopt($http2ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0); // send push $apple_cert = &apos;/certificates/samplepush/development.pem&apos;; $message = &apos;{&quot;aps&quot;:{&quot;alert&quot;:&quot;Hi!&quot;,&quot;sound&quot;:&quot;default&quot;}}&apos;; $token = &apos;dbdaeae86abcde56rtyww1859fb41b2cby053ec48987847&apos;; $http2_server = &apos;https://api.development.push.apple.com&apos;; // or &apos;api.push.apple.com&apos; if production $app_bundle_id = &apos;it.tabasoft.samplepush&apos;; $status = sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token); echo &quot;Response from apple -&amp;gt; {$status} &quot;; // close connection curl_close($http2ch); response 200 Success 400 Bad request 403 There was an error with the certificate. 405 The request used a bad :method value. Only POST requests are supported. 410 The device token is no longer active for the topic. 413 The notification payload was too large. 429 The server received too many requests for the same device token. 500 Internal server error 503 The server is shutting down and unavailable. multi token send // open connection // send all the pushes for ($i = 0; $i &amp;lt; $totSends; $i++) { // send push } // close connection">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/php/2016/10/22/PHP-http2/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/php/2016/10/22/PHP-http2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -336,7 +336,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/PHP" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/PHP" itemprop="url" rel="index">
                     <span itemprop="name">PHP</span>
                   </a>
                 </span>
@@ -551,7 +551,7 @@ for ($i = 0; $i &lt; $totSends; $i++) {
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/10/24/gclouddocker-push-pull-delete/" rel="next" title="【gcloud】docker push/pull/delete">
+              <a href="/blogpost/2016/10/24/gclouddocker-push-pull-delete/" rel="next" title="【gcloud】docker push/pull/delete">
                 <i class="fa fa-chevron-left"></i> 【gcloud】docker push/pull/delete
               </a>
             
@@ -561,7 +561,7 @@ for ($i = 0; $i &lt; $totSends; $i++) {
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/redis/2016/10/19/Redis/" rel="prev" title="【redis】basic 心得">
+              <a href="/blogpost/redis/2016/10/19/Redis/" rel="prev" title="【redis】basic 心得">
                 【redis】basic 心得 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -632,7 +632,7 @@ for ($i = 0; $i &lt; $totSends; $i++) {
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -643,7 +643,7 @@ for ($i = 0; $i &lt; $totSends; $i++) {
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -654,7 +654,7 @@ for ($i = 0; $i &lt; $totSends; $i++) {
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -665,7 +665,7 @@ for ($i = 0; $i &lt; $totSends; $i++) {
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -797,64 +797,64 @@ for ($i = 0; $i &lt; $totSends; $i++) {
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

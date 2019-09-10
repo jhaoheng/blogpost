@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Docker】docker-machine 部署到 aws">
-<meta property="og:url" content="/2017/07/15/docker-docker-machine-operation/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/2017/07/15/docker-docker-machine-operation/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="使用 docker-machine 部署 docker 到 aws 參考 : https://docs.docker.com/machine/drivers/aws/ 指令參數表 : https://docs.docker.com/machine/drivers/aws/#options 有些預設的參數要注意，如果沒有指定的情況下，會依照預設參數來建立 aws instance ex : ami, region, zone, group, instance-type, device-name, root-size, volume-type, ssh-user, request-spot-instance, spot-price, use-private-address, private-address-only, monitoring, use-ebs-optimized-instance, retries 其他部署文章參考 nvidia-docker Deploy on Amazon EC2 : https://github.com/NVIDIA/nvidia-docker/wiki/Deploy-on-Amazon-EC2 aws credentials 登入 aws 進入 IAM 選擇 user 給予需要使用的權限，在這邊選擇 ec2 取得該 user 的 AWS Access Key ID 與 AWS Secret Access Key 在使用 docker-machine 前，可使用以下兩種方法 通過 aws credentials 來設定 AWS Access Key ID 與 AWS Secret Access Key，建立的方法也有兩種 可透過 awscli，通過指令 aws configure 可協助設定好 也可直接建立 ~/.aws/credentials，顯示格式如下 [default] aws_access_key_id = AKID1234567890 aws_secret_access_key = MY-SECRET-KEY 可透過 docker-machine : $ docker-machine create --driver amazonec2 --amazonec2-access-key AKI******* --amazonec2-secret-key 8T93C******* aws01 來建立 docker-machine 的機器 測試建立 docker-machine create --driver [instance_Name] : 注意 default 參數值 zone : us-east-1 instance-type : t2.micro root-size : 16 volume-type : gp2 ssh-user : ubuntu 其他資訊請參考 docker-machine 說明 指定部分的參數操作 : docker-machine create --driver amazonec2 \ --amazonec2-region us-west-2 \ --amazonec2-zone b \ --amazonec2-ami ami-efd0428f \ --amazonec2-instance-type p2.xlarge \ --amazonec2-vpc-id vpc-*** \ --amazonec2-access-key AKI*** \ --amazonec2-secret-key *** \ aws01 未完待續">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/2017/07/15/docker-docker-machine-operation/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/07/15/docker-docker-machine-operation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -480,7 +480,7 @@ aws_secret_access_key = MY-SECRET-KEY
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/08/03/through-github-slack-subscription-release-rss/" rel="next" title="透過 slack 訂閱 github release RSS">
+              <a href="/blogpost/2017/08/03/through-github-slack-subscription-release-rss/" rel="next" title="透過 slack 訂閱 github release RSS">
                 <i class="fa fa-chevron-left"></i> 透過 slack 訂閱 github release RSS
               </a>
             
@@ -490,7 +490,7 @@ aws_secret_access_key = MY-SECRET-KEY
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/docker/sublime/2017/07/05/Docker-Sublime/" rel="prev" title="【Docker】use sublime to edit file in docker">
+              <a href="/blogpost/docker/sublime/2017/07/05/Docker-Sublime/" rel="prev" title="【Docker】use sublime to edit file in docker">
                 【Docker】use sublime to edit file in docker <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -561,7 +561,7 @@ aws_secret_access_key = MY-SECRET-KEY
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -572,7 +572,7 @@ aws_secret_access_key = MY-SECRET-KEY
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -583,7 +583,7 @@ aws_secret_access_key = MY-SECRET-KEY
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -594,7 +594,7 @@ aws_secret_access_key = MY-SECRET-KEY
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -726,64 +726,64 @@ aws_secret_access_key = MY-SECRET-KEY
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

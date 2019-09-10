@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【AWS DynamoDB】localhost">
-<meta property="og:url" content="/2017/05/22/aws-dynamodblocalhost/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/2017/05/22/aws-dynamodblocalhost/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="dynamodb 環境 osx 10.11 如何連接本地端 dynamodb 下載 http://docs.aws.amazon.com/zh_cn/amazondynamodb/latest/developerguide/DynamoDBLocal.html 確認 java 版本 http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html 要 1.7 以上版本，不然無法啟動，會有錯誤訊息 在 localhost dynamodb 的路徑下執行 : java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb 測試 : aws dynamodb list-tables --endpoint-url http://localhost:8000 透過 GUI 進行連線 下載 RazorSQL 左邊視窗選擇 connect to a database add connection profile -&amp;gt; choose DynamoDB(Amazon) RazorSQL DynamoDB Driver set Profile Name AWS Access Key : 任意參數 AWS Secret Key : 任意參數 勾選 Local DynamoDB 設定 Max Rows per Query : 10 連線即可 先隨意建立一個 table 透過 terminal cli 查看 : aws dynamodb list-tables --endpoint-url http://localhost:8000 透過 code 進行本地端 dynamodb 連線 http://docs.aws.amazon.com/zh_cn/amazondynamodb/latest/developerguide/DynamoDBLocal.Endpoint.html#w1ab1b9b9c13c11 java .net php php : 記得要先安裝 aws sdk for php $sdk = new Aws\Sdk([ &apos;endpoint&apos; =&amp;gt; &apos;http://localhost:8000&apos;, // Use DynamoDB running locally &apos;region&apos; =&amp;gt; &apos;us-west-2&apos;, // US West (Oregon) Region &apos;version&apos; =&amp;gt; &apos;latest&apos; // Use the latest version of the AWS SDK for PHP ]); // Create a new DynamoDB client $dynamodb = $sdk-&amp;gt;createDynamoDb();">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/2017/05/22/aws-dynamodblocalhost/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/05/22/aws-dynamodblocalhost/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -474,7 +474,7 @@ $dynamodb = $sdk-&gt;createDynamoDb();
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/hls/2017/05/28/HLS-m3u8/" rel="next" title="【HLS】m3u8 在直播上，播放器詢問次數測試">
+              <a href="/blogpost/hls/2017/05/28/HLS-m3u8/" rel="next" title="【HLS】m3u8 在直播上，播放器詢問次數測試">
                 <i class="fa fa-chevron-left"></i> 【HLS】m3u8 在直播上，播放器詢問次數測試
               </a>
             
@@ -484,7 +484,7 @@ $dynamodb = $sdk-&gt;createDynamoDb();
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/aws/cognito/ios/2017/05/20/AWS-Cognito-iOS/" rel="prev" title="【IOS】AWS Cognito sample test">
+              <a href="/blogpost/aws/cognito/ios/2017/05/20/AWS-Cognito-iOS/" rel="prev" title="【IOS】AWS Cognito sample test">
                 【IOS】AWS Cognito sample test <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -555,7 +555,7 @@ $dynamodb = $sdk-&gt;createDynamoDb();
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -566,7 +566,7 @@ $dynamodb = $sdk-&gt;createDynamoDb();
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -577,7 +577,7 @@ $dynamodb = $sdk-&gt;createDynamoDb();
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -588,7 +588,7 @@ $dynamodb = $sdk-&gt;createDynamoDb();
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -720,64 +720,64 @@ $dynamodb = $sdk-&gt;createDynamoDb();
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

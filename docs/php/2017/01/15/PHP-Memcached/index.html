@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【php】memcached">
-<meta property="og:url" content="/php/2017/01/15/PHP-Memcached/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/php/2017/01/15/PHP-Memcached/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="ENV php 7.x mac osx 編譯好的 memcache.so github : https://github.com/majksner/php-memcached-mamp 下載 memcached.so brew install memcached brew install libmemcached php –ini vim php.ini extension=memcached.so php -i grep memcached 自己 compile git clone https://github.com/php-memcached-dev/php-memcached.git brew install memcached brew install libmemcached git checkout php7 phpize ./configure --with-memcached=/usr/local/Cellar/libmemcached/1.0.18_1/lib/libmemcached Notice : the libmemcached path is brew install path make sudo make install mv memcached.so to extension path, you could get path with php -i | grep extension_dir vim php.ini, add extension=memcached.so 如何使用 前提 安裝好 memcached 在電腦中 : brew install memcached 至於 libmemcached 則為編譯成 .so 時使用 執行 memcached 即可 man memcached - memcached -l 127.0.0.1 -P 11211 -m 128 -d : for deamon - memcached -l 127.0.0.1 -P 11211 -m 128 -vv : for debug 檢查 memcached 是否有執行 : ps aux | grep memcached 判斷 php 是否安裝好支援的 memcached.so php -i grep memcached php -m grep memcached test &amp;lt;? php $mem = new Memcached(); $mem-&amp;gt;addServer(&apos;localhost&apos;,11211); if( $mem-&amp;gt;add(&quot;key&quot;,&quot;value&quot;,3600)){ echo &apos;cached!&apos;; }else{ echo &apos;cached data：&apos;.$mem-&amp;gt;get(&quot;key&quot;); } ?&amp;gt; console admin git@github.com:jhaoheng/phpmemcacheadmin.git">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/php/2017/01/15/PHP-Memcached/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/php/2017/01/15/PHP-Memcached/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -336,7 +336,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/PHP" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/PHP" itemprop="url" rel="index">
                     <span itemprop="name">PHP</span>
                   </a>
                 </span>
@@ -533,7 +533,7 @@ if( $mem-&gt;add("key","value",3600)){
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/" rel="next" title="【AWS-centos7-php7.x】phalcon / memcached / mosquitto">
+              <a href="/blogpost/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/" rel="next" title="【AWS-centos7-php7.x】phalcon / memcached / mosquitto">
                 <i class="fa fa-chevron-left"></i> 【AWS-centos7-php7.x】phalcon / memcached / mosquitto
               </a>
             
@@ -543,7 +543,7 @@ if( $mem-&gt;add("key","value",3600)){
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/php/mqtt/2017/01/12/PHP-MQTT/" rel="prev" title="【php+mqtt】basic">
+              <a href="/blogpost/php/mqtt/2017/01/12/PHP-MQTT/" rel="prev" title="【php+mqtt】basic">
                 【php+mqtt】basic <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -614,7 +614,7 @@ if( $mem-&gt;add("key","value",3600)){
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -625,7 +625,7 @@ if( $mem-&gt;add("key","value",3600)){
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -636,7 +636,7 @@ if( $mem-&gt;add("key","value",3600)){
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -647,7 +647,7 @@ if( $mem-&gt;add("key","value",3600)){
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -779,64 +779,64 @@ if( $mem-&gt;add("key","value",3600)){
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

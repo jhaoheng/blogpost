@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【AWS-centos7-php7.x】phalcon / memcached / mosquitto">
-<meta property="og:url" content="/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="完整的 bash script base on AWS centos7 : git@github.com:jhaoheng/centos-nginx-php7.x-extension.git 執行 sh env.sh 即可，整體安裝約 20 分鐘 start 至 aws launch new instance market search centos choose centos7 centos7 安裝 nginx yum -y install epel-release yum install nginx 驗證在瀏覽器開啟 ip, 注意 port 80 是否有開啟 操作 /bin/systemctl restart nginx centos7 安裝 php7.x yum -y install epel-release yum install wget wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm rpm -ivh ./remi-release-7.rpm yum install –enablerepo=remi,remi-php70 php-fpm php-devel php-mbstring php-pdo php-gd php-xml php-curl php-mysqlnd php-pdo_mysql php-mysqli php-json php-soap php-zip php-sockets php-session php-mcrypt php-date php-openssl php-yaml source 下載位置 http://php.net/downloads.php 可參考目前的 ext 手動新增 ext, ex: cd xml phpize ./configure make &amp;amp;&amp;amp; make install 查看 module 是否有此套件 操作 /bin/systemctl restart php-fpm 測試 找出 nginx.conf : nginx -h vi {$path}/nginx.conf server 設定參數可參考 https://docs.phalconphp.com/zh/latest/reference/nginx.html 請將 fastcgi 設定為 127.0.0.1:9000 &amp;lt;— 必須符合 php-fpm 的 listen 位置 在適當位置建立 的 index.php 在 browser 輸入 ip 與 index.php centos7 安裝 phalcon with php7.x yun install git yum install php-devel pcre-devel gcc make re2c 安裝編譯工具 : git clone https://github.com/phalcon/zephir cd zephir/ ./install-nosudo 下載 phalcon source : git clone git://github.com/phalcon/cphalcon.git cd cphalcon/ git checkout 適當的版本 {$Path}/zephir build 將 extension=phalcon.so 放入 php.ini php -i grep phalcon trouble undefined symbol: php_json_decode_ex in Unknown on line 0 原因在於此 extension=phalcon.so 不能直接放在 php.ini 中，請放置 /etc/php.d/ centos7 安裝 libmemcached 編譯 memcached.so 安裝 libmemcached 至官網下載 https://launchpad.net/libmemcached wget …. cd /libmemcached-1.x.x yum groupinstall “Development Tools” yum install zlib-static ./configure –disable-memcached-sasl make &amp;amp;&amp;amp; make install 編譯 memcached.so git clone https://github.com/php-memcached-dev/php-memcached.git git checkout php7 phpize ./configure make &amp;amp;&amp;amp; make install 確定是否將 .so 放入 module 中 : php -i | grep extension_dir cd {dir} 檢查是否有 memcached.so 確定 extension 是否有加入到 php.ini 驗證 php -i grep memcached centos7 安裝 libmosquitto 編譯 mosquitto.so 安裝 libmosquitto 進入官網 : https://mosquitto.org/download/ 找到 centos7 的 re 的 conf 將檔案 mosquitto.repo 放入 /etc/yum.repos.d 即可 The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto. 安裝 : yum install libmosquitto-devel 安裝後的 lib 路徑, 系統安裝後會提示, 無意外是 /usr/lib64/libmosquitto.so….. 編譯 mosquitto.so 下載 git source 後 : https://github.com/mgdm/Mosquitto-PHP cd Mosquitto-PHP phpize ./configure --with-mosquitto=/usr/lib64/libmosquitto.so make &amp;amp;&amp;amp; make install 驗證 module 是否有 mosquitto.so 在 php.ini 中設定 extension=mosquitto.so 驗證 : php -i grep mosquitto">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -336,7 +336,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/Phalcon" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/Phalcon" itemprop="url" rel="index">
                     <span itemprop="name">Phalcon</span>
                   </a>
                 </span>
@@ -348,7 +348,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/Memcached" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/Memcached" itemprop="url" rel="index">
                     <span itemprop="name">Memcached</span>
                   </a>
                 </span>
@@ -360,7 +360,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/Mosquitto" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/Mosquitto" itemprop="url" rel="index">
                     <span itemprop="name">Mosquitto</span>
                   </a>
                 </span>
@@ -372,7 +372,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/MQTT" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/MQTT" itemprop="url" rel="index">
                     <span itemprop="name">MQTT</span>
                   </a>
                 </span>
@@ -639,7 +639,7 @@
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/git/2017/03/15/Git-attribute/" rel="next" title="【Git】attribute, 合併後保留原本的設定檔">
+              <a href="/blogpost/git/2017/03/15/Git-attribute/" rel="next" title="【Git】attribute, 合併後保留原本的設定檔">
                 <i class="fa fa-chevron-left"></i> 【Git】attribute, 合併後保留原本的設定檔
               </a>
             
@@ -649,7 +649,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/php/2017/01/15/PHP-Memcached/" rel="prev" title="【php】memcached">
+              <a href="/blogpost/php/2017/01/15/PHP-Memcached/" rel="prev" title="【php】memcached">
                 【php】memcached <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -720,7 +720,7 @@
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -731,7 +731,7 @@
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -742,7 +742,7 @@
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -753,7 +753,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -885,64 +885,64 @@
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【LINE】develop intro">
-<meta property="og:url" content="/line/2016/04/15/linedevelop/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/line/2016/04/15/linedevelop/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="https://developers.line.me/ 申請與註冊開發 至 Channels，登入 若是第一次登入，會出現無 Channels 的頁面，請點選 『Business Center』 一個商用帳號，只能選擇一種開發 建立商用帳號後，可選三種開發 LINE@ LINE@ 提供針對公司或經營者使用的LINE帳號，不但能讓商業運作及訊息傳達更加活躍， 還具備了能夠將企業、品牌以及商品魅力傳達給顧客的各種功能。 群發訊息 1 對 1 聊天 : 能夠直接透過LINE聊天室溝通，回覆來自顧客 發送動態消息 : 將資訊投稿至顧客或粉絲的動態消息上 免費方案 : 每月1,000則以內 推廣方案 : 無限制 LINE Login LINE Login是可與您的事業內容結合，讓用戶能夠以LINE帳號登入並使用的功能。 透過LINE SDK for iOS / Android，將能夠在Native Application使用LINE Login功能。 透過LINE所提供的OAuth2認證，將能夠在Web Application使用LINE Login功能。 BOT API Trial Account BOT API Trial Account是一項能夠讓用戶針對您所提供的事業內容進行雙向溝通的功能。 BOT API將透過LINE伺服器，在您的伺服器與LINE應用程式間互相收發資訊。將活用JSON形式的API進行通訊請求。 可傳送訊息給將您帳號加為好友的用戶。將透過API收發所有的訊息。 可傳送含有網站縮圖及連結的訊息，能夠有效地將用戶引導至網站中。 使用條件 測試時，上限傳送人數 50 人 Develop LINE@ 透過 business center 進行申請 認證 若認證失敗，則會轉為一般帳號 認證帳號與一般帳號 5~7 個審核工作天 Line Login 透過 business center 進行申請 App icon : 在申請帳號服務時的 name 與 image 即為此 login app 的預設資料 建立好後，可設定以下參數跟下載開發 sdk (目前 iOS 版本 3.1.17) NATIVE_APP iOS Bundle ID iOS Scheme Android Package Name : Android Package Signature Android Scheme WEB Authentication domain Note: The download link is displayed only after the Channel status becomes DEVELOPING. Line bot 透過 business center 進行申請 basic Name App icon Callback URL Server IP WhiteList : 可針對單一的 ip 進行設定，也可以透過子網路遮罩，設定一整組的範圍">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/line/2016/04/15/linedevelop/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/line/2016/04/15/linedevelop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -336,7 +336,7 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/category/#/line" itemprop="url" rel="index">
+                  <a href="/blogpost/category/#/line" itemprop="url" rel="index">
                     <span itemprop="name">line</span>
                   </a>
                 </span>
@@ -537,7 +537,7 @@
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/growth_hacker/mixpanel/2016/04/19/mixpanelbasic/" rel="next" title="【Mixpanel】basic">
+              <a href="/blogpost/growth_hacker/mixpanel/2016/04/19/mixpanelbasic/" rel="next" title="【Mixpanel】basic">
                 <i class="fa fa-chevron-left"></i> 【Mixpanel】basic
               </a>
             
@@ -547,7 +547,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/git/github/gpg/2016/04/09/gpggnu-privacy-guard-with-git/" rel="prev" title="【GPG】GNU Privacy Guard with git">
+              <a href="/blogpost/git/github/gpg/2016/04/09/gpggnu-privacy-guard-with-git/" rel="prev" title="【GPG】GNU Privacy Guard with git">
                 【GPG】GNU Privacy Guard with git <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -618,7 +618,7 @@
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -629,7 +629,7 @@
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -640,7 +640,7 @@
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -651,7 +651,7 @@
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -783,64 +783,64 @@
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 

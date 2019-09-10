@@ -47,7 +47,7 @@
 
   
   
-  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -78,9 +78,9 @@
 
 
 
-<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="" />
@@ -92,7 +92,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
 
 
 
@@ -113,7 +113,7 @@
 <meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【phalcon】Di">
-<meta property="og:url" content="/2016/07/12/phalcondi/">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/2016/07/12/phalcondi/">
 <meta property="og:site_name" content="MAX 呼~">
 <meta property="og:description" content="Dependency Injection/Service Location Phalcon\Di 是一個實現 Dependency Injection/Service Location 的組件，而且它本身就是一個裝載它們的容器。 透過 Phalcon\Di 可以註冊許多的服務，放在 Di 中，也可以透過 Di 進行傳遞參數的行為 可以很容易的使用自己建立的組件，或者第三方組件，還有進行替換的動作 ex : 替換掉 db 的 config 連線資訊 支援『延遲加載』：主要就是等到需要用到的時候，才會進行加載的行為，使用方法可參考官方文件 可在 Class Phalcon\Di 中查看 methods FactoryDefault 是延伸 class Phalcon\Di，也可以從 Phalcon/Di 中自己建立自己的 Di 底下有介紹 FactoryDefault 作為一個 Di 的延伸，並且預載了許多已經加入過的服務 若不想要預載過多服務，則直接使用 Di 把需要的服務手動加載進去 要看很多範例關於 Di 的設定的話，可參考 https://github.com/phalcon?tab=repositories 初始化 Di 初始化後，才可以使用 Di set 與 get use Phalcon\Di $di = new Phalcon\Di(); 初始化後，若要在 mvc 或者其他的控制器中使用該 Di ex1 : MVC，可用 phalcon-devtools 建立一個 Project 與 Scaffold 可看到範例 $application = new \Phalcon\Mvc\Application($di); 並 echo $application-&amp;gt;handle()-&amp;gt;getContent(); 註冊服務 第一種 $di-&amp;gt;set(&apos;request&apos;, &apos;Phalcon\Http\Request&apos;); 第二種 use Phalcon\Http\Request; $di-&amp;gt;set(&apos;request&apos;, new Request()); 第三種：通過外部參數 $config 變更 di 中的設定。透過 use 協助 use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql; // 把當前域的$config變量傳遞給匿名函數使用 $di-&amp;gt;set(&quot;db&quot;, function () use ($config) { return new PdoMysql( array( &quot;host&quot; =&amp;gt; $config-&amp;gt;host, &quot;username&quot; =&amp;gt; $config-&amp;gt;username, &quot;password&quot; =&amp;gt; $config-&amp;gt;password, &quot;dbname&quot; =&amp;gt; $config-&amp;gt;name ) ); }); 其他還有 : 範例至官方參考 如果要求不用實例化/解析服務，就可以改變定義服務的話，我們需要使用數組的方式去定義服務。 Constructor Injection Setter Injection Properties Injection 所有的都是服務註冊，有比較簡易的註冊方式，也有複雜（詳細）的設定方法 從 di 中取回服務 在 di 中設定好 request $di = new Phalcon\Di(); $di-&amp;gt;set(&quot;request&quot;, &apos;Phalcon\Http\Request&apos;); // 第一個參數是『類別名稱』，第二個是『definition』 // use Phalcon\Http\Request; 使用這兩種方式建立服務也行 // $di-&amp;gt;set(&quot;request&quot;, new Request()); &amp;lt;?php $request = $di-&amp;gt;get(&quot;request&quot;); or $request = $di-&amp;gt;getRequest(); 通過容器的方式傳遞參數 $component = $di-&amp;gt;get(&quot;MyComponent&quot;, array(&quot;some-parameter&quot;, &quot;other&quot;)); 共享服務（Shared services） setShared : 意指可以被註冊成 共享，意味被解析後，此實例將被保存在系統中，每次請求都可以從系統中找回，無需從新註冊或者重新解析 use Phalcon\Session\Adapter\Files as SessionFiles; // 把session服務註冊成「shared」類型 $di-&amp;gt;setShared(&apos;session&apos;, function () { $session = new SessionFiles(); $session-&amp;gt;start(); return $session; }); $session = $di-&amp;gt;get(&apos;session&apos;); // 第一次獲取session服務時，session服務將實例化 $session = $di-&amp;gt;getSession(); // 第二次獲取時，不再實例化，直接返回第一次實例化的對象 如果服務註冊時，並非註冊成 shared 時，又想從 Di 中獲取 shared 的 instance，可使用 getShared 意指，若以註冊成 shared 類型時，則使用 get 即可 Manipulating services individually 這邊的 resolve() 方法不知從哪邊定義，找了 di 沒發現到 目前正在請教 gitter 的群組 將 未註冊的服務 從 Di 中取出 當服務尚未被註冊時（Di 找不到相同名稱的服務），則可以在當下設定該服務 $di-&amp;gt;set(&apos;IndexController&apos;, function () { $component = new Component(); return $component; }, true); 通過此方法，可以隨意註冊一個沒有被定義過的服務，甚至有同樣的服務內容，卻用不同的服務名稱 A 有 abc 服務 B 有 abc 服務 但 A 與 B 裝的資訊內容可能不同，如 db config 在類別或組件 自動注入 Di 當類別或組件，本身需要用到 Di 的服務時，可直接在該類別或者組件中，導入 Di 的服務，不用在外部引入該類別或組件 利用 Di 來避免服務重複的解析 某些服務應用於每次的 request，如此可能會產生重複的解析，故放入 Di 前，先解析一次後，再放入 Di 中，可稍微提升效能 ex : $router = new MyRouter(); 通過 Di 的服務設定，就不用重新再 new 一次（把已解析的對象設置到註冊服務中） ex : $di-&amp;gt;set(&apos;router&apos;, $router); ex : $di-&amp;gt;get(&apos;router&apos;); Q:不確定這種方式跟 shared 差別倒底在哪 使用文件方式定義服務(Organizing services in files) 透過獨立的文件，設定服務內容 $di-&amp;gt;set(&apos;router&apos;, function () { return include &quot;../app/config/routes.php&quot;; }); 在 routes.php 中 $router = new MyRouter(); $router-&amp;gt;post(&apos;/login&apos;); return $router; 使用此方式，可以簡化需設定的服務內容 使用靜態方法存取 Di（Accessing the DI in a static way） use Phalcon\Di; $session = Di::getDefault()-&amp;gt;getSession(); Factory Default DI 這是一開始所提到的 FactoryDefault 這個服務器擴展了 Phalcon\Di ，會自動註冊相應的服務 the developer does not need to register each service individually. 預設的服務名稱 預設名稱 自定義自己的 Di Phalcon\DiInterface 必須被實現">
 <meta property="og:locale" content="en">
@@ -125,7 +125,7 @@
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '',
+    root: '/blogpost',
     scheme: 'Muse',
     sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
     fancybox: true,
@@ -146,7 +146,7 @@
 
 
 
-  <link rel="canonical" href=""/>
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
 
 
 
@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -216,7 +216,7 @@
         
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/blogpost/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -228,7 +228,7 @@
         
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/blogpost/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -240,7 +240,7 @@
         
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/blogpost/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="/2016/07/12/phalcondi/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/12/phalcondi/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -618,7 +618,7 @@ $session = Di::getDefault()-&gt;getSession();
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/07/16/phalconsql/" rel="next" title="【phalcon】sql">
+              <a href="/blogpost/2016/07/16/phalconsql/" rel="next" title="【phalcon】sql">
                 <i class="fa fa-chevron-left"></i> 【phalcon】sql
               </a>
             
@@ -628,7 +628,7 @@ $session = Di::getDefault()-&gt;getSession();
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2016/07/11/phalcondevelop-tool/" rel="prev" title="【Phalcon】develop tool">
+              <a href="/blogpost/2016/07/11/phalcondevelop-tool/" rel="prev" title="【Phalcon】develop tool">
                 【Phalcon】develop tool <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -699,7 +699,7 @@ $session = Di::getDefault()-&gt;getSession();
       <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="/assets/images/avatar.gif"
+               src="/blogpost/assets/images/avatar.gif"
                alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
@@ -710,7 +710,7 @@ $session = Di::getDefault()-&gt;getSession();
 
           
             <div class="site-state-item site-state-posts">
-              <a href="/archives/">
+              <a href="/blogpost/archives/">
                 <span class="site-state-item-count">103</span>
                 <span class="site-state-item-name">posts</span>
               </a>
@@ -721,7 +721,7 @@ $session = Di::getDefault()-&gt;getSession();
             
             
             <div class="site-state-item site-state-categories">
-              <a href="/categories/">
+              <a href="/blogpost/categories/">
                 <span class="site-state-item-count">71</span>
                 <span class="site-state-item-name">categories</span>
               </a>
@@ -732,7 +732,7 @@ $session = Di::getDefault()-&gt;getSession();
             
             
             <div class="site-state-item site-state-tags">
-              <a href="/tags/">
+              <a href="/blogpost/tags/">
                 <span class="site-state-item-count">6</span>
                 <span class="site-state-item-name">tags</span>
               </a>
@@ -864,64 +864,64 @@ $session = Di::getDefault()-&gt;getSession();
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
 
   
   
   
   
   
-  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
 
 
   
 
 
-  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
 
-  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
 
-
-
-  
-  
-
-  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
   
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
 
 
-  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
 
 
 
