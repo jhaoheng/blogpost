@@ -1,6 +1,14 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-09-10T19:27:20+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/feed.xml</id><title type="html">Max 乎~</title><subtitle>修煉!</subtitle><entry><title type="html">【Go】利用 struct 優化（二）:interface</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/" rel="alternate" type="text/html" title="【Go】利用 struct 優化（二）:interface" /><published>2019-09-10T19:11:00+08:00</published><updated>2019-09-10T19:11:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/%5BGo%5Dstruct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/">&lt;h1 id=&quot;sypnosis&quot;&gt;Sypnosis&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-09-10T22:22:17+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/feed.xml</id><title type="html">Max 乎~</title><subtitle>修煉!</subtitle><entry><title type="html">【Go】利用 struct 優化（二）:interface</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/" rel="alternate" type="text/html" title="【Go】利用 struct 優化（二）:interface" /><published>2019-09-10T19:11:00+08:00</published><updated>2019-09-10T19:11:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/%5BGo%5Dstruct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/">&lt;h1 id=&quot;sypnosis&quot;&gt;Sypnosis&lt;/h1&gt;
 
-&lt;p&gt;在上一個程式碼經過第一階段優化後&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/&quot;&gt;【Go】利用 struct 優化（一）&lt;/a&gt;後，可以得知&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;使用 struct 讓物件統一，更容易理解&lt;/li&gt;
+  &lt;li&gt;使用 pointer 來提高 memory 的使用效率&lt;/li&gt;
+  &lt;li&gt;使用 func as method 讓程式碼更容易被閱讀&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;以下為相關程式碼&lt;/p&gt;
 
 &lt;div&gt;
     &lt;iframe src=&quot;https://play.golang.org/p/D0_Jvfq5da8&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
@@ -11,12 +19,12 @@
 &lt;ol&gt;
   &lt;li&gt;兩邊都有相同的 method, read(), 如何建立一個統一的接口, 再執行某 func, for ex:
     &lt;ul&gt;
-      &lt;li&gt;‘db read’ : 不同的 db 都會有 read 的 method&lt;/li&gt;
-      &lt;li&gt;‘sign in’ : 不同的登入方法, 但可能是 jwt,facebook, email 等&lt;/li&gt;
-      &lt;li&gt;‘notification’ : 不同的 notification 進行設計 (ios,android,aws,極光…)&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;db read&lt;/code&gt; : 不同的 db 都會有 read 的 method&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;sign in&lt;/code&gt; : 不同的登入方法, 但可能是 jwt, facebook, email 等&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;notification&lt;/code&gt; : 不同的 notification 進行設計 (ios,android,aws,極光…)&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;接續 1, 在實踐上, 能夠把 func 寫成 method 嗎? 讓可讀性變高&lt;/li&gt;
+  &lt;li&gt;接續 1, 在實踐上, 再把 func 變成 method, 讓可讀性變高&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;!--more--&gt;
@@ -29,7 +37,8 @@
 
 &lt;h3 id=&quot;1-1-定義-interface&quot;&gt;1-1 定義 interface&lt;/h3&gt;
 &lt;ul&gt;
-  &lt;li&gt;在 interface 中, 不是定義 field, 而是定義 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;method set&lt;/code&gt;.&lt;/li&gt;
+  &lt;li&gt;在 struct 中, 定義 fields&lt;/li&gt;
+  &lt;li&gt;在 interface 中, 定義 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;method set&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;type Shape interface {
@@ -115,11 +124,11 @@ func main() {
     &lt;/iframe&gt;
 &lt;/div&gt;
 
-&lt;h1 id=&quot;quesions&quot;&gt;Quesions&lt;/h1&gt;
+&lt;h1 id=&quot;延伸問題&quot;&gt;延伸問題&lt;/h1&gt;
 
 &lt;ul&gt;
   &lt;li&gt;如何添加周長?&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><category term="Golang" /><summary type="html">Sypnosis 在上一個程式碼經過第一階段優化後 接下來的問題是 兩邊都有相同的 method, read(), 如何建立一個統一的接口, 再執行某 func, for ex: ‘db read’ : 不同的 db 都會有 read 的 method ‘sign in’ : 不同的登入方法, 但可能是 jwt,facebook, email 等 ‘notification’ : 不同的 notification 進行設計 (ios,android,aws,極光…) 接續 1, 在實踐上, 能夠把 func 寫成 method 嗎? 讓可讀性變高</summary></entry><entry><title type="html">【Go】利用 struct 優化（一）</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" rel="alternate" type="text/html" title="【Go】利用 struct 優化（一）" /><published>2019-09-10T13:51:00+08:00</published><updated>2019-09-10T13:51:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/%5BGo%5Dstruct%20%E5%84%AA%E5%8C%96</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">&lt;h2 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h2&gt;
+&lt;/ul&gt;</content><author><name></name></author><category term="Golang" /><summary type="html">Sypnosis 【Go】利用 struct 優化（一）後，可以得知 使用 struct 讓物件統一，更容易理解 使用 pointer 來提高 memory 的使用效率 使用 func as method 讓程式碼更容易被閱讀 以下為相關程式碼 接下來的問題是 兩邊都有相同的 method, read(), 如何建立一個統一的接口, 再執行某 func, for ex: db read : 不同的 db 都會有 read 的 method sign in : 不同的登入方法, 但可能是 jwt, facebook, email 等 notification : 不同的 notification 進行設計 (ios,android,aws,極光…) 接續 1, 在實踐上, 再把 func 變成 method, 讓可讀性變高</summary></entry><entry><title type="html">【Go】利用 struct 優化（一）</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" rel="alternate" type="text/html" title="【Go】利用 struct 優化（一）" /><published>2019-09-10T13:51:00+08:00</published><updated>2019-09-10T13:51:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/%5BGo%5Dstruct%20%E5%84%AA%E5%8C%96</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">&lt;h2 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h2&gt;
 &lt;ol&gt;
   &lt;li&gt;透過 struct 方式，容易看懂程式&lt;/li&gt;
   &lt;li&gt;透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)&lt;/li&gt;

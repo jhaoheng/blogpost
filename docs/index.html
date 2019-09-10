@@ -140,7 +140,15 @@ Reading time ~1 minute
   <div class="entry-content">
     <h1 id="sypnosis">Sypnosis</h1>
 
-<p>在上一個程式碼經過第一階段優化後</p>
+<p><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">【Go】利用 struct 優化（一）</a>後，可以得知</p>
+
+<ul>
+  <li>使用 struct 讓物件統一，更容易理解</li>
+  <li>使用 pointer 來提高 memory 的使用效率</li>
+  <li>使用 func as method 讓程式碼更容易被閱讀</li>
+</ul>
+
+<p>以下為相關程式碼</p>
 
 <div>
     <iframe src="https://play.golang.org/p/D0_Jvfq5da8" height="315" width="560" allowfullscreen="" frameborder="1">
@@ -151,12 +159,12 @@ Reading time ~1 minute
 <ol>
   <li>兩邊都有相同的 method, read(), 如何建立一個統一的接口, 再執行某 func, for ex:
     <ul>
-      <li>‘db read’ : 不同的 db 都會有 read 的 method</li>
-      <li>‘sign in’ : 不同的登入方法, 但可能是 jwt,facebook, email 等</li>
-      <li>‘notification’ : 不同的 notification 進行設計 (ios,android,aws,極光…)</li>
+      <li><code class="language-html highlighter-rouge">db read</code> : 不同的 db 都會有 read 的 method</li>
+      <li><code class="language-html highlighter-rouge">sign in</code> : 不同的登入方法, 但可能是 jwt, facebook, email 等</li>
+      <li><code class="language-html highlighter-rouge">notification</code> : 不同的 notification 進行設計 (ios,android,aws,極光…)</li>
     </ul>
   </li>
-  <li>接續 1, 在實踐上, 能夠把 func 寫成 method 嗎? 讓可讀性變高</li>
+  <li>接續 1, 在實踐上, 再把 func 變成 method, 讓可讀性變高</li>
 </ol>
 
 
