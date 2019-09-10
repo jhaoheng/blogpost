@@ -140,7 +140,7 @@ Reading time ~1 minute
         <li>Rawbody</li>
         <li>Scheme</li>
         <li>URI</li>
-        <li>Fragment : <code class="highlighter-rouge">"&lt;script&gt;document.write(window.location.hash);&lt;/script&gt;";</code>，只有透過 js 才能取得此參數
+        <li>Fragment : <code class="language-html highlighter-rouge">"<span class="nt">&lt;script&gt;</span><span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">);</span><span class="nt">&lt;/script&gt;</span>";</code>，只有透過 js 才能取得此參數
           <ul>
             <li>URL 組成 : scheme://host:port/path?query#fragment</li>
           </ul>
@@ -151,12 +151,12 @@ Reading time ~1 minute
 </blockquote>
 
 <ol>
-  <li>首先登入 <code class="highlighter-rouge">https://developers.facebook.com/</code></li>
+  <li>首先登入 <code class="language-html highlighter-rouge">https://developers.facebook.com/</code></li>
   <li>建立一個新的 fb app</li>
   <li>在左側 sidebar 中，選擇 新增產品 -&gt; Facebook 登入 -&gt; 設定，這樣就完成了新增</li>
   <li>在左側中，商品下會看到 『Facebook 登入』選擇設定</li>
   <li>在步驟四後的右側，<strong>關閉</strong>『對重新導向 URI 使用 Strict 模式』（原因在於此方法並沒有使用任何 SDK）</li>
-  <li>在步驟四後的右側，『有效的 OAuth 重新導向 URI』中設定 <strong>網站的 Host</strong>，ex:<code class="highlighter-rouge">http://localhost</code>，注意，若你要轉址到 localhost，也是要設定 http://localhost
+  <li>在步驟四後的右側，『有效的 OAuth 重新導向 URI』中設定 <strong>網站的 Host</strong>，ex:<code class="language-html highlighter-rouge">http://localhost</code>，注意，若你要轉址到 localhost，也是要設定 http://localhost
     <ul>
       <li>為何要設定此方法，主要在於使用的方式會需要透過 facebook redirect 到你的伺服器，進行 註冊/登入，等行為，所以必須要驗證。</li>
     </ul>
@@ -178,10 +178,10 @@ Reading time ~1 minute
 </blockquote>
 
 <ul>
-  <li>正式開始取得授權 token : <code class="highlighter-rouge">https://jhaoheng.github.io/blogpost/facebook/app/mobile/web/facebook-%E9%80%B2%E9%9A%8E-%E7%99%BB%E5%85%A5/</code>
+  <li>正式開始取得授權 token : <code class="language-html highlighter-rouge">https://jhaoheng.github.io/blogpost/facebook/app/mobile/web/facebook-%E9%80%B2%E9%9A%8E-%E7%99%BB%E5%85%A5/</code>
     <ol>
       <li>mobile / web 端，呼叫 fb oauth(其中包含 redirect_uri)</li>
-      <li>透過 redirect_uri 轉到『你的 server』，這邊因 (1) 中的 <code class="highlighter-rouge">response_type</code> 設定方式，而有所不同</li>
+      <li>透過 redirect_uri 轉到『你的 server』，這邊因 (1) 中的 <code class="language-html highlighter-rouge">response_type</code> 設定方式，而有所不同</li>
       <li>驗證 oauth_token</li>
       <li>判斷『登入』、『註冊』，若無需用到 oauth_token 則，無須理會</li>
     </ol>
@@ -192,16 +192,16 @@ Reading time ~1 minute
 
 <blockquote>
   <p>更多請參考 facebook graph api
-可使用 <code class="highlighter-rouge">https://developers.facebook.com/tools/explorer/</code></p>
+可使用 <code class="language-html highlighter-rouge">https://developers.facebook.com/tools/explorer/</code></p>
 </blockquote>
 
 <ul>
   <li>me
     <ul>
-      <li>url : <code class="highlighter-rouge">https://graph.facebook.com/{fb_api_version}/me?access_token={oauth_token}&amp;fields={fields}</code></li>
+      <li>url : <code class="language-html highlighter-rouge">https://graph.facebook.com/{fb_api_version}/me?access_token={oauth_token}<span class="err">&amp;</span>fields={fields}</code></li>
       <li>{fb_api_version} : 請注意你的 fb_app 版本</li>
       <li>{oauth_token} :</li>
-      <li>{fields} : <code class="highlighter-rouge">email,name,id,picture.width(320).height(320)</code></li>
+      <li>{fields} : <code class="language-html highlighter-rouge">email,name,id,picture.width(320).height(320)</code></li>
     </ul>
   </li>
 </ul>
@@ -233,19 +233,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/facebook/app/mobile/web/facebook-%E9%80%B2%E9%9A%8E-OAuth-code-flow/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

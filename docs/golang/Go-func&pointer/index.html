@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>【Golang】func & pointer &#8211; Max 乎~</title>
 <meta name="description" content="修煉!">
-<meta name="keywords" content="">
+<meta name="keywords" content="Golang">
 
 
 
@@ -143,69 +143,69 @@ Reading time ~1 minute
 
 <!--more-->
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>package main
 
-<span class="n">import</span> <span class="s2">"fmt"</span>
+import "fmt"
 
-<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="p">//</span> <span class="n">map</span>
-	<span class="n">var</span> <span class="n">mapObj</span> <span class="p">=</span> <span class="n">map</span><span class="p">[</span><span class="n">int</span><span class="p">]</span><span class="k">string</span><span class="p">{}</span>
-	<span class="n">mapObj</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="s2">"max"</span>
-	<span class="n">updateMapObj</span><span class="p">(</span><span class="n">mapObj</span><span class="p">)</span>
-	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"   map =&gt;"</span><span class="p">,</span> <span class="n">mapObj</span><span class="p">)</span>
+func main() {
+	// map
+	var mapObj = map[int]string{}
+	mapObj[0] = "max"
+	updateMapObj(mapObj)
+	fmt.Println("   map =&gt;", mapObj)
 
-	<span class="p">//</span> <span class="n">slice</span>
-	<span class="n">sliceObj</span> <span class="p">:=</span> <span class="p">[]</span><span class="k">string</span><span class="p">{</span>
-		<span class="m">0</span><span class="p">:</span> <span class="s2">"max"</span><span class="p">,</span>
-	<span class="p">}</span>
-	<span class="n">updateSliceObj</span><span class="p">(</span><span class="n">sliceObj</span><span class="p">)</span>
-	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">" slice =&gt;"</span><span class="p">,</span> <span class="n">sliceObj</span><span class="p">)</span> <span class="p">//</span> <span class="p">[</span><span class="n">sunny</span><span class="p">]</span>
+	// slice
+	sliceObj := []string{
+		0: "max",
+	}
+	updateSliceObj(sliceObj)
+	fmt.Println(" slice =&gt;", sliceObj) // [sunny]
 
-	<span class="p">//</span> <span class="k">array</span>
-	<span class="n">arrayObject</span> <span class="p">:=</span> <span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="k">string</span><span class="p">{</span><span class="s2">"max"</span><span class="p">}</span>
-	<span class="n">updateArrayObj</span><span class="p">(&amp;</span><span class="n">arrayObject</span><span class="p">)</span>
-	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">" array =&gt;"</span><span class="p">,</span> <span class="n">arrayObject</span><span class="p">)</span> <span class="p">//</span> <span class="p">[</span><span class="n">sunny</span><span class="p">]</span>
+	// array
+	arrayObject := [1]string{"max"}
+	updateArrayObj(<span class="err">&amp;</span>arrayObject)
+	fmt.Println(" array =&gt;", arrayObject) // [sunny]
 
-	<span class="p">//</span> <span class="k">string</span>
-	<span class="n">var</span> <span class="n">stringObj</span> <span class="k">string</span>
-	<span class="n">stringObj</span> <span class="p">=</span> <span class="s2">"max"</span>
-	<span class="n">updateStringObj</span><span class="p">(&amp;</span><span class="n">stringObj</span><span class="p">)</span>
-	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"string =&gt;"</span><span class="p">,</span> <span class="n">stringObj</span><span class="p">)</span> <span class="p">//</span> <span class="m">999</span>
+	// string
+	var stringObj string
+	stringObj = "max"
+	updateStringObj(<span class="err">&amp;</span>stringObj)
+	fmt.Println("string =&gt;", stringObj) // 999
 
-	<span class="p">//</span> <span class="n">struct</span>
-	<span class="n">var</span> <span class="n">srtuctObj</span> <span class="n">StructObject</span>
-	<span class="n">srtuctObj</span><span class="p">.</span><span class="n">name</span> <span class="p">=</span> <span class="s2">"max"</span>
-	<span class="n">updateStructObj</span><span class="p">(&amp;</span><span class="n">srtuctObj</span><span class="p">)</span>
-	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"struct =&gt;"</span><span class="p">,</span> <span class="n">srtuctObj</span><span class="p">)</span> <span class="p">//</span> <span class="p">{</span><span class="n">sunny</span><span class="p">}</span>
-<span class="p">}</span>
+	// struct
+	var srtuctObj StructObject
+	srtuctObj.name = "max"
+	updateStructObj(<span class="err">&amp;</span>srtuctObj)
+	fmt.Println("struct =&gt;", srtuctObj) // {sunny}
+}
 
-<span class="n">func</span> <span class="n">updateMapObj</span><span class="p">(</span><span class="n">mapObj</span> <span class="n">map</span><span class="p">[</span><span class="n">int</span><span class="p">]</span><span class="k">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="n">mapObj</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="s2">"sunny"</span>
-<span class="p">}</span>
+func updateMapObj(mapObj map[int]string) {
+	mapObj[0] = "sunny"
+}
 
-<span class="n">func</span> <span class="n">updateArrayObj</span><span class="p">(</span><span class="n">arrayObject</span> <span class="p">*[</span><span class="m">1</span><span class="p">]</span><span class="k">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="n">arrayObject</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="s2">"sunny"</span>
-<span class="p">}</span>
+func updateArrayObj(arrayObject *[1]string) {
+	arrayObject[0] = "sunny"
+}
 
-<span class="n">func</span> <span class="n">updateSliceObj</span><span class="p">(</span><span class="n">sliceObj</span> <span class="p">[]</span><span class="k">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="n">sliceObj</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="s2">"sunny"</span>
-<span class="p">}</span>
+func updateSliceObj(sliceObj []string) {
+	sliceObj[0] = "sunny"
+}
 
-<span class="n">func</span> <span class="n">updateStringObj</span><span class="p">(</span><span class="n">stringObj</span> <span class="p">*</span><span class="k">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="p">*</span><span class="n">stringObj</span> <span class="p">=</span> <span class="s2">"sunny"</span>
-<span class="p">}</span>
+func updateStringObj(stringObj *string) {
+	*stringObj = "sunny"
+}
 
-<span class="n">type</span> <span class="n">StructObject</span> <span class="n">struct</span> <span class="p">{</span>
-	<span class="n">name</span> <span class="k">string</span>
-<span class="p">}</span>
+type StructObject struct {
+	name string
+}
 
-<span class="n">func</span> <span class="n">updateStructObj</span><span class="p">(</span><span class="n">srtuctObj</span> <span class="p">*</span><span class="n">StructObject</span><span class="p">)</span> <span class="p">{</span>
-	<span class="n">srtuctObj</span><span class="p">.</span><span class="n">name</span> <span class="p">=</span> <span class="s2">"sunny"</span>
-<span class="p">}</span>
+func updateStructObj(srtuctObj *StructObject) {
+	srtuctObj.name = "sunny"
+}
 </code></pre></div></div>
 
       <footer class="entry-meta">
-        <span class="entry-tags"></span>
+        <span class="entry-tags"><a href="https://jhaoheng.github.io/blogpost/tags/#Golang" title="Pages tagged Golang" class="tag"><span class="term">Golang</span></a></span>
         
         <div class="social-share">
   <ul class="socialcount socialcount-small inline-list">
@@ -223,19 +223,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-diff-slice&array/" title="【Golang】Diff - slice & array">【Golang】Diff - slice & array</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

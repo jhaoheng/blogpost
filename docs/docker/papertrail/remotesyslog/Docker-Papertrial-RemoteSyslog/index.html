@@ -125,8 +125,8 @@ Reading time ~1 minute
     <div class="entry-content">
       <h1 id="目標">目標</h1>
 <ul>
-  <li>透過 <code class="highlighter-rouge">remote_syslog</code> 將 app log 送到 papertrail 中</li>
-  <li>官方建議的 docker image : <code class="highlighter-rouge">https://github.com/octohost/remote_syslog</code>
+  <li>透過 <code class="language-html highlighter-rouge">remote_syslog</code> 將 app log 送到 papertrail 中</li>
+  <li>官方建議的 docker image : <code class="language-html highlighter-rouge">https://github.com/octohost/remote_syslog</code>
     <ul>
       <li>說明 : https://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-docker/#mount
 <!--more--></li>
@@ -140,15 +140,15 @@ Reading time ~1 minute
   <li>ex :
     <ul>
       <li>建立一個 file.log，並得知路徑位置 $path</li>
-      <li>取得你的 papertrail 的 destination path, 像是 <code class="highlighter-rouge">logs.papertrailapp.com:10000</code></li>
-      <li>組合指令 <code class="highlighter-rouge">docker run -d -v=... --name remote_syslog octohost/remote_syslog {remote_syslog 指令串}</code></li>
-      <li>finish : <code class="highlighter-rouge">docker run -d -v=$path/file.log:/file.log --name remote_syslog octohost/remote_syslog --hostname  -p 10000 -d logs.papertrailapp.com /file.log</code></li>
+      <li>取得你的 papertrail 的 destination path, 像是 <code class="language-html highlighter-rouge">logs.papertrailapp.com:10000</code></li>
+      <li>組合指令 <code class="language-html highlighter-rouge">docker run -d -v=... --name remote_syslog octohost/remote_syslog {remote_syslog 指令串}</code></li>
+      <li>finish : <code class="language-html highlighter-rouge">docker run -d -v=$path/file.log:/file.log --name remote_syslog octohost/remote_syslog --hostname  -p 10000 -d logs.papertrailapp.com /file.log</code></li>
     </ul>
   </li>
 </ul>
 
 <h2 id="docker-compose">docker-compose</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '3.0'
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '3.0'
 services:
   remote_syslog:
     image: octohost/remote_syslog:latest
@@ -161,7 +161,7 @@ services:
 
 <h1 id="remote_syslog-reference">remote_syslog reference</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Usage: remote_syslog [OPTION]... &lt;FILE&gt;...
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Usage: remote_syslog [OPTION]... <span class="nt">&lt;FILE&gt;</span>...
 
 Options:
     -c, --configfile PATH            Path to config (/etc/log_files.yml)
@@ -212,19 +212,19 @@ Example:
       <a href="https://jhaoheng.github.io/blogpost/raspberry/facebookatc/Raspberry-FacebookATC/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

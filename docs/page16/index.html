@@ -124,6 +124,54 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2016-07-22T03:13:00+08:00"><a href="https://jhaoheng.github.io/blogpost/mampddns/">July 22, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/mampddns/" rel="bookmark" title="【MAMP】DDNS" itemprop="url">【MAMP】DDNS</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="mamp-設定-ddns">MAMP 設定 DDNS</h1>
+
+<ol>
+  <li>Dynamic DNS : 選擇想要的服務，註冊，並且登入
+    <ul>
+      <li>我選擇 no-ip -&gt; Manage hosts -&gt; add a host -&gt; 設定 redirect_name，選擇免費 DNS，直接按下確認即可(此必須設定在 MAMP-alias)</li>
+    </ul>
+  </li>
+  <li>回到 MAMP -&gt; Dynamic DNS -&gt; 登入該服務帳密
+    <ul>
+      <li>啟用上選擇『自動』</li>
+    </ul>
+  </li>
+  <li>MAMP -&gt; Hosts，選擇服務
+    <ul>
+      <li>General -&gt; Dynamic DNS 選擇 <strong>no-ip.com</strong></li>
+      <li>下方的 alias name 輸入
+        <ul>
+          <li>之前在 no-ip 上設定好的 ddns</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/mampddns/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2016-07-19T02:08:00+08:00"><a href="https://jhaoheng.github.io/blogpost/phalconmigration/">July 19, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -148,14 +196,14 @@ Reading time ~1 minute
 <h2 id="main-cmd">main cmd</h2>
 
 <ul>
-  <li><code class="highlighter-rouge">phalcon migration --help</code></li>
-  <li><code class="highlighter-rouge">phalcon migration generate</code> : 產生 migration file
+  <li><code class="language-html highlighter-rouge">phalcon migration --help</code></li>
+  <li><code class="language-html highlighter-rouge">phalcon migration generate</code> : 產生 migration file
     <ul>
-      <li><code class="highlighter-rouge">migration generate 1.0.1</code> : 1.0.1 為產生的版本號，預設為 1.0.0</li>
-      <li>預設路徑為 <code class="highlighter-rouge">app/migrations/</code></li>
+      <li><code class="language-html highlighter-rouge">migration generate 1.0.1</code> : 1.0.1 為產生的版本號，預設為 1.0.0</li>
+      <li>預設路徑為 <code class="language-html highlighter-rouge">app/migrations/</code></li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">phalcon migration run</code> : 執行產生的 migration</li>
+  <li><code class="language-html highlighter-rouge">phalcon migration run</code> : 執行產生的 migration</li>
 </ul>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/phalconmigration/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
@@ -185,7 +233,7 @@ Reading time ~1 minute
 
 <h2 id="select">select</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$conditions = "Users.id = :id:";
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$conditions = "Users.id = :id:";
 $parameters = array(
     "aid" =&gt; '31'
 );
@@ -194,13 +242,13 @@ $phql = "SELECT b.* FROM Users as a RIGHT JOIN Devices as b on a.id=:aid:";
 $result = $app-&gt;modelsManager-&gt;executeQuery($phql,$parameters);
 </code></pre></div></div>
 <ul>
-  <li>其中的 <code class="highlighter-rouge">$app</code> 為 Micro 建立的物件</li>
-  <li><code class="highlighter-rouge">modelsManager</code> 為 model 的 method</li>
+  <li>其中的 <code class="language-html highlighter-rouge">$app</code> 為 Micro 建立的物件</li>
+  <li><code class="language-html highlighter-rouge">modelsManager</code> 為 model 的 method</li>
 </ul>
 
 <h2 id="insert">insert</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$parameters = array(
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$parameters = array(
     "key" =&gt; "123",
     "user_id" =&gt; 3,
 );
@@ -219,7 +267,7 @@ if ($result==true) {
   <li>因若透過抽象層建立 sql，很難直接看出 sql 是否正確，可透過 phalcon 建立 log，並將 db 的所有動作記錄</li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Phalcon\Mvc\Model\Criteria;
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Phalcon\Mvc\Model\Criteria;
 use Phalcon\Logger;
 use Phalcon\Logger\Adapter\File as FileLogger;
 use Phalcon\Events\Manager;
@@ -274,8 +322,8 @@ Reading time ~1 minute
     <h1 id="dependency-injectionservice-location">Dependency Injection/Service Location</h1>
 
 <ul>
-  <li><code class="highlighter-rouge">Phalcon\Di</code> 是一個實現 <code class="highlighter-rouge">Dependency Injection/Service Location</code> 的組件，而且它本身就是一個裝載它們的容器。</li>
-  <li>透過 <code class="highlighter-rouge">Phalcon\Di</code> 可以註冊許多的服務，放在 Di 中，也可以透過 Di 進行傳遞參數的行為
+  <li><code class="language-html highlighter-rouge">Phalcon\Di</code> 是一個實現 <code class="language-html highlighter-rouge">Dependency Injection/Service Location</code> 的組件，而且它本身就是一個裝載它們的容器。</li>
+  <li>透過 <code class="language-html highlighter-rouge">Phalcon\Di</code> 可以註冊許多的服務，放在 Di 中，也可以透過 Di 進行傳遞參數的行為
     <ul>
       <li>可以很容易的使用自己建立的組件，或者第三方組件，還有進行替換的動作
         <ul>
@@ -285,8 +333,8 @@ Reading time ~1 minute
       <li>支援『延遲加載』：主要就是等到需要用到的時候，才會進行加載的行為，使用方法可參考官方文件</li>
     </ul>
   </li>
-  <li>可在 Class <code class="highlighter-rouge">Phalcon\Di</code> 中查看 methods</li>
-  <li>FactoryDefault 是延伸 class <code class="highlighter-rouge">Phalcon\Di</code>，也可以從 Phalcon/Di 中自己建立自己的 Di
+  <li>可在 Class <code class="language-html highlighter-rouge">Phalcon\Di</code> 中查看 methods</li>
+  <li>FactoryDefault 是延伸 class <code class="language-html highlighter-rouge">Phalcon\Di</code>，也可以從 Phalcon/Di 中自己建立自己的 Di
     <ul>
       <li>底下有介紹</li>
     </ul>
@@ -303,7 +351,7 @@ Reading time ~1 minute
 
 <ul>
   <li>初始化後，才可以使用 Di set 與 get
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Phalcon\Di
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Phalcon\Di
 $di = new Phalcon\Di();
 </code></pre></div>    </div>
   </li>
@@ -311,10 +359,10 @@ $di = new Phalcon\Di();
     <ul>
       <li>ex1 : MVC，可用 phalcon-devtools 建立一個 Project 與 Scaffold 可看到範例
         <ul>
-          <li><code class="highlighter-rouge">$application = new \Phalcon\Mvc\Application($di);</code></li>
+          <li><code class="language-html highlighter-rouge">$application = new \Phalcon\Mvc\Application($di);</code></li>
         </ul>
       </li>
-      <li>並 <code class="highlighter-rouge">echo $application-&gt;handle()-&gt;getContent();</code></li>
+      <li>並 <code class="language-html highlighter-rouge">echo $application-&gt;handle()-&gt;getContent();</code></li>
     </ul>
   </li>
 </ul>
@@ -323,16 +371,16 @@ $di = new Phalcon\Di();
 
 <ul>
   <li>第一種
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$di-&gt;set('request', 'Phalcon\Http\Request');
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$di-&gt;set('request', 'Phalcon\Http\Request');
 </code></pre></div>    </div>
   </li>
   <li>第二種
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Phalcon\Http\Request;  
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Phalcon\Http\Request;  
 $di-&gt;set('request', new Request());
 </code></pre></div>    </div>
   </li>
-  <li>第三種：通過外部參數 <code class="highlighter-rouge">$config</code> 變更 di 中的設定。透過 use 協助
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql;
+  <li>第三種：通過外部參數 <code class="language-html highlighter-rouge">$config</code> 變更 di 中的設定。透過 use 協助
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql;
 // 把當前域的$config變量傳遞給匿名函數使用
 $di-&gt;set("db", function () use ($config) {
   return new PdoMysql(
@@ -361,23 +409,23 @@ $di-&gt;set("db", function () use ($config) {
 
 <ul>
   <li>在 di 中設定好 request
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$di = new Phalcon\Di();
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$di = new Phalcon\Di();
 $di-&gt;set("request", 'Phalcon\Http\Request'); // 第一個參數是『類別名稱』，第二個是『definition』
 // use Phalcon\Http\Request; 使用這兩種方式建立服務也行
 // $di-&gt;set("request", new Request()); 
 </code></pre></div>    </div>
   </li>
-  <li><code class="highlighter-rouge"><span class="cp">&lt;?php</span> <span class="nv">$request</span> <span class="o">=</span> <span class="nv">$di</span><span class="o">-&gt;</span><span class="na">get</span><span class="p">(</span><span class="s2">"request"</span><span class="p">);</span></code> or <code class="highlighter-rouge">$request = $di-&gt;getRequest();</code></li>
+  <li><code class="language-html highlighter-rouge"><span class="nt">&lt;</span><span class="err">?</span><span class="na">php</span> <span class="err">$</span><span class="na">request = </span><span class="s">$di-</span><span class="nt">&gt;</span>get("request");</code> or <code class="language-html highlighter-rouge">$request = $di-&gt;getRequest();</code></li>
   <li>通過容器的方式傳遞參數
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$component = $di-&gt;get("MyComponent", array("some-parameter", "other"));
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$component = $di-&gt;get("MyComponent", array("some-parameter", "other"));
 </code></pre></div>    </div>
   </li>
 </ul>
 
 <h2 id="共享服務shared-services">共享服務（Shared services）</h2>
 <ul>
-  <li><code class="highlighter-rouge">setShared</code> : 意指可以被註冊成 共享，意味被解析後，此實例將被保存在系統中，每次請求都可以從系統中找回，無需從新註冊或者重新解析
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Phalcon\Session\Adapter\Files as SessionFiles;
+  <li><code class="language-html highlighter-rouge">setShared</code> : 意指可以被註冊成 共享，意味被解析後，此實例將被保存在系統中，每次請求都可以從系統中找回，無需從新註冊或者重新解析
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Phalcon\Session\Adapter\Files as SessionFiles;
 // 把session服務註冊成「shared」類型
 $di-&gt;setShared('session', function () {
   $session = new SessionFiles();
@@ -388,7 +436,7 @@ $session = $di-&gt;get('session'); // 第一次獲取session服務時，session�
 $session = $di-&gt;getSession();   // 第二次獲取時，不再實例化，直接返回第一次實例化的對象
 </code></pre></div>    </div>
   </li>
-  <li>如果服務註冊時，並非註冊成 shared 時，又想從 Di 中獲取 shared 的 instance，可使用 <code class="highlighter-rouge">getShared</code>
+  <li>如果服務註冊時，並非註冊成 shared 時，又想從 Di 中獲取 shared 的 instance，可使用 <code class="language-html highlighter-rouge">getShared</code>
     <ul>
       <li>意指，若以註冊成 shared 類型時，則使用 get 即可</li>
     </ul>
@@ -396,14 +444,14 @@ $session = $di-&gt;getSession();   // 第二次獲取時，不再實例化，直
 </ul>
 
 <h2 id="manipulating-services-individually">Manipulating services individually</h2>
-<p>這邊的 <code class="highlighter-rouge">resolve()</code> 方法不知從哪邊定義，找了 di 沒發現到
+<p>這邊的 <code class="language-html highlighter-rouge">resolve()</code> 方法不知從哪邊定義，找了 di 沒發現到
 目前正在請教 gitter 的群組</p>
 
 <h2 id="將-未註冊的服務-從-di-中取出">將 未註冊的服務 從 Di 中取出</h2>
 
 <ul>
   <li>當服務尚未被註冊時（Di 找不到相同名稱的服務），則可以在當下設定該服務
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$di-&gt;set('IndexController', function () {
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$di-&gt;set('IndexController', function () {
   $component = new Component();
   return $component;
 }, true);
@@ -427,29 +475,29 @@ $session = $di-&gt;getSession();   // 第二次獲取時，不再實例化，直
 <ul>
   <li>某些服務應用於每次的 request，如此可能會產生重複的解析，故放入 Di 前，先解析一次後，再放入 Di 中，可稍微提升效能
     <ul>
-      <li>ex : <code class="highlighter-rouge">$router = new MyRouter();</code></li>
+      <li>ex : <code class="language-html highlighter-rouge">$router = new MyRouter();</code></li>
     </ul>
   </li>
   <li>通過 Di 的服務設定，就不用重新再 new 一次（把已解析的對象設置到註冊服務中）
     <ul>
-      <li>ex : <code class="highlighter-rouge">$di-&gt;set('router', $router);</code></li>
-      <li>ex : <code class="highlighter-rouge">$di-&gt;get('router');</code></li>
+      <li>ex : <code class="language-html highlighter-rouge">$di-&gt;set('router', $router);</code></li>
+      <li>ex : <code class="language-html highlighter-rouge">$di-&gt;get('router');</code></li>
     </ul>
   </li>
-  <li>Q:不確定這種方式跟 <code class="highlighter-rouge">shared</code> 差別倒底在哪</li>
+  <li>Q:不確定這種方式跟 <code class="language-html highlighter-rouge">shared</code> 差別倒底在哪</li>
 </ul>
 
 <h2 id="使用文件方式定義服務organizing-services-in-files">使用文件方式定義服務(Organizing services in files)</h2>
 
 <ul>
   <li>透過獨立的文件，設定服務內容
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$di-&gt;set('router', function () {
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$di-&gt;set('router', function () {
   return include "../app/config/routes.php";
 });
 </code></pre></div>    </div>
   </li>
   <li>在 routes.php 中
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$router = new MyRouter();
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$router = new MyRouter();
 $router-&gt;post('/login');
 return $router;
 </code></pre></div>    </div>
@@ -458,7 +506,7 @@ return $router;
 </ul>
 
 <h2 id="使用靜態方法存取-diaccessing-the-di-in-a-static-way">使用靜態方法存取 Di（Accessing the DI in a static way）</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Phalcon\Di;
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Phalcon\Di;
 $session = Di::getDefault()-&gt;getSession();
 </code></pre></div></div>
 
@@ -466,7 +514,7 @@ $session = Di::getDefault()-&gt;getSession();
 
 <ul>
   <li>這是一開始所提到的 FactoryDefault</li>
-  <li>這個服務器擴展了 <code class="highlighter-rouge">Phalcon\Di </code>，會自動註冊相應的服務</li>
+  <li>這個服務器擴展了 <code class="language-html highlighter-rouge">Phalcon\Di </code>，會自動註冊相應的服務</li>
   <li>the developer does not need to register each service individually.</li>
 </ul>
 
@@ -514,24 +562,24 @@ Reading time ~1 minute
 <h2 id="版本">版本</h2>
 
 <ul>
-  <li>執行 <code class="highlighter-rouge">phalcon</code> 確認版本 : <code class="highlighter-rouge">Phalcon DevTools (2.0.13)</code></li>
+  <li>執行 <code class="language-html highlighter-rouge">phalcon</code> 確認版本 : <code class="language-html highlighter-rouge">Phalcon DevTools (2.0.13)</code></li>
 </ul>
 
 <h2 id="建立專案">建立專案</h2>
 
 <ul>
-  <li>快速建立一個基本的 project : <code class="highlighter-rouge">phalcon create-project store</code>
+  <li>快速建立一個基本的 project : <code class="language-html highlighter-rouge">phalcon create-project store</code>
     <ul>
-      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code></li>
+      <li>檢視網頁 : <code class="language-html highlighter-rouge">localhost:[yourport]/store</code></li>
     </ul>
   </li>
-  <li>在非 phalcon direction，只能使用 <code class="highlighter-rouge">phalcon project</code> 的指令建立 project 的結構</li>
+  <li>在非 phalcon direction，只能使用 <code class="language-html highlighter-rouge">phalcon project</code> 的指令建立 project 的結構</li>
   <li>在該 project 下，可以使用其他的指令
     <ul>
-      <li><code class="highlighter-rouge">phalcon webtools enable</code>
+      <li><code class="language-html highlighter-rouge">phalcon webtools enable</code>
         <ul>
           <li>啟用 web 介面的 phalcon 編輯器</li>
-          <li><code class="highlighter-rouge">http://[localhost]/[project_name]/webtools.php</code></li>
+          <li><code class="language-html highlighter-rouge">http://[localhost]/[project_name]/webtools.php</code></li>
         </ul>
       </li>
     </ul>
@@ -541,10 +589,10 @@ Reading time ~1 minute
 <h2 id="資料庫設定">資料庫設定</h2>
 
 <ul>
-  <li>PATH : <code class="highlighter-rouge">store/app/config</code> 中的 config.php
+  <li>PATH : <code class="language-html highlighter-rouge">store/app/config</code> 中的 config.php
     <ul>
-      <li>若在 create 專案時，有特別指定使用 <code class="highlighter-rouge">.ini</code> 為其擴展名，才會特別使用。(<code class="highlighter-rouge">--use-config-ini</code>)</li>
-      <li>使用 <code class="highlighter-rouge">phalcon project --help</code> 查詢指令</li>
+      <li>若在 create 專案時，有特別指定使用 <code class="language-html highlighter-rouge">.ini</code> 為其擴展名，才會特別使用。(<code class="language-html highlighter-rouge">--use-config-ini</code>)</li>
+      <li>使用 <code class="language-html highlighter-rouge">phalcon project --help</code> 查詢指令</li>
     </ul>
   </li>
 </ul>
@@ -555,22 +603,22 @@ Reading time ~1 minute
   <li>建立模型，目的在於制式化處理某些事情，或者驗證，如每次呼叫模型的某個 method，都希望得到『用戶名稱』</li>
   <li>建立 model 前，須先把 db 與 schema 建立完成
     <ul>
-      <li>建立完成後，才可以建立 <code class="highlighter-rouge">phalcon model [model_name]</code>
+      <li>建立完成後，才可以建立 <code class="language-html highlighter-rouge">phalcon model [model_name]</code>
         <ul>
           <li>如果沒有該 table name : [Error: Table “people” does not exist.]</li>
         </ul>
       </li>
-      <li>Troubleshoot : <code class="highlighter-rouge">ERROR: SQLSTATE[HY000] [2002] No such file or directory</code>
+      <li>Troubleshoot : <code class="language-html highlighter-rouge">ERROR: SQLSTATE[HY000] [2002] No such file or directory</code>
         <ul>
-          <li><code class="highlighter-rouge">php --ini</code></li>
-          <li><code class="highlighter-rouge">vim php.ini</code></li>
-          <li>搜尋 <code class="highlighter-rouge">mysql.default_socket</code>
+          <li><code class="language-html highlighter-rouge">php --ini</code></li>
+          <li><code class="language-html highlighter-rouge">vim php.ini</code></li>
+          <li>搜尋 <code class="language-html highlighter-rouge">mysql.default_socket</code>
             <ul>
-              <li>因我使用 mamp 所以填入 : <code class="highlighter-rouge">/Applications/MAMP/tmp/mysql/mysql.sock</code></li>
+              <li>因我使用 mamp 所以填入 : <code class="language-html highlighter-rouge">/Applications/MAMP/tmp/mysql/mysql.sock</code></li>
               <li>查詢 socket
                 <ul>
-                  <li><code class="highlighter-rouge">mysql -u root -p</code></li>
-                  <li><code class="highlighter-rouge">show variables like '%socket%';</code> 填入該路徑即可</li>
+                  <li><code class="language-html highlighter-rouge">mysql -u root -p</code></li>
+                  <li><code class="language-html highlighter-rouge">show variables like '%socket%';</code> 填入該路徑即可</li>
                 </ul>
               </li>
             </ul>
@@ -579,7 +627,7 @@ Reading time ~1 minute
       </li>
     </ul>
   </li>
-  <li>在專案的根目錄下 : <code class="highlighter-rouge">phalcon model</code>，有基本的 Usage</li>
+  <li>在專案的根目錄下 : <code class="language-html highlighter-rouge">phalcon model</code>，有基本的 Usage</li>
 </ul>
 
 <h2 id="scaffold-a-crud">Scaffold a CRUD</h2>
@@ -590,7 +638,7 @@ Reading time ~1 minute
       <li>Notice : 注意 model 產生時，必須要有對應的 table-name</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">phalcon scaffold --table-name products</code> 會產生
+  <li><code class="language-html highlighter-rouge">phalcon scaffold --table-name products</code> 會產生
     <ul>
       <li>app/controllers/ProductsController.php</li>
       <li>app/models/Products.php</li>
@@ -607,145 +655,11 @@ Reading time ~1 minute
 
 <ul>
   <li>透過 web 的介面，進行操作 model / controller</li>
-  <li>路徑 : <code class="highlighter-rouge">http://[localhost:port]/store/webtools.php</code></li>
-  <li>啟用 : <code class="highlighter-rouge">phalcon webtools --action=enable</code></li>
+  <li>路徑 : <code class="language-html highlighter-rouge">http://[localhost:port]/store/webtools.php</code></li>
+  <li>啟用 : <code class="language-html highlighter-rouge">phalcon webtools --action=enable</code></li>
 </ul>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/phalcondevelop-tool/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2016-07-07T09:35:00+08:00"><a href="https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/">July 07, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/" rel="bookmark" title="【Phalcon】basic" itemprop="url">【Phalcon】basic</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="ㄧinstall-phalcon">ㄧ、install phalcon</h1>
-
-<ol>
-  <li><a href="https://phalconphp.com/en/download">官方</a></li>
-  <li>github : https://github.com/phalcon/cphalcon</li>
-  <li>install from github
-    <ul>
-      <li><code class="highlighter-rouge">git clone</code></li>
-      <li><code class="highlighter-rouge">cd cphalcon/build</code></li>
-      <li><code class="highlighter-rouge">sudo ./install</code></li>
-    </ul>
-  </li>
-  <li>遇到問題，參考 troubleshoot</li>
-</ol>
-
-<h2 id="check">check</h2>
-
-<ol>
-  <li><code class="highlighter-rouge">phpinfo();</code>
-    <ul>
-      <li>找 phalcon extension，沒意外的話是 2.0.13</li>
-    </ul>
-  </li>
-  <li>安裝環境</li>
-</ol>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>環境
-- `php -m | grep -i phalcon`
-  - if output `phalcon` mean it is ok to use phalcon cmd
-- `apachectl -v`
-  - output : `apache/2.4.16`
-- `php -v`
-  - output : `php 5.6.23`
-- `mysql --version`
-  - output : `mysql ver 14.14`
-</code></pre></div></div>
-
-<h2 id="troubleshoot">troubleshoot</h2>
-
-<ol>
-  <li>若 gcc 編譯失敗，<code class="highlighter-rouge">free -g</code>，查看 memory or swap 是否有 1g 可供 compile
-    <ul>
-      <li>1g memory <code class="highlighter-rouge">https://github.com/phalcon/cphalcon/issues/10478</code></li>
-    </ul>
-  </li>
-  <li>因為目前僅支援 5.4/5.5/5.6 版本，故如果用 7.x 版本編譯時，會產生名稱錯誤</li>
-  <li>設定 <code class="highlighter-rouge">extension=phalcon.so</code>，出現 <code class="highlighter-rouge">PHP Warning:  Module 'phalcon' already loaded in Unknown on line 0</code>
-    <ul>
-      <li><a href="http://www.somacon.com/p520.php">info</a></li>
-      <li>在 php.ini 中，將 <code class="highlighter-rouge">extension=phalcon.so</code> 前面加 <code class="highlighter-rouge">;</code> -&gt; <code class="highlighter-rouge">;extension=phalcon.so</code></li>
-      <li>執行 <code class="highlighter-rouge">php -m | grep -i phalcon</code>，正常</li>
-    </ul>
-  </li>
-</ol>
-
-<h1 id="二安裝-phalcon-develop-tool">二、安裝 Phalcon develop-tool</h1>
-
-<ul>
-  <li><a href="https://docs.phalconphp.com/zh/latest/reference/tools.html">介紹</a>
-    <ul>
-      <li>總之就是透過指令可以快速建立模組，連大小寫都處理好，另外還會結合資料庫建立 mode : getter / setter</li>
-    </ul>
-  </li>
-  <li><a href="https://github.com/phalcon/phalcon-devtools">install</a>
-    <ul>
-      <li>installation via Git</li>
-      <li><code class="highlighter-rouge">sudo ln -s ~/path/phalcon.php /usr/local/bin/phalcon</code> mac 要放在 <code class="highlighter-rouge">/usr/local/bin</code> 下</li>
-    </ul>
-  </li>
-  <li>執行 <code class="highlighter-rouge">phalcon</code></li>
-</ul>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Phalcon</span> <span class="n">DevTools</span> <span class="p">(</span><span class="m">2.0.13</span><span class="p">)</span>
-
-<span class="n">Help</span><span class="p">:</span>
-  <span class="n">Lists</span> <span class="n">the</span> <span class="n">commands</span> <span class="n">available</span> <span class="k">in</span> <span class="n">Phalcon</span> <span class="n">devtools</span>
-
-<span class="n">Available</span> <span class="n">commands</span><span class="p">:</span>
-  <span class="n">commands</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="k">list</span><span class="p">,</span> <span class="n">enumerate</span><span class="p">)</span>
-  <span class="n">controller</span>       <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">controller</span><span class="p">)</span>
-  <span class="n">module</span>           <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">module</span><span class="p">)</span>
-  <span class="k">model</span>            <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="k">model</span><span class="p">)</span>
-  <span class="n">all</span><span class="p">-</span><span class="n">models</span>       <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">all</span><span class="p">-</span><span class="n">models</span><span class="p">)</span>
-  <span class="n">project</span>          <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">project</span><span class="p">)</span>
-  <span class="n">scaffold</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">scaffold</span><span class="p">)</span>
-  <span class="n">migration</span>        <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">migration</span><span class="p">)</span>
-  <span class="n">webtools</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">webtools</span><span class="p">)</span>
-</code></pre></div></div>
-<ul>
-  <li>查看語法，直接執行 <code class="highlighter-rouge">phalcon [command]</code> 即可
-    <ul>
-      <li><code class="highlighter-rouge">phalcon controller</code></li>
-      <li><code class="highlighter-rouge">phalcon webtools</code></li>
-    </ul>
-  </li>
-  <li>啟用 WebTools
-    <ul>
-      <li>在影片中，可以用 browser 的方式，進行設定，在網頁資料夾下，<code class="highlighter-rouge">phalcon webtools --action=enable</code>
-        <ul>
-          <li>有新舊版本的問題，查看 github readme</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>快速建立一個基本的 project : <code class="highlighter-rouge">phalcon create-project store</code>
-    <ul>
-      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code></li>
-    </ul>
-  </li>
-</ul>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

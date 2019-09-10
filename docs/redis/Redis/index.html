@@ -133,18 +133,18 @@ Reading time ~2 minutes
 <h3 id="將-redis-安裝到-usrlocalbin-的方法">將 redis 安裝到 /usr/local/bin 的方法</h3>
 
 <ul>
-  <li><code class="highlighter-rouge">make install</code>
+  <li><code class="language-html highlighter-rouge">make install</code>
     <ul>
-      <li>更改預設安裝位置 : <code class="highlighter-rouge">make PREFIX=/some/other/directory install</code></li>
+      <li>更改預設安裝位置 : <code class="language-html highlighter-rouge">make PREFIX=/some/other/directory install</code></li>
     </ul>
   </li>
   <li>此方法會安裝 binaries 到系統中，但相關的 script 與配置檔，並不會放到是到的位置，因為只是 play</li>
   <li>若需要安裝到正式的系統中，請使用
     <ul>
-      <li><code class="highlighter-rouge">cd utils</code></li>
-      <li><code class="highlighter-rouge">./install_server.sh</code></li>
+      <li><code class="language-html highlighter-rouge">cd utils</code></li>
+      <li><code class="language-html highlighter-rouge">./install_server.sh</code></li>
       <li>此種安裝方式會詢問幾個設定的問題，並且在 sys reboot 後會自動重新啟動</li>
-      <li>手動停止與啟動 : <code class="highlighter-rouge">/etc/init.d/redis_&lt;portnumber&gt;</code></li>
+      <li>手動停止與啟動 : <code class="language-html highlighter-rouge">/etc/init.d/redis_<span class="nt">&lt;portnumber&gt;</span></code></li>
     </ul>
   </li>
 </ul>
@@ -154,12 +154,12 @@ Reading time ~2 minutes
 <ul>
   <li>啟用伺服器
     <ul>
-      <li>直接啟用 : <code class="highlighter-rouge">src/redis-server</code></li>
-      <li>制定設定檔 : <code class="highlighter-rouge">./src/redis-server /path/to/redis.conf</code></li>
+      <li>直接啟用 : <code class="language-html highlighter-rouge">src/redis-server</code></li>
+      <li>制定設定檔 : <code class="language-html highlighter-rouge">./src/redis-server /path/to/redis.conf</code></li>
       <li>透過指令直接覆蓋設定檔 :
         <ul>
-          <li><code class="highlighter-rouge">./redis-server --port 9999 --slaveof 127.0.0.1 6379</code></li>
-          <li><code class="highlighter-rouge">./redis-server /etc/redis/6379.conf --loglevel debug</code></li>
+          <li><code class="language-html highlighter-rouge">./redis-server --port 9999 --slaveof 127.0.0.1 6379</code></li>
+          <li><code class="language-html highlighter-rouge">./redis-server /etc/redis/6379.conf --loglevel debug</code></li>
           <li>在 redis.conf 中的參數名稱，全部都支援使用 command line 進行設定。</li>
         </ul>
       </li>
@@ -167,20 +167,20 @@ Reading time ~2 minutes
   </li>
   <li>啟用 client
     <ul>
-      <li><code class="highlighter-rouge">src/redis-cli</code>，進入互動介面</li>
+      <li><code class="language-html highlighter-rouge">src/redis-cli</code>，進入互動介面</li>
       <li>測試
         <ul>
-          <li><code class="highlighter-rouge">ping</code></li>
-          <li><code class="highlighter-rouge">set foo bar</code></li>
-          <li><code class="highlighter-rouge">get foo</code></li>
+          <li><code class="language-html highlighter-rouge">ping</code></li>
+          <li><code class="language-html highlighter-rouge">set foo bar</code></li>
+          <li><code class="language-html highlighter-rouge">get foo</code></li>
         </ul>
       </li>
-      <li>可直接下指令 <code class="highlighter-rouge">./redis_cli get foo</code> 取得參數</li>
+      <li>可直接下指令 <code class="language-html highlighter-rouge">./redis_cli get foo</code> 取得參數</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">./redis_cli --help</code> : 查看一般指令</li>
-  <li><code class="highlighter-rouge">./redis_cli help {cmd}</code> : 取得指令相關資訊</li>
-  <li><code class="highlighter-rouge">./redis_cli command</code> : 取得全部指令</li>
+  <li><code class="language-html highlighter-rouge">./redis_cli --help</code> : 查看一般指令</li>
+  <li><code class="language-html highlighter-rouge">./redis_cli help {cmd}</code> : 取得指令相關資訊</li>
+  <li><code class="language-html highlighter-rouge">./redis_cli command</code> : 取得全部指令</li>
 </ul>
 
 <h2 id="特性">特性</h2>
@@ -217,22 +217,22 @@ Reading time ~2 minutes
 <h3 id="basic">basic</h3>
 
 <ul>
-  <li>計數 : <code class="highlighter-rouge">redis-cli incr {變數名稱}</code></li>
-  <li>寫入檔案 : <code class="highlighter-rouge">redis-cli incr {變數名稱} &gt; ./output.txt</code></li>
-  <li>取得 : <code class="highlighter-rouge">redis-cli get {變數名稱}</code>
+  <li>計數 : <code class="language-html highlighter-rouge">redis-cli incr {變數名稱}</code></li>
+  <li>寫入檔案 : <code class="language-html highlighter-rouge">redis-cli incr {變數名稱} &gt; ./output.txt</code></li>
+  <li>取得 : <code class="language-html highlighter-rouge">redis-cli get {變數名稱}</code>
     <ul>
-      <li>指定輸出為 raw <code class="highlighter-rouge">redis-cli --raw get {變數名稱}</code></li>
+      <li>指定輸出為 raw <code class="language-html highlighter-rouge">redis-cli --raw get {變數名稱}</code></li>
     </ul>
   </li>
   <li>刪除 :
     <ul>
-      <li><code class="highlighter-rouge">./redis-cli del {變數名稱}</code></li>
-      <li><code class="highlighter-rouge">./redis-cli flushall</code> : 刪除全部 keys from all db</li>
-      <li><code class="highlighter-rouge">./redis-cli flushdb</code> : 從目前的 db 刪除掉所有的 keys</li>
+      <li><code class="language-html highlighter-rouge">./redis-cli del {變數名稱}</code></li>
+      <li><code class="language-html highlighter-rouge">./redis-cli flushall</code> : 刪除全部 keys from all db</li>
+      <li><code class="language-html highlighter-rouge">./redis-cli flushdb</code> : 從目前的 db 刪除掉所有的 keys</li>
     </ul>
   </li>
-  <li>設定 : <code class="highlighter-rouge">redis-cli set {變數名稱}</code></li>
-  <li>查看變數編碼屬性 : <code class="highlighter-rouge">OBJECT ENCODING {變數名稱}</code>
+  <li>設定 : <code class="language-html highlighter-rouge">redis-cli set {變數名稱}</code></li>
+  <li>查看變數編碼屬性 : <code class="language-html highlighter-rouge">OBJECT ENCODING {變數名稱}</code>
     <ul>
       <li>int</li>
       <li>raw</li>
@@ -240,13 +240,13 @@ Reading time ~2 minutes
       <li>more : <a href="http://redisbook.com/preview/object/string.html">http://redisbook.com/preview/object/string.html</a></li>
     </ul>
   </li>
-  <li>接續 : <code class="highlighter-rouge">redis-cli append {變數名稱} "{延伸內容}"</code></li>
-  <li>列出所有的 {變數名稱} : <code class="highlighter-rouge">KEYS *</code>
+  <li>接續 : <code class="language-html highlighter-rouge">redis-cli append {變數名稱} "{延伸內容}"</code></li>
+  <li>列出所有的 {變數名稱} : <code class="language-html highlighter-rouge">KEYS *</code>
     <ul>
-      <li>列出指定內容的 {變數名稱} : <code class="highlighter-rouge">KEYS *o*</code></li>
+      <li>列出指定內容的 {變數名稱} : <code class="language-html highlighter-rouge">KEYS *o*</code></li>
     </ul>
   </li>
-  <li>查看 {變數名稱} 是否存在 : <code class="highlighter-rouge">./redis-cli exists {變數名稱} ...</code></li>
+  <li>查看 {變數名稱} 是否存在 : <code class="language-html highlighter-rouge">./redis-cli exists {變數名稱} ...</code></li>
 </ul>
 
 <h3 id="host-port-password-and-database">Host, port, password and database</h3>
@@ -260,12 +260,12 @@ Reading time ~2 minutes
           <li>port : 6379</li>
         </ul>
       </li>
-      <li>specify <code class="highlighter-rouge">-h</code> &amp; <code class="highlighter-rouge">-p</code> : <code class="highlighter-rouge">./redis-cli -h redis15.localnet.org -p 6390 ping</code></li>
+      <li>specify <code class="language-html highlighter-rouge">-h</code> &amp; <code class="language-html highlighter-rouge">-p</code> : <code class="language-html highlighter-rouge">./redis-cli -h redis15.localnet.org -p 6390 ping</code></li>
     </ul>
   </li>
   <li>password
     <ul>
-      <li><code class="highlighter-rouge">./redis-cli a {password} ping</code></li>
+      <li><code class="language-html highlighter-rouge">./redis-cli a {password} ping</code></li>
     </ul>
   </li>
   <li>database
@@ -273,59 +273,59 @@ Reading time ~2 minutes
       <li>預設會有 16 個 db，db 的名稱是用數字表達</li>
       <li>basic
         <ul>
-          <li>查詢 db 數量 : <code class="highlighter-rouge">./redis-cli CONFIG GET databases</code></li>
-          <li>查詢每個 db 中的內存 : <code class="highlighter-rouge">./redis-cli INFO keyspace</code></li>
-          <li>指定 db 設定參數 : <code class="highlighter-rouge">./redis-cli -n 1 set {變數名稱} {內容}</code>
+          <li>查詢 db 數量 : <code class="language-html highlighter-rouge">./redis-cli CONFIG GET databases</code></li>
+          <li>查詢每個 db 中的內存 : <code class="language-html highlighter-rouge">./redis-cli INFO keyspace</code></li>
+          <li>指定 db 設定參數 : <code class="language-html highlighter-rouge">./redis-cli -n 1 set {變數名稱} {內容}</code>
             <ul>
               <li>n 預設為 0</li>
             </ul>
           </li>
-          <li>顯示目前此 db 的 key 數量 : <code class="highlighter-rouge">./redis-cli dbsize</code></li>
-          <li>移動 key 到另一個 db : <code class="highlighter-rouge">./redis-cli move {db_number}</code></li>
+          <li>顯示目前此 db 的 key 數量 : <code class="language-html highlighter-rouge">./redis-cli dbsize</code></li>
+          <li>移動 key 到另一個 db : <code class="language-html highlighter-rouge">./redis-cli move {db_number}</code></li>
         </ul>
       </li>
     </ul>
   </li>
 </ul>
 
-<h3 id="special-modes-of-operation--redis-cli---help">Special modes of operation : <code class="highlighter-rouge">./redis-cli --help</code></h3>
+<h3 id="special-modes-of-operation--redis-cli---help">Special modes of operation : <code class="language-html highlighter-rouge">./redis-cli --help</code></h3>
 
 <ul>
-  <li>即時查看系統狀態 : <code class="highlighter-rouge">./redis-cli --stat</code></li>
-  <li>分析 key : <code class="highlighter-rouge">redis-cli --bigkeys</code></li>
+  <li>即時查看系統狀態 : <code class="language-html highlighter-rouge">./redis-cli --stat</code></li>
+  <li>分析 key : <code class="language-html highlighter-rouge">redis-cli --bigkeys</code></li>
   <li>Getting a list of keys :
     <ul>
-      <li><code class="highlighter-rouge">./redis-cli --scan | head -10</code></li>
-      <li><code class="highlighter-rouge">./redis-cli --scan --pattern '*-11*'</code></li>
-      <li><code class="highlighter-rouge">redis-cli --scan --pattern 'user:*' | wc -l</code></li>
+      <li><code class="language-html highlighter-rouge">./redis-cli --scan | head -10</code></li>
+      <li><code class="language-html highlighter-rouge">./redis-cli --scan --pattern '*-11*'</code></li>
+      <li><code class="language-html highlighter-rouge">redis-cli --scan --pattern 'user:*' | wc -l</code></li>
     </ul>
   </li>
   <li>Pub/sub mode
     <ul>
-      <li><code class="highlighter-rouge">publish {channel} {message}</code></li>
-      <li><code class="highlighter-rouge">subscribe {channel} ...</code></li>
-      <li><code class="highlighter-rouge">psubscribe {pattern}</code> : 設定 pattern 直接訂閱相關的頻道
+      <li><code class="language-html highlighter-rouge">publish {channel} {message}</code></li>
+      <li><code class="language-html highlighter-rouge">subscribe {channel} ...</code></li>
+      <li><code class="language-html highlighter-rouge">psubscribe {pattern}</code> : 設定 pattern 直接訂閱相關的頻道
         <ul>
-          <li>pattern : <code class="highlighter-rouge">?, * , [ab]</code>
+          <li>pattern : <code class="language-html highlighter-rouge">?, * , [ab]</code>
             <ul>
-              <li><code class="highlighter-rouge">h?llo</code> 訂閱所有 <code class="highlighter-rouge">h?ll0</code> 相關頻道，只有一個字元</li>
-              <li><code class="highlighter-rouge">h*llo</code> 訂閱所有 <code class="highlighter-rouge">h*llo</code> 相關頻道，<code class="highlighter-rouge">*</code> 可以是多個字元</li>
-              <li><code class="highlighter-rouge">h[ae]llo</code> 訂閱 hallo 與 hello 頻道</li>
+              <li><code class="language-html highlighter-rouge">h?llo</code> 訂閱所有 <code class="language-html highlighter-rouge">h?ll0</code> 相關頻道，只有一個字元</li>
+              <li><code class="language-html highlighter-rouge">h*llo</code> 訂閱所有 <code class="language-html highlighter-rouge">h*llo</code> 相關頻道，<code class="language-html highlighter-rouge">*</code> 可以是多個字元</li>
+              <li><code class="language-html highlighter-rouge">h[ae]llo</code> 訂閱 hallo 與 hello 頻道</li>
             </ul>
           </li>
         </ul>
       </li>
     </ul>
   </li>
-  <li>即時監控目前 redis 所有的參數 : <code class="highlighter-rouge">./redis-cli monitor</code></li>
+  <li>即時監控目前 redis 所有的參數 : <code class="language-html highlighter-rouge">./redis-cli monitor</code></li>
   <li>測試＋模擬 redis 的延遲 (以毫秒計):
     <ul>
-      <li>基本 : <code class="highlighter-rouge">./redis-cli --latency -h {host} -p {port}</code>，可跨伺服器測試，預設為 localhost:6390</li>
-      <li>每 15 秒 重新產生一次測試 : <code class="highlighter-rouge">./redis-cli --latency-history</code></li>
-      <li>圖像化顯示 : <code class="highlighter-rouge">./redis-cli --latency-dist</code></li>
+      <li>基本 : <code class="language-html highlighter-rouge">./redis-cli --latency -h {host} -p {port}</code>，可跨伺服器測試，預設為 localhost:6390</li>
+      <li>每 15 秒 重新產生一次測試 : <code class="language-html highlighter-rouge">./redis-cli --latency-history</code></li>
+      <li>圖像化顯示 : <code class="language-html highlighter-rouge">./redis-cli --latency-dist</code></li>
       <li>測試 redis 內部延遲，此依賴 cpu 效能
         <ul>
-          <li><code class="highlighter-rouge">./redis-cli --intrinsic-latency {秒數}</code> : 在 {秒數} 內測試</li>
+          <li><code class="language-html highlighter-rouge">./redis-cli --intrinsic-latency {秒數}</code> : 在 {秒數} 內測試</li>
         </ul>
       </li>
       <li>文章
@@ -338,12 +338,12 @@ Reading time ~2 minutes
   </li>
   <li>Remote backups of RDB files
     <ul>
-      <li><code class="highlighter-rouge">./redis-cli --rdb /tmp/dump.rdb</code></li>
+      <li><code class="language-html highlighter-rouge">./redis-cli --rdb /tmp/dump.rdb</code></li>
     </ul>
   </li>
   <li>透過此指令，會複製 redis 上面載入的指令，到 slave，可清楚的看到下的指令順序是否正確
     <ul>
-      <li><code class="highlighter-rouge">redis-cli --slave</code></li>
+      <li><code class="language-html highlighter-rouge">redis-cli --slave</code></li>
     </ul>
   </li>
   <li>Performing an LRU simulation
@@ -374,19 +374,19 @@ Reading time ~2 minutes
       <a href="https://jhaoheng.github.io/blogpost/ssh/SSH-Remote-Access/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

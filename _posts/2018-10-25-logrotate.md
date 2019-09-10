@@ -3,6 +3,7 @@ layout: post
 title: 【Log】Use Logrotate at ubuntu16.04
 date: 2018-10-25 07:30
 categories: ubuntu log
+tags: Ubuntu Log
 ---
 
 # env & 注意

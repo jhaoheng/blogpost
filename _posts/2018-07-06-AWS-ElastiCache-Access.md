@@ -3,6 +3,7 @@ layout: post
 title: 【AWS-Redis】How to Access to AWS-ElastiCache
 date: 2018-07-06 07:30
 categories: aws redis
+tags: AWS Redis
 ---
 
 # 透過 redis-cli 連線 elasticache

@@ -127,8 +127,8 @@ Reading time ~1 minute
 <ol>
   <li>rtmpt + ssl
     <ul>
-      <li><code class="highlighter-rouge">ngx_rtmpt_proxy_module.so</code></li>
-      <li><code class="highlighter-rouge">ngx_rtmp_module.so</code></li>
+      <li><code class="language-html highlighter-rouge">ngx_rtmpt_proxy_module.so</code></li>
+      <li><code class="language-html highlighter-rouge">ngx_rtmp_module.so</code></li>
       <li>ssl certificate</li>
     </ul>
   </li>
@@ -150,11 +150,11 @@ Reading time ~1 minute
 
 <h1 id="ssl-自簽">ssl 自簽</h1>
 <blockquote>
-  <p>參考 : <code class="highlighter-rouge">https://gist.github.com/jhaoheng/c0a19690da10dda9db9beda1c8a812a3</code></p>
+  <p>參考 : <code class="language-html highlighter-rouge">https://gist.github.com/jhaoheng/c0a19690da10dda9db9beda1c8a812a3</code></p>
 </blockquote>
 
 <ol>
-  <li>下載後，執行 <code class="highlighter-rouge">sh generate-CA.sh</code>
+  <li>下載後，執行 <code class="language-html highlighter-rouge">sh generate-CA.sh</code>
     <ul>
       <li>產生 xxxx.crt &amp; xxxx.key  (非 ca 開頭)</li>
     </ul>
@@ -164,7 +164,7 @@ Reading time ~1 minute
 
 <h1 id="nginxconf">nginx.conf</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user  nginx;
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user  nginx;
 worker_processes  1;
 
 # should add this to enable rtmpt : 
@@ -262,19 +262,19 @@ rtmp {
       <a href="https://jhaoheng.github.io/blogpost/docker/haproxy/nginx/proxy/rtmp/rtmps/haproxy/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

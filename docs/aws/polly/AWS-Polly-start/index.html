@@ -159,14 +159,14 @@ Reading time ~1 minute
   <li>AWS Console</li>
   <li>AWS SDKS</li>
   <li>AWS CLI : 這邊使用 cli 當做範例</li>
-  <li>API reference : <code class="highlighter-rouge">http://docs.aws.amazon.com/polly/latest/dg/API_Reference.html</code></li>
+  <li>API reference : <code class="language-html highlighter-rouge">http://docs.aws.amazon.com/polly/latest/dg/API_Reference.html</code></li>
 </ul>
 
 <h1 id="aws-cli">AWS CLI</h1>
 
 <ol>
-  <li>必須先安裝且設定 AWS CLI : <code class="highlighter-rouge">http://docs.aws.amazon.com/polly/latest/dg/setup-aws-cli.html</code></li>
-  <li>這邊的範例使用 <code class="highlighter-rouge">aws polly synthesize-speech</code>
+  <li>必須先安裝且設定 AWS CLI : <code class="language-html highlighter-rouge">http://docs.aws.amazon.com/polly/latest/dg/setup-aws-cli.html</code></li>
+  <li>這邊的範例使用 <code class="language-html highlighter-rouge">aws polly synthesize-speech</code>
     <ol>
       <li>執行指令</li>
       <li>取得下載的語音檔案</li>
@@ -177,7 +177,7 @@ Reading time ~1 minute
 
 <h2 id="polloy-可用的指令">POLLOY 可用的指令</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 輸入 aws polly help
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 輸入 aws polly help
 delete-lexicon
 describe-voices
 get-lexicon
@@ -190,12 +190,12 @@ synthesize-speech
 <h2 id="polly--synthesizespeech">POLLY : SynthesizeSpeech</h2>
 
 <blockquote>
-  <p>如果你在 aws-cli 中設定的地區不支援 polly, 則你必須使用 <code class="highlighter-rouge">--region polly-supported-aws-region</code> 來指定使用 polly 服務的地區
+  <p>如果你在 aws-cli 中設定的地區不支援 polly, 則你必須使用 <code class="language-html highlighter-rouge">--region polly-supported-aws-region</code> 來指定使用 polly 服務的地區
 如 : 你用了某個地區的服務，但該地區並不支援 polly，則若你要使用 polly，則必須額外指定地區，來讓你的服務正常
-<code class="highlighter-rouge">aws polly synthesize-speech help</code></p>
+<code class="language-html highlighter-rouge">aws polly synthesize-speech help</code></p>
 </blockquote>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 輸入, 以下為必要選項
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 輸入, 以下為必要選項
 aws polly synthesize-speech \
     --output-format mp3 \
     --voice-id Joanna \
@@ -216,7 +216,7 @@ aws polly synthesize-speech \
   <p>取得所有可以用的聲音設定，會有不同的語調與速度，可在 aws polly console 測試</p>
 </blockquote>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 輸入
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code># 輸入
 aws polly describe-voices
 # 輸出
 {
@@ -241,8 +241,8 @@ aws polly describe-voices
 </code></pre></div></div>
 
 <ul>
-  <li>除此之外，<code class="highlighter-rouge">describe-voice</code> 還可取得其他的設定，如 <code class="highlighter-rouge">--language-code</code> : <code class="highlighter-rouge">aws polly describe-voices --language-code pt-BR(Brazilian Portuguese. 巴西葡萄牙語)</code></li>
-  <li>使用 <code class="highlighter-rouge">aws polly describe-voices help</code> 取得更多的幫助</li>
+  <li>除此之外，<code class="language-html highlighter-rouge">describe-voice</code> 還可取得其他的設定，如 <code class="language-html highlighter-rouge">--language-code</code> : <code class="language-html highlighter-rouge">aws polly describe-voices --language-code pt-BR(Brazilian Portuguese. 巴西葡萄牙語)</code></li>
+  <li>使用 <code class="language-html highlighter-rouge">aws polly describe-voices help</code> 取得更多的幫助</li>
 </ul>
 
       <footer class="entry-meta">
@@ -264,19 +264,19 @@ aws polly describe-voices
       <a href="https://jhaoheng.github.io/blogpost/golang/yaml/go-viper-yaml/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

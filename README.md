@@ -3,9 +3,10 @@
 ```
 ---
 layout: post
-title: 【Deploy Test】Use Kubernetes & Minikube(local)
-date: 2018-03-02 07:30
-categories: kubenetes minikube
+title: 【Go】Drill interface{}
+date: 2019-09-07 16:17
+categories: Golang
+tags: Golang
 ---
 ```
 
@@ -43,7 +44,7 @@ categories: kubenetes minikube
     - 每次執行 build 都會重建文章的 commit code, 會讓 commit 很複雜, 故用此方法
 
 ## deploy
-- build : `sudo jekyll build`
+- build : `jekyll build -d ./docs`
 - upload : `cd _site && git add . && git commit -m "update" && git push`
 
 # update

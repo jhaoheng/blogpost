@@ -136,14 +136,14 @@ Reading time ~1 minute
 
 <h1 id="安裝-rsyslog">安裝 rsyslog</h1>
 <ol>
-  <li>在 docker:container 中，安裝 <code class="highlighter-rouge">apt-get install rsyslog -y</code></li>
+  <li>在 docker:container 中，安裝 <code class="language-html highlighter-rouge">apt-get install rsyslog -y</code></li>
   <li>設定檔
     <ul>
       <li>rsyslog.conf : 設定檔</li>
       <li>rsyslog.d/ : 啟動預載檔</li>
     </ul>
   </li>
-  <li>log 位置 : <code class="highlighter-rouge">/var/log</code>，可參考啟動預載檔</li>
+  <li>log 位置 : <code class="language-html highlighter-rouge">/var/log</code>，可參考啟動預載檔</li>
 </ol>
 
 <h1 id="docker">docker</h1>
@@ -153,7 +153,7 @@ Reading time ~1 minute
     <ol>
       <li>一種是使用 docker:remote_syslog 將 syslog 的檔案丟到外面系統中央化
         <ul>
-          <li>詳情參考 <code class="highlighter-rouge">https://jhaoheng.github.io/blogpost/2458676/</code></li>
+          <li>詳情參考 <code class="language-html highlighter-rouge">https://jhaoheng.github.io/blogpost/2458676/</code></li>
         </ul>
       </li>
       <li>另一種是用 rsyslog 本身支援直接指定目標位置</li>
@@ -169,25 +169,25 @@ Reading time ~1 minute
     <ol>
       <li>進入 container</li>
       <li>找到 syslog 的位置</li>
-      <li>直接寫入 <code class="highlighter-rouge">echo "hello" &gt;&gt; syslog</code></li>
+      <li>直接寫入 <code class="language-html highlighter-rouge">echo "hello" &gt;&gt; syslog</code></li>
     </ol>
   </li>
   <li>方法二 : 透過 logger
     <ol>
       <li>進入 container</li>
-      <li><code class="highlighter-rouge">logger -s "world"</code></li>
+      <li><code class="language-html highlighter-rouge">logger -s "world"</code></li>
     </ol>
   </li>
   <li>檢查 :
     <ol>
       <li>找到 syslog 的位置</li>
-      <li><code class="highlighter-rouge">tail -f syslog</code></li>
+      <li><code class="language-html highlighter-rouge">tail -f syslog</code></li>
     </ol>
   </li>
 </ul>
 
 <h2 id="php-code">php code</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openlog("response", LOG_PID, LOG_SYSLOG);
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>openlog("response", LOG_PID, LOG_SYSLOG);
 syslog(LOG_INFO, json_encode($log));
 closelog();
 </code></pre></div></div>
@@ -213,19 +213,19 @@ closelog();
       <a href="https://jhaoheng.github.io/blogpost/facebook/app/mobile/web/oauth/%E5%A6%82%E4%BD%95%E5%BB%BA%E7%AB%8Bfacebook_oauth/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

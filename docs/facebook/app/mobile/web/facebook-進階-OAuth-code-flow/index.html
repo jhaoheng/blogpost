@@ -124,12 +124,12 @@ Reading time ~1 minute
     </header>
     <div class="entry-content">
       <h1 id="first-at-all">First at all</h1>
-<p>官方 : <code class="highlighter-rouge">https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow</code></p>
+<p>官方 : <code class="language-html highlighter-rouge">https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow</code></p>
 
 <ul>
   <li>手動建立的流程中，有分兩個方式取得 token
     <ol>
-      <li>直接在要求 oauth 的授權 url 中 加入參數 <code class="highlighter-rouge">response_type=token</code>，但返回的 token 會夾帶在 fragment(hashtag) 中，可透過 js 取得(因為在 url 的解析中，無法直接取得 fragment 的參數)。</li>
+      <li>直接在要求 oauth 的授權 url 中 加入參數 <code class="language-html highlighter-rouge">response_type=token</code>，但返回的 token 會夾帶在 fragment(hashtag) 中，可透過 js 取得(因為在 url 的解析中，無法直接取得 fragment 的參數)。</li>
       <li>透過 oauth default 方法取得 code，把 code 送去交換取得 token
 <!--more--></li>
     </ol>
@@ -139,13 +139,13 @@ Reading time ~1 minute
 <h2 id="方法一--直接取得-token---驗證-token">方法一 : 直接取得 token -&gt; 驗證 token</h2>
 <blockquote>
   <ul>
-    <li>URL 組成 : <code class="highlighter-rouge">scheme://host:port/path?query#fragment</code></li>
+    <li>URL 組成 : <code class="language-html highlighter-rouge">scheme://host:port/path?query#fragment</code></li>
     <li>fragment : fragment 片段 網頁中可能會分為不同的片段，如果想訪問網頁後直接到達指定位置(tag)，可以在這部分設置</li>
   </ul>
 </blockquote>
 
 <ol>
-  <li><code class="highlighter-rouge">https://www.facebook.com/v2.10/dialog/oauth?client_id={your_app_id}&amp;response_type=token&amp;redirect_uri={redirect_uri}</code>
+  <li><code class="language-html highlighter-rouge">https://www.facebook.com/v2.10/dialog/oauth?client_id={your_app_id}<span class="err">&amp;</span>response_type=token<span class="err">&amp;</span>redirect_uri={redirect_uri}</code>
     <ul>
       <li>parameters
         <ul>
@@ -154,16 +154,16 @@ Reading time ~1 minute
           <li>redirect_uri</li>
         </ul>
       </li>
-      <li>response url : <code class="highlighter-rouge">{redirect_uri}?#access_token={token}&amp;expires_in={expires_in}</code> : 注意 token 是放在 fragment 的字串中
+      <li>response url : <code class="language-html highlighter-rouge">{redirect_uri}?#access_token={token}<span class="err">&amp;</span>expires_in={expires_in}</code> : 注意 token 是放在 fragment 的字串中
         <ul>
-          <li>php 透過 javascript 取得 fragment string : <code class="highlighter-rouge">$fragment = "&lt;script&gt;document.write(window.location.hash);&lt;/script&gt;";</code></li>
+          <li>php 透過 javascript 取得 fragment string : <code class="language-html highlighter-rouge">$fragment = "<span class="nt">&lt;script&gt;</span><span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">);</span><span class="nt">&lt;/script&gt;</span>";</code></li>
         </ul>
       </li>
     </ul>
   </li>
   <li>驗證 :
     <ol>
-      <li>取得 your_app_token : <code class="highlighter-rouge">https://graph.facebook.com/oauth/access_token?client_id={your_app_id}&amp;client_secret={your_app_secret}&amp;grant_type=client_credentials</code>
+      <li>取得 your_app_token : <code class="language-html highlighter-rouge">https://graph.facebook.com/oauth/access_token?client_id={your_app_id}<span class="err">&amp;</span>client_secret={your_app_secret}<span class="err">&amp;</span>grant_type=client_credentials</code>
         <ul>
           <li>parameters
             <ul>
@@ -172,10 +172,10 @@ Reading time ~1 minute
               <li>grant_type=client_credentials</li>
             </ul>
           </li>
-          <li>response json : <code class="highlighter-rouge">{"access_token": {your_app_token}, "token_type": "bearer"}</code></li>
+          <li>response json : <code class="language-html highlighter-rouge">{"access_token": {your_app_token}, "token_type": "bearer"}</code></li>
         </ul>
       </li>
-      <li>驗證 : <code class="highlighter-rouge">https://graph.facebook.com/debug_token?input_token={token}&amp;access_token={app-token-or-admin-token}</code>
+      <li>驗證 : <code class="language-html highlighter-rouge">https://graph.facebook.com/debug_token?input_token={token}<span class="err">&amp;</span>access_token={app-token-or-admin-token}</code>
         <ul>
           <li>parameters
             <ul>
@@ -192,7 +192,7 @@ Reading time ~1 minute
 
 <h2 id="先取得-code---使用-code-來取得-token---驗證-token">先取得 code -&gt; 使用 code 來取得 token -&gt; 驗證 token</h2>
 <ol>
-  <li><code class="highlighter-rouge">https://www.facebook.com/v2.10/dialog/oauth?client_id={your_app_id}&amp;redirect_uri={redirect_url}</code>
+  <li><code class="language-html highlighter-rouge">https://www.facebook.com/v2.10/dialog/oauth?client_id={your_app_id}<span class="err">&amp;</span>redirect_uri={redirect_url}</code>
     <ul>
       <li>parameters
         <ul>
@@ -200,10 +200,10 @@ Reading time ~1 minute
           <li>redirect_uri</li>
         </ul>
       </li>
-      <li>response url : <code class="highlighter-rouge">{reditect_url}?code={code}#_=_</code></li>
+      <li>response url : <code class="language-html highlighter-rouge">{reditect_url}?code={code}#_=_</code></li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">https://graph.facebook.com/v2.10/oauth/access_token?client_id={your_app_id}&amp;client_secret={your_app_secret}&amp;redirect_uri={redirect_url}&amp;code={code}</code>
+  <li><code class="language-html highlighter-rouge">https://graph.facebook.com/v2.10/oauth/access_token?client_id={your_app_id}<span class="err">&amp;</span>client_secret={your_app_secret}<span class="err">&amp;</span>redirect_uri={redirect_url}<span class="err">&amp;</span>code={code}</code>
     <ul>
       <li>parameters
         <ul>
@@ -213,12 +213,12 @@ Reading time ~1 minute
           <li>code : 步驟 1 中取得的 code</li>
         </ul>
       </li>
-      <li>response json : <code class="highlighter-rouge">{ "access_token": {access-token}, "token_type": {type}, "expires_in": {seconds-til-expiration} }</code></li>
+      <li>response json : <code class="language-html highlighter-rouge">{ "access_token": {access-token}, "token_type": {type}, "expires_in": {seconds-til-expiration} }</code></li>
     </ul>
   </li>
   <li>驗證 :
     <ol>
-      <li>取得 your_app_token : <code class="highlighter-rouge">https://graph.facebook.com/oauth/access_token?client_id={your_app_id}&amp;client_secret={your_app_secret}&amp;grant_type=client_credentials</code>
+      <li>取得 your_app_token : <code class="language-html highlighter-rouge">https://graph.facebook.com/oauth/access_token?client_id={your_app_id}<span class="err">&amp;</span>client_secret={your_app_secret}<span class="err">&amp;</span>grant_type=client_credentials</code>
         <ul>
           <li>parameters
             <ul>
@@ -227,10 +227,10 @@ Reading time ~1 minute
               <li>grant_type=client_credentials</li>
             </ul>
           </li>
-          <li>response json : <code class="highlighter-rouge">{"access_token": {your_app_token}, "token_type": "bearer"}</code></li>
+          <li>response json : <code class="language-html highlighter-rouge">{"access_token": {your_app_token}, "token_type": "bearer"}</code></li>
         </ul>
       </li>
-      <li>驗證 : <code class="highlighter-rouge">https://graph.facebook.com/debug_token?input_token={token}&amp;access_token={app-token-or-admin-token}</code>
+      <li>驗證 : <code class="language-html highlighter-rouge">https://graph.facebook.com/debug_token?input_token={token}<span class="err">&amp;</span>access_token={app-token-or-admin-token}</code>
         <ul>
           <li>parameters
             <ul>
@@ -238,7 +238,7 @@ Reading time ~1 minute
               <li>access_token : 此為 上步驟中 respone 的 access_token</li>
             </ul>
           </li>
-          <li>response : 請參考 <code class="highlighter-rouge">https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow#checktoken</code></li>
+          <li>response : 請參考 <code class="language-html highlighter-rouge">https://developers.facebook.com/docs/facebook-login/manually-build-a-login-flow#checktoken</code></li>
         </ul>
       </li>
     </ol>
@@ -246,37 +246,37 @@ Reading time ~1 minute
 </ol>
 
 <h1 id="附註--javascript-pass-value-to-php">附註 : javascript pass value to php</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">"text/javascript"</span><span class="nt">&gt;</span>
 
 <span class="kd">var</span> <span class="nx">protocol</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">protocol</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">hostname</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hostname</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">pathname</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">pathname</span><span class="p">;</span> 
-<span class="nx">baseUrl</span> <span class="o">=</span> <span class="nx">protocol</span><span class="o">+</span><span class="s1">'//'</span><span class="o">+</span><span class="nx">hostname</span><span class="o">+</span><span class="nx">pathname</span><span class="p">;</span>
+<span class="nx">baseUrl</span> <span class="o">=</span> <span class="nx">protocol</span><span class="o">+</span><span class="dl">'</span><span class="s1">//</span><span class="dl">'</span><span class="o">+</span><span class="nx">hostname</span><span class="o">+</span><span class="nx">pathname</span><span class="p">;</span>
 <span class="c1">// alert(baseUrl);</span>
 
 <span class="nx">fragment</span> <span class="o">=</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">hash</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 
 <span class="k">if</span> <span class="p">(</span><span class="nx">fragment</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// alert(fragment);</span>
-    <span class="nx">state</span> <span class="o">=</span> <span class="nx">fragment</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">fragment</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'state='</span><span class="p">))</span>
-                  <span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'&amp;'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                  <span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'='</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="nx">state</span> <span class="o">=</span> <span class="nx">fragment</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">fragment</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">'</span><span class="s1">state=</span><span class="dl">'</span><span class="p">))</span>
+                  <span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">&amp;</span><span class="dl">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                  <span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">=</span><span class="dl">'</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
     <span class="c1">// alert(state);</span>
-    <span class="nx">access_token</span> <span class="o">=</span> <span class="nx">fragment</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">fragment</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">'access_token='</span><span class="p">))</span>
-                  <span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'&amp;'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-                  <span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">'='</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
+    <span class="nx">access_token</span> <span class="o">=</span> <span class="nx">fragment</span><span class="p">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">fragment</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="dl">'</span><span class="s1">access_token=</span><span class="dl">'</span><span class="p">))</span>
+                  <span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">&amp;</span><span class="dl">'</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                  <span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">'</span><span class="s1">=</span><span class="dl">'</span><span class="p">)[</span><span class="mi">1</span><span class="p">];</span>
     <span class="c1">// alert(access_token);</span>
     
     <span class="c1">// alert("do it");</span>
-    <span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">baseUrl</span><span class="o">+</span><span class="s2">"?state="</span> <span class="o">+</span> <span class="nx">state</span> <span class="o">+</span> <span class="s1">'&amp;access_token='</span> <span class="o">+</span> <span class="nx">access_token</span><span class="p">;</span>
+    <span class="nx">location</span><span class="p">.</span><span class="nx">href</span> <span class="o">=</span> <span class="nx">baseUrl</span><span class="o">+</span><span class="dl">"</span><span class="s2">?state=</span><span class="dl">"</span> <span class="o">+</span> <span class="nx">state</span> <span class="o">+</span> <span class="dl">'</span><span class="s1">&amp;access_token=</span><span class="dl">'</span> <span class="o">+</span> <span class="nx">access_token</span><span class="p">;</span>
 <span class="p">}</span> 
 <span class="k">else</span> 
     <span class="nx">exit</span><span class="p">();</span>
 
 <span class="nt">&lt;/script&gt;</span>
 
-<span class="cp">&lt;?php</span>  
-<span class="k">echo</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">'access_token'</span><span class="p">];</span>
+<span class="nt">&lt;</span><span class="err">?</span><span class="na">php</span>  
+<span class="na">echo</span> <span class="err">$</span><span class="na">_GET</span><span class="err">['</span><span class="na">access_token</span><span class="err">'];</span>
 </code></pre></div></div>
 
       <footer class="entry-meta">
@@ -298,19 +298,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/github/jekyll/github&jekyll/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

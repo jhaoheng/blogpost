@@ -139,13 +139,13 @@ Reading time ~1 minute
 <h1 id="安裝-mongodb">安裝 mongodb</h1>
 
 <ol>
-  <li><code class="highlighter-rouge">$ brew install mongodb</code></li>
-  <li>可在 <code class="highlighter-rouge">$ cat /usr/local/etc/mongod.conf</code>，看到 mongodb 設定
+  <li><code class="language-html highlighter-rouge">$ brew install mongodb</code></li>
+  <li>可在 <code class="language-html highlighter-rouge">$ cat /usr/local/etc/mongod.conf</code>，看到 mongodb 設定
     <ul>
       <li>注意位置 /data/db，確定是否存在，若不存在則建立一個，記得打開權限</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">$ mongod</code> 啟動 mongodb</li>
+  <li><code class="language-html highlighter-rouge">$ mongod</code> 啟動 mongodb</li>
 </ol>
 
 <h1 id="設定-php-drive">設定 php drive</h1>
@@ -159,22 +159,22 @@ Reading time ~1 minute
 </blockquote>
 
 <ol>
-  <li><code class="highlighter-rouge">$ brew install php70-mongodb</code></li>
-  <li><code class="highlighter-rouge">$ cd /usr/local/Cellar/php70-mongodb</code> =&gt; 找到 mongodb.so</li>
-  <li><code class="highlighter-rouge">$ php -i | grep extension</code> =&gt; 找到 extension 的位置</li>
-  <li><code class="highlighter-rouge">$ mv mongodb.so {extension 位置}</code></li>
-  <li><code class="highlighter-rouge">$ php --ini</code> =&gt; 找到 php.ini</li>
-  <li><code class="highlighter-rouge">$ vim php.ini</code>
+  <li><code class="language-html highlighter-rouge">$ brew install php70-mongodb</code></li>
+  <li><code class="language-html highlighter-rouge">$ cd /usr/local/Cellar/php70-mongodb</code> =&gt; 找到 mongodb.so</li>
+  <li><code class="language-html highlighter-rouge">$ php -i | grep extension</code> =&gt; 找到 extension 的位置</li>
+  <li><code class="language-html highlighter-rouge">$ mv mongodb.so {extension 位置}</code></li>
+  <li><code class="language-html highlighter-rouge">$ php --ini</code> =&gt; 找到 php.ini</li>
+  <li><code class="language-html highlighter-rouge">$ vim php.ini</code>
     <ul>
       <li>在 extension 中，加入 extension=mongodb.so</li>
     </ul>
   </li>
-  <li>驗證在 <code class="highlighter-rouge">$ php -i | grep mongo</code> 驗證版本應該跟下載的相同</li>
+  <li>驗證在 <code class="language-html highlighter-rouge">$ php -i | grep mongo</code> 驗證版本應該跟下載的相同</li>
 </ol>
 
 <h2 id="當執行-mongo-提取資料時出現">當執行 mongo 提取資料時出現</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dyld: lazy symbol binding failed: Symbol not found: _clock_gettime
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dyld: lazy symbol binding failed: Symbol not found: _clock_gettime
   Referenced from: /usr/local/opt/php70-mongodb/mongodb.so
   Expected in: /usr/lib/libSystem.B.dylib
 
@@ -231,19 +231,19 @@ dyld: Symbol not found: _clock_gettime
       <a href="https://jhaoheng.github.io/blogpost/php-mamp-pcntl-installation/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

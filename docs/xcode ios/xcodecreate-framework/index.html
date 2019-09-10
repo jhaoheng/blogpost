@@ -125,14 +125,14 @@ Reading time ~1 minute
     <div class="entry-content">
       <h2 id="why">Why</h2>
 
-<p>直接在 xcode 中，產生出適合 <code class="highlighter-rouge">armv7 -arch armv7s</code> 與 <code class="highlighter-rouge">x86_64</code> 的 framework
-若透過預設的方法產出，會有兩種版本，必須再使用 <code class="highlighter-rouge">lipo create</code> 進行合併
-此方法是透過 script 在 compile 時，直接進行 build 與 <code class="highlighter-rouge">lipo create</code> 的動作</p>
+<p>直接在 xcode 中，產生出適合 <code class="language-html highlighter-rouge">armv7 -arch armv7s</code> 與 <code class="language-html highlighter-rouge">x86_64</code> 的 framework
+若透過預設的方法產出，會有兩種版本，必須再使用 <code class="language-html highlighter-rouge">lipo create</code> 進行合併
+此方法是透過 script 在 compile 時，直接進行 build 與 <code class="language-html highlighter-rouge">lipo create</code> 的動作</p>
 
 <h3 id="基本設定">基本設定</h3>
 <ol>
   <li>設置靜態庫，將 Mach-o type 從動態設定為 Static Library
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>|-MyFirstFramework
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>|-MyFirstFramework
  |-TARGETS
   	|-Build Settings
  	|-Linking
@@ -173,10 +173,10 @@ Reading time ~1 minute
       <li>要注意的是 xxx-name.framework，只是一包資料夾，要進行合併的是底下的 [xxx-name] 
       - 真機路徑(path_1) : Debug-iphoneos/[name].framework/[name]
       - 模擬機路徑(path_2) : Debug-iphonesimulator/[name].framework/[name]
-      - <code class="highlighter-rouge">lipo -create path_1 path_2 -output [name]</code>
-      - 產生出的 name 為執行檔，copy <code class="highlighter-rouge">Debug-iphoneos/[name].framework</code> 到適當位置
+      - <code class="language-html highlighter-rouge">lipo -create path_1 path_2 -output [name]</code>
+      - 產生出的 name 為執行檔，copy <code class="language-html highlighter-rouge">Debug-iphoneos/[name].framework</code> 到適當位置
       - 將剛剛產生出的 [name]，取代掉上一行 framwork 中原本的 [name]
-      - <code class="highlighter-rouge">lipo -info [name]</code>
+      - <code class="language-html highlighter-rouge">lipo -info [name]</code>
       - 將整包調整過後的 framework 放入 xcode 測試</li>
     </ul>
   </li>
@@ -201,19 +201,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/dynamic-programming/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

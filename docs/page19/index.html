@@ -124,6 +124,70 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2016-05-23T03:55:00+08:00"><a href="https://jhaoheng.github.io/blogpost/objc-c-toll-free-bridging-non-destructive-bridge/">May 23, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/objc-c-toll-free-bridging-non-destructive-bridge/" rel="bookmark" title="【Objc-C】Toll-Free Bridging : 無損橋接 " itemprop="url">【Objc-C】Toll-Free Bridging : 無損橋接 </a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h2 id="toll-free-bridging--無損橋接">Toll-Free Bridging : 無損橋接</h2>
+
+<p>在 ARC 管理中，常會看到這個名詞</p>
+
+<p>簡單來說就是因為 OC 是 C 的執行庫，而為了讓 OC 可以與 C 進行資料交換，就得利用 Toll-Free Bridging 進行資料格式的交換
+如 NSArray 與 CFArray <a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Reference/CFArrayRef/index.html#//apple_ref/c/tdef/CFArrayRef">參考</a></p>
+
+<blockquote>
+  <p>CFArray is “toll-free bridged” with its Cocoa Foundation counterpart, NSArray. This means that the Core Foundation type is interchangeable in function or method calls with the bridged Foundation object. Therefore, in a method where you see an NSArray * parameter, you can pass in a CFArrayRef, and in a function where you see a CFArrayRef parameter, you can pass in an NSArray instance. This also applies to concrete subclasses of NSArray. See Toll-Free Bridged Types for more information on toll-free bridging.</p>
+</blockquote>
+
+<p><a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Conceptual/CFDesignConcepts/Articles/tollFreeBridgedTypes.html#//apple_ref/doc/uid/TP40010677">Toll-Free Bridged Types</a></p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSArray *_array = [[NSArray alloc]init]; 
+NSString *values = {@"foo",@"bar"}; 
+CFArrayRef arrayRef = CFArrayCreate(kCFAllocatorDefault, (void *)values, (CFIndex)2,NULL); 
+NSArray *array = (__bridgeNSArray *)arrayRef;//注意這一行的__bridge 
+NSDa
+</code></pre></div></div>
+
+<h3 id="nsstring---cfstring">NSString -&gt; CFString</h3>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *foo = @"bar"; 
+CFStringRef bar = (__bridge CFStringRef)(foo); 
+NSLog(@"%ld", CFStringGetLength(bar));
+</code></pre></div></div>
+
+<h3 id="cfstring---nsstring">CFString -&gt; NSString</h3>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CFStringRef foo = CFStringCreateWithCString(kCFAllocatorDefault, "foo", kCFStringEncodingUTF8); 
+NSString *bar = (__bridge NSString *)(foo);
+NSLog(@"%ld", bar.length); 
+CFRelease(foo);
+</code></pre></div></div>
+
+<h3 id="__bridge">__bridge</h3>
+<p>目的在於處理 ARC &lt;-&gt; MRC 間的溝通</p>
+
+<p>而 <strong>『MRC 下的 Toll－Free Bridging 因為不涉及記憶體管理的轉移，相互之間可以直接交換使用。』</strong></p>
+
+<p><a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Conceptual/CFDesignConcepts/Articles/tollFreeBridgedTypes.html#//apple_ref/doc/uid/TP40010677">Toll-Free Bridged Types</a> 
+中，有支援 Toll-Free Bridging 的對照表</p>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/objc-c-toll-free-bridging-non-destructive-bridge/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2016-05-20T11:58:00+08:00"><a href="https://jhaoheng.github.io/blogpost/iotmqtt/">May 20, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -269,7 +333,7 @@ Reading time ~1 minute
   </li>
   <li>合併 *.crt -&gt; bundle.crt
     <ul>
-      <li><code class="highlighter-rouge">cat COMODORSADomainValidationSecureServerCA.crt COMODORSAAddTrustCA.crt AddTrustExternalCARoot.crt &gt;&gt; bundle.crt</code></li>
+      <li><code class="language-html highlighter-rouge">cat COMODORSADomainValidationSecureServerCA.crt COMODORSAAddTrustCA.crt AddTrustExternalCARoot.crt &gt;&gt; bundle.crt</code></li>
     </ul>
   </li>
   <li>
@@ -340,11 +404,11 @@ Reading time ~1 minute
 <h2 id="mp4---m3u8轉換工具--ffmpeg">mp4 -&gt; m3u8轉換工具 : ffmpeg</h2>
 
 <p>因已安裝 homebrew 故</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install ffmpeg
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install ffmpeg
 </code></pre></div></div>
 
 <h2 id="格式轉換">格式轉換</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg -i &lt;filename&gt;.mp4 -c:v libx264 -c:a copy -f hls &lt;outputNmae&gt;.m3u8
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg -i <span class="nt">&lt;filename&gt;</span>.mp4 -c:v libx264 -c:a copy -f hls <span class="nt">&lt;outputNmae&gt;</span>.m3u8
 </code></pre></div></div>
 
 <h2 id="透過-safari-播放測試-m3u8">透過 safari 播放測試 m3u8</h2>
@@ -364,150 +428,6 @@ Reading time ~1 minute
 
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/ioshls/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2016-05-07T18:37:00+08:00"><a href="https://jhaoheng.github.io/blogpost/online-teaching-preparation-udemy/">May 07, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/online-teaching-preparation-udemy/" rel="bookmark" title="【線上教學準備】Udemy" itemprop="url">【線上教學準備】Udemy</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <p>首先無意間發現這個平台，覺得還不錯（應該說是版型設計深得我心），若以當講師為目標，以下歸納幾個重點。
-其中不論講話的速度與自信…等等，在討論與開會上，還頗有用。</p>
-
-<h2 id="課程上線要檢查的-checklist">課程上線要檢查的 checklist</h2>
-<p>http://udemy-images.s3.amazonaws.com/fb/email/2016/Feb_2016_Quality_Checklist.pdf</p>
-
-<h3 id="plan">Plan</h3>
-<ul>
-  <li>Differentiated Topic : 差異化標題</li>
-  <li>Course Goals : 課程目標</li>
-  <li>Structured Teaching : 結構化教學</li>
-  <li>Practice Activities : 實踐教學， (quiz,exercise, or project)</li>
-</ul>
-
-<h3 id="produce">Produce</h3>
-
-<ul>
-  <li>Lecture Format : 課程格式，約 2-20 分鐘。</li>
-  <li>Audio : 聲音注意必須清晰，自新、像講故事般，不要語助詞。</li>
-  <li>Video : HD，投影片必須清晰，60% 的課程必須是影片，16:9 畫面，字體必須要大，並且方便閱讀，畫面簡單，若有人在裡面，佔畫面的 1/4，不需靠太近，把手臂也放入影片中。</li>
-  <li>Instructor Delivery : 簡潔、清晰、自信，盡量少講，ㄜ….，ㄚ….等語助詞。說話語氣要有熱情，因為透過影片，故會減少一些熱度，熱情必須保持在 110%，發音清楚、強調重點。</li>
-  <li>Promo Video : 宣傳視頻，好的教學風格、目標、技巧，都會提升學生的轉換率。</li>
-</ul>
-
-<h3 id="publish">publish</h3>
-
-<ul>
-  <li>Instructor Bio</li>
-  <li>Price : 價格將影響其他相同影片之間的競爭性</li>
-  <li>Title / Subtitle</li>
-  <li>Course Summary</li>
-  <li>Course Image : Must be 16:9; 2048 x 1152 pixels minimum; .jpg, .jpeg, .gif, .png, or .bmp format.</li>
-  <li>Lecture Descriptions</li>
-  <li>Course Complete</li>
-</ul>
-
-<h2 id="從學生的角度思考">從學生的角度思考</h2>
-
-<ul>
-  <li>What are they interested in?</li>
-  <li>What are they taking the course?</li>
-  <li>What motivates them to enroll in a course?</li>
-  <li>What motivates them to complete a course?</li>
-</ul>
-
-<h2 id="who-is-your-target-audience">who is your target audience</h2>
-
-<ul>
-  <li>search Udemy for the “board topic” of your course</li>
-  <li>search the marketplace for similar courses</li>
-  <li>This is your market analysis</li>
-</ul>
-
-<h2 id="course-topic-tip">Course Topic tip</h2>
-
-<p>I want to teach <strong>Level</strong> <strong>Subject</strong> to <strong>Ideal Student</strong> who have <strong>Target Audience</strong> and want to be able to <strong>Learning Objective</strong> for <strong>Course Value</strong></p>
-
-<p>ex:
-I want to teach <strong>Intermediate</strong> <strong>Swift 2.2</strong> to <strong>ios developer</strong> who have <strong>basic Swift skills</strong> and want to be able to <strong>study more new things</strong> for <strong>promote self develop skill</strong></p>
-
-<h2 id="制定好自己的-schedule">制定好自己的 schedule</h2>
-<p>製作教學影片是一個長時間的專案，構思好自己的架構，並且持續打磨產品，好的產品能得到不錯的迴響，再透過數據分析學生群</p>
-
-<h2 id="outline-課程概要">Outline 課程概要</h2>
-<p>好的大綱能吸引學生，並且引導學生了解學習地圖的一部份
-文字、影像、投影片、特寫、語音 的混搭類型</p>
-
-<h2 id="課程描述">課程描述</h2>
-<p>https://support.udemy.com/customer/portal/articles/1587916-add-lecture-descriptions?b_id=3056</p>
-<ol>
-  <li>簡短清晰</li>
-  <li>不要使用外部連結</li>
-</ol>
-
-<h2 id="裝備">裝備</h2>
-<ul>
-  <li>video : Camtasia for MAC
-    <ul>
-      <li>Select Share &gt; Advanced Export &gt; Select from Export list &gt; Export to Quicktime MPEG-4 &gt; Select Options to adjust rest of options</li>
-      <li>Quality Settings: Use high resolution 720p or HD settings</li>
-      <li>Compression Type: H.264</li>
-      <li>Aspect Ratio: 16:9</li>
-      <li>Resolution: 1280x720</li>
-      <li>Frame Rate: 10-15 (preferred)</li>
-      <li>Frame Reordering: Unchecked</li>
-      <li>Key Frames: Automatic</li>
-      <li>Data Rate: Automatic</li>
-      <li><a href="https://www.techsmith.com/tutorial-camtasia-mac-current.html">教學</a></li>
-    </ul>
-  </li>
-  <li>audio : 麥克風</li>
-  <li>slide : keynote</li>
-</ul>
-
-<h2 id="上傳檔案">上傳檔案</h2>
-<p>https://www.udemy.com/tools/</p>
-
-<h2 id="上傳相關資源">上傳相關資源</h2>
-<p>https://support.udemy.com/customer/portal/articles/1587918?b_id=3056</p>
-
-<h2 id="建立測驗">建立測驗</h2>
-<p>https://support.udemy.com/customer/portal/articles/1507750?b_id=3056</p>
-
-<h2 id="圖片--promo">圖片 &amp; promo</h2>
-<p>less is more
-少量的文字
-明確的色彩
-清晰的圖片</p>
-
-<p>promo video: 介紹你自己</p>
-<ul>
-  <li>Don’t Be Shy : 在介紹中露個臉，讓學員知道，他們在跟誰學習</li>
-  <li>Establish Credibility : 告知學員你的經歷與背景，並解釋為什麼這門課程比其他優秀的地方</li>
-  <li>Be Concise : 推廣影片約 2-3 分鐘或者更少</li>
-  <li>Show &amp; Tell : 影片中自信、微笑、偶爾開一些小玩笑</li>
-  <li>Keep it Moving : 別讓學員在某個影片中停留太久</li>
-</ul>
-
-<h2 id="coupon-促銷教學">Coupon 促銷教學</h2>
-<p>https://support.udemy.com/customer/portal/articles/1503919-how-do-i-create-a-coupon-for-my-course-?b_id=3056</p>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/online-teaching-preparation-udemy/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

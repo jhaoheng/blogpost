@@ -133,26 +133,26 @@ Reading time ~1 minute
 
 <ul>
   <li>github : https://github.com/aws/aws-cli/releases</li>
-  <li>安裝 &amp; 更新 &amp; 反安裝 : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/installing.html</code></li>
-  <li>cli 中指令的參考 : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/index.html</code>
+  <li>安裝 &amp; 更新 &amp; 反安裝 : <code class="language-html highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/installing.html</code></li>
+  <li>cli 中指令的參考 : <code class="language-html highlighter-rouge">http://docs.aws.amazon.com/cli/latest/index.html</code>
     <ul>
-      <li><code class="highlighter-rouge">aws help</code> : 可看到所有指令</li>
+      <li><code class="language-html highlighter-rouge">aws help</code> : 可看到所有指令</li>
     </ul>
   </li>
   <li>查詢各類指令說明 :
     <ul>
-      <li><code class="highlighter-rouge">aws help</code></li>
-      <li><code class="highlighter-rouge">aws {command} help</code></li>
-      <li><code class="highlighter-rouge">aws {command} {sub-cmd} help</code></li>
+      <li><code class="language-html highlighter-rouge">aws help</code></li>
+      <li><code class="language-html highlighter-rouge">aws {command} help</code></li>
+      <li><code class="language-html highlighter-rouge">aws {command} {sub-cmd} help</code></li>
     </ul>
   </li>
-  <li>aws Command Completion : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/cli-command-completion.html</code>
+  <li>aws Command Completion : <code class="language-html highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/cli-command-completion.html</code>
     <ul>
       <li>透過 tab 搜尋 aws 相關指令, install :
         <ol>
-          <li><code class="highlighter-rouge">echo $SHELL</code></li>
-          <li>find path : <code class="highlighter-rouge">which aws_completer</code></li>
-          <li>enable : <code class="highlighter-rouge">complete -C '/usr/local/bin/aws_completer' aws</code></li>
+          <li><code class="language-html highlighter-rouge">echo $SHELL</code></li>
+          <li>find path : <code class="language-html highlighter-rouge">which aws_completer</code></li>
+          <li>enable : <code class="language-html highlighter-rouge">complete -C '/usr/local/bin/aws_completer' aws</code></li>
         </ol>
       </li>
     </ul>
@@ -161,36 +161,36 @@ Reading time ~1 minute
 
 <h2 id="設定-profile">設定 profile</h2>
 <ul>
-  <li>resource : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html</code></li>
+  <li>resource : <code class="language-html highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html</code></li>
   <li>請到 iam 取得以下
     <ul>
       <li>AWS Access Key ID</li>
       <li>AWS Secret Access Key</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">aws configure help</code> : 查詢在 configure 中的指令有哪些可用</li>
+  <li><code class="language-html highlighter-rouge">aws configure help</code> : 查詢在 configure 中的指令有哪些可用</li>
   <li>設定 profile
     <ul>
-      <li><code class="highlighter-rouge">aws configure</code></li>
-      <li><code class="highlighter-rouge">aws configure --profile user2</code></li>
+      <li><code class="language-html highlighter-rouge">aws configure</code></li>
+      <li><code class="language-html highlighter-rouge">aws configure --profile user2</code></li>
     </ul>
   </li>
   <li>列出 profile
     <ul>
-      <li><code class="highlighter-rouge">aws configure list</code> : 預設</li>
-      <li><code class="highlighter-rouge">aws configure list --profile default</code> : 指定身份</li>
+      <li><code class="language-html highlighter-rouge">aws configure list</code> : 預設</li>
+      <li><code class="language-html highlighter-rouge">aws configure list --profile default</code> : 指定身份</li>
     </ul>
   </li>
   <li>使用 profile
     <ul>
-      <li><code class="highlighter-rouge">aws ec2 describe-instance</code></li>
-      <li><code class="highlighter-rouge">aws ec2 describe-instance --profile user2</code></li>
+      <li><code class="language-html highlighter-rouge">aws ec2 describe-instance</code></li>
+      <li><code class="language-html highlighter-rouge">aws ec2 describe-instance --profile user2</code></li>
     </ul>
   </li>
   <li>指定使用哪一個 profile
     <ul>
-      <li><code class="highlighter-rouge">export AWS_PROFILE=user2</code> : AWS_PROFILE 為 Environment Variables</li>
-      <li><code class="highlighter-rouge">unset AWS_PROFILE</code> : 回到預設值</li>
+      <li><code class="language-html highlighter-rouge">export AWS_PROFILE=user2</code> : AWS_PROFILE 為 Environment Variables</li>
+      <li><code class="language-html highlighter-rouge">unset AWS_PROFILE</code> : 回到預設值</li>
       <li>Profile Environment Variables
         <ul>
           <li>AWS_ACCESS_KEY_ID</li>
@@ -208,25 +208,25 @@ Reading time ~1 minute
   </li>
   <li>Options
     <ul>
-      <li><code class="highlighter-rouge">--profile</code>		: 指定使用 profile</li>
-      <li><code class="highlighter-rouge">--region</code> 		: 指定地區
+      <li><code class="language-html highlighter-rouge">--profile</code>		: 指定使用 profile</li>
+      <li><code class="language-html highlighter-rouge">--region</code> 		: 指定地區
         <ul>
-          <li>顯示地區列表 : <code class="highlighter-rouge">aws ec2 describe-regions --output table</code></li>
+          <li>顯示地區列表 : <code class="language-html highlighter-rouge">aws ec2 describe-regions --output table</code></li>
         </ul>
       </li>
       <li>
         <table>
           <tbody>
             <tr>
-              <td><code class="highlighter-rouge">--output</code> 		: json</td>
+              <td><code class="language-html highlighter-rouge">--output</code> 		: json</td>
               <td>text</td>
               <td>table</td>
             </tr>
           </tbody>
         </table>
       </li>
-      <li><code class="highlighter-rouge">--endpoint-url</code> : 指定</li>
-      <li>ex : <code class="highlighter-rouge">aws ec2 describe-instances --output table --region ap-northeast-2</code></li>
+      <li><code class="language-html highlighter-rouge">--endpoint-url</code> : 指定</li>
+      <li>ex : <code class="language-html highlighter-rouge">aws ec2 describe-instances --output table --region ap-northeast-2</code></li>
     </ul>
   </li>
 </ul>
@@ -236,17 +236,17 @@ Reading time ~1 minute
 <ol>
   <li>想要列出目前預設使用的 profile 使哪一張
     <ul>
-      <li><code class="highlighter-rouge">aws configure list</code></li>
+      <li><code class="language-html highlighter-rouge">aws configure list</code></li>
     </ul>
   </li>
   <li>想指定預設的 profile
     <ul>
-      <li><code class="highlighter-rouge">export AWS_PROFILE=xxx</code></li>
+      <li><code class="language-html highlighter-rouge">export AWS_PROFILE=xxx</code></li>
     </ul>
   </li>
   <li>想取消指定 profile，回到 default
     <ul>
-      <li><code class="highlighter-rouge">unset AWS_PROFILE</code></li>
+      <li><code class="language-html highlighter-rouge">unset AWS_PROFILE</code></li>
     </ul>
   </li>
 </ol>
@@ -270,19 +270,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/papertrial/logspout/Papertrial-logspout/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

@@ -141,7 +141,7 @@ Reading time ~3 minutes
 </ul>
 
 <h2 id="arc-enforces-new-rules">ARC Enforces New Rules</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 不能明確的調用 `dealloc`，與直接使用 `retain`, `retainCount` 或者 `autorelease`。
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- 不能明確的調用 `dealloc`，與直接使用 `retain`, `retainCount` 或者 `autorelease`。
 	- 但一樣可以使用 `dealloc` 來管理資源，在 ARC 中客製化使用 `dealloc`，不需要使用 `[super delloc]`
 	- 可以使用 `CFRetain`, `CFRelease` 與其他 **Core Foundation-style objects** 相關的功能 (參考 Managing Toll-Free Bridging)
 - 不能使用 `NSAllocateObject`, `NSDeallocateObject`
@@ -157,7 +157,7 @@ Reading time ~3 minutes
 <h3 id="arc-強化在命名方法上的限制">ARC 強化在命名方法上的限制</h3>
 <p>不能給予存取器開頭為 new 的物件名稱，若要給予一個開頭為 new 的物件名稱，則必須用 getter 指定不同的</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Won't work:
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// Won't work:
 @property NSString *newTitle; //Xcode 會給予錯誤
  
 // Works:
@@ -180,16 +180,16 @@ Reading time ~3 minutes
 
 <h3 id="variable-qualifiers">Variable Qualifiers</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>__strong : 預設
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>__strong : 預設
 __weak : 當未被使用後，會被設定為 nil
 __unsafe_unretained : 當沒被使用，且沒被設為 nil，若引用對象被釋放後，the pointer is left dangling.
 __autoreleasing : 用來代表當參數通過 id * 傳遞後，在 return 會被 autoreleased
 </code></pre></div></div>
 
-<p>使用方法 <code class="highlighter-rouge">ClassName * qualifier variableName;</code></p>
+<p>使用方法 <code class="language-html highlighter-rouge">ClassName * qualifier variableName;</code></p>
 
 <h4 id="使用-__weak-測試">使用 __weak 測試</h4>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *ref = @"test";
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *ref = @"test";
 NSString * __weak string = ref;
 NSLog(@"string: %@", string);  // test
     
@@ -218,9 +218,9 @@ NSLog(@"string: %@", string2); // null
 
 <h2 id="arc-uses-a-new-statement-to-manage-autorelease-pools">ARC Uses a New Statement to Manage Autorelease Pools</h2>
 
-<p>在 ARC 下，不能使用 <code class="highlighter-rouge">NSAutoreleasePool </code>，但可以用 <code class="highlighter-rouge">@autoreleasepool blocks</code> 替代</p>
+<p>在 ARC 下，不能使用 <code class="language-html highlighter-rouge">NSAutoreleasePool </code>，但可以用 <code class="language-html highlighter-rouge">@autoreleasepool blocks</code> 替代</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@autoreleasepool {
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@autoreleasepool {
      // Code, such as a loop that creates a large number of temporary objects.
 }
 </code></pre></div></div>
@@ -229,7 +229,7 @@ NSLog(@"string: %@", string2); // null
 
 <p>ARC 下，strong, weak, autoreleasing 的堆疊變數初始化都為 nil</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *name;
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *name;
 NSLog(@"name: %@", name);// nil
 </code></pre></div></div>
 
@@ -238,8 +238,8 @@ NSLog(@"name: %@", name);// nil
 <p>ARC 下，對某個檔案</p>
 
 <ul>
-  <li>使用 <code class="highlighter-rouge">-fobjc-arc</code> 的旗標，開啟 ARC</li>
-  <li>使用 <code class="highlighter-rouge">-fno-objc-arc</code>，來取消 ARC</li>
+  <li>使用 <code class="language-html highlighter-rouge">-fobjc-arc</code> 的旗標，開啟 ARC</li>
+  <li>使用 <code class="language-html highlighter-rouge">-fno-objc-arc</code>，來取消 ARC</li>
 </ul>
 
 <blockquote>
@@ -264,7 +264,7 @@ NSLog(@"name: %@", name);// nil
 
 <p>EX:</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)logFirstNameOfPerson:(ABRecordRef)person {
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)logFirstNameOfPerson:(ABRecordRef)person {
  
     NSString *name = (NSString *)ABRecordCopyValue(person, kABPersonFirstNameProperty);
     NSLog(@"Person's first name: %@", name);
@@ -272,7 +272,7 @@ NSLog(@"name: %@", name);// nil
 }
 </code></pre></div></div>
 <p>轉換為</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)logFirstNameOfPerson:(ABRecordRef)person {
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)logFirstNameOfPerson:(ABRecordRef)person {
  
     NSString *name = (NSString *)CFBridgingRelease(ABRecordCopyValue(person, kABPersonFirstNameProperty));
     NSLog(@"Person's first name: %@", name);
@@ -281,7 +281,7 @@ NSLog(@"name: %@", name);// nil
 
 <h2 id="the-compiler-handles-cf-objects-returned-from-cocoa-methods">The Compiler Handles CF Objects Returned From Cocoa Methods</h2>
 <p>轉換成適當的類別，不能直接使用 UIColor 放入 NSMutableArray 中，要轉換成 CGColor。</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSMutableArray *colors = [NSMutableArray arrayWithObject:(id)[[UIColor darkGrayColor] CGColor]];
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSMutableArray *colors = [NSMutableArray arrayWithObject:(id)[[UIColor darkGrayColor] CGColor]];
 [colors addObject:(id)[[UIColor lightGrayColor] CGColor]];
 </code></pre></div></div>
 
@@ -289,13 +289,13 @@ NSLog(@"name: %@", name);// nil
 
 <p>接下來的範例中，陣列 array 透過 CGGradientCreateWithColors 進行轉換</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSArray *colors = &lt;#An array of colors#&gt;;
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSArray *colors = <span class="nt">&lt;</span><span class="na">#An</span> <span class="na">array</span> <span class="na">of</span> <span class="na">colors#</span><span class="nt">&gt;</span>;
 CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArrayRef)colors, locations);
 </code></pre></div></div>
 
 <p>完整的範例如下</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)drawRect:(CGRect)rect {
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>- (void)drawRect:(CGRect)rect {
     CGContextRef ctx = UIGraphicsGetCurrentContext();
     CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
     CGFloat locations[2] = {0.0, 1.0};
@@ -335,19 +335,19 @@ CGGradientRef gradient = CGGradientCreateWithColors(colorSpace, (__bridge CFArra
       <a href="https://jhaoheng.github.io/blogpost/sslsssls-with-synology-web/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

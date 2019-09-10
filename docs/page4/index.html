@@ -124,6 +124,42 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-11-07T08:01:00+08:00"><a href="https://jhaoheng.github.io/blogpost/rtmpts/rtmpt/nginx/rtmpts/">November 07, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/rtmpts/rtmpt/nginx/rtmpts/" rel="bookmark" title="【rtmpts】透過 ffmpeg 推送 rtmpts 實踐" itemprop="url">【rtmpts】透過 ffmpeg 推送 rtmpts 實踐</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="synopsis">synopsis</h1>
+<ol>
+  <li>rtmpt + ssl
+    <ul>
+      <li><code class="language-html highlighter-rouge">ngx_rtmpt_proxy_module.so</code></li>
+      <li><code class="language-html highlighter-rouge">ngx_rtmp_module.so</code></li>
+      <li>ssl certificate</li>
+    </ul>
+  </li>
+  <li>利用 ffmpeg 傳送給 rtmpts://{host}/demo/video</li>
+</ol>
+
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/rtmpts/rtmpt/nginx/rtmpts/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2017-11-06T12:13:00+08:00"><a href="https://jhaoheng.github.io/blogpost/docker/haproxy/nginx/proxy/rtmp/rtmps/haproxy/">November 06, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -141,7 +177,7 @@ Reading time ~1 minute
     <h1 id="synopsis">synopsis</h1>
 <ol>
   <li>因 nginx-rtmp-module 並沒有支援 ssl 的方式，透過 proxy 的方式也無法使用</li>
-  <li>故使用 haproxy 的方法，透過 <code class="highlighter-rouge">rtmps://</code> 轉送到 <code class="highlighter-rouge">rtmp:1935</code>，加入 ssl，進行驗證。</li>
+  <li>故使用 haproxy 的方法，透過 <code class="language-html highlighter-rouge">rtmps://</code> 轉送到 <code class="language-html highlighter-rouge">rtmp:1935</code>，加入 ssl，進行驗證。</li>
   <li>本文透過 docker 建立環境與設定 : haproxy / rtmp container</li>
   <li>再透過 ffmpeg 進行推送</li>
 </ol>
@@ -254,33 +290,6 @@ Reading time ~1 minute
 
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/docker/mairadb/docker&mariadb/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2017-11-02T08:12:00+08:00"><a href="https://jhaoheng.github.io/blogpost/ubuntu/rsyslog/log/docker/rsyslog&docker/">November 02, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/ubuntu/rsyslog/log/docker/rsyslog&docker/" rel="bookmark" title="【log centralized】use rsyslog in docker" itemprop="url">【log centralized】use rsyslog in docker</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="目標">目標</h1>
-<p>code print log to syslog, and then put sent log to outside(log centralized)</p>
-
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/ubuntu/rsyslog/log/docker/rsyslog&docker/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

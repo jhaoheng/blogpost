@@ -125,15 +125,15 @@ Reading time ~1 minute
     <div class="entry-content">
       <h2 id="initial-check">initial check</h2>
 <ol>
-  <li>檢查網路是否支援 AP : <code class="highlighter-rouge">iw list</code>，須找到支援 AP 的選項</li>
-  <li>檢察網路 : <code class="highlighter-rouge">ifconfig -a</code>，會看到
+  <li>檢查網路是否支援 AP : <code class="language-html highlighter-rouge">iw list</code>，須找到支援 AP 的選項</li>
+  <li>檢察網路 : <code class="language-html highlighter-rouge">ifconfig -a</code>，會看到
     <ul>
       <li>eth0 : 在我的 pi3 下顯示的是 enxb87ebbb66cf，在 iptables 的 package transfer 將 eth0 設定成此值</li>
       <li>lo</li>
       <li>wlan0</li>
     </ul>
   </li>
-  <li>接上 乙太網路線，先測試 raspberry pi 上的網路是否正常，透過 <code class="highlighter-rouge">route</code> 指令檢查 default 的 gateway，可得知 Iface 的名稱，也就是 eth0</li>
+  <li>接上 乙太網路線，先測試 raspberry pi 上的網路是否正常，透過 <code class="language-html highlighter-rouge">route</code> 指令檢查 default 的 gateway，可得知 Iface 的名稱，也就是 eth0</li>
   <li>整個目標就是透過 iptable 的方式，交換 wifi 與乙太網路的資訊</li>
 </ol>
 
@@ -143,11 +143,11 @@ Reading time ~1 minute
 </ul>
 
 <ol>
-  <li>編輯 DHCP Client 設定資訊 : <code class="highlighter-rouge">vim /etc/dhcpcd.conf</code></li>
+  <li>編輯 DHCP Client 設定資訊 : <code class="language-html highlighter-rouge">vim /etc/dhcpcd.conf</code></li>
   <li>在最下方，新增
     <ol>
-      <li><code class="highlighter-rouge">interface  wlan0</code></li>
-      <li><code class="highlighter-rouge">static ip_address=10.0.7.1/24</code> : 指定 wlan0 的 ip 位置</li>
+      <li><code class="language-html highlighter-rouge">interface  wlan0</code></li>
+      <li><code class="language-html highlighter-rouge">static ip_address=10.0.7.1/24</code> : 指定 wlan0 的 ip 位置</li>
     </ol>
   </li>
 </ol>
@@ -158,85 +158,85 @@ Reading time ~1 minute
 </ul>
 
 <ol>
-  <li>開啟 ipv4 路由轉發功能，檔案位置 <code class="highlighter-rouge">/etc/sysctl.conf</code>
+  <li>開啟 ipv4 路由轉發功能，檔案位置 <code class="language-html highlighter-rouge">/etc/sysctl.conf</code>
     <ul>
-      <li>查詢 : <code class="highlighter-rouge">cat /etc/sysctl.conf | grep ip_forward</code></li>
-      <li>變更設定 : 至 <code class="highlighter-rouge">/etc/sysctl.conf</code>，找到 <code class="highlighter-rouge">net.ipv4.ip_forward</code> 並設定為 1
+      <li>查詢 : <code class="language-html highlighter-rouge">cat /etc/sysctl.conf | grep ip_forward</code></li>
+      <li>變更設定 : 至 <code class="language-html highlighter-rouge">/etc/sysctl.conf</code>，找到 <code class="language-html highlighter-rouge">net.ipv4.ip_forward</code> 並設定為 1
         <ul>
-          <li>或透過指令變更 : <code class="highlighter-rouge">sudo sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf</code></li>
+          <li>或透過指令變更 : <code class="language-html highlighter-rouge">sudo sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf</code></li>
         </ul>
       </li>
     </ul>
   </li>
-  <li>更新 iptable，將內部的 wlan0 封包轉給 eth0，詳細原理可參考 : <code class="highlighter-rouge">http://web.mit.edu/rhel-doc/4/RH-DOCS/rhel-sg-zh_tw-4/s1-firewall-ipt-fwd.html</code>
+  <li>更新 iptable，將內部的 wlan0 封包轉給 eth0，詳細原理可參考 : <code class="language-html highlighter-rouge">http://web.mit.edu/rhel-doc/4/RH-DOCS/rhel-sg-zh_tw-4/s1-firewall-ipt-fwd.html</code>
     <ol>
-      <li><code class="highlighter-rouge">sudo iptables -F</code></li>
-      <li><code class="highlighter-rouge">sudo iptables -F -t nat</code></li>
-      <li><code class="highlighter-rouge">sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</code></li>
-      <li><code class="highlighter-rouge">sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT</code></li>
-      <li><code class="highlighter-rouge">sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -F</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -F -t nat</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT</code></li>
     </ol>
   </li>
   <li>儲存設定，讓每次開機都自動設定
     <ol>
-      <li><code class="highlighter-rouge">vim /etc/rc.local</code></li>
-      <li>在 <code class="highlighter-rouge">exit 0</code> 之前，加入<code class="highlighter-rouge">sudo iptables-save &gt; /etc/network/iptables.ipv4.nat</code></li>
+      <li><code class="language-html highlighter-rouge">vim /etc/rc.local</code></li>
+      <li>在 <code class="language-html highlighter-rouge">exit 0</code> 之前，加入<code class="language-html highlighter-rouge">sudo iptables-save &gt; /etc/network/iptables.ipv4.nat</code></li>
     </ol>
   </li>
   <li>查看 iptable
     <ul>
-      <li><code class="highlighter-rouge">sudo iptables -t nat -S</code></li>
-      <li><code class="highlighter-rouge">sudo iptables -S</code></li>
-      <li><code class="highlighter-rouge">sudo iptables -L</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -t nat -S</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -S</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -L</code></li>
     </ul>
   </li>
 </ol>
 
 <h2 id="架設-dhcp-server">架設 DHCP Server</h2>
 <ol>
-  <li><code class="highlighter-rouge">sudo apt-get -y install dnsmasq</code></li>
-  <li><code class="highlighter-rouge">sudo vim /etc/dnsmasq.conf</code>，在最下方編輯
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>interface=wlan0
+  <li><code class="language-html highlighter-rouge">sudo apt-get -y install dnsmasq</code></li>
+  <li><code class="language-html highlighter-rouge">sudo vim /etc/dnsmasq.conf</code>，在最下方編輯
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>interface=wlan0
 dhcp-range=10.0.7.101,10.0.7.200,255.255.255.0,12h
 </code></pre></div>    </div>
   </li>
-  <li>重新啟動 dnsmasq : <code class="highlighter-rouge">sudo systemctl restart dnsmasq &amp;&amp; sudo systemctl enable dnsmasq</code></li>
+  <li>重新啟動 dnsmasq : <code class="language-html highlighter-rouge">sudo systemctl restart dnsmasq <span class="err">&amp;&amp;</span> sudo systemctl enable dnsmasq</code></li>
 </ol>
 
 <h2 id="設定-hostapd">設定 hostapd</h2>
 
 <ol>
-  <li><code class="highlighter-rouge">sudo apt-get install hostapd -y</code></li>
-  <li><code class="highlighter-rouge">cp /usr/share/doc/hostapd/examples/hostapd.conf.gz /etc/hostapd/</code></li>
-  <li><code class="highlighter-rouge">gunzip /usr/share/doc/hostapd/examples/hostapd.conf.gz</code></li>
+  <li><code class="language-html highlighter-rouge">sudo apt-get install hostapd -y</code></li>
+  <li><code class="language-html highlighter-rouge">cp /usr/share/doc/hostapd/examples/hostapd.conf.gz /etc/hostapd/</code></li>
+  <li><code class="language-html highlighter-rouge">gunzip /usr/share/doc/hostapd/examples/hostapd.conf.gz</code></li>
   <li>編輯 hostapd.conf
     <ol>
-      <li><code class="highlighter-rouge">interface=wlan0</code></li>
-      <li><code class="highlighter-rouge">driver=nl80211</code></li>
-      <li><code class="highlighter-rouge">ssid=RPI-AP</code></li>
-      <li><code class="highlighter-rouge">hw_mode=g</code></li>
-      <li><code class="highlighter-rouge">channel=11</code></li>
-      <li><code class="highlighter-rouge">macaddr_acl=0</code></li>
-      <li><code class="highlighter-rouge">auth_algs=1</code></li>
-      <li><code class="highlighter-rouge">ignore_broadcast_ssid=0</code></li>
-      <li><code class="highlighter-rouge">wpa=2</code></li>
-      <li><code class="highlighter-rouge">wpa_passphrase=12345678</code> : 設定無線網路密碼</li>
-      <li><code class="highlighter-rouge">wpa_key_mgmt=WPA-PSK</code></li>
-      <li><code class="highlighter-rouge">rsn_pairwise=CCMP</code></li>
+      <li><code class="language-html highlighter-rouge">interface=wlan0</code></li>
+      <li><code class="language-html highlighter-rouge">driver=nl80211</code></li>
+      <li><code class="language-html highlighter-rouge">ssid=RPI-AP</code></li>
+      <li><code class="language-html highlighter-rouge">hw_mode=g</code></li>
+      <li><code class="language-html highlighter-rouge">channel=11</code></li>
+      <li><code class="language-html highlighter-rouge">macaddr_acl=0</code></li>
+      <li><code class="language-html highlighter-rouge">auth_algs=1</code></li>
+      <li><code class="language-html highlighter-rouge">ignore_broadcast_ssid=0</code></li>
+      <li><code class="language-html highlighter-rouge">wpa=2</code></li>
+      <li><code class="language-html highlighter-rouge">wpa_passphrase=12345678</code> : 設定無線網路密碼</li>
+      <li><code class="language-html highlighter-rouge">wpa_key_mgmt=WPA-PSK</code></li>
+      <li><code class="language-html highlighter-rouge">rsn_pairwise=CCMP</code></li>
     </ol>
   </li>
-  <li>測試 : <code class="highlighter-rouge">sudo hostapd -dd /etc/hostapd/hostapd.conf</code>
+  <li>測試 : <code class="language-html highlighter-rouge">sudo hostapd -dd /etc/hostapd/hostapd.conf</code>
     <ul>
       <li>測試時，可以透過其他裝置，並連接上 wifi ap</li>
-      <li>如果連接得上，但沒有辦法看網頁，為 iptables 設定錯誤，請檢查你的 iptables : <code class="highlighter-rouge">iptables -L</code></li>
+      <li>如果連接得上，但沒有辦法看網頁，為 iptables 設定錯誤，請檢查你的 iptables : <code class="language-html highlighter-rouge">iptables -L</code></li>
     </ul>
   </li>
-  <li>指定 hostapd daemon 的位置 : <code class="highlighter-rouge">sudo sed -i 's/#DAEMON_CONF=""/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/g' /etc/default/hostapd</code></li>
+  <li>指定 hostapd daemon 的位置 : <code class="language-html highlighter-rouge">sudo sed -i 's/#DAEMON_CONF=""/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/g' /etc/default/hostapd</code></li>
 </ol>
 
 <h2 id="重新開機讓所有的設定值都生效">重新開機讓所有的設定值都生效</h2>
 <ul>
-  <li><code class="highlighter-rouge">sudo systemctl enable hostapd &amp;&amp; sudo reboot</code></li>
+  <li><code class="language-html highlighter-rouge">sudo systemctl enable hostapd <span class="err">&amp;&amp;</span> sudo reboot</code></li>
 </ul>
 
 <h2 id="troubleshooting">troubleshooting</h2>
@@ -256,12 +256,12 @@ dhcp-range=10.0.7.101,10.0.7.200,255.255.255.0,12h
 
 <h2 id="檢查錯誤訊息">檢查錯誤訊息</h2>
 <ul>
-  <li><code class="highlighter-rouge">/var/log/syslog</code></li>
+  <li><code class="language-html highlighter-rouge">/var/log/syslog</code></li>
 </ul>
 
 <h2 id="如何關閉-wifi-ap">如何關閉 wifi ap</h2>
 <ul>
-  <li>停掉 hostapd 服務即可 : <code class="highlighter-rouge">sudo systemctl hostapd stop</code></li>
+  <li>停掉 hostapd 服務即可 : <code class="language-html highlighter-rouge">sudo systemctl hostapd stop</code></li>
 </ul>
 
       <footer class="entry-meta">
@@ -283,19 +283,19 @@ dhcp-range=10.0.7.101,10.0.7.200,255.255.255.0,12h
       <a href="https://jhaoheng.github.io/blogpost/docker/mariadb/Docker-MariaDB/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

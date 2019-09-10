@@ -124,6 +124,102 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-07-15T00:33:00+08:00"><a href="https://jhaoheng.github.io/blogpost/docker-docker-machine-operation/">July 15, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/docker-docker-machine-operation/" rel="bookmark" title="【Docker】docker-machine 部署到 aws" itemprop="url">【Docker】docker-machine 部署到 aws</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="使用-docker-machine-部署-docker-到-aws">使用 docker-machine 部署 docker 到 aws</h1>
+
+<ul>
+  <li>參考 : <code class="language-html highlighter-rouge">https://docs.docker.com/machine/drivers/aws/</code></li>
+  <li>指令參數表 : <code class="language-html highlighter-rouge">https://docs.docker.com/machine/drivers/aws/#options</code>
+    <ul>
+      <li>有些預設的參數要注意，如果沒有指定的情況下，會依照預設參數來建立 aws instance
+        <ul>
+          <li>ex : ami, region, zone, group, instance-type, device-name, root-size, volume-type, ssh-user, request-spot-instance, spot-price, use-private-address, private-address-only, monitoring, use-ebs-optimized-instance, retries</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="其他部署文章參考">其他部署文章參考</h1>
+<ul>
+  <li>nvidia-docker Deploy on Amazon EC2 : <code class="language-html highlighter-rouge">https://github.com/NVIDIA/nvidia-docker/wiki/Deploy-on-Amazon-EC2</code></li>
+</ul>
+
+<h2 id="aws-credentials">aws credentials</h2>
+<ol>
+  <li>登入 aws</li>
+  <li>進入 IAM</li>
+  <li>選擇 user</li>
+  <li>給予需要使用的權限，在這邊選擇 ec2</li>
+  <li>取得該 user 的 <code class="language-html highlighter-rouge">AWS Access Key ID</code> 與 <code class="language-html highlighter-rouge">AWS Secret Access Key</code></li>
+  <li>在使用 docker-machine 前，可使用以下兩種方法
+    <ol>
+      <li>通過 aws credentials 來設定 <code class="language-html highlighter-rouge">AWS Access Key ID</code> 與 <code class="language-html highlighter-rouge">AWS Secret Access Key</code>，建立的方法也有兩種
+        <ol>
+          <li>可透過 awscli，通過指令 <code class="language-html highlighter-rouge">aws configure</code> 可協助設定好</li>
+          <li>也可直接建立 <code class="language-html highlighter-rouge">~/.aws/credentials</code>，顯示格式如下
+            <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[default]
+aws_access_key_id = AKID1234567890
+aws_secret_access_key = MY-SECRET-KEY
+</code></pre></div>            </div>
+          </li>
+        </ol>
+      </li>
+      <li>可透過 docker-machine : <code class="language-html highlighter-rouge">$ docker-machine create --driver amazonec2 --amazonec2-access-key AKI******* --amazonec2-secret-key 8T93C*******  aws01</code> 來建立 docker-machine 的機器</li>
+    </ol>
+  </li>
+  <li>測試建立
+    <ul>
+      <li><code class="language-html highlighter-rouge">docker-machine create --driver [instance_Name]</code> : 注意 default 參數值
+        <ul>
+          <li>zone : us-east-1</li>
+          <li>instance-type : t2.micro</li>
+          <li>root-size : 16</li>
+          <li>volume-type : gp2</li>
+          <li>ssh-user : ubuntu</li>
+          <li>其他資訊請參考 docker-machine 說明</li>
+        </ul>
+      </li>
+      <li>指定部分的參數操作 :
+        <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker-machine create --driver amazonec2 \
+                --amazonec2-region us-west-2 \
+                --amazonec2-zone b \
+                --amazonec2-ami ami-efd0428f \
+                --amazonec2-instance-type p2.xlarge \
+                --amazonec2-vpc-id vpc-*** \
+                --amazonec2-access-key AKI*** \
+                --amazonec2-secret-key *** \
+                aws01
+</code></pre></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="未完待續">未完待續</h1>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/docker-docker-machine-operation/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2017-07-05T03:56:00+08:00"><a href="https://jhaoheng.github.io/blogpost/docker/sublime/Docker-Sublime/">July 05, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -150,13 +246,13 @@ Reading time ~1 minute
 <p><strong>Docker Engine &gt;= 1.10.0 * Docker Compose &gt;= 1.6.2</strong></p>
 
 <ol>
-  <li><code class="highlighter-rouge">git clone git@github.com:phalcon/phalcon-compose.git</code></li>
-  <li><code class="highlighter-rouge">cp variables.env.example variables.env</code></li>
-  <li><code class="highlighter-rouge">docker-compose up -d</code></li>
+  <li><code class="language-html highlighter-rouge">git clone git@github.com:phalcon/phalcon-compose.git</code></li>
+  <li><code class="language-html highlighter-rouge">cp variables.env.example variables.env</code></li>
+  <li><code class="language-html highlighter-rouge">docker-compose up -d</code></li>
   <li>開啟網頁 localhost:80</li>
-  <li>建立檔案 <code class="highlighter-rouge">./phalcon-compose/application/public/hello.php</code>
+  <li>建立檔案 <code class="language-html highlighter-rouge">./phalcon-compose/application/public/hello.php</code>
     <ul>
-      <li><code class="highlighter-rouge"><span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="s2">"world"</span><span class="p">;</span> <span class="cp">?&gt;</span></code></li>
+      <li><code class="language-html highlighter-rouge"><span class="cp">&lt;?php echo "world"; ?&gt;</span></code></li>
     </ul>
   </li>
   <li>開啟網頁 localhost/hello.php</li>
@@ -198,11 +294,11 @@ Reading time ~1 minute
       <li>或者把影片存成 mp4 後，放到 server 上</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">docker run --rm jrottenberg/ffmpeg:ubuntu -re -i http://... -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp:...</code>
+  <li><code class="language-html highlighter-rouge">docker run --rm jrottenberg/ffmpeg:ubuntu -re -i http://... -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp:...</code>
     <ul>
-      <li><code class="highlighter-rouge">-re</code> : Read input at native frame rate. Mainly used to simulate a grab device.  or live input stream (e.g. when reading from a file). Should not be used with actual grab devices or live input streams (where it can cause packet loss).  By default ffmpeg attempts to read the input(s) as fast as possible.  This option will slow down the reading of the input(s) to the native frame rate of the input(s). It is useful for real-time output (e.g. live streaming).</li>
-      <li><code class="highlighter-rouge">http://...</code> : 輸入的 mp4 影片位置，也可用 file 來替代</li>
-      <li><code class="highlighter-rouge">rmpt://...</code> : 要串流的 rtmp server 位置</li>
+      <li><code class="language-html highlighter-rouge">-re</code> : Read input at native frame rate. Mainly used to simulate a grab device.  or live input stream (e.g. when reading from a file). Should not be used with actual grab devices or live input streams (where it can cause packet loss).  By default ffmpeg attempts to read the input(s) as fast as possible.  This option will slow down the reading of the input(s) to the native frame rate of the input(s). It is useful for real-time output (e.g. live streaming).</li>
+      <li><code class="language-html highlighter-rouge">http://...</code> : 輸入的 mp4 影片位置，也可用 file 來替代</li>
+      <li><code class="language-html highlighter-rouge">rmpt://...</code> : 要串流的 rtmp server 位置</li>
     </ul>
   </li>
 </ol>
@@ -240,9 +336,9 @@ Reading time ~1 minute
     <ol>
       <li>下載 https://github.com/digitalStyx/video-js-swf/blob/master/bin-debug/VideoJS.swf 到本地後</li>
       <li>在 head 中加入
-        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;script&gt;
-   videojs.options.flash.swf = "VideoJS.swf";
- &lt;/script&gt;
+        <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nt">&lt;script&gt;</span>
+   <span class="nx">videojs</span><span class="p">.</span><span class="nx">options</span><span class="p">.</span><span class="nx">flash</span><span class="p">.</span><span class="nx">swf</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">VideoJS.swf</span><span class="dl">"</span><span class="p">;</span>
+ <span class="nt">&lt;/script&gt;</span>
 </code></pre></div>        </div>
       </li>
       <li>使用參考 : https://coolestguidesontheplanet.com/videodrome/videojs/</li>
@@ -263,7 +359,7 @@ Reading time ~1 minute
   <li>use like below : <strong>#EXT-X-START:TIME-OFFSET=2</strong></li>
 </ol>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#EXTM3U
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#EXTM3U
 #EXT-X-VERSION:7
 #EXT-X-ALLOW-CACHE:YES
 #EXT-X-TARGETDURATION:7
@@ -279,7 +375,7 @@ Reading time ~1 minute
 
 </code></pre></div></div>
 <ol>
-  <li>注意播放器要支援解析, EX: <code class="highlighter-rouge">https://github.com/jhaoheng/html5_hls_test/blob/master/hls.html</code></li>
+  <li>注意播放器要支援解析, EX: <code class="language-html highlighter-rouge">https://github.com/jhaoheng/html5_hls_test/blob/master/hls.html</code></li>
 </ol>
 
 <h1 id="jwplayer-使用-flash-播放-hls--rtmp">jwplayer 使用 flash 播放 hls / rtmp</h1>
@@ -287,8 +383,8 @@ Reading time ~1 minute
 <ul>
   <li>jwplayer 提供 http / https 的網頁測試
     <ul>
-      <li>http  : <code class="highlighter-rouge">http://demo.jwplayer.com/developer-tools/http-stream-tester/</code></li>
-      <li>https : <code class="highlighter-rouge">https://developer.jwplayer.com/tools/stream-tester/</code></li>
+      <li>http  : <code class="language-html highlighter-rouge">http://demo.jwplayer.com/developer-tools/http-stream-tester/</code></li>
+      <li>https : <code class="language-html highlighter-rouge">https://developer.jwplayer.com/tools/stream-tester/</code></li>
     </ul>
   </li>
   <li>要讓 jwplayer 透過 flash 支援 hls 的播放，需要加入 crossdomain.xml 檔案
@@ -330,7 +426,7 @@ Reading time ~1 minute
 
 <h1 id="ex">ex</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>require './vendor/autoload.php';
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>require './vendor/autoload.php';
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 use Aws\CommandPool;
@@ -379,61 +475,6 @@ try {
 </code></pre></div></div>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/aws-s3-multiple-file-upload/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2017-06-07T02:10:00+08:00"><a href="https://jhaoheng.github.io/blogpost/dockerenv/">June 07, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/dockerenv/" rel="bookmark" title="【Docker】ENV" itemprop="url">【Docker】ENV</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="env-環境變數">env 環境變數</h1>
-
-<p>當用 docker 設定環境變數
-docker 會將變數透過 bash 建立變數，並將 變數 export
-故在設定 docker env 後，運行 docker，可以透過 <code class="highlighter-rouge">export -p</code> 查看所有環境變數</p>
-
-<h1 id="indexphp">index.php</h1>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>  
-<span class="k">echo</span> <span class="nb">getenv</span><span class="p">(</span><span class="s2">"helloEnv"</span><span class="p">)</span><span class="o">.</span><span class="nx">PHP_EOL</span><span class="p">;</span>
-<span class="k">echo</span> <span class="nb">getenv</span><span class="p">(</span><span class="s2">"go"</span><span class="p">)</span><span class="o">.</span><span class="nx">PHP_EOL</span><span class="p">;</span>
-</code></pre></div></div>
-
-<h1 id="step">step</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull jhaoheng/php_env:v1.2
-// 建立 container, 設定 env
-docker run -dt -e "helloEnv=sure" -e "go=ok" [image_id]
-// 查看 container 中的環境變數
-docker exec d11d88d32 bash -c export -p
-// 放入 index.php
-docker cp index.php [container_id]:/home
-// 透過 php 取得環境變數
-docker exec [container_id] php /home/index.php
-</code></pre></div></div>
-
-<h1 id="設計模式">設計模式</h1>
-<ol>
-  <li>設定好環境變數</li>
-  <li>設定好取得環境變數的模板</li>
-  <li>在運行 docker container 時，自動依據環境變數，建立起 config</li>
-</ol>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/dockerenv/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

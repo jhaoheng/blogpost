@@ -124,6 +124,45 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2016-08-05T02:57:00+08:00"><a href="https://jhaoheng.github.io/blogpost/mampcant-connect-to-local-mysql-server-through-socket/">August 05, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/mampcant-connect-to-local-mysql-server-through-socket/" rel="bookmark" title="【MAMP】Can't connect to local mySql server through socket" itemprop="url">【MAMP】Can't connect to local mySql server through socket</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="mamp">MAMP</h1>
+<ul>
+  <li>3.5.2</li>
+</ul>
+
+<h2 id="situation">Situation</h2>
+<p>Use third app to access MAMP mysql : [Querious]
+(In general, you can use phpMyAdmin…..)</p>
+
+<h1 id="troubleshoot">troubleshoot</h1>
+
+<h2 id="cant-connect-to-local-mysql-server-through-socket-tmpmysqlsock">Can’t connect to local mySql server through socket /tmp/mysql.sock</h2>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ln -s /Application/MAMP/tmp/mysql/mysql.sock /tmp/mysql.sock
+</code></pre></div></div>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/mampcant-connect-to-local-mysql-server-through-socket/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2016-08-04T10:07:00+08:00"><a href="https://jhaoheng.github.io/blogpost/phalconinstall-cphalcon-phalcon-tool-by-brew/">August 04, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -150,21 +189,21 @@ Reading time ~1 minute
   </li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install php70
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>brew install php70
 brew install php70-phalcon
 </code></pre></div></div>
 <h2 id="check">check</h2>
 
 <ul>
-  <li><code class="highlighter-rouge">php -m | grep -i phalcon</code> -&gt; should output <code class="highlighter-rouge">phalcon</code></li>
-  <li>cmd <code class="highlighter-rouge">phalcon</code> -&gt; should output phalcon cmd info, include phalcon version</li>
+  <li><code class="language-html highlighter-rouge">php -m | grep -i phalcon</code> -&gt; should output <code class="language-html highlighter-rouge">phalcon</code></li>
+  <li>cmd <code class="language-html highlighter-rouge">phalcon</code> -&gt; should output phalcon cmd info, include phalcon version</li>
 </ul>
 
 <h2 id="php_info">php_info()</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?
 php\_info();
-?&gt;
+?&gt;</span>
 </code></pre></div></div>
 <h2 id="mamp-install-phalcon">mamp install phalcon</h2>
 
@@ -179,8 +218,8 @@ php\_info();
 </ul>
 
 <blockquote>
-  <p>use brew’s <code class="highlighter-rouge">php70-phalcon/phalcon.so</code>
-move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/php/extensions/no-debug-non-zts-xxxxxxxxxxx/</code></p>
+  <p>use brew’s <code class="language-html highlighter-rouge">php70-phalcon/phalcon.so</code>
+move to <code class="language-html highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/php/extensions/no-debug-non-zts-xxxxxxxxxxx/</code></p>
 </blockquote>
 
 
@@ -213,12 +252,12 @@ Reading time ~1 minute
   <li>mac mini</li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo $PATH
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo $PATH
 </code></pre></div></div>
 
 <p>可能存放的位置有</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/paths
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/paths
 /etc/profile
 /etc/bashrc
 ~/.bash\_profile
@@ -228,7 +267,7 @@ Reading time ~1 minute
 </code></pre></div></div>
 
 <p>或者</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /etc/profile
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /etc/profile
 </code></pre></div></div>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/path/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
@@ -304,60 +343,12 @@ Reading time ~1 minute
   </header>
   <div class="entry-content">
     <p>讓 ide 支援 phalcon-devtools 的語法
-<code class="highlighter-rouge">/phalcon-devtools/ide/phpstorm/phalcon.sh</code></p>
+<code class="language-html highlighter-rouge">/phalcon-devtools/ide/phpstorm/phalcon.sh</code></p>
 
 <p>讓 ide 支援 phalcon 的語法
-<code class="highlighter-rouge">/phalcon-devtools/ide/stubs/Phalcon</code></p>
+<code class="language-html highlighter-rouge">/phalcon-devtools/ide/stubs/Phalcon</code></p>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/phalconphpstorm-ide/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2016-07-22T03:13:00+08:00"><a href="https://jhaoheng.github.io/blogpost/mampddns/">July 22, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/mampddns/" rel="bookmark" title="【MAMP】DDNS" itemprop="url">【MAMP】DDNS</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="mamp-設定-ddns">MAMP 設定 DDNS</h1>
-
-<ol>
-  <li>Dynamic DNS : 選擇想要的服務，註冊，並且登入
-    <ul>
-      <li>我選擇 no-ip -&gt; Manage hosts -&gt; add a host -&gt; 設定 redirect_name，選擇免費 DNS，直接按下確認即可(此必須設定在 MAMP-alias)</li>
-    </ul>
-  </li>
-  <li>回到 MAMP -&gt; Dynamic DNS -&gt; 登入該服務帳密
-    <ul>
-      <li>啟用上選擇『自動』</li>
-    </ul>
-  </li>
-  <li>MAMP -&gt; Hosts，選擇服務
-    <ul>
-      <li>General -&gt; Dynamic DNS 選擇 <strong>no-ip.com</strong></li>
-      <li>下方的 alias name 輸入
-        <ul>
-          <li>之前在 no-ip 上設定好的 ddns</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ol>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/mampddns/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

@@ -124,6 +124,61 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-06-07T02:10:00+08:00"><a href="https://jhaoheng.github.io/blogpost/dockerenv/">June 07, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/dockerenv/" rel="bookmark" title="【Docker】ENV" itemprop="url">【Docker】ENV</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="env-環境變數">env 環境變數</h1>
+
+<p>當用 docker 設定環境變數
+docker 會將變數透過 bash 建立變數，並將 變數 export
+故在設定 docker env 後，運行 docker，可以透過 <code class="language-html highlighter-rouge">export -p</code> 查看所有環境變數</p>
+
+<h1 id="indexphp">index.php</h1>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;</span><span class="err">?</span><span class="na">php</span>  
+<span class="na">echo</span> <span class="na">getenv</span><span class="err">("</span><span class="na">helloEnv</span><span class="err">").</span><span class="na">PHP_EOL</span><span class="err">;</span>
+<span class="na">echo</span> <span class="na">getenv</span><span class="err">("</span><span class="na">go</span><span class="err">").</span><span class="na">PHP_EOL</span><span class="err">;</span>
+</code></pre></div></div>
+
+<h1 id="step">step</h1>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker pull jhaoheng/php_env:v1.2
+// 建立 container, 設定 env
+docker run -dt -e "helloEnv=sure" -e "go=ok" [image_id]
+// 查看 container 中的環境變數
+docker exec d11d88d32 bash -c export -p
+// 放入 index.php
+docker cp index.php [container_id]:/home
+// 透過 php 取得環境變數
+docker exec [container_id] php /home/index.php
+</code></pre></div></div>
+
+<h1 id="設計模式">設計模式</h1>
+<ol>
+  <li>設定好環境變數</li>
+  <li>設定好取得環境變數的模板</li>
+  <li>在運行 docker container 時，自動依據環境變數，建立起 config</li>
+</ol>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/dockerenv/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2017-05-31T03:50:00+08:00"><a href="https://jhaoheng.github.io/blogpost/srs/docker/SRS-docker/">May 31, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -147,56 +202,56 @@ Reading time ~1 minute
 <h1 id="完成品">完成品</h1>
 <ul>
   <li>https://hub.docker.com/r/jhaoheng/srs-release2.0/</li>
-  <li><code class="highlighter-rouge">docker run -d -t -p 1935:1935 {image}</code></li>
-  <li>位置 : <code class="highlighter-rouge">/opt/srs/trunk</code>，執行 srs 即可</li>
+  <li><code class="language-html highlighter-rouge">docker run -d -t -p 1935:1935 {image}</code></li>
+  <li>位置 : <code class="language-html highlighter-rouge">/opt/srs/trunk</code>，執行 srs 即可</li>
 </ul>
 
 <h1 id="base">base</h1>
 <ul>
-  <li><code class="highlighter-rouge">docker pull centos:latest</code></li>
-  <li><code class="highlighter-rouge">docker run -d -t -p 1935:1935 [centos:latest]</code></li>
-  <li><code class="highlighter-rouge">docker exec -it [container] /bin/bash</code></li>
+  <li><code class="language-html highlighter-rouge">docker pull centos:latest</code></li>
+  <li><code class="language-html highlighter-rouge">docker run -d -t -p 1935:1935 [centos:latest]</code></li>
+  <li><code class="language-html highlighter-rouge">docker exec -it [container] /bin/bash</code></li>
 </ul>
 
 <h1 id="安裝">安裝</h1>
 <ul>
-  <li><code class="highlighter-rouge">yum update</code></li>
+  <li><code class="language-html highlighter-rouge">yum update</code></li>
   <li>required
     <ul>
-      <li><code class="highlighter-rouge">yum install -y gcc</code></li>
-      <li><code class="highlighter-rouge">yum install -y gcc-c++</code></li>
-      <li><code class="highlighter-rouge">yum install -y make</code></li>
-      <li><code class="highlighter-rouge">yum install -y patch</code></li>
-      <li><code class="highlighter-rouge">yum install -y unzip</code></li>
-      <li><code class="highlighter-rouge">yum install -y pcre-devel</code></li>
-      <li><code class="highlighter-rouge">yum install -y automake</code></li>
-      <li><code class="highlighter-rouge">yum install -y libtool</code></li>
-      <li><code class="highlighter-rouge">yum install -y zlib-devel</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y gcc</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y gcc-c++</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y make</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y patch</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y unzip</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y pcre-devel</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y automake</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y libtool</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y zlib-devel</code></li>
     </ul>
   </li>
   <li>git clone [source]</li>
-  <li>安裝 <code class="highlighter-rouge">./trunk/3rdparty/CherryPy-3.2.4</code>
+  <li>安裝 <code class="language-html highlighter-rouge">./trunk/3rdparty/CherryPy-3.2.4</code>
     <ul>
-      <li><code class="highlighter-rouge">unzip ./trunk/3rdparty/CherryPy-3.2.4.zip &amp;&amp; mv CherryPy-3.2.4 ../objs/</code></li>
+      <li><code class="language-html highlighter-rouge">unzip ./trunk/3rdparty/CherryPy-3.2.4.zip <span class="err">&amp;&amp;</span> mv CherryPy-3.2.4 ../objs/</code></li>
     </ul>
   </li>
-  <li>compile srs : <code class="highlighter-rouge">./configure --full --with-ffmpeg --with-research &amp;&amp; make</code>
+  <li>compile srs : <code class="language-html highlighter-rouge">./configure --full --with-ffmpeg --with-research <span class="err">&amp;&amp;</span> make</code>
     <ul>
-      <li><code class="highlighter-rouge">./configure -h</code> : 可查看所有安裝選項</li>
+      <li><code class="language-html highlighter-rouge">./configure -h</code> : 可查看所有安裝選項</li>
     </ul>
   </li>
-  <li>start srs : <code class="highlighter-rouge">./objs/srs -c conf/srs.conf</code></li>
+  <li>start srs : <code class="language-html highlighter-rouge">./objs/srs -c conf/srs.conf</code></li>
 </ul>
 
 <h1 id="測試">測試</h1>
 <ul>
-  <li><code class="highlighter-rouge">tail -f ./trunk/srs.log</code></li>
+  <li><code class="language-html highlighter-rouge">tail -f ./trunk/srs.log</code></li>
   <li>將桌面的畫面推送給 docker:srs
     <ul>
-      <li><code class="highlighter-rouge">ffmpeg -f avfoundation -i "1" -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp://localhost:1935/live/desktop</code></li>
+      <li><code class="language-html highlighter-rouge">ffmpeg -f avfoundation -i "1" -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp://localhost:1935/live/desktop</code></li>
     </ul>
   </li>
-  <li>透過 VLC 播放 <code class="highlighter-rouge">rtmp://localhost:1935/live/desktop</code></li>
+  <li>透過 VLC 播放 <code class="language-html highlighter-rouge">rtmp://localhost:1935/live/desktop</code></li>
 </ul>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/srs/docker/SRS-docker/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
@@ -257,7 +312,7 @@ Reading time ~1 minute
 
 <h2 id="第一次建立的-m3u8-file-每次詢問時都給予相同的-m3u8-檔案">第一次建立的 m3u8 file, 每次詢問時都給予相同的 m3u8 檔案</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#EXTM3U
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#EXTM3U
 #EXT-X-VERSION:3
 #EXT-X-ALLOW-CACHE:YES
 #EXT-X-TARGETDURATION:8.334
@@ -285,7 +340,7 @@ EXT-X-MEDIA-SEQUENCE:1
 <h2 id="結論">結論</h2>
 
 <p>每次的 log 的時間、間隔，</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>log_2 - log_1 , duration = 16
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>log_2 - log_1 , duration = 16
 log_3 - log_2 , duration = 8
 log_4 - log_3 , duration = 8
 log_5 - log_4 , duration = 8
@@ -297,7 +352,7 @@ log_4 : 第三個 ts 播放完畢, 開始播放第四個
 log_5 : 第四個 ts 播放完畢, 開始播放第五個
 </code></pre></div></div>
 <p>播放器在每次播放完 ts 的檔案後，都會進行 api 的詢問，透過詢問，可產生下一次的 m3u8 檔案，
-若更新 m3u8 後，記得需同時 <code class="highlighter-rouge">EXT-X-MEDIA-SEQUENCE</code> 進行 +1</p>
+若更新 m3u8 後，記得需同時 <code class="language-html highlighter-rouge">EXT-X-MEDIA-SEQUENCE</code> 進行 +1</p>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/hls/HLS-m3u8/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
@@ -332,15 +387,15 @@ Reading time ~1 minute
 <h2 id="如何連接本地端-dynamodb">如何連接本地端 dynamodb</h2>
 
 <ol>
-  <li>下載 <code class="highlighter-rouge">http://docs.aws.amazon.com/zh_cn/amazondynamodb/latest/developerguide/DynamoDBLocal.html</code></li>
+  <li>下載 <code class="language-html highlighter-rouge">http://docs.aws.amazon.com/zh_cn/amazondynamodb/latest/developerguide/DynamoDBLocal.html</code></li>
   <li>確認 java 版本
     <ul>
       <li>http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</li>
       <li>要 1.7 以上版本，不然無法啟動，會有錯誤訊息</li>
     </ul>
   </li>
-  <li>在 localhost dynamodb 的路徑下執行 : <code class="highlighter-rouge">java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb</code></li>
-  <li>測試 : <code class="highlighter-rouge">aws dynamodb list-tables --endpoint-url http://localhost:8000</code></li>
+  <li>在 localhost dynamodb 的路徑下執行 : <code class="language-html highlighter-rouge">java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb</code></li>
+  <li>測試 : <code class="language-html highlighter-rouge">aws dynamodb list-tables --endpoint-url http://localhost:8000</code></li>
   <li>透過 GUI 進行連線
     <ol>
       <li>下載 RazorSQL</li>
@@ -361,7 +416,7 @@ Reading time ~1 minute
         </ol>
       </li>
       <li>先隨意建立一個 table</li>
-      <li>透過 terminal cli 查看 : <code class="highlighter-rouge">aws dynamodb list-tables --endpoint-url http://localhost:8000</code></li>
+      <li>透過 terminal cli 查看 : <code class="language-html highlighter-rouge">aws dynamodb list-tables --endpoint-url http://localhost:8000</code></li>
     </ol>
   </li>
 </ol>
@@ -379,7 +434,7 @@ Reading time ~1 minute
 
 <h3 id="php--記得要先安裝-aws-sdk-for-php">php : 記得要先安裝 aws sdk for php</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$sdk = new Aws\Sdk([
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$sdk = new Aws\Sdk([
     'endpoint'   =&gt; 'http://localhost:8000',  // Use DynamoDB running locally
     'region'   =&gt; 'us-west-2',  // US West (Oregon) Region
     'version'  =&gt; 'latest'  // Use the latest version of the AWS SDK for PHP
@@ -488,7 +543,7 @@ Reading time ~1 minute
   </li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 設定 1
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 設定 1
 AWSServiceConfiguration *serviceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:nil];
 // 設定 2
 AWSCognitoIdentityUserPoolConfiguration *userPoolConfiguration = [[AWSCognitoIdentityUserPoolConfiguration alloc] initWithClientId:@"YOUR_CLIENT_ID"  clientSecret:@"YOUR_CLIENT_SECRET" poolId:@"YOUR_USER_POOL_ID"];
@@ -503,7 +558,7 @@ AWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProv
 </code></pre></div></div>
 
 <p>將憑證放入 serviceManager 中</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AWSServiceConfiguration *defaultServiceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AWSServiceConfiguration *defaultServiceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1
         credentialsProvider:credentialsProvider];
 AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultServiceConfiguration;
 </code></pre></div></div>
@@ -514,7 +569,7 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
   <li>參考 sample 中的 CognitoSync-Sample</li>
   <li>sample 中，記得關閉 bitcode (預設是開啟)，否則實機測試會失敗(測試時間 20170520)
     <ul>
-      <li>compile error : <code class="highlighter-rouge">linker command failed with exit code 1</code></li>
+      <li>compile error : <code class="language-html highlighter-rouge">linker command failed with exit code 1</code></li>
     </ul>
   </li>
 </ul>
@@ -557,67 +612,6 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
 <p>透過 user pool 來同步手機資料，將用戶的某些資料放到 aws console 中，避免遺失，也可用於跨多裝置的使用</p>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/aws/cognito/ios/AWS-Cognito-iOS/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2017-05-18T08:19:00+08:00"><a href="https://jhaoheng.github.io/blogpost/hls/aws/HLS-AWS/">May 18, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/hls/aws/HLS-AWS/" rel="bookmark" title="【AWS S3】播放 HLS 時，發生 crossdomain access denied" itemprop="url">【AWS S3】播放 HLS 時，發生 crossdomain access denied</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="環境">環境</h1>
-
-<ul>
-  <li>player : http://video-dev.github.io/hls.js/demo/</li>
-  <li>aws s3
-    <ul>
-      <li>將 ts 與 m3u8 均放在上面</li>
-    </ul>
-  </li>
-</ul>
-
-<h1 id="問題描述">問題描述</h1>
-
-<ol>
-  <li>VLC 可播放</li>
-  <li>丟入其他播放器，無法播放
-    <ul>
-      <li>某些播放器會說明 crossdomain access denied</li>
-      <li>持續轉圈圈</li>
-    </ul>
-  </li>
-</ol>
-
-<h1 id="解決-crossdomain-access-denied">解決 crossdomain access denied</h1>
-
-<ul>
-  <li>aws file : http://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html</li>
-  <li>console 設定
-    <ul>
-      <li>進入 bucket</li>
-      <li>進入所選定的 folder 中</li>
-      <li>選擇 Permissions</li>
-      <li>看到 AllowedHeader</li>
-      <li>寫入 *</li>
-    </ul>
-  </li>
-</ul>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/hls/aws/HLS-AWS/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

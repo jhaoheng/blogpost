@@ -164,15 +164,15 @@ Reading time ~1 minute
   <li>brew install libmemcached</li>
   <li>git checkout php7</li>
   <li>phpize</li>
-  <li><code class="highlighter-rouge">./configure --with-memcached=/usr/local/Cellar/libmemcached/1.0.18_1/lib/libmemcached</code>
+  <li><code class="language-html highlighter-rouge">./configure --with-memcached=/usr/local/Cellar/libmemcached/1.0.18_1/lib/libmemcached</code>
     <ul>
-      <li>Notice : the <code class="highlighter-rouge">libmemcached</code> path is brew install path</li>
+      <li>Notice : the <code class="language-html highlighter-rouge">libmemcached</code> path is brew install path</li>
     </ul>
   </li>
   <li>make</li>
   <li>sudo make install</li>
-  <li>mv memcached.so to extension path, you could get path with <code class="highlighter-rouge">php -i | grep extension_dir</code></li>
-  <li>vim php.ini, add <code class="highlighter-rouge">extension=memcached.so</code></li>
+  <li>mv memcached.so to extension path, you could get path with <code class="language-html highlighter-rouge">php -i | grep extension_dir</code></li>
+  <li>vim php.ini, add <code class="language-html highlighter-rouge">extension=memcached.so</code></li>
 </ol>
 
 <h1 id="如何使用">如何使用</h1>
@@ -186,12 +186,12 @@ Reading time ~1 minute
   </li>
   <li>執行 memcached 即可
     <ul>
-      <li><code class="highlighter-rouge">man memcached</code>
-      - <code class="highlighter-rouge">memcached -l 127.0.0.1 -P 11211 -m 128 -d</code> : for deamon
-      - <code class="highlighter-rouge">memcached -l 127.0.0.1 -P 11211 -m 128 -vv</code> : for debug</li>
+      <li><code class="language-html highlighter-rouge">man memcached</code>
+      - <code class="language-html highlighter-rouge">memcached -l 127.0.0.1 -P 11211 -m 128 -d</code> : for deamon
+      - <code class="language-html highlighter-rouge">memcached -l 127.0.0.1 -P 11211 -m 128 -vv</code> : for debug</li>
     </ul>
   </li>
-  <li>檢查 memcached 是否有執行 : <code class="highlighter-rouge">ps aux | grep memcached</code></li>
+  <li>檢查 memcached 是否有執行 : <code class="language-html highlighter-rouge">ps aux | grep memcached</code></li>
 </ol>
 
 <h2 id="判斷-php-是否安裝好支援的-memcachedso">判斷 php 是否安裝好支援的 memcached.so</h2>
@@ -210,7 +210,7 @@ Reading time ~1 minute
 </table>
 
 <h2 id="test">test</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;? php
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;? php
 $mem  = new Memcached();
 
 $mem-&gt;addServer('localhost',11211);
@@ -219,12 +219,12 @@ if( $mem-&gt;add("key","value",3600)){
 }else{
     echo 'cached data：'.$mem-&gt;get("key");
 }
-?&gt;
+?&gt;</span>
 </code></pre></div></div>
 
 <h2 id="console-admin">console admin</h2>
 
-<p><code class="highlighter-rouge">git@github.com:jhaoheng/phpmemcacheadmin.git</code></p>
+<p><code class="language-html highlighter-rouge">git@github.com:jhaoheng/phpmemcacheadmin.git</code></p>
 
       <footer class="entry-meta">
         <span class="entry-tags"></span>
@@ -245,19 +245,19 @@ if( $mem-&gt;add("key","value",3600)){
       <a href="https://jhaoheng.github.io/blogpost/php/mqtt/PHP-MQTT/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

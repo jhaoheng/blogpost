@@ -132,24 +132,24 @@ Reading time ~1 minute
 <h2 id="版本">版本</h2>
 
 <ul>
-  <li>執行 <code class="highlighter-rouge">phalcon</code> 確認版本 : <code class="highlighter-rouge">Phalcon DevTools (2.0.13)</code></li>
+  <li>執行 <code class="language-html highlighter-rouge">phalcon</code> 確認版本 : <code class="language-html highlighter-rouge">Phalcon DevTools (2.0.13)</code></li>
 </ul>
 
 <h2 id="建立專案">建立專案</h2>
 
 <ul>
-  <li>快速建立一個基本的 project : <code class="highlighter-rouge">phalcon create-project store</code>
+  <li>快速建立一個基本的 project : <code class="language-html highlighter-rouge">phalcon create-project store</code>
     <ul>
-      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code></li>
+      <li>檢視網頁 : <code class="language-html highlighter-rouge">localhost:[yourport]/store</code></li>
     </ul>
   </li>
-  <li>在非 phalcon direction，只能使用 <code class="highlighter-rouge">phalcon project</code> 的指令建立 project 的結構</li>
+  <li>在非 phalcon direction，只能使用 <code class="language-html highlighter-rouge">phalcon project</code> 的指令建立 project 的結構</li>
   <li>在該 project 下，可以使用其他的指令
     <ul>
-      <li><code class="highlighter-rouge">phalcon webtools enable</code>
+      <li><code class="language-html highlighter-rouge">phalcon webtools enable</code>
         <ul>
           <li>啟用 web 介面的 phalcon 編輯器</li>
-          <li><code class="highlighter-rouge">http://[localhost]/[project_name]/webtools.php</code></li>
+          <li><code class="language-html highlighter-rouge">http://[localhost]/[project_name]/webtools.php</code></li>
         </ul>
       </li>
     </ul>
@@ -159,10 +159,10 @@ Reading time ~1 minute
 <h2 id="資料庫設定">資料庫設定</h2>
 
 <ul>
-  <li>PATH : <code class="highlighter-rouge">store/app/config</code> 中的 config.php
+  <li>PATH : <code class="language-html highlighter-rouge">store/app/config</code> 中的 config.php
     <ul>
-      <li>若在 create 專案時，有特別指定使用 <code class="highlighter-rouge">.ini</code> 為其擴展名，才會特別使用。(<code class="highlighter-rouge">--use-config-ini</code>)</li>
-      <li>使用 <code class="highlighter-rouge">phalcon project --help</code> 查詢指令</li>
+      <li>若在 create 專案時，有特別指定使用 <code class="language-html highlighter-rouge">.ini</code> 為其擴展名，才會特別使用。(<code class="language-html highlighter-rouge">--use-config-ini</code>)</li>
+      <li>使用 <code class="language-html highlighter-rouge">phalcon project --help</code> 查詢指令</li>
     </ul>
   </li>
 </ul>
@@ -173,22 +173,22 @@ Reading time ~1 minute
   <li>建立模型，目的在於制式化處理某些事情，或者驗證，如每次呼叫模型的某個 method，都希望得到『用戶名稱』</li>
   <li>建立 model 前，須先把 db 與 schema 建立完成
     <ul>
-      <li>建立完成後，才可以建立 <code class="highlighter-rouge">phalcon model [model_name]</code>
+      <li>建立完成後，才可以建立 <code class="language-html highlighter-rouge">phalcon model [model_name]</code>
         <ul>
           <li>如果沒有該 table name : [Error: Table “people” does not exist.]</li>
         </ul>
       </li>
-      <li>Troubleshoot : <code class="highlighter-rouge">ERROR: SQLSTATE[HY000] [2002] No such file or directory</code>
+      <li>Troubleshoot : <code class="language-html highlighter-rouge">ERROR: SQLSTATE[HY000] [2002] No such file or directory</code>
         <ul>
-          <li><code class="highlighter-rouge">php --ini</code></li>
-          <li><code class="highlighter-rouge">vim php.ini</code></li>
-          <li>搜尋 <code class="highlighter-rouge">mysql.default_socket</code>
+          <li><code class="language-html highlighter-rouge">php --ini</code></li>
+          <li><code class="language-html highlighter-rouge">vim php.ini</code></li>
+          <li>搜尋 <code class="language-html highlighter-rouge">mysql.default_socket</code>
             <ul>
-              <li>因我使用 mamp 所以填入 : <code class="highlighter-rouge">/Applications/MAMP/tmp/mysql/mysql.sock</code></li>
+              <li>因我使用 mamp 所以填入 : <code class="language-html highlighter-rouge">/Applications/MAMP/tmp/mysql/mysql.sock</code></li>
               <li>查詢 socket
                 <ul>
-                  <li><code class="highlighter-rouge">mysql -u root -p</code></li>
-                  <li><code class="highlighter-rouge">show variables like '%socket%';</code> 填入該路徑即可</li>
+                  <li><code class="language-html highlighter-rouge">mysql -u root -p</code></li>
+                  <li><code class="language-html highlighter-rouge">show variables like '%socket%';</code> 填入該路徑即可</li>
                 </ul>
               </li>
             </ul>
@@ -197,7 +197,7 @@ Reading time ~1 minute
       </li>
     </ul>
   </li>
-  <li>在專案的根目錄下 : <code class="highlighter-rouge">phalcon model</code>，有基本的 Usage</li>
+  <li>在專案的根目錄下 : <code class="language-html highlighter-rouge">phalcon model</code>，有基本的 Usage</li>
 </ul>
 
 <h2 id="scaffold-a-crud">Scaffold a CRUD</h2>
@@ -208,7 +208,7 @@ Reading time ~1 minute
       <li>Notice : 注意 model 產生時，必須要有對應的 table-name</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">phalcon scaffold --table-name products</code> 會產生
+  <li><code class="language-html highlighter-rouge">phalcon scaffold --table-name products</code> 會產生
     <ul>
       <li>app/controllers/ProductsController.php</li>
       <li>app/models/Products.php</li>
@@ -225,8 +225,8 @@ Reading time ~1 minute
 
 <ul>
   <li>透過 web 的介面，進行操作 model / controller</li>
-  <li>路徑 : <code class="highlighter-rouge">http://[localhost:port]/store/webtools.php</code></li>
-  <li>啟用 : <code class="highlighter-rouge">phalcon webtools --action=enable</code></li>
+  <li>路徑 : <code class="language-html highlighter-rouge">http://[localhost:port]/store/webtools.php</code></li>
+  <li>啟用 : <code class="language-html highlighter-rouge">phalcon webtools --action=enable</code></li>
 </ul>
 
       <footer class="entry-meta">
@@ -248,19 +248,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

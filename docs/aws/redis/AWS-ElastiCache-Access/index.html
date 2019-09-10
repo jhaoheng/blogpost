@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>【AWS-Redis】How to Access to AWS-ElastiCache &#8211; Max 乎~</title>
 <meta name="description" content="修煉!">
-<meta name="keywords" content="">
+<meta name="keywords" content="AWS, Redis">
 
 
 
@@ -152,13 +152,13 @@ Please note that IP-range based access control is currently not enabled for Cach
 <h2 id="安裝-redis-cli-連線">安裝 redis-cli, 連線</h2>
 <ol>
   <li>先 access 進 ec2 instance</li>
-  <li><code class="highlighter-rouge">apt-get update &amp;&amp; apt-get install gcc make -y</code></li>
-  <li><code class="highlighter-rouge">wget http://download.redis.io/redis-stable.tar.gz &amp;&amp; tar xvzf redis-stable.tar.gz &amp;&amp; cd redis-stable &amp;&amp; make distclean &amp;&amp; make</code></li>
-  <li>(optional) <code class="highlighter-rouge">ln -s $(pwd)/src/redis-cli /bin/redis-cli</code></li>
+  <li><code class="language-html highlighter-rouge">apt-get update <span class="err">&amp;&amp;</span> apt-get install gcc make -y</code></li>
+  <li><code class="language-html highlighter-rouge">wget http://download.redis.io/redis-stable.tar.gz <span class="err">&amp;&amp;</span> tar xvzf redis-stable.tar.gz <span class="err">&amp;&amp;</span> cd redis-stable <span class="err">&amp;&amp;</span> make distclean <span class="err">&amp;&amp;</span> make</code></li>
+  <li>(optional) <code class="language-html highlighter-rouge">ln -s $(pwd)/src/redis-cli /bin/redis-cli</code></li>
   <li>connect :
     <ul>
-      <li>if (3) <code class="highlighter-rouge">redis-cli -c -h {endpoint} -p 6379</code></li>
-      <li><code class="highlighter-rouge">./src/redis-cli -c -h {endpoint} -p 6379</code></li>
+      <li>if (3) <code class="language-html highlighter-rouge">redis-cli -c -h {endpoint} -p 6379</code></li>
+      <li><code class="language-html highlighter-rouge">./src/redis-cli -c -h {endpoint} -p 6379</code></li>
     </ul>
   </li>
 </ol>
@@ -166,14 +166,14 @@ Please note that IP-range based access control is currently not enabled for Cach
 <h2 id="透過-gui-訪問">透過 GUI 訪問</h2>
 <ol>
   <li>先 access 進 ec2 instance</li>
-  <li><code class="highlighter-rouge">apt-get update &amp;&amp; apt-get install nodejs npm -y &amp;&amp; ln -s $(which nodejs) /usr/bin/node &amp;&amp; npm install -g redis-commander</code></li>
-  <li>執行服務 : <code class="highlighter-rouge">redis-commander --redis-host &lt;elasticache endpoint&gt;</code></li>
+  <li><code class="language-html highlighter-rouge">apt-get update <span class="err">&amp;&amp;</span> apt-get install nodejs npm -y <span class="err">&amp;&amp;</span> ln -s $(which nodejs) /usr/bin/node <span class="err">&amp;&amp;</span> npm install -g redis-commander</code></li>
+  <li>執行服務 : <code class="language-html highlighter-rouge">redis-commander --redis-host <span class="nt">&lt;elasticache</span> <span class="na">endpoint</span><span class="nt">&gt;</span></code></li>
   <li>確定 ec2 security 8081 port 可讓你目前的 ip 進行連線</li>
   <li>瀏覽器輸入 : <ec2-instance-ip>:8081</ec2-instance-ip></li>
 </ol>
 
       <footer class="entry-meta">
-        <span class="entry-tags"></span>
+        <span class="entry-tags"><a href="https://jhaoheng.github.io/blogpost/tags/#AWS" title="Pages tagged AWS" class="tag"><span class="term">AWS</span></a><a href="https://jhaoheng.github.io/blogpost/tags/#Redis" title="Pages tagged Redis" class="tag"><span class="term">Redis</span></a></span>
         
         <div class="social-share">
   <ul class="socialcount socialcount-small inline-list">
@@ -191,19 +191,19 @@ Please note that IP-range based access control is currently not enabled for Cach
       <a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Kubernetes&Minikube/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

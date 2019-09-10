@@ -1,4 +1,195 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.3">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-09-08T20:51:37+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/</id><title type="html">Max 乎~</title><subtitle>修煉!</subtitle><entry><title type="html">【Go】Drill interface{}</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-drill-interface/" rel="alternate" type="text/html" title="【Go】Drill interface{}" /><published>2019-09-07T16:17:00+08:00</published><updated>2019-09-07T16:17:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/%5BGo%5Ddrill%20interface%7B%7D</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-drill-interface/">&lt;h1 id=&quot;interface&quot;&gt;interface{}&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.6">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/feed.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-09-10T15:43:04+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/feed.xml</id><title type="html">Max 乎~</title><subtitle>修煉!</subtitle><entry><title type="html">【Go】利用 struct 優化（一）</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" rel="alternate" type="text/html" title="【Go】利用 struct 優化（一）" /><published>2019-09-10T13:51:00+08:00</published><updated>2019-09-10T13:51:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/%5BGo%5Dstruct%20%E5%84%AA%E5%8C%96</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">&lt;h2 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h2&gt;
+&lt;ol&gt;
+  &lt;li&gt;透過 struct 方式，容易看懂程式&lt;/li&gt;
+  &lt;li&gt;透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)&lt;/li&gt;
+  &lt;li&gt;使用 func as method 方式，讓程式碼在 func 使用上更容易被理解&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;example&quot;&gt;Example&lt;/h1&gt;
+&lt;p&gt;一般來說，如果要用程式碼計算『圓形面積』、『長方形面積』，可以用一些簡單的方式攥寫&lt;/p&gt;
+
+&lt;div&gt;
+    &lt;iframe src=&quot;https://play.golang.org/p/fzSt0Hz56WP&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
+    &lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;p&gt;但回頭看這個程式碼，會發現&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;如果要追蹤『rx1, ry1, rx2, ry2』或者『cx, cy, cr』當程式碼一長 or 複雜，就很難理解這個參數的意義&lt;/li&gt;
+  &lt;li&gt;儘管有寫註解，在 function 中，一樣很難快速理解&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;解決方案 : 使用 struct 來幫助理解&lt;/p&gt;
+
+&lt;!--more--&gt;
+
+&lt;h1 id=&quot;use-struct&quot;&gt;use struct&lt;/h1&gt;
+&lt;p&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;struct&lt;/code&gt; 是一種 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;type&lt;/code&gt;, 它包含了名稱的欄位, 例如：可以把 Rectangle 寫成如下方式&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;type Coordinate struct {
+	x float64
+	y float64
+}
+
+type Rectangle struct {
+	start Coordinate
+	end   Coordinate
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;新增一個 Coordinate 的物件, 類型(type)是 struct, 裡面夾帶 (x,y) 欄位&lt;/li&gt;
+  &lt;li&gt;新增一個 Rectangle, 類型(type)是 struct 的物件, 裡面夾帶 ‘起始座標’ 與 ‘結束座標’&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;宣告方法可以有以下幾種&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;以下都相同，跟 (2) 不同的是，返回是一個指標
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;r := new(Rectangle)&lt;/code&gt;, 而 new 的主要作用是為 type 申請 memory，並&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;返回指向 memory 的指標&lt;/code&gt;。&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;r := &lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;Rectangle{}&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;以下也都相同
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;var r Rectangle&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;r := Rectangle{}&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;r := Rectangle{Coordinate{}, Coordinate{}}&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;r := Rectangle{ start: Coordinate{}, end:   Coordinate{},}&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;優化開始&quot;&gt;優化開始&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;steps
+    &lt;ol&gt;
+      &lt;li&gt;將 func() 參數物件改為傳遞 struct&lt;/li&gt;
+      &lt;li&gt;將 func() 中 strct 設定為指標&lt;/li&gt;
+      &lt;li&gt;function as a method&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;1-將-func-參數物件改為傳遞-struct&quot;&gt;1. 將 func() 參數物件改為傳遞 struct&lt;/h2&gt;
+
+&lt;p&gt;從上面的基本操作，建立了 Rectangle 物件, type 是 struct
+所以將 rectangleArea() 與 distance() 變更為&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;func rectangleArea(r Rectangle) float64 {
+	l := r.end.x - r.start.x
+	w := r.end.y - r.start.y
+	return l * w
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在 main 中, 可以改為, 如此可以輕鬆地理解 r 來自於 Rectangle 這個結構中的欄位&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;r := Rectangle{
+	start: Coordinate{
+		x: 1,
+		y: 1,
+	},
+	end: Coordinate{
+		x: 10,
+		y: 10,
+	},
+}
+fmt.Println(rectangleArea(r))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;2-將-func-中-strct-設定為指標&quot;&gt;2. 將 func() 中 strct 設定為指標&lt;/h2&gt;
+&lt;p&gt;以上 func 中, 重新宣告了一個 Rectangle 的物件
+可以使用 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;fmt.Printf(&quot;%p\n&quot;, ThePointer)&lt;/code&gt; 查看記憶體位置的變化&lt;/p&gt;
+
+&lt;p&gt;for example&lt;/p&gt;
+
+&lt;pre&gt;
+0xc00009c000 &amp;lt;= main 中的 Rectangle
+0xc00009c020 &amp;lt;= func 中的 Rectangle
+&lt;/pre&gt;
+
+&lt;p&gt;但可以用 pointer, 避免重複宣告並佔用 memory, 浪費資源&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;func rectangleArea(r *Rectangle) float64 {
+    fmt.Printf(&quot;%p&quot;, r) // 因為這邊的 r 已經是 pointer
+	l := r.end.x - r.start.x
+	w := r.end.y - r.start.y
+	return l * w
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在 main 中&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;r := Rectangle{
+	start: Coordinate{
+		x: 1,
+		y: 1,
+	},
+	end: Coordinate{
+		x: 10,
+		y: 10,
+	},
+}
+fmt.Printf(&quot;%p\n&quot;, &lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;r)
+fmt.Println(rectangleArea(&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;r))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;3-function-as-a-method&quot;&gt;3. function as a method&lt;/h2&gt;
+&lt;p&gt;解決了以上的問題，會發現&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;rectangle 與 circle 都有 area, 雖然可以在命名上作區別, 但有更好的方法
+且可以透過 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;.&lt;/code&gt; 的方式, 快速地在編輯器上引用此 method&lt;/li&gt;
+  &lt;li&gt;在 main 中，帶入的物件是 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;r&lt;/code&gt; 會有點難以理解&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;將 rectangleArea() 改為 rectangle 的 method&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;func (r *Rectangle) area() float64 {
+	fmt.Printf(&quot;%p\n&quot;, r)
+	l := r.end.x - r.start.x
+	w := r.end.y - r.start.y
+	return l * w
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;在 main 中&lt;/p&gt;
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;fmt.Println(r.area())
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;優化結束&quot;&gt;優化結束&lt;/h2&gt;
+
+&lt;div&gt;
+    &lt;iframe src=&quot;https://play.golang.org/p/ZQ3xAB8o5R9&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
+    &lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;p&gt;這是一個簡短的例子，當我們將功能越寫越多時，程式碼會越複雜
+我們可以透過此方法達成以下三個目的&lt;/p&gt;
+&lt;ol&gt;
+  &lt;li&gt;透過 struct 方式，容易看懂程式&lt;/li&gt;
+  &lt;li&gt;透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)&lt;/li&gt;
+  &lt;li&gt;使用 func as method 方式，讓程式碼在 func 使用上更容易被理解&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
+&lt;ol&gt;
+  &lt;li&gt;過於複雜的參數傳遞，雖然我們可以用命名方式來釐清，但名稱越長，也會使程式碼難以理解&lt;/li&gt;
+  &lt;li&gt;優化並非將程式碼縮短(但的確在大型架構下，可以縮短，並更容易理解)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;問題&quot;&gt;問題&lt;/h1&gt;
+&lt;p&gt;一個人裡有各種資訊物件，身分證、健保卡、護照，都用在不同的地方，也都有各自的 ID
+可以透過 struct 將 『身分證、健保卡、護照』 各自建立起來，用在不同的目的上
+但是否有方法整合這些物件？&lt;/p&gt;
+
+&lt;p&gt;『參考下篇 struct 優化（二）』&lt;/p&gt;</content><author><name></name></author><category term="Golang" /><summary type="html">Synopsis 透過 struct 方式，容易看懂程式 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory) 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解 Example 一般來說，如果要用程式碼計算『圓形面積』、『長方形面積』，可以用一些簡單的方式攥寫 但回頭看這個程式碼，會發現 如果要追蹤『rx1, ry1, rx2, ry2』或者『cx, cy, cr』當程式碼一長 or 複雜，就很難理解這個參數的意義 儘管有寫註解，在 function 中，一樣很難快速理解 解決方案 : 使用 struct 來幫助理解</summary></entry><entry><title type="html">【Go】Drill interface{}</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-drill-interface/" rel="alternate" type="text/html" title="【Go】Drill interface{}" /><published>2019-09-07T16:17:00+08:00</published><updated>2019-09-07T16:17:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/%5BGo%5Ddrill%20interface%7B%7D</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-drill-interface/">&lt;h1 id=&quot;interface&quot;&gt;interface{}&lt;/h1&gt;
 
 &lt;h2 id=&quot;explore&quot;&gt;Explore&lt;/h2&gt;
 &lt;blockquote&gt;
@@ -13,7 +204,7 @@
 
 &lt;h2 id=&quot;conclusion&quot;&gt;conclusion&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;interface{}&lt;/code&gt; is changed by each time setting, but the address is not changed.&lt;/li&gt;
+  &lt;li&gt;The &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;interface{}&lt;/code&gt; is changed by each time setting, but the address is not changed.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;for-example&quot;&gt;for example&lt;/h2&gt;
@@ -26,85 +217,85 @@
 &lt;!--more--&gt;
 
 &lt;h4 id=&quot;source&quot;&gt;source&lt;/h4&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;package main
 
-&lt;span class=&quot;n&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-	&lt;span class=&quot;s2&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
-	&lt;span class=&quot;s2&quot;&gt;&quot;reflect&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+import (
+	&quot;fmt&quot;
+	&quot;reflect&quot;
+)
 
-&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;S&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+type S struct {
+	x int
+	y int
+}
 
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+func main() {
 
-	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;interface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;printInfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	var i interface{}
+	printInfo(&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;i)
 
-	&lt;span class=&quot;n&quot;&gt;setInt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;setStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;setStruct&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;setSlice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	setInt(&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;i)
+	setStr(&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;i)
+	setStruct(&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;i)
+	setSlice(&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;i)
+}
 
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setInt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;interface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;999&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;printInfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+func setInt(i *interface{}) {
+	*i = 999
+	printInfo(i)
+}
 
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setStr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;interface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;str&quot;&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;printInfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+func setStr(i *interface{}) {
+	*i = &quot;str&quot;
+	printInfo(i)
+}
 
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setStruct&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;interface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;S&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;x&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;y&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;printInfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+func setStruct(i *interface{}) {
+	*i = S{
+		x: 1,
+		y: 2,
+	}
+	printInfo(i)
+}
 
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;setSlice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;interface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;printInfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+func setSlice(i *interface{}) {
+	*i = []int{1, 2, 3, 4}
+	printInfo(i)
+}
 
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;printInfo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;interface&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{})&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+func printInfo(i *interface{}) {
 
-	&lt;span class=&quot;n&quot;&gt;objKind&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;reflect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ValueOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Kind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;objType&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Sprintf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;%T&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;objAddress&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Sprintf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;%p&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;objValue&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;i&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;[Kind is : %v]&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;objKind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;% 15v %v&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Address =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;objAddress&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;% 15s %v&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Type =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;objType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;% 15s %+v&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Value =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;objValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">interface{} Explore When set object is an interface{} Set object is an interface{} Use pointer to set object value is int / string / struct / slice Print kind / address / type / value conclusion The interface{} is changed by each time setting, but the address is not changed. for example</summary></entry><entry><title type="html">【Apache】Proxy &amp;amp; Use Expressions To Restricted Access</title><link href="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" rel="alternate" type="text/html" title="【Apache】Proxy &amp; Use Expressions To Restricted Access" /><published>2019-09-06T20:30:00+08:00</published><updated>2019-09-06T20:30:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/%5BApache%5DProxy&amp;UseExpressions</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/Apache-Proxy&amp;UseExpressions/">&lt;h1 id=&quot;goal&quot;&gt;Goal&lt;/h1&gt;
+	objKind := reflect.ValueOf(*i).Kind()
+	objType := fmt.Sprintf(&quot;%T&quot;, *i)
+	objAddress := fmt.Sprintf(&quot;%p&quot;, *&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;i)
+	objValue := *i
+	fmt.Printf(&quot;[Kind is : %v]\n&quot;, objKind)
+	fmt.Printf(&quot;% 15v %v\n&quot;, &quot;Address =&amp;gt;&quot;, objAddress)
+	fmt.Printf(&quot;% 15s %v\n&quot;, &quot;Type =&amp;gt;&quot;, objType)
+	fmt.Printf(&quot;% 15s %+v\n&quot;, &quot;Value =&amp;gt;&quot;, objValue)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Golang" /><summary type="html">interface{} Explore When set object is an interface{} Set object is an interface{} Use pointer to set object value is int / string / struct / slice Print kind / address / type / value conclusion The interface{} is changed by each time setting, but the address is not changed. for example</summary></entry><entry><title type="html">【Apache】Proxy &amp;amp; Use Expressions To Restricted Access</title><link href="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" rel="alternate" type="text/html" title="【Apache】Proxy &amp; Use Expressions To Restricted Access" /><published>2019-09-06T20:30:00+08:00</published><updated>2019-09-06T20:30:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/%5BApache%5DProxy&amp;UseExpressions</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/Apache-Proxy&amp;UseExpressions/">&lt;h1 id=&quot;goal&quot;&gt;Goal&lt;/h1&gt;
 &lt;ol&gt;
   &lt;li&gt;80 port proxy to 8080 port. If work, will show ‘proxy’&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; can’t access, must return 404.
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt; can’t access, must return 404.
     &lt;ul&gt;
-      &lt;li&gt;Use &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;If &quot;%{SERVER_PORT} != '80'&quot;&amp;gt; Redirect 404 / &amp;lt;/If&amp;gt;&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;Use &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;If&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;&quot;%{&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;SERVER_PORT&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;'&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;80&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;'&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; Redirect 404 / &lt;span class=&quot;nt&quot;&gt;&amp;lt;/If&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h1 id=&quot;repo--env-set&quot;&gt;Repo &amp;amp; Env Set&lt;/h1&gt;
 &lt;blockquote&gt;
-  &lt;p&gt;source code : &lt;code class=&quot;highlighter-rouge&quot;&gt;https://github.com/jhaoheng/apacheProxy&amp;amp;UseExpressions&lt;/code&gt;&lt;/p&gt;
+  &lt;p&gt;source code : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;https://github.com/jhaoheng/apacheProxy&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;UseExpressions&lt;/code&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose up -d&lt;/code&gt; &amp;amp;&amp;amp; &lt;code class=&quot;highlighter-rouge&quot;&gt;docker exec -it ubuntu /bin/bash&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apt-get update&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apt-get install -y libapache2-mod-proxy-html libxml2-dev apache2 build-essential&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;docker-compose up -d&lt;/code&gt; &amp;amp;&amp;amp; &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;docker exec -it ubuntu /bin/bash&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;apt-get update&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;apt-get install -y libapache2-mod-proxy-html libxml2-dev apache2 build-essential&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;Proxy Modules
     &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;a2enmod proxy proxy_http proxy_ajp rewrite proxy_balancer proxy_connect proxy_html xml2enc&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;a2enmod proxy proxy_http proxy_ajp rewrite proxy_balancer proxy_connect proxy_html xml2enc&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ol&gt;
@@ -113,20 +304,20 @@
 
 &lt;h1 id=&quot;steps&quot;&gt;Steps&lt;/h1&gt;
 &lt;blockquote&gt;
-  &lt;p&gt;ref &lt;code class=&quot;highlighter-rouge&quot;&gt;./default.conf&lt;/code&gt; &amp;amp; &lt;code class=&quot;highlighter-rouge&quot;&gt;ports.conf&lt;/code&gt;&lt;/p&gt;
+  &lt;p&gt;ref &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;./default.conf&lt;/code&gt; &amp;amp; &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;ports.conf&lt;/code&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;h2 id=&quot;step1--enable-port-8080&quot;&gt;step1 : enable port 8080&lt;/h2&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;update &lt;code class=&quot;highlighter-rouge&quot;&gt;ports.conf&lt;/code&gt; in the ‘/etc/apache2/ports’&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;Listen 8080&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;update &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;ports.conf&lt;/code&gt; in the ‘/etc/apache2/ports’&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;Listen 8080&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2 id=&quot;step2--set-virtualhost&quot;&gt;step2 : set VirtualHost&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;echo &quot;proxy&quot; &amp;gt; /var/www/proxy/index.html&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;echo &quot;proxy&quot; &amp;gt; /var/www/proxy/index.html&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;set VirtualHost
 ```&lt;/li&gt;
 &lt;/ul&gt;
@@ -134,7 +325,7 @@
         ServerName localhost
         DocumentRoot /var/www/proxy/
 &amp;lt;/VirtualHost&amp;gt;&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
 ## step3 : set proxy
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -143,10 +334,10 @@
 ProxyPass / http://localhost:8080
 ProxyPassReverse / http://localhost:8080
 ProxyPreserveHost On&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;
 ## step4 : restricted direct connect localhost:8080
 
-&amp;gt; Write below into `&amp;lt;VirtualHost *:8080&amp;gt; ... &amp;lt;/VirtualHost&amp;gt;`
+&amp;gt; Write below into `&lt;span class=&quot;nt&quot;&gt;&amp;lt;VirtualHost&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;*:8080&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; ... &lt;span class=&quot;nt&quot;&gt;&amp;lt;/VirtualHost&amp;gt;&lt;/span&gt;`
 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 &lt;p&gt;AllowCONNECT 80
@@ -165,101 +356,22 @@ ProxyPreserveHost On&lt;/p&gt;
 
 &lt;h2 id=&quot;step5--restart--check-it&quot;&gt;step5 : restart &amp;amp; check it&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apache2ctl restart&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:80&lt;/code&gt;, will show ‘proxy’&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt;, be restricted to access&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">Goal 80 port proxy to 8080 port. If work, will show ‘proxy’ http://localhost:8080 can’t access, must return 404. Use &amp;lt;If &quot;%{SERVER_PORT} != '80'&quot;&amp;gt; Redirect 404 / &amp;lt;/If&amp;gt; Repo &amp;amp; Env Set source code : https://github.com/jhaoheng/apacheProxy&amp;amp;UseExpressions docker-compose up -d &amp;amp;&amp;amp; docker exec -it ubuntu /bin/bash apt-get update apt-get install -y libapache2-mod-proxy-html libxml2-dev apache2 build-essential Proxy Modules a2enmod proxy proxy_http proxy_ajp rewrite proxy_balancer proxy_connect proxy_html xml2enc</summary></entry><entry><title type="html">【Golang】func &amp;amp; pointer</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-func&pointer/" rel="alternate" type="text/html" title="【Golang】func &amp; pointer" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/%5BGo%5Dfunc&amp;pointer</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-func&amp;pointer/">&lt;h1 id=&quot;kind&quot;&gt;kind&lt;/h1&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;Different kinds use a pointer to change the value in Func.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;map&lt;/li&gt;
-  &lt;li&gt;slice&lt;/li&gt;
-  &lt;li&gt;array&lt;/li&gt;
-  &lt;li&gt;string&lt;/li&gt;
-  &lt;li&gt;struct&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div&gt;
-    &lt;iframe src=&quot;https://play.golang.org/p/sUiGkLDt8vJ&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
-    &lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;!--more--&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateMapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;   map =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;slice&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateSliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; slice =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateArrayObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; array =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateStringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;string =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;999&lt;/span&gt;
-
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;struct&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateStructObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;struct =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateMapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateArrayObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateSliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateStringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateStructObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">kind Different kinds use a pointer to change the value in Func. map slice array string struct</summary></entry><entry><title type="html">【Golang】Diff - slice &amp;amp; array</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-diff-slice&array/" rel="alternate" type="text/html" title="【Golang】Diff - slice &amp; array" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/%5BGo%5Ddiff-slice&amp;array</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-diff-slice&amp;array/">&lt;h1 id=&quot;slice--array-差別&quot;&gt;slice &amp;amp; array 差別&lt;/h1&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;apache2ctl restart&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;http://localhost:80&lt;/code&gt;, will show ‘proxy’&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt;, be restricted to access&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><category term="Apache" /><summary type="html">Goal 80 port proxy to 8080 port. If work, will show ‘proxy’ http://localhost:8080 can’t access, must return 404. Use &amp;lt;If &quot;%{SERVER_PORT} != '80'&quot;&amp;gt; Redirect 404 / &amp;lt;/If&amp;gt; Repo &amp;amp; Env Set source code : https://github.com/jhaoheng/apacheProxy&amp;amp;UseExpressions docker-compose up -d &amp;amp;&amp;amp; docker exec -it ubuntu /bin/bash apt-get update apt-get install -y libapache2-mod-proxy-html libxml2-dev apache2 build-essential Proxy Modules a2enmod proxy proxy_http proxy_ajp rewrite proxy_balancer proxy_connect proxy_html xml2enc</summary></entry><entry><title type="html">【Golang】Diff - slice &amp;amp; array</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-diff-slice&array/" rel="alternate" type="text/html" title="【Golang】Diff - slice &amp; array" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/%5BGo%5Ddiff-slice&amp;array</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-diff-slice&amp;array/">&lt;h1 id=&quot;slice--array-差別&quot;&gt;slice &amp;amp; array 差別&lt;/h1&gt;
 &lt;blockquote&gt;
   &lt;p&gt;https://blog.golang.org/go-slices-usage-and-internals&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;h1 id=&quot;array&quot;&gt;Array&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value.
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value.
 - An array's size is fixed;
 - Arrays do not need to be initialized
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h1 id=&quot;slice&quot;&gt;Slice&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length.
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length.
 A slice can be created with the built-in function called make, which has the signature,
 `func make([]T, len, cap) []T`
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
@@ -281,24 +393,24 @@ A slice can be created with the built-in function called make, which has the sig
 &lt;ul&gt;
   &lt;li&gt;array : Go’s arrays are values.
     &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;var arrObject [4]int&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;arrObject := [4]int{0, 1, 2, 3}&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;arrObject := [...]int{0, 1, 2, 3}&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;var arrObject [4]int&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;arrObject := [4]int{0, 1, 2, 3}&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;arrObject := [...]int{0, 1, 2, 3}&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;slice : 用 make 建立
     &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;var sliceObject []int&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sliceObject := []int{}&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sliceObject := []int{1,2,3,4}&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;var sliceObject []int&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;sliceObject := []int{}&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;sliceObject := []int{1,2,3,4}&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;兩者-type-不同&quot;&gt;兩者 type 不同&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;array : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(reflect.TypeOf(arrObject))&lt;/code&gt;, 顯示 [4]int&lt;/li&gt;
-  &lt;li&gt;slice : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(reflect.TypeOf(sliceObject))&lt;/code&gt;, 顯示 []int&lt;/li&gt;
+  &lt;li&gt;array : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;fmt.Println(reflect.TypeOf(arrObject))&lt;/code&gt;, 顯示 [4]int&lt;/li&gt;
+  &lt;li&gt;slice : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;fmt.Println(reflect.TypeOf(sliceObject))&lt;/code&gt;, 顯示 []int&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;div&gt;
@@ -308,8 +420,8 @@ A slice can be created with the built-in function called make, which has the sig
 
 &lt;h2 id=&quot;兩者-kind-不同-&quot;&gt;兩者 kind 不同 :&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;array : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(reflect.TypeOf(arrObject).Kind())&lt;/code&gt;, 顯示 array&lt;/li&gt;
-  &lt;li&gt;slice : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(reflect.TypeOf(sliceObject).Kind())&lt;/code&gt;, 顯示 slice&lt;/li&gt;
+  &lt;li&gt;array : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;fmt.Println(reflect.TypeOf(arrObject).Kind())&lt;/code&gt;, 顯示 array&lt;/li&gt;
+  &lt;li&gt;slice : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;fmt.Println(reflect.TypeOf(sliceObject).Kind())&lt;/code&gt;, 顯示 slice&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;div&gt;
@@ -334,13 +446,13 @@ A slice can be created with the built-in function called make, which has the sig
   &lt;li&gt;array
     &lt;ul&gt;
       &lt;li&gt;arr 長度固定, 無法新增&lt;/li&gt;
-      &lt;li&gt;新增、修改 : &lt;code class=&quot;highlighter-rouge&quot;&gt;arrObject[0] = 999&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;新增、修改 : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;arrObject[0] = 999&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;slice
     &lt;ul&gt;
-      &lt;li&gt;新增 : &lt;code class=&quot;highlighter-rouge&quot;&gt;sliceObject = append(sliceObject, 1,2,3,4)&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;修改 : &lt;code class=&quot;highlighter-rouge&quot;&gt;sliceObject[0] = 999&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;新增 : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;sliceObject = append(sliceObject, 1,2,3,4)&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;修改 : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;sliceObject[0] = 999&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -369,14 +481,93 @@ A slice can be created with the built-in function called make, which has the sig
 
 &lt;h2 id=&quot;兩者在切割方式上相同-&quot;&gt;兩者在切割方式上&lt;strong&gt;相同&lt;/strong&gt; :&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;arr[:2]&lt;/code&gt; = &lt;code class=&quot;highlighter-rouge&quot;&gt;sliceObject[:2]&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;arr[:2]&lt;/code&gt; = &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;sliceObject[:2]&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;顯示長度上&quot;&gt;顯示長度上&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;array : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(len(arrayObject))&lt;/code&gt;, 顯示 4&lt;/li&gt;
-  &lt;li&gt;slice : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(len(sliceObject))&lt;/code&gt; 顯示 0&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">slice &amp;amp; array 差別 https://blog.golang.org/go-slices-usage-and-internals Array Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value. - An array's size is fixed; - Arrays do not need to be initialized Slice The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length. A slice can be created with the built-in function called make, which has the signature, `func make([]T, len, cap) []T` Glance : Difference between both 兩者在宣告方式不同 兩者 type 不同 兩者 kind 不同 兩者在宣告後, 不設定 content, 印出內容 兩者在新增/修改值上不同 兩者 func 中，使用原理方式不同</summary></entry><entry><title type="html">【Golang】Go module</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/gomod/" rel="alternate" type="text/html" title="【Golang】Go module" /><published>2019-08-31T20:14:00+08:00</published><updated>2019-08-31T20:14:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/gomod</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/gomod/">&lt;h1 id=&quot;環境&quot;&gt;環境&lt;/h1&gt;
+  &lt;li&gt;array : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;fmt.Println(len(arrayObject))&lt;/code&gt;, 顯示 4&lt;/li&gt;
+  &lt;li&gt;slice : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;fmt.Println(len(sliceObject))&lt;/code&gt; 顯示 0&lt;/li&gt;
+&lt;/ul&gt;</content><author><name></name></author><category term="Golang" /><summary type="html">slice &amp;amp; array 差別 https://blog.golang.org/go-slices-usage-and-internals Array Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value. - An array's size is fixed; - Arrays do not need to be initialized Slice The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length. A slice can be created with the built-in function called make, which has the signature, `func make([]T, len, cap) []T` Glance : Difference between both 兩者在宣告方式不同 兩者 type 不同 兩者 kind 不同 兩者在宣告後, 不設定 content, 印出內容 兩者在新增/修改值上不同 兩者 func 中，使用原理方式不同</summary></entry><entry><title type="html">【Golang】func &amp;amp; pointer</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-func&pointer/" rel="alternate" type="text/html" title="【Golang】func &amp; pointer" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/%5BGo%5Dfunc&amp;pointer</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/Go-func&amp;pointer/">&lt;h1 id=&quot;kind&quot;&gt;kind&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Different kinds use a pointer to change the value in Func.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;map&lt;/li&gt;
+  &lt;li&gt;slice&lt;/li&gt;
+  &lt;li&gt;array&lt;/li&gt;
+  &lt;li&gt;string&lt;/li&gt;
+  &lt;li&gt;struct&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div&gt;
+    &lt;iframe src=&quot;https://play.golang.org/p/sUiGkLDt8vJ&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
+    &lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;!--more--&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;package main
+
+import &quot;fmt&quot;
+
+func main() {
+	// map
+	var mapObj = map[int]string{}
+	mapObj[0] = &quot;max&quot;
+	updateMapObj(mapObj)
+	fmt.Println(&quot;   map =&amp;gt;&quot;, mapObj)
+
+	// slice
+	sliceObj := []string{
+		0: &quot;max&quot;,
+	}
+	updateSliceObj(sliceObj)
+	fmt.Println(&quot; slice =&amp;gt;&quot;, sliceObj) // [sunny]
+
+	// array
+	arrayObject := [1]string{&quot;max&quot;}
+	updateArrayObj(&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;arrayObject)
+	fmt.Println(&quot; array =&amp;gt;&quot;, arrayObject) // [sunny]
+
+	// string
+	var stringObj string
+	stringObj = &quot;max&quot;
+	updateStringObj(&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;stringObj)
+	fmt.Println(&quot;string =&amp;gt;&quot;, stringObj) // 999
+
+	// struct
+	var srtuctObj StructObject
+	srtuctObj.name = &quot;max&quot;
+	updateStructObj(&lt;span class=&quot;err&quot;&gt;&amp;amp;&lt;/span&gt;srtuctObj)
+	fmt.Println(&quot;struct =&amp;gt;&quot;, srtuctObj) // {sunny}
+}
+
+func updateMapObj(mapObj map[int]string) {
+	mapObj[0] = &quot;sunny&quot;
+}
+
+func updateArrayObj(arrayObject *[1]string) {
+	arrayObject[0] = &quot;sunny&quot;
+}
+
+func updateSliceObj(sliceObj []string) {
+	sliceObj[0] = &quot;sunny&quot;
+}
+
+func updateStringObj(stringObj *string) {
+	*stringObj = &quot;sunny&quot;
+}
+
+type StructObject struct {
+	name string
+}
+
+func updateStructObj(srtuctObj *StructObject) {
+	srtuctObj.name = &quot;sunny&quot;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Golang" /><summary type="html">kind Different kinds use a pointer to change the value in Func. map slice array string struct</summary></entry><entry><title type="html">【Golang】Go module</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/gomod/" rel="alternate" type="text/html" title="【Golang】Go module" /><published>2019-08-31T20:14:00+08:00</published><updated>2019-08-31T20:14:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/gomod</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/gomod/">&lt;h1 id=&quot;環境&quot;&gt;環境&lt;/h1&gt;
 &lt;ul&gt;
   &lt;li&gt;go version go1.12.9 darwin/amd64&lt;/li&gt;
   &lt;li&gt;官方教學 : https://github.com/golang/go/wiki/Modules#quick-start&lt;/li&gt;
@@ -389,13 +580,13 @@ A slice can be created with the built-in function called make, which has the sig
 &lt;ul&gt;
   &lt;li&gt;支援 GO 1.11 以後版本
     &lt;ul&gt;
-      &lt;li&gt;確認版本 &lt;code class=&quot;highlighter-rouge&quot;&gt;go version&lt;/code&gt;，檢查環境變數 : &lt;code class=&quot;highlighter-rouge&quot;&gt;go env&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;確認版本 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go version&lt;/code&gt;，檢查環境變數 : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go env&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;調用方式有兩種
     &lt;ul&gt;
       &lt;li&gt;在 GOPATH 外，確定 GO111MODULE 沒有設定或者設定為 auto，並在專案中建立 go.mod&lt;/li&gt;
-      &lt;li&gt;在 GOPAHT 中，設定 &lt;code class=&quot;highlighter-rouge&quot;&gt;export GO111MODULE=on&lt;/code&gt;，就可直接在 GOPATH 中使用&lt;/li&gt;
+      &lt;li&gt;在 GOPAHT 中，設定 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;export GO111MODULE=on&lt;/code&gt;，就可直接在 GOPATH 中使用&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -408,14 +599,14 @@ A slice can be created with the built-in function called make, which has the sig
 
 &lt;h2 id=&quot;1-建立-repo&quot;&gt;1. 建立 repo&lt;/h2&gt;
 
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ mkdir -p /tmp/scratchpad/repo
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ mkdir -p /tmp/scratchpad/repo
 $ cd /tmp/scratchpad/repo
 $ git init -q
 $ git remote add origin https://github.com/my/repo
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;2-初始化-go-module&quot;&gt;2. 初始化 go module&lt;/h2&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ go mod init github.com/my/repo
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ go mod init github.com/my/repo
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;ul&gt;
@@ -423,38 +614,38 @@ $ git remote add origin https://github.com/my/repo
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;3-設定-maingo&quot;&gt;3. 設定 main.go&lt;/h2&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;$&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;EOF&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hello&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;go&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ cat &lt;span class=&quot;nt&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;EOF&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; hello.go
+package main
 
-&lt;span class=&quot;n&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
-    &lt;span class=&quot;s2&quot;&gt;&quot;rsc.io/quote&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+import (
+    &quot;fmt&quot;
+    &quot;rsc.io/quote&quot;
+)
 
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;quote&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Hello&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;())&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;EOF&lt;/span&gt;
+func main() {
+    fmt.Println(quote.Hello())
+}
+EOF
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;4-建立-hello-執行檔&quot;&gt;4. 建立 hello 執行檔&lt;/h2&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ go build -o hello
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ go build -o hello
 $ ./hello
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;go build|test|install&lt;/code&gt; : 都會下載 pkg 到 &lt;code class=&quot;highlighter-rouge&quot;&gt;$GOPATH/pkg/mod&lt;/code&gt; 目錄下
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go build|test|install&lt;/code&gt; : 都會下載 pkg 到 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;$GOPATH/pkg/mod&lt;/code&gt; 目錄下
     &lt;ul&gt;
-      &lt;li&gt;使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;go mod download&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;使用 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go mod download&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;因為並沒有明確設定 go.mod 中 &lt;code class=&quot;highlighter-rouge&quot;&gt;rsc.io/quote&lt;/code&gt; 的版本，會自動下載最新版本，可以去 go.mod 中檢查變動&lt;/li&gt;
-  &lt;li&gt;可以注意到並沒有用 &lt;code class=&quot;highlighter-rouge&quot;&gt;go get&lt;/code&gt; 的指令&lt;/li&gt;
-  &lt;li&gt;當想要變更版本，可以使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;go get foo@v1.2.3&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;go get foo@master&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;go get foo@e3702bed2&lt;/code&gt;, 或者直接編輯 &lt;code class=&quot;highlighter-rouge&quot;&gt;go.mod&lt;/code&gt; 然後執行下載.&lt;/li&gt;
+  &lt;li&gt;因為並沒有明確設定 go.mod 中 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;rsc.io/quote&lt;/code&gt; 的版本，會自動下載最新版本，可以去 go.mod 中檢查變動&lt;/li&gt;
+  &lt;li&gt;可以注意到並沒有用 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go get&lt;/code&gt; 的指令&lt;/li&gt;
+  &lt;li&gt;當想要變更版本，可以使用 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go get foo@v1.2.3&lt;/code&gt;, &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go get foo@master&lt;/code&gt;, &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go get foo@e3702bed2&lt;/code&gt;, 或者直接編輯 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go.mod&lt;/code&gt; 然後執行下載.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;一個標準的-gomod&quot;&gt;一個標準的 go.mod&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module maxtest
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;module maxtest
 require (
 	github.com/joho/godotenv v1.3.0
 	rsc.io/quote v1.5.2
@@ -463,8 +654,8 @@ go 1.12
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;下載的 go pkg 都會放在 &lt;code class=&quot;highlighter-rouge&quot;&gt;GOPATH/pkg/mod/...&lt;/code&gt; 路徑中&lt;/li&gt;
-  &lt;li&gt;gomod 不會在 &lt;code class=&quot;highlighter-rouge&quot;&gt;$GOPATH/src&lt;/code&gt; 目錄下保存 pkg 包的源碼，而是包源碼和鏈接庫保存在 &lt;code class=&quot;highlighter-rouge&quot;&gt;$GOPATH/pkg/mod&lt;/code&gt; 目錄下。&lt;/li&gt;
+  &lt;li&gt;下載的 go pkg 都會放在 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;GOPATH/pkg/mod/...&lt;/code&gt; 路徑中&lt;/li&gt;
+  &lt;li&gt;gomod 不會在 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;$GOPATH/src&lt;/code&gt; 目錄下保存 pkg 包的源碼，而是包源碼和鏈接庫保存在 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;$GOPATH/pkg/mod&lt;/code&gt; 目錄下。&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;一些會用到的相關指令&quot;&gt;一些會用到的相關指令&lt;/h1&gt;
@@ -473,37 +664,37 @@ go 1.12
 &lt;/blockquote&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;go list -m all&lt;/code&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go list -m all&lt;/code&gt;
     &lt;ul&gt;
       &lt;li&gt;查看所有目前 build 後有使用的相依版本(direct and indirect 都會列出)&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;go list -u -m all&lt;/code&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go list -u -m all&lt;/code&gt;
     &lt;ul&gt;
       &lt;li&gt;對所有的 direct 與 indirect 相依，查看有效的最小版本與補丁升級。(details)&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;go list -u -m -json all&lt;/code&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go list -u -m -json all&lt;/code&gt;
     &lt;ul&gt;
       &lt;li&gt;用 json 格式顯示詳細資料&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;go get -u&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;go get -u=patch&lt;/code&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go get -u&lt;/code&gt; or &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go get -u=patch&lt;/code&gt;
     &lt;ul&gt;
       &lt;li&gt;更新所有相依到最新的版本號或者補丁升級(pre-releases 會被忽略)&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;go build ./...&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;go test ./...&lt;/code&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go build ./...&lt;/code&gt; or &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go test ./...&lt;/code&gt;
     &lt;ul&gt;
       &lt;li&gt;在根目錄執行 build 與 test 會下載 module&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;go mod tidy&lt;/code&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go mod tidy&lt;/code&gt;
     &lt;ul&gt;
       &lt;li&gt;從 go.mod 中，新增或移除沒用的 modules&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;go mod vendor&lt;/code&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go mod vendor&lt;/code&gt;
     &lt;ul&gt;
       &lt;li&gt;若你有在使用 vendor, 可使用此指令, 將 modules 複製到 vendor 目錄下&lt;/li&gt;
     &lt;/ul&gt;
@@ -513,8 +704,8 @@ go 1.12
 &lt;h1 id=&quot;其他&quot;&gt;其他&lt;/h1&gt;
 &lt;ul&gt;
   &lt;li&gt;go list 只是把 cache 更新, 要用 go mod download 才會下載&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;go mod edit -fmt&lt;/code&gt; : 重新格式化 go.mod 的格式, ex : 如果版本不是 3 位數，會補齊&lt;/li&gt;
-  &lt;li&gt;清除下載的 pkg &amp;amp; cache : &lt;code class=&quot;highlighter-rouge&quot;&gt;go clean -i -x -modcache&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go mod edit -fmt&lt;/code&gt; : 重新格式化 go.mod 的格式, ex : 如果版本不是 3 位數，會補齊&lt;/li&gt;
+  &lt;li&gt;清除下載的 pkg &amp;amp; cache : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;go clean -i -x -modcache&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;gomod-與-gosum&quot;&gt;go.mod 與 go.sum&lt;/h2&gt;
@@ -524,26 +715,26 @@ go 1.12
   &lt;li&gt;For validation purposes, go.sum contains the expected cryptographic checksums of the content of specific module versions.&lt;/li&gt;
   &lt;li&gt;go.sum 是為了驗證目的，go.sum 包含所有指定版本的 cryptographic checksums&lt;/li&gt;
   &lt;li&gt;此外，go.sum 紀錄的 checksums 包含所有 direct 與 indriect 的相依庫，曾經建立過的。因此 go.sum 算是一種歷史紀錄。&lt;/li&gt;
-&lt;/ul&gt;</content><author><name></name></author><summary type="html">環境 go version go1.12.9 darwin/amd64 官方教學 : https://github.com/golang/go/wiki/Modules#quick-start</summary></entry><entry><title type="html">【Log】Use Logrotate at ubuntu16.04</title><link href="https://jhaoheng.github.io/blogpost/blogpost/ubuntu/log/logrotate/" rel="alternate" type="text/html" title="【Log】Use Logrotate at ubuntu16.04" /><published>2018-10-25T07:30:00+08:00</published><updated>2018-10-25T07:30:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/ubuntu/log/logrotate</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/ubuntu/log/logrotate/">&lt;h1 id=&quot;env--注意&quot;&gt;env &amp;amp; 注意&lt;/h1&gt;
+&lt;/ul&gt;</content><author><name></name></author><category term="Golang" /><summary type="html">環境 go version go1.12.9 darwin/amd64 官方教學 : https://github.com/golang/go/wiki/Modules#quick-start</summary></entry><entry><title type="html">【Log】Use Logrotate at ubuntu16.04</title><link href="https://jhaoheng.github.io/blogpost/blogpost/ubuntu/log/logrotate/" rel="alternate" type="text/html" title="【Log】Use Logrotate at ubuntu16.04" /><published>2018-10-25T07:30:00+08:00</published><updated>2018-10-25T07:30:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/ubuntu/log/logrotate</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/ubuntu/log/logrotate/">&lt;h1 id=&quot;env--注意&quot;&gt;env &amp;amp; 注意&lt;/h1&gt;
 &lt;ul&gt;
   &lt;li&gt;ubuntu&lt;/li&gt;
   &lt;li&gt;必須確認有 cron 服務&lt;/li&gt;
-  &lt;li&gt;doc : &lt;code class=&quot;highlighter-rouge&quot;&gt;https://linux.die.net/man/8/logrotate&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;必須確定已經有 log, 若無 log file, 系統會報錯 &lt;code class=&quot;highlighter-rouge&quot;&gt;error: stat of /root/xxxx.log failed: No such file or directory&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;doc : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;https://linux.die.net/man/8/logrotate&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;必須確定已經有 log, 若無 log file, 系統會報錯 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;error: stat of /root/xxxx.log failed: No such file or directory&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h1 id=&quot;說明&quot;&gt;說明&lt;/h1&gt;
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apt-get install -y logrotate&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;配置文件 : &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/logrotate.conf&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;設定檔為至 : &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/logrotate.d/&lt;/code&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;apt-get install -y logrotate&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;配置文件 : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;/etc/logrotate.conf&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;設定檔為至 : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;/etc/logrotate.d/&lt;/code&gt;
     &lt;ul&gt;
-      &lt;li&gt;若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 &lt;code class=&quot;highlighter-rouge&quot;&gt;/etc/logrotate.d/&lt;/code&gt; 中, 建立相關的設定&lt;/li&gt;
+      &lt;li&gt;若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;/etc/logrotate.d/&lt;/code&gt; 中, 建立相關的設定&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;檢查設定 &lt;code class=&quot;highlighter-rouge&quot;&gt;sudo logrotate /etc/logrotate.conf --debug&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;logrotate 歷史紀錄 &lt;code class=&quot;highlighter-rouge&quot;&gt;cat /var/lib/logrotate/status&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;強迫 logrotate 立即執行 : &lt;code class=&quot;highlighter-rouge&quot;&gt;logrotate -f /etc/logrotate.conf&lt;/code&gt;
+  &lt;li&gt;檢查設定 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;sudo logrotate /etc/logrotate.conf --debug&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;logrotate 歷史紀錄 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;cat /var/lib/logrotate/status&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;強迫 logrotate 立即執行 : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;logrotate -f /etc/logrotate.conf&lt;/code&gt;
     &lt;ul&gt;
       &lt;li&gt;透過 [logrotate 歷史紀錄] 可查看執行時間&lt;/li&gt;
     &lt;/ul&gt;
@@ -568,7 +759,7 @@ go 1.12
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;ex-&quot;&gt;ex :&lt;/h2&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/tmp/sample_output.log {
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/tmp/sample_output.log {
 	size 1k
 	create 700 root root
 	rotate 4
@@ -577,7 +768,7 @@ go 1.12
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
 &lt;h2 id=&quot;ex--nginx&quot;&gt;ex : nginx&lt;/h2&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/var/log/nginx/*.log {
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;/var/log/nginx/*.log {
     daily
     missingok
     rotate 52
@@ -592,7 +783,7 @@ go 1.12
             fi
     endscript
 }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><summary type="html">env &amp;amp; 注意 ubuntu 必須確認有 cron 服務 doc : https://linux.die.net/man/8/logrotate 必須確定已經有 log, 若無 log file, 系統會報錯 error: stat of /root/xxxx.log failed: No such file or directory 說明 apt-get install -y logrotate 配置文件 : /etc/logrotate.conf 設定檔為至 : /etc/logrotate.d/ 若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 /etc/logrotate.d/ 中, 建立相關的設定 檢查設定 sudo logrotate /etc/logrotate.conf --debug logrotate 歷史紀錄 cat /var/lib/logrotate/status 強迫 logrotate 立即執行 : logrotate -f /etc/logrotate.conf 透過 [logrotate 歷史紀錄] 可查看執行時間 主要設定 compress –&amp;gt; 壓縮日誌文件的所有非當前版本 daily,weekly,monthly –&amp;gt; 按指定計劃輪換日誌文件 delaycompress –&amp;gt; 壓縮所有版本，除了當前和下一個最近的 errors “emailid” –&amp;gt; 給指定郵箱發送錯誤通知 missingok –&amp;gt; 如果日誌文件丟失，不要顯示錯誤 notifempty –&amp;gt; 如果日誌文件為空，則不輪換日誌文件 olddir “dir” –&amp;gt; 指定日誌文件的舊版本放在 「dir」 中 postrotate –&amp;gt; 引入一個在日誌被輪換後執行的腳本 prerotate –&amp;gt; 引入一個在日誌被輪換前執行的腳本 endscript –&amp;gt; 標記 prerotate 或 postrotate 腳本的結束 rotate ‘n’ –&amp;gt; 在輪換方案中包含日誌的 n 個版本 sharedscripts –&amp;gt; 對於整個日誌組只運行一次腳本 size=’logsize’ –&amp;gt; 在日誌大小大於 logsize（例如 100K，4M）時輪換 ex : /tmp/sample_output.log { size 1k create 700 root root rotate 4 compress } ex : nginx /var/log/nginx/*.log { daily missingok rotate 52 compress delaycompress notifempty create 640 nginx adm sharedscripts postrotate if [ -f /var/run/nginx.pid ]; then kill -USR1 `cat /var/run/nginx.pid` fi endscript }</summary></entry><entry><title type="html">【AWS-Redis】How to Access to AWS-ElastiCache</title><link href="https://jhaoheng.github.io/blogpost/blogpost/aws/redis/AWS-ElastiCache-Access/" rel="alternate" type="text/html" title="【AWS-Redis】How to Access to AWS-ElastiCache" /><published>2018-07-06T07:30:00+08:00</published><updated>2018-07-06T07:30:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/aws/redis/AWS-ElastiCache-Access</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/aws/redis/AWS-ElastiCache-Access/">&lt;h1 id=&quot;透過-redis-cli-連線-elasticache&quot;&gt;透過 redis-cli 連線 elasticache&lt;/h1&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name></name></author><category term="Ubuntu" /><category term="Log" /><summary type="html">env &amp;amp; 注意 ubuntu 必須確認有 cron 服務 doc : https://linux.die.net/man/8/logrotate 必須確定已經有 log, 若無 log file, 系統會報錯 error: stat of /root/xxxx.log failed: No such file or directory 說明 apt-get install -y logrotate 配置文件 : /etc/logrotate.conf 設定檔為至 : /etc/logrotate.d/ 若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 /etc/logrotate.d/ 中, 建立相關的設定 檢查設定 sudo logrotate /etc/logrotate.conf --debug logrotate 歷史紀錄 cat /var/lib/logrotate/status 強迫 logrotate 立即執行 : logrotate -f /etc/logrotate.conf 透過 [logrotate 歷史紀錄] 可查看執行時間 主要設定 compress –&amp;gt; 壓縮日誌文件的所有非當前版本 daily,weekly,monthly –&amp;gt; 按指定計劃輪換日誌文件 delaycompress –&amp;gt; 壓縮所有版本，除了當前和下一個最近的 errors “emailid” –&amp;gt; 給指定郵箱發送錯誤通知 missingok –&amp;gt; 如果日誌文件丟失，不要顯示錯誤 notifempty –&amp;gt; 如果日誌文件為空，則不輪換日誌文件 olddir “dir” –&amp;gt; 指定日誌文件的舊版本放在 「dir」 中 postrotate –&amp;gt; 引入一個在日誌被輪換後執行的腳本 prerotate –&amp;gt; 引入一個在日誌被輪換前執行的腳本 endscript –&amp;gt; 標記 prerotate 或 postrotate 腳本的結束 rotate ‘n’ –&amp;gt; 在輪換方案中包含日誌的 n 個版本 sharedscripts –&amp;gt; 對於整個日誌組只運行一次腳本 size=’logsize’ –&amp;gt; 在日誌大小大於 logsize（例如 100K，4M）時輪換 ex : /tmp/sample_output.log { size 1k create 700 root root rotate 4 compress } ex : nginx /var/log/nginx/*.log { daily missingok rotate 52 compress delaycompress notifempty create 640 nginx adm sharedscripts postrotate if [ -f /var/run/nginx.pid ]; then kill -USR1 `cat /var/run/nginx.pid` fi endscript }</summary></entry><entry><title type="html">【AWS-Redis】How to Access to AWS-ElastiCache</title><link href="https://jhaoheng.github.io/blogpost/blogpost/aws/redis/AWS-ElastiCache-Access/" rel="alternate" type="text/html" title="【AWS-Redis】How to Access to AWS-ElastiCache" /><published>2018-07-06T07:30:00+08:00</published><updated>2018-07-06T07:30:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/aws/redis/AWS-ElastiCache-Access</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/aws/redis/AWS-ElastiCache-Access/">&lt;h1 id=&quot;透過-redis-cli-連線-elasticache&quot;&gt;透過 redis-cli 連線 elasticache&lt;/h1&gt;
 
 &lt;h2 id=&quot;限制&quot;&gt;限制&lt;/h2&gt;
 &lt;ol&gt;
@@ -621,13 +812,13 @@ Please note that IP-range based access control is currently not enabled for Cach
 &lt;h2 id=&quot;安裝-redis-cli-連線&quot;&gt;安裝 redis-cli, 連線&lt;/h2&gt;
 &lt;ol&gt;
   &lt;li&gt;先 access 進 ec2 instance&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apt-get update &amp;amp;&amp;amp; apt-get install gcc make -y&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;wget http://download.redis.io/redis-stable.tar.gz &amp;amp;&amp;amp; tar xvzf redis-stable.tar.gz &amp;amp;&amp;amp; cd redis-stable &amp;amp;&amp;amp; make distclean &amp;amp;&amp;amp; make&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;(optional) &lt;code class=&quot;highlighter-rouge&quot;&gt;ln -s $(pwd)/src/redis-cli /bin/redis-cli&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;apt-get update &lt;span class=&quot;err&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install gcc make -y&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;wget http://download.redis.io/redis-stable.tar.gz &lt;span class=&quot;err&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; tar xvzf redis-stable.tar.gz &lt;span class=&quot;err&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; cd redis-stable &lt;span class=&quot;err&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; make distclean &lt;span class=&quot;err&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; make&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;(optional) &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;ln -s $(pwd)/src/redis-cli /bin/redis-cli&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;connect :
     &lt;ul&gt;
-      &lt;li&gt;if (3) &lt;code class=&quot;highlighter-rouge&quot;&gt;redis-cli -c -h {endpoint} -p 6379&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;./src/redis-cli -c -h {endpoint} -p 6379&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;if (3) &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;redis-cli -c -h {endpoint} -p 6379&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;./src/redis-cli -c -h {endpoint} -p 6379&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ol&gt;
@@ -635,11 +826,11 @@ Please note that IP-range based access control is currently not enabled for Cach
 &lt;h2 id=&quot;透過-gui-訪問&quot;&gt;透過 GUI 訪問&lt;/h2&gt;
 &lt;ol&gt;
   &lt;li&gt;先 access 進 ec2 instance&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apt-get update &amp;amp;&amp;amp; apt-get install nodejs npm -y &amp;amp;&amp;amp; ln -s $(which nodejs) /usr/bin/node &amp;amp;&amp;amp; npm install -g redis-commander&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;執行服務 : &lt;code class=&quot;highlighter-rouge&quot;&gt;redis-commander --redis-host &amp;lt;elasticache endpoint&amp;gt;&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;apt-get update &lt;span class=&quot;err&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; apt-get install nodejs npm -y &lt;span class=&quot;err&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; ln -s $(which nodejs) /usr/bin/node &lt;span class=&quot;err&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; npm install -g redis-commander&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;執行服務 : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;redis-commander --redis-host &lt;span class=&quot;nt&quot;&gt;&amp;lt;elasticache&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;endpoint&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;確定 ec2 security 8081 port 可讓你目前的 ip 進行連線&lt;/li&gt;
   &lt;li&gt;瀏覽器輸入 : &lt;ec2-instance-ip&gt;:8081&lt;/ec2-instance-ip&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><summary type="html">透過 redis-cli 連線 elasticache 限制 必須透過 aws ec2 進行連線 : From AWS FAQ: (http://aws.amazon.com/elasticache/faqs/) Please note that IP-range based access control is currently not enabled for Cache Clusters. All clients to a Cache Cluster must be within the EC2 network, and authorized via security groups as described above. 確定 elasticache 建立時的 endpoint Subnet Group Security Group 確定 aws ec2 確保 instance 的 vpc 與 elasticache 的 Subnet Group 相同</summary></entry><entry><title type="html">【Deploy Test】Use Kubernetes &amp;amp; Minikube(local)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/Kubernetes&Minikube/" rel="alternate" type="text/html" title="【Deploy Test】Use Kubernetes &amp; Minikube(local)" /><published>2018-03-02T07:30:00+08:00</published><updated>2018-03-02T07:30:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/Kubernetes&amp;Minikube</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/Kubernetes&amp;Minikube/">&lt;h2 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h2&gt;
+&lt;/ol&gt;</content><author><name></name></author><category term="AWS" /><category term="Redis" /><summary type="html">透過 redis-cli 連線 elasticache 限制 必須透過 aws ec2 進行連線 : From AWS FAQ: (http://aws.amazon.com/elasticache/faqs/) Please note that IP-range based access control is currently not enabled for Cache Clusters. All clients to a Cache Cluster must be within the EC2 network, and authorized via security groups as described above. 確定 elasticache 建立時的 endpoint Subnet Group Security Group 確定 aws ec2 確保 instance 的 vpc 與 elasticache 的 Subnet Group 相同</summary></entry><entry><title type="html">【Deploy Test】Use Kubernetes &amp;amp; Minikube(local)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/Kubernetes&Minikube/" rel="alternate" type="text/html" title="【Deploy Test】Use Kubernetes &amp; Minikube(local)" /><published>2018-03-02T07:30:00+08:00</published><updated>2018-03-02T07:30:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/Kubernetes&amp;Minikube</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/Kubernetes&amp;Minikube/">&lt;h2 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h2&gt;
 &lt;ul&gt;
   &lt;li&gt;透過本地端，練習 kubenetes client&lt;/li&gt;
   &lt;li&gt;使用 minikube&amp;amp;virtual 當作 kube server&lt;/li&gt;
@@ -667,13 +858,13 @@ Please note that IP-range based access control is currently not enabled for Cach
       &lt;li&gt;mac 安裝失敗問題 : http://blog.csdn.net/u013247765/article/details/78176079&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;osx 安裝 minikube : &lt;code class=&quot;highlighter-rouge&quot;&gt;brew cask install minikube&lt;/code&gt;
+  &lt;li&gt;osx 安裝 minikube : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;brew cask install minikube&lt;/code&gt;
     &lt;ul&gt;
       &lt;li&gt;minikube start&lt;/li&gt;
-      &lt;li&gt;若遇到失敗 : &lt;code class=&quot;highlighter-rouge&quot;&gt;minikube delete&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;若遇到失敗 : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;minikube delete&lt;/code&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;https://kubernetes.io/docs/tutorials/stateless-application/hello-minikube/&quot;&gt;操作方法&lt;/a&gt;&lt;/li&gt;
       &lt;li&gt;&lt;a href=&quot;https://github.com/kubernetes/minikube&quot;&gt;Github&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;開啟 web dashboard : &lt;code class=&quot;highlighter-rouge&quot;&gt;minikube dashboard&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;開啟 web dashboard : &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;minikube dashboard&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;安裝 kubernetes client &lt;a href=&quot;https://kubernetes.io/docs/imported/release/notes/&quot;&gt;官網安裝&lt;/a&gt;
@@ -682,11 +873,11 @@ Please note that IP-range based access control is currently not enabled for Cach
       &lt;li&gt;選擇 client binaries&lt;/li&gt;
       &lt;li&gt;確定自己電腦的 linux 安裝即可 : osx amd64
         &lt;ul&gt;
-          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;uname -a&lt;/code&gt; : 看是否是 x86_64&lt;/li&gt;
-          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;shasum -a 256 {the file} | grep {hash}&lt;/code&gt; : 在 osx 驗證 hash&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;uname -a&lt;/code&gt; : 看是否是 x86_64&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;language-html highlighter-rouge&quot;&gt;shasum -a 256 {the file} | grep {hash}&lt;/code&gt; : 在 osx 驗證 hash&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/li&gt;
-      &lt;li&gt;放入 bash_profile, &lt;code class=&quot;highlighter-rouge&quot;&gt;source ~/.bash_profile&lt;/code&gt; 即可&lt;/li&gt;
+      &lt;li&gt;放入 bash_profile, &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;source ~/.bash_profile&lt;/code&gt; 即可&lt;/li&gt;
     &lt;/ol&gt;
   &lt;/li&gt;
 &lt;/ol&gt;</content><author><name></name></author><summary type="html">Synopsis 透過本地端，練習 kubenetes client 使用 minikube&amp;amp;virtual 當作 kube server minikube 本身提供像 gcloud 一樣 GUI 介面，方便具有既視感 docker 本身提供的 kubernetes server 目前沒有 GUI 介面 Environment osx minikube &amp;amp; virtualbox kubernetes client</summary></entry><entry><title type="html">【Deploy Test】Use Kubernetes &amp;amp; Docker(local)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/docker/Kubernetes&Docker/" rel="alternate" type="text/html" title="【Deploy Test】Use Kubernetes &amp; Docker(local)" /><published>2018-03-01T07:30:00+08:00</published><updated>2018-03-01T07:30:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/kubenetes/docker/Kubernetes&amp;Docker</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/docker/Kubernetes&amp;Docker/">&lt;h2 id=&quot;synopsis&quot;&gt;SYNOPSIS&lt;/h2&gt;
@@ -754,10 +945,10 @@ Please note that IP-range based access control is currently not enabled for Cach
 &lt;h2 id=&quot;設定-kubenetes-client&quot;&gt;設定 kubenetes client&lt;/h2&gt;
 
 &lt;ol&gt;
-  &lt;li&gt;安裝好 client 後，執行 &lt;code class=&quot;highlighter-rouge&quot;&gt;kubectl version&lt;/code&gt;，會出現 server 並沒有指定的錯誤&lt;/li&gt;
-  &lt;li&gt;執行 &lt;code class=&quot;highlighter-rouge&quot;&gt;kubectl config get-contexts&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;設定 &lt;code class=&quot;highlighter-rouge&quot;&gt;kubectl config use-context docker-for-desktop&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;再執行一次 &lt;code class=&quot;highlighter-rouge&quot;&gt;kubectl version&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;安裝好 client 後，執行 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;kubectl version&lt;/code&gt;，會出現 server 並沒有指定的錯誤&lt;/li&gt;
+  &lt;li&gt;執行 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;kubectl config get-contexts&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;設定 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;kubectl config use-context docker-for-desktop&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;再執行一次 &lt;code class=&quot;language-html highlighter-rouge&quot;&gt;kubectl version&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;h2 id=&quot;檢查-docker&quot;&gt;檢查 docker&lt;/h2&gt;
@@ -771,18 +962,4 @@ Please note that IP-range based access control is currently not enabled for Cach
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;在執行一次，就會發現相關服務被隱藏起來&lt;/li&gt;
-&lt;/ol&gt;</content><author><name></name></author><summary type="html">SYNOPSIS 透過本地端，練習 kubenetes client 在 mac 上，建立本地端的 kubernetes server &amp;amp; client 透過本地部署測試來降低雲端部署的錯誤 安裝 kubernetes server 實踐日期 20180301, 未來或許會有更好的方法進行測試 docker for mac 這個應用程式本身就包含 kubernetes server 的建立 關於 minikube，須先安裝 vm 服務 (virtualbox) 才能使用 [參考另一篇關於 kubenetes &amp;amp; minikube) 安裝 kubenetes client 則透過官網安裝即可 Environment osx docker community edition version 18.03.0-ce, channel:edge. 此版本在 20180301 支援 kubernetes 的整合. kubectl version Client Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.1”, GitCommit:”3a1c9449a956b6026f075fa3134ff92f7d55f812”, GitTreeState:”clean”, BuildDate:”2018-01-04T11:52:23Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”darwin/amd64”} Server Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.2”, GitCommit:”5fa2db2bd46ac79e5e00a4e6ed24191080aa463b”, GitTreeState:”clean”, BuildDate:”2018-01-18T09:42:01Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”linux/amd64”}</summary></entry><entry><title type="html">【CI&amp;amp;CD】Use DRONE</title><link href="https://jhaoheng.github.io/blogpost/blogpost/drone/Drone/" rel="alternate" type="text/html" title="【CI&amp;CD】Use DRONE" /><published>2018-02-04T04:30:00+08:00</published><updated>2018-02-04T04:30:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/drone/Drone</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/drone/Drone/">&lt;h1 id=&quot;synopsis&quot;&gt;SYNOPSIS&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;目的 : 使用 Drone 來佈建 CI &amp;amp; CD, 輕量化, 好操作, 分布式建構&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;buid Drone with docker&lt;/li&gt;
-  &lt;li&gt;code coverage with Drone&lt;/li&gt;
-  &lt;li&gt;notify with Drone&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;!--more--&gt;
-
-&lt;iframe src=&quot;https://www.slideshare.net/slideshow/embed_code/key/MQaDxzeZKG74Ry?cid=8B504C1595CD3973&amp;amp;resid=8B504C1595CD3973%2126382&amp;amp;authkey=AJzDcN30q6g4W0Y&amp;amp;em=2&quot; width=&quot;700px&quot; height=&quot;500px&quot; frameborder=&quot;0&quot; scrolling=&quot;no&quot;&gt; &lt;/iframe&gt;</content><author><name></name></author><summary type="html">SYNOPSIS 目的 : 使用 Drone 來佈建 CI &amp;amp; CD, 輕量化, 好操作, 分布式建構 buid Drone with docker code coverage with Drone notify with Drone</summary></entry></feed>
+&lt;/ol&gt;</content><author><name></name></author><summary type="html">SYNOPSIS 透過本地端，練習 kubenetes client 在 mac 上，建立本地端的 kubernetes server &amp;amp; client 透過本地部署測試來降低雲端部署的錯誤 安裝 kubernetes server 實踐日期 20180301, 未來或許會有更好的方法進行測試 docker for mac 這個應用程式本身就包含 kubernetes server 的建立 關於 minikube，須先安裝 vm 服務 (virtualbox) 才能使用 [參考另一篇關於 kubenetes &amp;amp; minikube) 安裝 kubenetes client 則透過官網安裝即可 Environment osx docker community edition version 18.03.0-ce, channel:edge. 此版本在 20180301 支援 kubernetes 的整合. kubectl version Client Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.1”, GitCommit:”3a1c9449a956b6026f075fa3134ff92f7d55f812”, GitTreeState:”clean”, BuildDate:”2018-01-04T11:52:23Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”darwin/amd64”} Server Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.2”, GitCommit:”5fa2db2bd46ac79e5e00a4e6ed24191080aa463b”, GitTreeState:”clean”, BuildDate:”2018-01-18T09:42:01Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”linux/amd64”}</summary></entry></feed>

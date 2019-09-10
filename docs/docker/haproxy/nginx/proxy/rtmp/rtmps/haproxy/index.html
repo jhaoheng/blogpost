@@ -126,7 +126,7 @@ Reading time ~1 minute
       <h1 id="synopsis">synopsis</h1>
 <ol>
   <li>因 nginx-rtmp-module 並沒有支援 ssl 的方式，透過 proxy 的方式也無法使用</li>
-  <li>故使用 haproxy 的方法，透過 <code class="highlighter-rouge">rtmps://</code> 轉送到 <code class="highlighter-rouge">rtmp:1935</code>，加入 ssl，進行驗證。</li>
+  <li>故使用 haproxy 的方法，透過 <code class="language-html highlighter-rouge">rtmps://</code> 轉送到 <code class="language-html highlighter-rouge">rtmp:1935</code>，加入 ssl，進行驗證。</li>
   <li>本文透過 docker 建立環境與設定 : haproxy / rtmp container</li>
   <li>再透過 ffmpeg 進行推送</li>
 </ol>
@@ -150,7 +150,7 @@ Reading time ~1 minute
 
 <h1 id="haproxycfg">haproxy.cfg</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>frontend rtmp_https
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>frontend rtmp_https
          bind *:443 #ssl crt /path/to/cert
          mode                    tcp
          # log                     global
@@ -171,7 +171,7 @@ backend rtmpbackend_tcp_ipvANY
 </code></pre></div></div>
 
 <h1 id="nginxconf">nginx.conf</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user  nginx;
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user  nginx;
 worker_processes  1;
 
 load_module modules/ngx_rtmp_module.so;
@@ -199,7 +199,7 @@ rtmp {
 
 <h1 id="docker-compose">docker-compose</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: "3.2"
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: "3.2"
 services:
   nginx-rtmp:
     image: nginx:latest
@@ -231,7 +231,7 @@ networks:
 
 <h1 id="ffmpeg-test">ffmpeg test</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg -f avfoundation -i "1" -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp://localhost:443/demo/desktop
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffmpeg -f avfoundation -i "1" -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp://localhost:443/demo/desktop
 </code></pre></div></div>
 
       <footer class="entry-meta">
@@ -253,19 +253,19 @@ networks:
       <a href="https://jhaoheng.github.io/blogpost/docker/nginx/rtmpt/rtmp/ossrs/rtmpt&rtmp/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

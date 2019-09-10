@@ -124,6 +124,157 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-08-25T03:59:00+08:00"><a href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-configure/">August 25, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-configure/" rel="bookmark" title="【AWS CLI】profile : configure" itemprop="url">【AWS CLI】profile : configure</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="purpose">PURPOSE</h1>
+<ol>
+  <li>了解 aws cli profile 運作方式</li>
+  <li>了解 aws cli configure 操作方法</li>
+</ol>
+
+<h1 id="aws-cli">aws cli</h1>
+
+<ul>
+  <li>github : https://github.com/aws/aws-cli/releases</li>
+  <li>安裝 &amp; 更新 &amp; 反安裝 : <code class="language-html highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/installing.html</code></li>
+  <li>cli 中指令的參考 : <code class="language-html highlighter-rouge">http://docs.aws.amazon.com/cli/latest/index.html</code>
+    <ul>
+      <li><code class="language-html highlighter-rouge">aws help</code> : 可看到所有指令</li>
+    </ul>
+  </li>
+  <li>查詢各類指令說明 :
+    <ul>
+      <li><code class="language-html highlighter-rouge">aws help</code></li>
+      <li><code class="language-html highlighter-rouge">aws {command} help</code></li>
+      <li><code class="language-html highlighter-rouge">aws {command} {sub-cmd} help</code></li>
+    </ul>
+  </li>
+  <li>aws Command Completion : <code class="language-html highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/cli-command-completion.html</code>
+    <ul>
+      <li>透過 tab 搜尋 aws 相關指令, install :
+        <ol>
+          <li><code class="language-html highlighter-rouge">echo $SHELL</code></li>
+          <li>find path : <code class="language-html highlighter-rouge">which aws_completer</code></li>
+          <li>enable : <code class="language-html highlighter-rouge">complete -C '/usr/local/bin/aws_completer' aws</code></li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="設定-profile">設定 profile</h2>
+<ul>
+  <li>resource : <code class="language-html highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html</code></li>
+  <li>請到 iam 取得以下
+    <ul>
+      <li>AWS Access Key ID</li>
+      <li>AWS Secret Access Key</li>
+    </ul>
+  </li>
+  <li><code class="language-html highlighter-rouge">aws configure help</code> : 查詢在 configure 中的指令有哪些可用</li>
+  <li>設定 profile
+    <ul>
+      <li><code class="language-html highlighter-rouge">aws configure</code></li>
+      <li><code class="language-html highlighter-rouge">aws configure --profile user2</code></li>
+    </ul>
+  </li>
+  <li>列出 profile
+    <ul>
+      <li><code class="language-html highlighter-rouge">aws configure list</code> : 預設</li>
+      <li><code class="language-html highlighter-rouge">aws configure list --profile default</code> : 指定身份</li>
+    </ul>
+  </li>
+  <li>使用 profile
+    <ul>
+      <li><code class="language-html highlighter-rouge">aws ec2 describe-instance</code></li>
+      <li><code class="language-html highlighter-rouge">aws ec2 describe-instance --profile user2</code></li>
+    </ul>
+  </li>
+  <li>指定使用哪一個 profile
+    <ul>
+      <li><code class="language-html highlighter-rouge">export AWS_PROFILE=user2</code> : AWS_PROFILE 為 Environment Variables</li>
+      <li><code class="language-html highlighter-rouge">unset AWS_PROFILE</code> : 回到預設值</li>
+      <li>Profile Environment Variables
+        <ul>
+          <li>AWS_ACCESS_KEY_ID</li>
+          <li>AWS_SECRET_ACCESS_KEY</li>
+          <li>AWS_SESSION_TOKEN</li>
+          <li>AWS_DEFAULT_REGION</li>
+          <li>AWS_DEFAULT_OUTPUT</li>
+          <li>AWS_PROFILE</li>
+          <li>AWS_CA_BUNDLE</li>
+          <li>AWS_SHARED_CREDENTIALS_FILE</li>
+          <li>AWS_CONFIG_FILE</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Options
+    <ul>
+      <li><code class="language-html highlighter-rouge">--profile</code>		: 指定使用 profile</li>
+      <li><code class="language-html highlighter-rouge">--region</code> 		: 指定地區
+        <ul>
+          <li>顯示地區列表 : <code class="language-html highlighter-rouge">aws ec2 describe-regions --output table</code></li>
+        </ul>
+      </li>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td><code class="language-html highlighter-rouge">--output</code> 		: json</td>
+              <td>text</td>
+              <td>table</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li><code class="language-html highlighter-rouge">--endpoint-url</code> : 指定</li>
+      <li>ex : <code class="language-html highlighter-rouge">aws ec2 describe-instances --output table --region ap-northeast-2</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="example">example</h1>
+
+<ol>
+  <li>想要列出目前預設使用的 profile 使哪一張
+    <ul>
+      <li><code class="language-html highlighter-rouge">aws configure list</code></li>
+    </ul>
+  </li>
+  <li>想指定預設的 profile
+    <ul>
+      <li><code class="language-html highlighter-rouge">export AWS_PROFILE=xxx</code></li>
+    </ul>
+  </li>
+  <li>想取消指定 profile，回到 default
+    <ul>
+      <li><code class="language-html highlighter-rouge">unset AWS_PROFILE</code></li>
+    </ul>
+  </li>
+</ol>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-configure/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2017-08-18T07:51:00+08:00"><a href="https://jhaoheng.github.io/blogpost/papertrial/logspout/Papertrial-logspout/">August 18, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -142,14 +293,14 @@ Reading time ~1 minute
 
 <ul>
   <li>申請一個 papertrail 帳號</li>
-  <li>建立一個 Log Destinations : 會得到 <code class="highlighter-rouge">logsx.papertrailapp.com:46888</code></li>
+  <li>建立一個 Log Destinations : 會得到 <code class="language-html highlighter-rouge">logsx.papertrailapp.com:46888</code></li>
 </ul>
 
 <h2 id="logspout">logspout</h2>
 
 <ul>
   <li>建立 docker container
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --name="logspout" \
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run --name="logspout" \
 -d \
 -e SYSLOG_HOSTNAME=test_name \
 --volume=/var/run/docker.sock:/var/run/docker.sock \
@@ -165,7 +316,7 @@ gliderlabs/logspout \
           <li>docker run -p 81:81 centos /bin/date =&gt; 在 papertrial 印出 日期</li>
           <li>docker run -i -d -p 80:80 centos /bin/bash
             <ul>
-              <li><code class="highlighter-rouge">docker exec -it [container_id] /bin/bash</code></li>
+              <li><code class="language-html highlighter-rouge">docker exec -it [container_id] /bin/bash</code></li>
             </ul>
             <ul>
               <li>echo hello » /proc/1/fd/1 =&gt; 在 papertrial 印出 hello</li>
@@ -174,7 +325,7 @@ gliderlabs/logspout \
         </ol>
       </li>
       <li>注意 : docker run 用 -t 啟用的話，就不會被 logspout 給監聽到</li>
-      <li>注意 : logging driver 只支援 <code class="highlighter-rouge">journald</code>, <code class="highlighter-rouge">json-file</code></li>
+      <li>注意 : logging driver 只支援 <code class="language-html highlighter-rouge">journald</code>, <code class="language-html highlighter-rouge">json-file</code></li>
     </ul>
   </li>
 </ul>
@@ -202,7 +353,7 @@ Reading time ~1 minute
     
   </header>
   <div class="entry-content">
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM        ubuntu:16.04
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>FROM        ubuntu:16.04
 
 EXPOSE      5222 5280 5269 4560
 
@@ -256,38 +407,38 @@ Reading time ~1 minute
 <ol>
   <li>安裝 ejabberd 本體
     <ul>
-      <li><code class="highlighter-rouge">apt-get update</code></li>
-      <li>到安裝頁面，選擇 deb，<code class="highlighter-rouge">wget {download source}</code></li>
-      <li><code class="highlighter-rouge">dpkg -i {download file}</code></li>
-      <li><code class="highlighter-rouge">su ejabberd &amp;&amp; cd ~</code></li>
-      <li>檢查你的 host 請更改為 localhost : <code class="highlighter-rouge">vi ./conf/ejabberd.yml</code></li>
+      <li><code class="language-html highlighter-rouge">apt-get update</code></li>
+      <li>到安裝頁面，選擇 deb，<code class="language-html highlighter-rouge">wget {download source}</code></li>
+      <li><code class="language-html highlighter-rouge">dpkg -i {download file}</code></li>
+      <li><code class="language-html highlighter-rouge">su ejabberd <span class="err">&amp;&amp;</span> cd ~</code></li>
+      <li>檢查你的 host 請更改為 localhost : <code class="language-html highlighter-rouge">vi ./conf/ejabberd.yml</code></li>
       <li>先記錄 {host}</li>
-      <li>啟動 ejabberd, <code class="highlighter-rouge">./bin/ejabberdctl start</code></li>
-      <li>建立管理者 : <code class="highlighter-rouge">./bin/ejabberdctl register admin {host} admin</code></li>
+      <li>啟動 ejabberd, <code class="language-html highlighter-rouge">./bin/ejabberdctl start</code></li>
+      <li>建立管理者 : <code class="language-html highlighter-rouge">./bin/ejabberdctl register admin {host} admin</code></li>
     </ul>
   </li>
-  <li>安裝壓力測試編譯時需要的套件 : <code class="highlighter-rouge">apt-get install cvs make gcc libexpat1-dev libncurses5-dev libssl-dev bison byacc flex -y</code></li>
+  <li>安裝壓力測試編譯時需要的套件 : <code class="language-html highlighter-rouge">apt-get install cvs make gcc libexpat1-dev libncurses5-dev libssl-dev bison byacc flex -y</code></li>
   <li>安裝 Jabber Test Suite，官方 : http://jabbertest.sourceforge.net/
     <ol>
       <li>確定切換回 root, cd /home/ubuntu</li>
-      <li><code class="highlighter-rouge">cvs -z3 -d:pserver:anonymous@jabbertest.cvs.sourceforge.net:/cvsroot/jabbertest co testsuite</code></li>
-      <li><code class="highlighter-rouge">cd testsuite/ &amp;&amp; cp Makefile.linux Makefile &amp;&amp; make userreg</code></li>
-      <li>查詢 <code class="highlighter-rouge">./userreg -?</code> 的使用方法</li>
-      <li><code class="highlighter-rouge">./userreg -h 127.0.0.1 -u 3000 -n 1 -o ./output</code></li>
-      <li><code class="highlighter-rouge">cat ./output</code> 如果成功會顯示類似，無意外會有 3000 筆資訊</li>
-      <li>如果沒有，請將 <code class="highlighter-rouge">ejabberd stop</code> then <code class="highlighter-rouge">start</code></li>
+      <li><code class="language-html highlighter-rouge">cvs -z3 -d:pserver:anonymous@jabbertest.cvs.sourceforge.net:/cvsroot/jabbertest co testsuite</code></li>
+      <li><code class="language-html highlighter-rouge">cd testsuite/ <span class="err">&amp;&amp;</span> cp Makefile.linux Makefile <span class="err">&amp;&amp;</span> make userreg</code></li>
+      <li>查詢 <code class="language-html highlighter-rouge">./userreg -?</code> 的使用方法</li>
+      <li><code class="language-html highlighter-rouge">./userreg -h 127.0.0.1 -u 3000 -n 1 -o ./output</code></li>
+      <li><code class="language-html highlighter-rouge">cat ./output</code> 如果成功會顯示類似，無意外會有 3000 筆資訊</li>
+      <li>如果沒有，請將 <code class="language-html highlighter-rouge">ejabberd stop</code> then <code class="language-html highlighter-rouge">start</code></li>
     </ol>
   </li>
   <li>安裝 Jabsimul
     <ol>
       <li>確定切換回 root, cd /home/ubuntu</li>
-      <li><code class="highlighter-rouge">wget http://www.ejabberd.im/files/other/jabsimul.tar.gz</code></li>
-      <li><code class="highlighter-rouge">tar xzf jabsimul.tar.gz</code></li>
-      <li><code class="highlighter-rouge">cp jab_simul.xml.example jab_simul.xml</code></li>
-      <li><code class="highlighter-rouge">./configure &amp;&amp; make</code></li>
-      <li>調整設定值，開啟 <code class="highlighter-rouge">jab_simul.xml</code> : 參考 <code class="highlighter-rouge">http://tkabber.jabber.ru/files/badlop/jab_simul.xml.chat60</code></li>
-      <li>注意 <code class="highlighter-rouge">jab_simul.xml</code> 中，server 的位置，必須是可解析的 DNS，不能用 ip</li>
-      <li>開始執行壓力測試 <code class="highlighter-rouge">./jab_simul</code></li>
+      <li><code class="language-html highlighter-rouge">wget http://www.ejabberd.im/files/other/jabsimul.tar.gz</code></li>
+      <li><code class="language-html highlighter-rouge">tar xzf jabsimul.tar.gz</code></li>
+      <li><code class="language-html highlighter-rouge">cp jab_simul.xml.example jab_simul.xml</code></li>
+      <li><code class="language-html highlighter-rouge">./configure <span class="err">&amp;&amp;</span> make</code></li>
+      <li>調整設定值，開啟 <code class="language-html highlighter-rouge">jab_simul.xml</code> : 參考 <code class="language-html highlighter-rouge">http://tkabber.jabber.ru/files/badlop/jab_simul.xml.chat60</code></li>
+      <li>注意 <code class="language-html highlighter-rouge">jab_simul.xml</code> 中，server 的位置，必須是可解析的 DNS，不能用 ip</li>
+      <li>開始執行壓力測試 <code class="language-html highlighter-rouge">./jab_simul</code></li>
       <li>請壓到你預設的數據人數，再去查看現在的資源狀態</li>
     </ol>
   </li>
@@ -297,10 +448,10 @@ Reading time ~1 minute
       <li>檢查 /tmp 底下的 xml testuser 中的訊息</li>
     </ol>
   </li>
-  <li><code class="highlighter-rouge">jab_simul</code> 執行後的錯誤訊息
+  <li><code class="language-html highlighter-rouge">jab_simul</code> 執行後的錯誤訊息
     <ul>
-      <li><code class="highlighter-rouge">Socket creation error ! (Too many open files)</code> : 請調整 ulimit 參考其他參數調整</li>
-      <li><code class="highlighter-rouge">Segmentation fault (core dumped)</code> : 伺服器超載</li>
+      <li><code class="language-html highlighter-rouge">Socket creation error ! (Too many open files)</code> : 請調整 ulimit 參考其他參數調整</li>
+      <li><code class="language-html highlighter-rouge">Segmentation fault (core dumped)</code> : 伺服器超載</li>
     </ul>
   </li>
 </ol>
@@ -341,8 +492,8 @@ Reading time ~1 minute
 <ul>
   <li>記憶體
     <ol>
-      <li>測試前 : <code class="highlighter-rouge">free -k</code></li>
-      <li>測試後 : <code class="highlighter-rouge">free -k</code></li>
+      <li>測試前 : <code class="language-html highlighter-rouge">free -k</code></li>
+      <li>測試後 : <code class="language-html highlighter-rouge">free -k</code></li>
     </ol>
   </li>
   <li>使用 top 指令</li>
@@ -352,7 +503,7 @@ Reading time ~1 minute
 <h1 id="壓力測試數據參考">壓力測試數據參考</h1>
 <p>在 t2.micro 底下約 7500 人，同時在線</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND                                                                                                                      
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  PID USER      PR  NI    VIRT    RES    SHR S %CPU %MEM     TIME+ COMMAND                                                                                                                      
 12022 root      20   0   84416  68836   4084 R 66.0  6.8   0:30.64 jab_simul 
 </code></pre></div></div>
 
@@ -391,7 +542,7 @@ Reading time ~1 minute
     <ol>
       <li>找到一個你想要訂閱的 github</li>
       <li>點選 release 的 item</li>
-      <li>在 url 的尾端加上 <code class="highlighter-rouge">.atom</code> 即可。ex: https://github.com/xxxx/yyyy/releases.atom</li>
+      <li>在 url 的尾端加上 <code class="language-html highlighter-rouge">.atom</code> 即可。ex: https://github.com/xxxx/yyyy/releases.atom</li>
       <li>copy url to slack rss</li>
     </ol>
   </li>
@@ -399,102 +550,6 @@ Reading time ~1 minute
 
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/through-github-slack-subscription-release-rss/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2017-07-15T00:33:00+08:00"><a href="https://jhaoheng.github.io/blogpost/docker-docker-machine-operation/">July 15, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/docker-docker-machine-operation/" rel="bookmark" title="【Docker】docker-machine 部署到 aws" itemprop="url">【Docker】docker-machine 部署到 aws</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="使用-docker-machine-部署-docker-到-aws">使用 docker-machine 部署 docker 到 aws</h1>
-
-<ul>
-  <li>參考 : <code class="highlighter-rouge">https://docs.docker.com/machine/drivers/aws/</code></li>
-  <li>指令參數表 : <code class="highlighter-rouge">https://docs.docker.com/machine/drivers/aws/#options</code>
-    <ul>
-      <li>有些預設的參數要注意，如果沒有指定的情況下，會依照預設參數來建立 aws instance
-        <ul>
-          <li>ex : ami, region, zone, group, instance-type, device-name, root-size, volume-type, ssh-user, request-spot-instance, spot-price, use-private-address, private-address-only, monitoring, use-ebs-optimized-instance, retries</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h1 id="其他部署文章參考">其他部署文章參考</h1>
-<ul>
-  <li>nvidia-docker Deploy on Amazon EC2 : <code class="highlighter-rouge">https://github.com/NVIDIA/nvidia-docker/wiki/Deploy-on-Amazon-EC2</code></li>
-</ul>
-
-<h2 id="aws-credentials">aws credentials</h2>
-<ol>
-  <li>登入 aws</li>
-  <li>進入 IAM</li>
-  <li>選擇 user</li>
-  <li>給予需要使用的權限，在這邊選擇 ec2</li>
-  <li>取得該 user 的 <code class="highlighter-rouge">AWS Access Key ID</code> 與 <code class="highlighter-rouge">AWS Secret Access Key</code></li>
-  <li>在使用 docker-machine 前，可使用以下兩種方法
-    <ol>
-      <li>通過 aws credentials 來設定 <code class="highlighter-rouge">AWS Access Key ID</code> 與 <code class="highlighter-rouge">AWS Secret Access Key</code>，建立的方法也有兩種
-        <ol>
-          <li>可透過 awscli，通過指令 <code class="highlighter-rouge">aws configure</code> 可協助設定好</li>
-          <li>也可直接建立 <code class="highlighter-rouge">~/.aws/credentials</code>，顯示格式如下
-            <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[default]
-aws_access_key_id = AKID1234567890
-aws_secret_access_key = MY-SECRET-KEY
-</code></pre></div>            </div>
-          </li>
-        </ol>
-      </li>
-      <li>可透過 docker-machine : <code class="highlighter-rouge">$ docker-machine create --driver amazonec2 --amazonec2-access-key AKI******* --amazonec2-secret-key 8T93C*******  aws01</code> 來建立 docker-machine 的機器</li>
-    </ol>
-  </li>
-  <li>測試建立
-    <ul>
-      <li><code class="highlighter-rouge">docker-machine create --driver [instance_Name]</code> : 注意 default 參數值
-        <ul>
-          <li>zone : us-east-1</li>
-          <li>instance-type : t2.micro</li>
-          <li>root-size : 16</li>
-          <li>volume-type : gp2</li>
-          <li>ssh-user : ubuntu</li>
-          <li>其他資訊請參考 docker-machine 說明</li>
-        </ul>
-      </li>
-      <li>指定部分的參數操作 :
-        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker-machine create --driver amazonec2 \
-                --amazonec2-region us-west-2 \
-                --amazonec2-zone b \
-                --amazonec2-ami ami-efd0428f \
-                --amazonec2-instance-type p2.xlarge \
-                --amazonec2-vpc-id vpc-*** \
-                --amazonec2-access-key AKI*** \
-                --amazonec2-secret-key *** \
-                aws01
-</code></pre></div>        </div>
-      </li>
-    </ul>
-  </li>
-</ol>
-
-<h1 id="未完待續">未完待續</h1>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/docker-docker-machine-operation/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

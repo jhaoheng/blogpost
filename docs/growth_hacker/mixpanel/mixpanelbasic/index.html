@@ -245,7 +245,7 @@ ex : 透過某些行銷行為，讓這些用戶感興趣，並且回到你的服
 how many of your users send invites, and what percentage of those invites become new users.</p>
 </blockquote>
 
-<p>以下為用戶 A 邀請用戶 B 成為會員的追蹤(必須要學會描述故事，在此前提先畫出 flow) <code class="highlighter-rouge">mixpanel.track("event", {"distinct_id": "Other ID"});</code>
+<p>以下為用戶 A 邀請用戶 B 成為會員的追蹤(必須要學會描述故事，在此前提先畫出 flow) <code class="language-html highlighter-rouge">mixpanel.track("event", {"distinct_id": "Other ID"});</code>
 (必須著重在，A 與 B 之間的對話方式)</p>
 
 <p><img src="http://mpdocs.s3.amazonaws.com/images/dual%20virality%20events.png" alt="img" /></p>
@@ -276,11 +276,11 @@ how many of your users send invites, and what percentage of those invites become
 
 <p>例如可在 mail 中，url 的參數放入邀請者的 id 或者可將整個事件的 json 轉為 base64 掛於 url 後方</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//將 json 轉為 base64
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//將 json 轉為 base64
 http://api.mixpanel.com/track/?data=ew0KICAgICJldmVudCI6ICJTaWduZWQgVXAiLA0KICAgICJwcm9wZXJ0aWVzIjogew0KICAgICAgICAiZGlzdGluY3RfaWQiOiAiMTM3OTMiLA0KICAgICAgICAidG9rZW4iOiAiZTNiYzQxMDAzMzBjMzU3MjI3NDBmYjhjNmY1YWJkZGMiLA0KICAgICAgICAiUmVmZXJyZWQgQnkiOiAiRnJpZW5kIg0KICAgIH0NCn0=
 </code></pre></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//將 json 轉為 base64，json 格式
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//將 json 轉為 base64，json 格式
 // Sends an event "Signed Up", associated with user 13793,
 // with a property "Referred By"
 {
@@ -314,18 +314,18 @@ http://api.mixpanel.com/track/?data=ew0KICAgICJldmVudCI6ICJTaWduZWQgVXAiLA0KICAg
   <li>當在 website 時，透過 js，檢查 host 是否為 productionHost</li>
 </ol>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var productionHost = 'Your production Domain'; 
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var productionHost = 'Your production Domain'; 
 
 var devToken = 'Development Token';
 var prodToken = 'Production Token';
 
 /* If the hostname is anything other than your production domain, initialize the Mixpanel library with your Development Token */
 
-if (window.location.hostname.toLowerCase().search(productionHost) &lt; 0) {
-    mixpanel.init(devToken);
-} else {
-    mixpanel.init(prodToken);
-}
+if (window.location.hostname.toLowerCase().search(productionHost) <span class="nt">&lt;</span> <span class="nt">0</span><span class="err">)</span> <span class="err">{</span>
+    <span class="na">mixpanel</span><span class="err">.</span><span class="na">init</span><span class="err">(</span><span class="na">devToken</span><span class="err">);</span>
+<span class="err">}</span> <span class="na">else</span> <span class="err">{</span>
+    <span class="na">mixpanel</span><span class="err">.</span><span class="na">init</span><span class="err">(</span><span class="na">prodToken</span><span class="err">);</span>
+<span class="err">}</span>
 </code></pre></div></div>
 
 <ol>
@@ -351,19 +351,19 @@ if (window.location.hostname.toLowerCase().search(productionHost) &lt; 0) {
       <a href="https://jhaoheng.github.io/blogpost/line/linedevelop/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

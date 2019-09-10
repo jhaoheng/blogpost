@@ -124,6 +124,53 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-03-15T09:41:00+08:00"><a href="https://jhaoheng.github.io/blogpost/git/Git-attribute/">March 15, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/git/Git-attribute/" rel="bookmark" title="【Git】attribute, 合併後保留原本的設定檔" itemprop="url">【Git】attribute, 合併後保留原本的設定檔</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="git--gitattributes">git : [.gitattributes]</h1>
+
+<h2 id="合併策略">合併策略</h2>
+
+<ul>
+  <li>在 project 的路徑下，同一層有 .git，建立 <code class="language-html highlighter-rouge">.gitattributes</code></li>
+  <li>建立要維持固定不變的設定檔 : config.json</li>
+  <li>在 <code class="language-html highlighter-rouge">.gitattributes</code> 中新增合併策略 <code class="language-html highlighter-rouge">config.json merge=ours</code></li>
+  <li>完成後，查詢 <code class="language-html highlighter-rouge">git config --global -l</code>，是否有 <code class="language-html highlighter-rouge">merge.ours.driver=true</code> 的參數設定</li>
+  <li>若無則下指令 : <code class="language-html highlighter-rouge">git config --global merge.ours.driver true</code></li>
+</ul>
+
+<h2 id="step-flow">step flow</h2>
+
+<ol>
+  <li><code class="language-html highlighter-rouge">git checkout -b [branch]</code></li>
+  <li>edit config.json &amp; commit</li>
+  <li>git checkout master</li>
+  <li>edit config.json &amp; commit</li>
+  <li>此時下 <code class="language-html highlighter-rouge">git log --all --graph --pretty=format:'%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)'</code>，會看到 branch 分別在兩條線，若是在同一條線上，並不會產生 conflict</li>
+  <li>git merge [branch]，讓兩條合併，此時產生 conflict，但因為設定的 <code class="language-html highlighter-rouge">.gitattributes</code> 的規則，會讓每個分支合併後，以原本分支的檔案為主</li>
+  <li>查看 <code class="language-html highlighter-rouge">git log --all --graph --pretty=format:'%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)'</code></li>
+</ol>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/git/Git-attribute/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2017-02-08T09:55:00+08:00"><a href="https://jhaoheng.github.io/blogpost/phalcon/memcached/mosquitto/mqtt/phalcon-mosquitto-memcached/">February 08, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -194,7 +241,7 @@ Reading time ~1 minute
 <ol>
   <li>找出 nginx.conf : nginx -h</li>
   <li>vi {$path}/nginx.conf</li>
-  <li>server 設定參數可參考 <code class="highlighter-rouge">https://docs.phalconphp.com/zh/latest/reference/nginx.html</code>
+  <li>server 設定參數可參考 <code class="language-html highlighter-rouge">https://docs.phalconphp.com/zh/latest/reference/nginx.html</code>
     <ul>
       <li>請將 fastcgi 設定為 127.0.0.1:9000 &lt;— 必須符合 php-fpm 的 listen 位置</li>
     </ul>
@@ -260,7 +307,7 @@ Reading time ~1 minute
   <li>make &amp;&amp; make install</li>
   <li>確定是否將 .so 放入 module 中 :
     <ol>
-      <li><code class="highlighter-rouge">php -i | grep extension_dir</code></li>
+      <li><code class="language-html highlighter-rouge">php -i | grep extension_dir</code></li>
       <li>cd {dir}</li>
       <li>檢查是否有 memcached.so</li>
     </ol>
@@ -285,7 +332,7 @@ Reading time ~1 minute
   <li>進入官網 : https://mosquitto.org/download/</li>
   <li>找到 centos7 的 re 的 conf</li>
   <li>將檔案 mosquitto.repo 放入 /etc/yum.repos.d 即可
-<code class="highlighter-rouge">The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto.</code></li>
+<code class="language-html highlighter-rouge">The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto.</code></li>
   <li>安裝 : yum install libmosquitto-devel</li>
   <li>安裝後的 lib 路徑, 系統安裝後會提示, 無意外是 /usr/lib64/libmosquitto.so…..</li>
 </ol>
@@ -295,7 +342,7 @@ Reading time ~1 minute
   <li>下載 git source 後 : https://github.com/mgdm/Mosquitto-PHP</li>
   <li>cd Mosquitto-PHP</li>
   <li>phpize</li>
-  <li><code class="highlighter-rouge">./configure --with-mosquitto=/usr/lib64/libmosquitto.so</code></li>
+  <li><code class="language-html highlighter-rouge">./configure --with-mosquitto=/usr/lib64/libmosquitto.so</code></li>
   <li>make &amp;&amp; make install</li>
   <li>驗證 module 是否有 mosquitto.so</li>
   <li>在 php.ini 中設定 extension=mosquitto.so</li>
@@ -375,15 +422,15 @@ Reading time ~1 minute
   <li>brew install libmemcached</li>
   <li>git checkout php7</li>
   <li>phpize</li>
-  <li><code class="highlighter-rouge">./configure --with-memcached=/usr/local/Cellar/libmemcached/1.0.18_1/lib/libmemcached</code>
+  <li><code class="language-html highlighter-rouge">./configure --with-memcached=/usr/local/Cellar/libmemcached/1.0.18_1/lib/libmemcached</code>
     <ul>
-      <li>Notice : the <code class="highlighter-rouge">libmemcached</code> path is brew install path</li>
+      <li>Notice : the <code class="language-html highlighter-rouge">libmemcached</code> path is brew install path</li>
     </ul>
   </li>
   <li>make</li>
   <li>sudo make install</li>
-  <li>mv memcached.so to extension path, you could get path with <code class="highlighter-rouge">php -i | grep extension_dir</code></li>
-  <li>vim php.ini, add <code class="highlighter-rouge">extension=memcached.so</code></li>
+  <li>mv memcached.so to extension path, you could get path with <code class="language-html highlighter-rouge">php -i | grep extension_dir</code></li>
+  <li>vim php.ini, add <code class="language-html highlighter-rouge">extension=memcached.so</code></li>
 </ol>
 
 <h1 id="如何使用">如何使用</h1>
@@ -397,12 +444,12 @@ Reading time ~1 minute
   </li>
   <li>執行 memcached 即可
     <ul>
-      <li><code class="highlighter-rouge">man memcached</code>
-      - <code class="highlighter-rouge">memcached -l 127.0.0.1 -P 11211 -m 128 -d</code> : for deamon
-      - <code class="highlighter-rouge">memcached -l 127.0.0.1 -P 11211 -m 128 -vv</code> : for debug</li>
+      <li><code class="language-html highlighter-rouge">man memcached</code>
+      - <code class="language-html highlighter-rouge">memcached -l 127.0.0.1 -P 11211 -m 128 -d</code> : for deamon
+      - <code class="language-html highlighter-rouge">memcached -l 127.0.0.1 -P 11211 -m 128 -vv</code> : for debug</li>
     </ul>
   </li>
-  <li>檢查 memcached 是否有執行 : <code class="highlighter-rouge">ps aux | grep memcached</code></li>
+  <li>檢查 memcached 是否有執行 : <code class="language-html highlighter-rouge">ps aux | grep memcached</code></li>
 </ol>
 
 <h2 id="判斷-php-是否安裝好支援的-memcachedso">判斷 php 是否安裝好支援的 memcached.so</h2>
@@ -421,7 +468,7 @@ Reading time ~1 minute
 </table>
 
 <h2 id="test">test</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;? php
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;? php
 $mem  = new Memcached();
 
 $mem-&gt;addServer('localhost',11211);
@@ -430,12 +477,12 @@ if( $mem-&gt;add("key","value",3600)){
 }else{
     echo 'cached data：'.$mem-&gt;get("key");
 }
-?&gt;
+?&gt;</span>
 </code></pre></div></div>
 
 <h2 id="console-admin">console admin</h2>
 
-<p><code class="highlighter-rouge">git@github.com:jhaoheng/phpmemcacheadmin.git</code></p>
+<p><code class="language-html highlighter-rouge">git@github.com:jhaoheng/phpmemcacheadmin.git</code></p>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/php/PHP-Memcached/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
@@ -473,9 +520,9 @@ Reading time ~1 minute
   <li>下載 github : https://github.com/mgdm/Mosquitto-PHP</li>
   <li>產生 mosquitto.so
     <ol>
-      <li><code class="highlighter-rouge">cd Mosquitto-PHP</code></li>
-      <li><code class="highlighter-rouge">phpize</code></li>
-      <li><code class="highlighter-rouge">./configure --with-mosquitto=/usr/local/Cellar/mosquitto/1.4.9/lib/libmosquitto</code></li>
+      <li><code class="language-html highlighter-rouge">cd Mosquitto-PHP</code></li>
+      <li><code class="language-html highlighter-rouge">phpize</code></li>
+      <li><code class="language-html highlighter-rouge">./configure --with-mosquitto=/usr/local/Cellar/mosquitto/1.4.9/lib/libmosquitto</code></li>
       <li>make</li>
       <li>sudo make install</li>
       <li>得到 mosquitto.so 安裝的位置</li>
@@ -485,16 +532,16 @@ Reading time ~1 minute
     <ul>
       <li>MAMP，請用套件管理 php.ini
         <ul>
-          <li>用 <code class="highlighter-rouge">phpinfo();</code></li>
+          <li>用 <code class="language-html highlighter-rouge">phpinfo();</code></li>
         </ul>
       </li>
       <li>手動
         <ol>
-          <li><code class="highlighter-rouge">php --ini</code></li>
-          <li><code class="highlighter-rouge">cat {path}/php.ini | grep extension_dir</code></li>
+          <li><code class="language-html highlighter-rouge">php --ini</code></li>
+          <li><code class="language-html highlighter-rouge">cat {path}/php.ini | grep extension_dir</code></li>
           <li>將 mosquitto.so 放入此路徑</li>
           <li>在 php.ini 中設定 extension=mosquitto.so</li>
-          <li>驗證 <code class="highlighter-rouge">php -i | grep mosquitto</code></li>
+          <li>驗證 <code class="language-html highlighter-rouge">php -i | grep mosquitto</code></li>
         </ol>
       </li>
     </ul>
@@ -574,55 +621,6 @@ Reading time ~1 minute
 </ul>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/line-flash-back-fix-201701/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2017-01-04T09:40:00+08:00"><a href="https://jhaoheng.github.io/blogpost/php/PHP-extension/">January 04, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/php/PHP-extension/" rel="bookmark" title="【php 7.x】/private/tmp/pear/install/yaml/php_yaml.h:56:10: fatal error: 'ext/standard/php_smart_str.h' file not found" itemprop="url">【php 7.x】/private/tmp/pear/install/yaml/php_yaml.h:56:10: fatal error: 'ext/standard/php_smart_str.h' file not found</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h2 id="install-ymalso">install ymal.so</h2>
-
-<p><code class="highlighter-rouge">sudo pecl insatll yaml</code>
-<strong>install Error</strong>
-<code class="highlighter-rouge">/private/tmp/pear/install/yaml/php_yaml.h:56:10: fatal error: 'ext/standard/php_smart_str.h' file not found</code></p>
-
-<h2 id="fixed">fixed</h2>
-
-<ol>
-  <li><code class="highlighter-rouge">sudo pecl install yaml-2.0.0</code></li>
-  <li>add yaml.so to php.ini extension
-    <ul>
-      <li>use MAMP
-  	1. mv yaml.so to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/php/extensions/no-debug-non-zts-xxxxxxxxxx</code>
-        <ol>
-          <li>edit php.ini of php7.0.8
-            <ul>
-              <li>others : <code class="highlighter-rouge">echo "extension=yaml.so" &gt; /usr/local/etc/php/conf.d/ext-yaml.ini</code></li>
-            </ul>
-          </li>
-        </ol>
-      </li>
-    </ul>
-  </li>
-</ol>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/php/PHP-extension/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

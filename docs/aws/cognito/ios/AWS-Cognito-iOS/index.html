@@ -199,7 +199,7 @@ Reading time ~1 minute
   </li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 設定 1
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// 設定 1
 AWSServiceConfiguration *serviceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:nil];
 // 設定 2
 AWSCognitoIdentityUserPoolConfiguration *userPoolConfiguration = [[AWSCognitoIdentityUserPoolConfiguration alloc] initWithClientId:@"YOUR_CLIENT_ID"  clientSecret:@"YOUR_CLIENT_SECRET" poolId:@"YOUR_USER_POOL_ID"];
@@ -214,7 +214,7 @@ AWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProv
 </code></pre></div></div>
 
 <p>將憑證放入 serviceManager 中</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AWSServiceConfiguration *defaultServiceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>AWSServiceConfiguration *defaultServiceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1
         credentialsProvider:credentialsProvider];
 AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultServiceConfiguration;
 </code></pre></div></div>
@@ -225,7 +225,7 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
   <li>參考 sample 中的 CognitoSync-Sample</li>
   <li>sample 中，記得關閉 bitcode (預設是開啟)，否則實機測試會失敗(測試時間 20170520)
     <ul>
-      <li>compile error : <code class="highlighter-rouge">linker command failed with exit code 1</code></li>
+      <li>compile error : <code class="language-html highlighter-rouge">linker command failed with exit code 1</code></li>
     </ul>
   </li>
 </ul>
@@ -286,19 +286,19 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
       <a href="https://jhaoheng.github.io/blogpost/hls/aws/HLS-AWS/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

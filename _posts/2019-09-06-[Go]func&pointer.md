@@ -3,6 +3,7 @@ layout: post
 title: 【Golang】func & pointer
 date: 2019-09-06 14:31
 categories: Golang
+tags: Golang
 ---
 
 # kind

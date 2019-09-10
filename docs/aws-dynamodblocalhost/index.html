@@ -133,15 +133,15 @@ Reading time ~1 minute
 <h2 id="如何連接本地端-dynamodb">如何連接本地端 dynamodb</h2>
 
 <ol>
-  <li>下載 <code class="highlighter-rouge">http://docs.aws.amazon.com/zh_cn/amazondynamodb/latest/developerguide/DynamoDBLocal.html</code></li>
+  <li>下載 <code class="language-html highlighter-rouge">http://docs.aws.amazon.com/zh_cn/amazondynamodb/latest/developerguide/DynamoDBLocal.html</code></li>
   <li>確認 java 版本
     <ul>
       <li>http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html</li>
       <li>要 1.7 以上版本，不然無法啟動，會有錯誤訊息</li>
     </ul>
   </li>
-  <li>在 localhost dynamodb 的路徑下執行 : <code class="highlighter-rouge">java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb</code></li>
-  <li>測試 : <code class="highlighter-rouge">aws dynamodb list-tables --endpoint-url http://localhost:8000</code></li>
+  <li>在 localhost dynamodb 的路徑下執行 : <code class="language-html highlighter-rouge">java -Djava.library.path=./DynamoDBLocal_lib -jar DynamoDBLocal.jar -sharedDb</code></li>
+  <li>測試 : <code class="language-html highlighter-rouge">aws dynamodb list-tables --endpoint-url http://localhost:8000</code></li>
   <li>透過 GUI 進行連線
     <ol>
       <li>下載 RazorSQL</li>
@@ -162,7 +162,7 @@ Reading time ~1 minute
         </ol>
       </li>
       <li>先隨意建立一個 table</li>
-      <li>透過 terminal cli 查看 : <code class="highlighter-rouge">aws dynamodb list-tables --endpoint-url http://localhost:8000</code></li>
+      <li>透過 terminal cli 查看 : <code class="language-html highlighter-rouge">aws dynamodb list-tables --endpoint-url http://localhost:8000</code></li>
     </ol>
   </li>
 </ol>
@@ -180,7 +180,7 @@ Reading time ~1 minute
 
 <h3 id="php--記得要先安裝-aws-sdk-for-php">php : 記得要先安裝 aws sdk for php</h3>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$sdk = new Aws\Sdk([
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$sdk = new Aws\Sdk([
     'endpoint'   =&gt; 'http://localhost:8000',  // Use DynamoDB running locally
     'region'   =&gt; 'us-west-2',  // US West (Oregon) Region
     'version'  =&gt; 'latest'  // Use the latest version of the AWS SDK for PHP
@@ -209,19 +209,19 @@ $dynamodb = $sdk-&gt;createDynamoDb();
       <a href="https://jhaoheng.github.io/blogpost/aws/cognito/ios/AWS-Cognito-iOS/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

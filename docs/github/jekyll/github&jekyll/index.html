@@ -128,7 +128,7 @@ Reading time ~1 minute
   <p>從 2009 年開始，從 blogger -&gt; 其他的服務 -&gt; HEXO -&gt; blogger -&gt; logdown，
 從浪費時間，到專注核心（寫文、po 文），決定了託管(server+頁面的管理)會比較輕鬆，最後選擇了 logdown
 沒想到 logdown 也會有服務出問題，甚至讓我覺得可能會中斷服務，讓我覺得挺可惜
-最後還是又回到了 github 中，不過這次用的服務是 <code class="highlighter-rouge">jekyll</code></p>
+最後還是又回到了 github 中，不過這次用的服務是 <code class="language-html highlighter-rouge">jekyll</code></p>
 </blockquote>
 
 <!--more-->
@@ -175,7 +175,7 @@ Reading time ~1 minute
 </ol>
 
 <h1 id="在-repo-中初始化-jekyll">在 repo 中，初始化 jekyll</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd {your-repo}
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd {your-repo}
 jekyll new . # 建立一個新專案
 bundle exec jekyll serve
 </code></pre></div></div>
@@ -186,7 +186,7 @@ bundle exec jekyll serve
 </blockquote>
 
 <p>解決方法</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem install bundler
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gem install bundler
 bundle install
 </code></pre></div></div>
 
@@ -214,7 +214,7 @@ bundle install
 
 <ul>
   <li>baseurl : 請設定為你的 repo 專案名稱</li>
-  <li>url : 請設定 <code class="highlighter-rouge">https://{username}.github.io</code></li>
+  <li>url : 請設定 <code class="language-html highlighter-rouge">https://{username}.github.io</code></li>
   <li>其他設定對第一次使用部會影響太多</li>
 </ul>
 
@@ -222,17 +222,17 @@ bundle install
 
 <blockquote>
   <p>master : 負責原始的文件檔
-gh-pages : html 靜態頁面，就是 <code class="highlighter-rouge">_site/</code> 的資料夾
+gh-pages : html 靜態頁面，就是 <code class="language-html highlighter-rouge">_site/</code> 的資料夾
 如何分開兩個 branch 與設定，以下說明如何操作</p>
 </blockquote>
 
 <ol>
-  <li>當使用 <code class="highlighter-rouge">jekyll</code> 產生新的樣板時，在 <code class="highlighter-rouge">.gitignore</code> 中，會發現 <code class="highlighter-rouge">_site/</code> 已經被自動忽略</li>
-  <li>設定好 <code class="highlighter-rouge">_config.yml</code> 後，執行 <code class="highlighter-rouge">jekyll build</code> 會建立 <code class="highlighter-rouge">_site/</code> 此為正式要推送到 gp-pages 的版本，<code class="highlighter-rouge">cd _site</code></li>
-  <li>在 <code class="highlighter-rouge">_site</code> 中執行 <code class="highlighter-rouge">git init</code>，新增 <code class="highlighter-rouge">git remote add origin {your_blog_repo}</code></li>
-  <li><code class="highlighter-rouge">git checkout -b gh-pages</code></li>
-  <li><code class="highlighter-rouge">git add .</code> -&gt; <code class="highlighter-rouge">git commit -m "jekyll first build"</code> -&gt; <code class="highlighter-rouge">git push origin gh-pages</code></li>
-  <li>記得要到 repo 中將 GitHub Pages 的 source 設定成 <code class="highlighter-rouge">gh-pages branch</code></li>
+  <li>當使用 <code class="language-html highlighter-rouge">jekyll</code> 產生新的樣板時，在 <code class="language-html highlighter-rouge">.gitignore</code> 中，會發現 <code class="language-html highlighter-rouge">_site/</code> 已經被自動忽略</li>
+  <li>設定好 <code class="language-html highlighter-rouge">_config.yml</code> 後，執行 <code class="language-html highlighter-rouge">jekyll build</code> 會建立 <code class="language-html highlighter-rouge">_site/</code> 此為正式要推送到 gp-pages 的版本，<code class="language-html highlighter-rouge">cd _site</code></li>
+  <li>在 <code class="language-html highlighter-rouge">_site</code> 中執行 <code class="language-html highlighter-rouge">git init</code>，新增 <code class="language-html highlighter-rouge">git remote add origin {your_blog_repo}</code></li>
+  <li><code class="language-html highlighter-rouge">git checkout -b gh-pages</code></li>
+  <li><code class="language-html highlighter-rouge">git add .</code> -&gt; <code class="language-html highlighter-rouge">git commit -m "jekyll first build"</code> -&gt; <code class="language-html highlighter-rouge">git push origin gh-pages</code></li>
+  <li>記得要到 repo 中將 GitHub Pages 的 source 設定成 <code class="language-html highlighter-rouge">gh-pages branch</code></li>
   <li>開啟 GiHub Pages 中顯示的網址即可</li>
 </ol>
 
@@ -243,20 +243,20 @@ gh-pages : html 靜態頁面，就是 <code class="highlighter-rouge">_site/</co
 </blockquote>
 
 <ul>
-  <li>測試 : <code class="highlighter-rouge">jekyll serve</code>，會在 <code class="highlighter-rouge">_site/xxx.html</code> 的 <code class="highlighter-rouge">canonical</code> 中使用 localhost 的位置</li>
-  <li>正式 : <code class="highlighter-rouge">jekyll build</code>，在 <code class="highlighter-rouge">_site/xxx.html</code> 則是用 <code class="highlighter-rouge">_config.yml</code> 中的 url 設定</li>
+  <li>測試 : <code class="language-html highlighter-rouge">jekyll serve</code>，會在 <code class="language-html highlighter-rouge">_site/xxx.html</code> 的 <code class="language-html highlighter-rouge">canonical</code> 中使用 localhost 的位置</li>
+  <li>正式 : <code class="language-html highlighter-rouge">jekyll build</code>，在 <code class="language-html highlighter-rouge">_site/xxx.html</code> 則是用 <code class="language-html highlighter-rouge">_config.yml</code> 中的 url 設定</li>
   <li>推送正式版本到 github 上
     <ol>
-      <li><code class="highlighter-rouge">cd _site/</code></li>
-      <li><code class="highlighter-rouge">git push -u origin gh-pages</code></li>
+      <li><code class="language-html highlighter-rouge">cd _site/</code></li>
+      <li><code class="language-html highlighter-rouge">git push -u origin gh-pages</code></li>
     </ol>
   </li>
-  <li>無論使用 <code class="highlighter-rouge">serve</code> or <code class="highlighter-rouge">build</code> 等指令，都會重新在 <code class="highlighter-rouge">_site/</code> 中，重新建立相關資料，我在猜，當文章過多，速度應該會比較慢。</li>
+  <li>無論使用 <code class="language-html highlighter-rouge">serve</code> or <code class="language-html highlighter-rouge">build</code> 等指令，都會重新在 <code class="language-html highlighter-rouge">_site/</code> 中，重新建立相關資料，我在猜，當文章過多，速度應該會比較慢。</li>
 </ul>
 
 <h1 id="note_1--更新-osx-ruby">Note_1 : 更新 osx ruby</h1>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\curl -sSL https://get.rvm.io | bash -s stable
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>\curl -sSL https://get.rvm.io | bash -s stable
 rvm list known
 rvm install ruby-2.4
 rvm use ruby-2.4 --default
@@ -266,8 +266,8 @@ ruby -v
 <h1 id="note_2--建立草稿與預覽">Note_2 : 建立草稿與預覽</h1>
 
 <ol>
-  <li>因為預設不會產生 <code class="highlighter-rouge">_drafts/</code> 的資料夾，所以需要手動建立</li>
-  <li>預覽草稿 : 使用 <code class="highlighter-rouge">jekyll serve</code> or <code class="highlighter-rouge">jekyll build</code> 時，加入 <code class="highlighter-rouge">--drafts</code> 參數， ex : <code class="highlighter-rouge">jekyll build --drafts</code></li>
+  <li>因為預設不會產生 <code class="language-html highlighter-rouge">_drafts/</code> 的資料夾，所以需要手動建立</li>
+  <li>預覽草稿 : 使用 <code class="language-html highlighter-rouge">jekyll serve</code> or <code class="language-html highlighter-rouge">jekyll build</code> 時，加入 <code class="language-html highlighter-rouge">--drafts</code> 參數， ex : <code class="language-html highlighter-rouge">jekyll build --drafts</code></li>
 </ol>
 
       <footer class="entry-meta">
@@ -289,19 +289,19 @@ ruby -v
       <a href="https://jhaoheng.github.io/blogpost/jekyll/update/welcome-to-jekyll/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

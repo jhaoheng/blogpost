@@ -132,13 +132,13 @@ Reading time ~1 minute
 
 <h1 id="flow">flow</h1>
 <ol>
-  <li><code class="highlighter-rouge">brew search pcntl</code>，找尋要安裝的版本</li>
-  <li><code class="highlighter-rouge">brew install php70-pcntl</code>，得到 pcntl 的安裝位置 =&gt; pcntl__path</li>
-  <li>安裝完畢後，確認 php, <code class="highlighter-rouge">which php</code>，得到路徑 =&gt; php__path</li>
+  <li><code class="language-html highlighter-rouge">brew search pcntl</code>，找尋要安裝的版本</li>
+  <li><code class="language-html highlighter-rouge">brew install php70-pcntl</code>，得到 pcntl 的安裝位置 =&gt; pcntl__path</li>
+  <li>安裝完畢後，確認 php, <code class="language-html highlighter-rouge">which php</code>，得到路徑 =&gt; php__path</li>
   <li>ls -al 路徑(php__path)，確認 php 的 source 指到的是 MAMP 的 php 路徑</li>
   <li>在 pcntl__path 中，取得 pcntl.so 的檔案，copy 到 MAMP 的 extension 中</li>
-  <li>編輯 localhost 的 php.ini 與 MAMP 的 php.ini，加入 <code class="highlighter-rouge">extension=pcntl.so</code></li>
-  <li>在 terminal 中，<code class="highlighter-rouge">php -i | grep pcntl</code>，可看到版本訊息</li>
+  <li>編輯 localhost 的 php.ini 與 MAMP 的 php.ini，加入 <code class="language-html highlighter-rouge">extension=pcntl.so</code></li>
+  <li>在 terminal 中，<code class="language-html highlighter-rouge">php -i | grep pcntl</code>，可看到版本訊息</li>
 </ol>
 
       <footer class="entry-meta">
@@ -160,19 +160,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/git/Git-attribute/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

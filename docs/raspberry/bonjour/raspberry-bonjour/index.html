@@ -151,7 +151,7 @@ Reading time ~1 minute
 <p>成功安裝後，便能以「ssh pi@raspberrypi.local」來遙距登入 Raspberry Pi。</p>
 
 <ul>
-  <li>安裝完畢後，可透過 <code class="highlighter-rouge">avahi-daemon -h</code> 進行功能查詢，基本上已經正在跑，可以用 <code class="highlighter-rouge">avahi-daemon</code> 可以知道服務正在執行
+  <li>安裝完畢後，可透過 <code class="language-html highlighter-rouge">avahi-daemon -h</code> 進行功能查詢，基本上已經正在跑，可以用 <code class="language-html highlighter-rouge">avahi-daemon</code> 可以知道服務正在執行
     <ul>
       <li>可測試把服務刪除後，是否可透過 host 進行連線</li>
     </ul>
@@ -164,10 +164,10 @@ Reading time ~1 minute
 </blockquote>
 
 <ol>
-  <li>在 raspberry 中，<code class="highlighter-rouge">vi /etc/avahi/services/multiple.service</code>，編輯內容如下，意思就是建立 bonjour 的搜尋內容，若無定義，則找不到服務</li>
+  <li>在 raspberry 中，<code class="language-html highlighter-rouge">vi /etc/avahi/services/multiple.service</code>，編輯內容如下，意思就是建立 bonjour 的搜尋內容，若無定義，則找不到服務</li>
 </ol>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" standalone='no'?&gt;</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" standalone='no'?&gt;</span>
 <span class="cp">&lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;</span>
 <span class="nt">&lt;service-group&gt;</span>
         <span class="nt">&lt;name</span> <span class="na">replace-wildcards=</span><span class="s">"yes"</span><span class="nt">&gt;</span>%h<span class="nt">&lt;/name&gt;</span>
@@ -188,10 +188,10 @@ Reading time ~1 minute
 </code></pre></div></div>
 
 <ul>
-  <li>完成後，請執行 <code class="highlighter-rouge">/etc/init.d/avahi-daemon restart</code> or <code class="highlighter-rouge">avahi-daemon -r</code></li>
+  <li>完成後，請執行 <code class="language-html highlighter-rouge">/etc/init.d/avahi-daemon restart</code> or <code class="language-html highlighter-rouge">avahi-daemon -r</code></li>
   <li>基本上只要安裝好 avahi 後，就可以直接透過該預設的 host : raspberry.local 連到該機器，以上的設定，只是為了讓 bonjour client 在 lan 下，搜尋是否搜尋到服務的一個廣播
     <ul>
-      <li>應用實例 : 安裝後，透過 osx command : <code class="highlighter-rouge">dns-sd</code> 進行 bonjour 註冊服務的搜尋，若 raspberry 沒有設定 ‘multiple.service’ 則找不到該機器</li>
+      <li>應用實例 : 安裝後，透過 osx command : <code class="language-html highlighter-rouge">dns-sd</code> 進行 bonjour 註冊服務的搜尋，若 raspberry 沒有設定 ‘multiple.service’ 則找不到該機器</li>
       <li>問題，如果有兩個相同的 raspberry.local 那該如何判別？</li>
     </ul>
   </li>
@@ -199,7 +199,7 @@ Reading time ~1 minute
 
 <h1 id="在-osx-上透過-dns-sd-進行搜尋-bonjour-的服務">在 osx 上，透過 dns-sd 進行搜尋 bonjour 的服務</h1>
 <ul>
-  <li>執行 <code class="highlighter-rouge">dns-sd -B &lt;type&gt;</code>, type 可以是 <code class="highlighter-rouge">_http._tcp</code> or <code class="highlighter-rouge">_ssh._tcp</code>，回應結果如下
+  <li>執行 <code class="language-html highlighter-rouge">dns-sd -B <span class="nt">&lt;type&gt;</span></code>, type 可以是 <code class="language-html highlighter-rouge">_http._tcp</code> or <code class="language-html highlighter-rouge">_ssh._tcp</code>，回應結果如下
     <pre><code class="language-return">Browsing for _http._tcp
 DATE: ---Sat 03 Feb 2018---
  4:12:37.611  ...STARTING...
@@ -207,7 +207,7 @@ Timestamp     A/R    Flags  if Domain               Service Type         Instanc
  4:12:37.612  Add        2   5 local.               _http._tcp.          raspberrypi
 </code></pre>
   </li>
-  <li>找到裝置後，就可以透過  <code class="highlighter-rouge">raspberrypi.local</code> 進行連線 … ，至於服務端的定義，如 80 port, 22 port, 就看設定檔如何設定</li>
+  <li>找到裝置後，就可以透過  <code class="language-html highlighter-rouge">raspberrypi.local</code> 進行連線 … ，至於服務端的定義，如 80 port, 22 port, 就看設定檔如何設定</li>
 </ul>
 
 <h1 id="更新-host">更新 host</h1>
@@ -241,19 +241,19 @@ Timestamp     A/R    Flags  if Domain               Service Type         Instanc
       <a href="https://jhaoheng.github.io/blogpost/raspberry/rtmp/raspi-gstreamer/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

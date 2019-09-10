@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>【Golang】Diff - slice & array &#8211; Max 乎~</title>
 <meta name="description" content="修煉!">
-<meta name="keywords" content="">
+<meta name="keywords" content="Golang">
 
 
 
@@ -129,13 +129,13 @@ Reading time ~1 minute
 </blockquote>
 
 <h1 id="array">Array</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value.
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value.
 - An array's size is fixed;
 - Arrays do not need to be initialized
 </code></pre></div></div>
 
 <h1 id="slice">Slice</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length.
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length.
 A slice can be created with the built-in function called make, which has the signature,
 `func make([]T, len, cap) []T`
 </code></pre></div></div>
@@ -157,24 +157,24 @@ A slice can be created with the built-in function called make, which has the sig
 <ul>
   <li>array : Go’s arrays are values.
     <ul>
-      <li><code class="highlighter-rouge">var arrObject [4]int</code></li>
-      <li><code class="highlighter-rouge">arrObject := [4]int{0, 1, 2, 3}</code></li>
-      <li><code class="highlighter-rouge">arrObject := [...]int{0, 1, 2, 3}</code></li>
+      <li><code class="language-html highlighter-rouge">var arrObject [4]int</code></li>
+      <li><code class="language-html highlighter-rouge">arrObject := [4]int{0, 1, 2, 3}</code></li>
+      <li><code class="language-html highlighter-rouge">arrObject := [...]int{0, 1, 2, 3}</code></li>
     </ul>
   </li>
   <li>slice : 用 make 建立
     <ul>
-      <li><code class="highlighter-rouge">var sliceObject []int</code></li>
-      <li><code class="highlighter-rouge">sliceObject := []int{}</code></li>
-      <li><code class="highlighter-rouge">sliceObject := []int{1,2,3,4}</code></li>
+      <li><code class="language-html highlighter-rouge">var sliceObject []int</code></li>
+      <li><code class="language-html highlighter-rouge">sliceObject := []int{}</code></li>
+      <li><code class="language-html highlighter-rouge">sliceObject := []int{1,2,3,4}</code></li>
     </ul>
   </li>
 </ul>
 
 <h2 id="兩者-type-不同">兩者 type 不同</h2>
 <ul>
-  <li>array : <code class="highlighter-rouge">fmt.Println(reflect.TypeOf(arrObject))</code>, 顯示 [4]int</li>
-  <li>slice : <code class="highlighter-rouge">fmt.Println(reflect.TypeOf(sliceObject))</code>, 顯示 []int</li>
+  <li>array : <code class="language-html highlighter-rouge">fmt.Println(reflect.TypeOf(arrObject))</code>, 顯示 [4]int</li>
+  <li>slice : <code class="language-html highlighter-rouge">fmt.Println(reflect.TypeOf(sliceObject))</code>, 顯示 []int</li>
 </ul>
 
 <div>
@@ -184,8 +184,8 @@ A slice can be created with the built-in function called make, which has the sig
 
 <h2 id="兩者-kind-不同-">兩者 kind 不同 :</h2>
 <ul>
-  <li>array : <code class="highlighter-rouge">fmt.Println(reflect.TypeOf(arrObject).Kind())</code>, 顯示 array</li>
-  <li>slice : <code class="highlighter-rouge">fmt.Println(reflect.TypeOf(sliceObject).Kind())</code>, 顯示 slice</li>
+  <li>array : <code class="language-html highlighter-rouge">fmt.Println(reflect.TypeOf(arrObject).Kind())</code>, 顯示 array</li>
+  <li>slice : <code class="language-html highlighter-rouge">fmt.Println(reflect.TypeOf(sliceObject).Kind())</code>, 顯示 slice</li>
 </ul>
 
 <div>
@@ -210,13 +210,13 @@ A slice can be created with the built-in function called make, which has the sig
   <li>array
     <ul>
       <li>arr 長度固定, 無法新增</li>
-      <li>新增、修改 : <code class="highlighter-rouge">arrObject[0] = 999</code></li>
+      <li>新增、修改 : <code class="language-html highlighter-rouge">arrObject[0] = 999</code></li>
     </ul>
   </li>
   <li>slice
     <ul>
-      <li>新增 : <code class="highlighter-rouge">sliceObject = append(sliceObject, 1,2,3,4)</code></li>
-      <li>修改 : <code class="highlighter-rouge">sliceObject[0] = 999</code></li>
+      <li>新增 : <code class="language-html highlighter-rouge">sliceObject = append(sliceObject, 1,2,3,4)</code></li>
+      <li>修改 : <code class="language-html highlighter-rouge">sliceObject[0] = 999</code></li>
     </ul>
   </li>
 </ul>
@@ -245,17 +245,17 @@ A slice can be created with the built-in function called make, which has the sig
 
 <h2 id="兩者在切割方式上相同-">兩者在切割方式上<strong>相同</strong> :</h2>
 <ul>
-  <li><code class="highlighter-rouge">arr[:2]</code> = <code class="highlighter-rouge">sliceObject[:2]</code></li>
+  <li><code class="language-html highlighter-rouge">arr[:2]</code> = <code class="language-html highlighter-rouge">sliceObject[:2]</code></li>
 </ul>
 
 <h2 id="顯示長度上">顯示長度上</h2>
 <ul>
-  <li>array : <code class="highlighter-rouge">fmt.Println(len(arrayObject))</code>, 顯示 4</li>
-  <li>slice : <code class="highlighter-rouge">fmt.Println(len(sliceObject))</code> 顯示 0</li>
+  <li>array : <code class="language-html highlighter-rouge">fmt.Println(len(arrayObject))</code>, 顯示 4</li>
+  <li>slice : <code class="language-html highlighter-rouge">fmt.Println(len(sliceObject))</code> 顯示 0</li>
 </ul>
 
       <footer class="entry-meta">
-        <span class="entry-tags"></span>
+        <span class="entry-tags"><a href="https://jhaoheng.github.io/blogpost/tags/#Golang" title="Pages tagged Golang" class="tag"><span class="term">Golang</span></a></span>
         
         <div class="social-share">
   <ul class="socialcount socialcount-small inline-list">
@@ -273,19 +273,19 @@ A slice can be created with the built-in function called make, which has the sig
       <a href="https://jhaoheng.github.io/blogpost/golang/gomod/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

@@ -160,20 +160,20 @@ Reading time ~1 minute
 <h3 id="put">PUT</h3>
 
 <ul>
-  <li>Update/Replace : 新增一項資料，如果存在就覆蓋過去。（還是只有一筆資料，故與 <code class="highlighter-rouge">POST</code> 有所差別）</li>
-  <li>ex : <code class="highlighter-rouge">/customers</code> -&gt; 404 (Not Found)</li>
-  <li>ex : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK) or 204 (No Content). 404 (Not Found), if ID not found or invalid.</li>
+  <li>Update/Replace : 新增一項資料，如果存在就覆蓋過去。（還是只有一筆資料，故與 <code class="language-html highlighter-rouge">POST</code> 有所差別）</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers</code> -&gt; 404 (Not Found)</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK) or 204 (No Content). 404 (Not Found), if ID not found or invalid.</li>
 </ul>
 
 <h3 id="post">POST</h3>
 
 <ul>
   <li>Create : 新增一項資料。（如果存在會新增一個新的）</li>
-  <li>ex : <code class="highlighter-rouge">/customers</code> -&gt; 404 (Not Found). 如果預計 POST 批次的話，或許可以考慮</li>
-  <li>ex : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 201 (Created).</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers</code> -&gt; 404 (Not Found). 如果預計 POST 批次的話，或許可以考慮</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers/{id}</code> -&gt; 201 (Created).</li>
 </ul>
 
-<p>ps : 用 [GET] : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 取得用戶資訊</p>
+<p>ps : 用 [GET] : <code class="language-html highlighter-rouge">/customers/{id}</code> -&gt; 取得用戶資訊</p>
 
 <h3 id="patch">PATCH</h3>
 
@@ -185,16 +185,16 @@ Reading time ~1 minute
 
 <ul>
   <li>Delete : 刪除資料。</li>
-  <li>ex : <code class="highlighter-rouge">/customers/</code> -&gt; 404 (Not Found).</li>
-  <li>ex : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK). 404 (Not Found), if ID not found or invalid.</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers/</code> -&gt; 404 (Not Found).</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK). 404 (Not Found), if ID not found or invalid.</li>
 </ul>
 
 <h3 id="get">GET</h3>
 
 <ul>
   <li>Read : 讀取資料。</li>
-  <li>ex : <code class="highlighter-rouge">/customers</code> -&gt; 200 (OK), list of customers.</li>
-  <li>ex : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK), single customer. 404 (Not Found), if ID not found or invalid.</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers</code> -&gt; 200 (OK), list of customers.</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK), single customer. 404 (Not Found), if ID not found or invalid.</li>
 </ul>
 
 <h3 id="head">HEAD</h3>
@@ -283,19 +283,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/bash-package-file-build-executable/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

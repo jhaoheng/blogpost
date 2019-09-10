@@ -124,6 +124,140 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2016-07-07T09:35:00+08:00"><a href="https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/">July 07, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/" rel="bookmark" title="【Phalcon】basic" itemprop="url">【Phalcon】basic</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="ㄧinstall-phalcon">ㄧ、install phalcon</h1>
+
+<ol>
+  <li><a href="https://phalconphp.com/en/download">官方</a></li>
+  <li>github : https://github.com/phalcon/cphalcon</li>
+  <li>install from github
+    <ul>
+      <li><code class="language-html highlighter-rouge">git clone</code></li>
+      <li><code class="language-html highlighter-rouge">cd cphalcon/build</code></li>
+      <li><code class="language-html highlighter-rouge">sudo ./install</code></li>
+    </ul>
+  </li>
+  <li>遇到問題，參考 troubleshoot</li>
+</ol>
+
+<h2 id="check">check</h2>
+
+<ol>
+  <li><code class="language-html highlighter-rouge">phpinfo();</code>
+    <ul>
+      <li>找 phalcon extension，沒意外的話是 2.0.13</li>
+    </ul>
+  </li>
+  <li>安裝環境</li>
+</ol>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>環境
+- `php -m | grep -i phalcon`
+  - if output `phalcon` mean it is ok to use phalcon cmd
+- `apachectl -v`
+  - output : `apache/2.4.16`
+- `php -v`
+  - output : `php 5.6.23`
+- `mysql --version`
+  - output : `mysql ver 14.14`
+</code></pre></div></div>
+
+<h2 id="troubleshoot">troubleshoot</h2>
+
+<ol>
+  <li>若 gcc 編譯失敗，<code class="language-html highlighter-rouge">free -g</code>，查看 memory or swap 是否有 1g 可供 compile
+    <ul>
+      <li>1g memory <code class="language-html highlighter-rouge">https://github.com/phalcon/cphalcon/issues/10478</code></li>
+    </ul>
+  </li>
+  <li>因為目前僅支援 5.4/5.5/5.6 版本，故如果用 7.x 版本編譯時，會產生名稱錯誤</li>
+  <li>設定 <code class="language-html highlighter-rouge">extension=phalcon.so</code>，出現 <code class="language-html highlighter-rouge">PHP Warning:  Module 'phalcon' already loaded in Unknown on line 0</code>
+    <ul>
+      <li><a href="http://www.somacon.com/p520.php">info</a></li>
+      <li>在 php.ini 中，將 <code class="language-html highlighter-rouge">extension=phalcon.so</code> 前面加 <code class="language-html highlighter-rouge">;</code> -&gt; <code class="language-html highlighter-rouge">;extension=phalcon.so</code></li>
+      <li>執行 <code class="language-html highlighter-rouge">php -m | grep -i phalcon</code>，正常</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="二安裝-phalcon-develop-tool">二、安裝 Phalcon develop-tool</h1>
+
+<ul>
+  <li><a href="https://docs.phalconphp.com/zh/latest/reference/tools.html">介紹</a>
+    <ul>
+      <li>總之就是透過指令可以快速建立模組，連大小寫都處理好，另外還會結合資料庫建立 mode : getter / setter</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/phalcon/phalcon-devtools">install</a>
+    <ul>
+      <li>installation via Git</li>
+      <li><code class="language-html highlighter-rouge">sudo ln -s ~/path/phalcon.php /usr/local/bin/phalcon</code> mac 要放在 <code class="language-html highlighter-rouge">/usr/local/bin</code> 下</li>
+    </ul>
+  </li>
+  <li>執行 <code class="language-html highlighter-rouge">phalcon</code></li>
+</ul>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Phalcon DevTools (2.0.13)
+
+Help:
+  Lists the commands available in Phalcon devtools
+
+Available commands:
+  commands         (alias of: list, enumerate)
+  controller       (alias of: create-controller)
+  module           (alias of: create-module)
+  model            (alias of: create-model)
+  all-models       (alias of: create-all-models)
+  project          (alias of: create-project)
+  scaffold         (alias of: create-scaffold)
+  migration        (alias of: create-migration)
+  webtools         (alias of: create-webtools)
+</code></pre></div></div>
+<ul>
+  <li>查看語法，直接執行 <code class="language-html highlighter-rouge">phalcon [command]</code> 即可
+    <ul>
+      <li><code class="language-html highlighter-rouge">phalcon controller</code></li>
+      <li><code class="language-html highlighter-rouge">phalcon webtools</code></li>
+    </ul>
+  </li>
+  <li>啟用 WebTools
+    <ul>
+      <li>在影片中，可以用 browser 的方式，進行設定，在網頁資料夾下，<code class="language-html highlighter-rouge">phalcon webtools --action=enable</code>
+        <ul>
+          <li>有新舊版本的問題，查看 github readme</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>快速建立一個基本的 project : <code class="language-html highlighter-rouge">phalcon create-project store</code>
+    <ul>
+      <li>檢視網頁 : <code class="language-html highlighter-rouge">localhost:[yourport]/store</code></li>
+    </ul>
+  </li>
+</ul>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/phalcon/Phalcon-basic/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2016-07-05T06:29:00+08:00"><a href="https://jhaoheng.github.io/blogpost/iosapns-with-http-2/">July 05, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -141,22 +275,22 @@ Reading time ~1 minute
     <h2 id="insatll-mac">insatll (mac)</h2>
 
 <ul>
-  <li><code class="highlighter-rouge">brew install curl --with-nghttp2</code></li>
-  <li><code class="highlighter-rouge">brew link curl --force</code></li>
+  <li><code class="language-html highlighter-rouge">brew install curl --with-nghttp2</code></li>
+  <li><code class="language-html highlighter-rouge">brew link curl --force</code></li>
 </ul>
 
 <h2 id="use">use</h2>
 <ul>
-  <li><code class="highlighter-rouge">./curl --version</code></li>
+  <li><code class="language-html highlighter-rouge">./curl --version</code></li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl 7.48.0 (x86_64-apple-darwin15.5.0) libcurl/7.48.0 OpenSSL/1.0.2g zlib/1.2.5 nghttp2/1.9.1
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl 7.48.0 (x86_64-apple-darwin15.5.0) libcurl/7.48.0 OpenSSL/1.0.2g zlib/1.2.5 nghttp2/1.9.1
 Protocols: dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp smb smbs smtp smtps telnet tftp 
 Features: IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP HTTP2 UnixSockets 
 </code></pre></div></div>
 
 <ul>
-  <li>exec : <code class="highlighter-rouge">./curl -v -d '{"aps":{"alert":"Test Push","sound":"default"}}' --cert [xxx.pem] -H "apns-topic: [bundle_id]" --http2 https://api.development.push.apple.com/3/device/[token]</code></li>
+  <li>exec : <code class="language-html highlighter-rouge">./curl -v -d '{"aps":{"alert":"Test Push","sound":"default"}}' --cert [xxx.pem] -H "apns-topic: [bundle_id]" --http2 https://api.development.push.apple.com/3/device/[token]</code></li>
 </ul>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/iosapns-with-http-2/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
@@ -204,11 +338,11 @@ Reading time ~1 minute
 <ol>
   <li>Open MAMP</li>
   <li>PHP -&gt; default version</li>
-  <li>download suitable <code class="highlighter-rouge">phalcon.so</code> from <a href="https://github.com/majksner/php-phalcon-mamp">github</a></li>
-  <li><code class="highlighter-rouge">cd /Applications/MAMP/bin/php/php5.x.xx</code> and <code class="highlighter-rouge">lib/php/extensions/</code> and ‘no-debug-non-zts-xxxxxxxx’</li>
-  <li>cp <code class="highlighter-rouge">phalcon.so</code> to (4) path</li>
+  <li>download suitable <code class="language-html highlighter-rouge">phalcon.so</code> from <a href="https://github.com/majksner/php-phalcon-mamp">github</a></li>
+  <li><code class="language-html highlighter-rouge">cd /Applications/MAMP/bin/php/php5.x.xx</code> and <code class="language-html highlighter-rouge">lib/php/extensions/</code> and ‘no-debug-non-zts-xxxxxxxx’</li>
+  <li>cp <code class="language-html highlighter-rouge">phalcon.so</code> to (4) path</li>
   <li>open MAMP navigation bar，File -&gt; Edit template -&gt; PHP -&gt; (choose currect php version which want to use)</li>
-  <li>Add <code class="highlighter-rouge">extension=phalcon.so</code> of php.ini</li>
+  <li>Add <code class="language-html highlighter-rouge">extension=phalcon.so</code> of php.ini</li>
   <li>restart MAMP</li>
 </ol>
 
@@ -272,20 +406,20 @@ Reading time ~1 minute
 <h3 id="put">PUT</h3>
 
 <ul>
-  <li>Update/Replace : 新增一項資料，如果存在就覆蓋過去。（還是只有一筆資料，故與 <code class="highlighter-rouge">POST</code> 有所差別）</li>
-  <li>ex : <code class="highlighter-rouge">/customers</code> -&gt; 404 (Not Found)</li>
-  <li>ex : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK) or 204 (No Content). 404 (Not Found), if ID not found or invalid.</li>
+  <li>Update/Replace : 新增一項資料，如果存在就覆蓋過去。（還是只有一筆資料，故與 <code class="language-html highlighter-rouge">POST</code> 有所差別）</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers</code> -&gt; 404 (Not Found)</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK) or 204 (No Content). 404 (Not Found), if ID not found or invalid.</li>
 </ul>
 
 <h3 id="post">POST</h3>
 
 <ul>
   <li>Create : 新增一項資料。（如果存在會新增一個新的）</li>
-  <li>ex : <code class="highlighter-rouge">/customers</code> -&gt; 404 (Not Found). 如果預計 POST 批次的話，或許可以考慮</li>
-  <li>ex : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 201 (Created).</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers</code> -&gt; 404 (Not Found). 如果預計 POST 批次的話，或許可以考慮</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers/{id}</code> -&gt; 201 (Created).</li>
 </ul>
 
-<p>ps : 用 [GET] : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 取得用戶資訊</p>
+<p>ps : 用 [GET] : <code class="language-html highlighter-rouge">/customers/{id}</code> -&gt; 取得用戶資訊</p>
 
 <h3 id="patch">PATCH</h3>
 
@@ -297,16 +431,16 @@ Reading time ~1 minute
 
 <ul>
   <li>Delete : 刪除資料。</li>
-  <li>ex : <code class="highlighter-rouge">/customers/</code> -&gt; 404 (Not Found).</li>
-  <li>ex : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK). 404 (Not Found), if ID not found or invalid.</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers/</code> -&gt; 404 (Not Found).</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK). 404 (Not Found), if ID not found or invalid.</li>
 </ul>
 
 <h3 id="get">GET</h3>
 
 <ul>
   <li>Read : 讀取資料。</li>
-  <li>ex : <code class="highlighter-rouge">/customers</code> -&gt; 200 (OK), list of customers.</li>
-  <li>ex : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK), single customer. 404 (Not Found), if ID not found or invalid.</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers</code> -&gt; 200 (OK), list of customers.</li>
+  <li>ex : <code class="language-html highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK), single customer. 404 (Not Found), if ID not found or invalid.</li>
 </ul>
 
 <h3 id="head">HEAD</h3>
@@ -416,7 +550,7 @@ Reading time ~1 minute
 <h2 id="流程">流程</h2>
 
 <ol>
-  <li><code class="highlighter-rouge">vim archive.sh</code>
+  <li><code class="language-html highlighter-rouge">vim archive.sh</code>
 ```
 DIR=”$( cd “$( dirname “${BASH_SOURCE[0]}” )” &amp;&amp; pwd )”
 #echo ${DIR}
@@ -428,55 +562,11 @@ cd ${DIR}</li>
 zip -r “archive-$(date +”%Y-%m-%d”).zip” ./youfile_1/</em> ./yourfilw_2/*
 ```</p>
 <ol>
-  <li><code class="highlighter-rouge">mv archive.sh archive.command</code></li>
-  <li><code class="highlighter-rouge">chmod 755 archive.command</code></li>
+  <li><code class="language-html highlighter-rouge">mv archive.sh archive.command</code></li>
+  <li><code class="language-html highlighter-rouge">chmod 755 archive.command</code></li>
 </ol>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/bash-package-file-build-executable/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2016-06-26T06:21:00+08:00"><a href="https://jhaoheng.github.io/blogpost/xcode-framework-dynamic-static-diff/">June 26, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/xcode-framework-dynamic-static-diff/" rel="bookmark" title="【xcode】framework 動/靜 diff" itemprop="url">【xcode】framework 動/靜 diff</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="framework-靜態動態-庫">framework 靜態/動態 庫</h1>
-
-<h2 id="env">env</h2>
-
-<ul>
-  <li>xcode : 7.3.1</li>
-  <li>ios 9</li>
-</ul>
-
-<h2 id="diff">diff</h2>
-
-<ul>
-  <li>取出 bundle file
-    <ul>
-      <li>靜態庫，無法取得 framework.plist 的資訊</li>
-      <li>動態庫，可</li>
-    </ul>
-  </li>
-  <li>包裝後的編譯檔，file 也會不同</li>
-</ul>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/xcode-framework-dynamic-static-diff/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

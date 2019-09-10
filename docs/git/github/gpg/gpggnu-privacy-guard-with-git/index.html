@@ -133,14 +133,14 @@ Reading time ~1 minute
   <li>可產生不同的 key，並針對這些 key 進行管理</li>
   <li>當產生後，會依據設定的『用戶名稱』、『你設定的 mail』產生 GPG key
     <ul>
-      <li>主要產生 <code class="highlighter-rouge">public_GPG_key</code>、<code class="highlighter-rouge">subordinate private keys</code></li>
-      <li>而過程中會要求是否設定 passphrase，是用來保護 <code class="highlighter-rouge">subordinate private keys</code></li>
+      <li>主要產生 <code class="language-html highlighter-rouge">public_GPG_key</code>、<code class="language-html highlighter-rouge">subordinate private keys</code></li>
+      <li>而過程中會要求是否設定 passphrase，是用來保護 <code class="language-html highlighter-rouge">subordinate private keys</code></li>
     </ul>
   </li>
   <li>ex key:
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pub   rsa4096/&lt;public_GPG_key&gt; 2016-04-09 [SC]
-uid         [ultimate&lt;設定的存活時間&gt;] maxhu&lt;設定名稱&gt; (fot github&lt;設定備註&gt;) xxxx@gmail.com&lt;設定email&gt;
-sub   rsa4096/&lt;subordinate private keys&gt; 2016-04-09 [E]
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pub   rsa4096/<span class="nt">&lt;public</span><span class="na">_GPG_key</span><span class="nt">&gt;</span> 2016-04-09 [SC]
+uid         [ultimate<span class="nt">&lt;</span><span class="err">設定的存活時間</span><span class="nt">&gt;</span>] maxhu<span class="nt">&lt;</span><span class="err">設定名稱</span><span class="nt">&gt;</span> (fot github<span class="nt">&lt;</span><span class="err">設定備註</span><span class="nt">&gt;</span>) xxxx@gmail.com<span class="nt">&lt;</span><span class="err">設定</span><span class="na">email</span><span class="nt">&gt;</span>
+sub   rsa4096/<span class="nt">&lt;subordinate</span> <span class="na">private</span> <span class="na">keys</span><span class="nt">&gt;</span> 2016-04-09 [E]
 </code></pre></div>    </div>
   </li>
 </ul>
@@ -177,17 +177,17 @@ sub   rsa4096/&lt;subordinate private keys&gt; 2016-04-09 [E]
       <li>(SHA-1: 558e20f8d938f2d870aae3bab59ce98649625c01) <strong>安裝檔中有說明，如何『驗證』與如何『移轉已存在的 gpg key』</strong></li>
     </ul>
   </li>
-  <li>安裝路徑 <code class="highlighter-rouge">/usr/local/gnupg-2.1/</code></li>
+  <li>安裝路徑 <code class="language-html highlighter-rouge">/usr/local/gnupg-2.1/</code></li>
 </ul>
 
 <blockquote>
   <p>因 github 預設使用 gpg，安裝後指令為 gpg2，故
-<code class="highlighter-rouge">ln -s /usr/local/gnupg-2.1/bin/gpg2 /usr/local/bin/gpg</code></p>
+<code class="language-html highlighter-rouge">ln -s /usr/local/gnupg-2.1/bin/gpg2 /usr/local/bin/gpg</code></p>
 </blockquote>
 
 <h2 id="移除-gpg">移除 GPG</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rm '/usr/local/bin/gpg*'
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rm '/usr/local/bin/gpg*'
 cd /usr/local
 sudo rm -rf gnupg-2.1/
 rm -rf ~/.gnupg
@@ -196,7 +196,7 @@ rm -rf ~/.gnupg
 <h2 id="產生-gpg-key">產生 GPG key</h2>
 
 <ul>
-  <li>執行 <code class="highlighter-rouge">gpg --full-gen-key</code> ，依序選擇
+  <li>執行 <code class="language-html highlighter-rouge">gpg --full-gen-key</code> ，依序選擇
     <ul>
       <li>(1) RSA and RSA (default)</li>
       <li>What keysize do you want? (2048) 4096</li>
@@ -205,14 +205,14 @@ rm -rf ~/.gnupg
       <li>輸入指定的 email <strong>此為設定 github 的 email</strong></li>
     </ul>
   </li>
-  <li>而 key 的存放位置為 <code class="highlighter-rouge">/Users/&lt;user&gt;/.gnupg</code> 下</li>
-  <li>查看 key <code class="highlighter-rouge">gpg --list-keys</code></li>
+  <li>而 key 的存放位置為 <code class="language-html highlighter-rouge">/Users/<span class="nt">&lt;user&gt;</span>/.gnupg</code> 下</li>
+  <li>查看 key <code class="language-html highlighter-rouge">gpg --list-keys</code></li>
 </ul>
 
 <h2 id="將-gpg-key-放入-github">將 GPG key 放入 github</h2>
 
 <ul>
-  <li><code class="highlighter-rouge">gpg --list-keys</code> : 找出要使用的 gpg key id : A8F99211
+  <li><code class="language-html highlighter-rouge">gpg --list-keys</code> : 找出要使用的 gpg key id : A8F99211
     <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/Users/hubot/.gnupg/pubring.gpg
 <span class="nt">------------------------------------</span>
 pub   4096R/A8F99211 2016-04-05
@@ -220,7 +220,7 @@ uid                  Hubot
 sub   4096R/Z832QR89 2016-04-05
 </code></pre></div>    </div>
   </li>
-  <li>輸出 : <code class="highlighter-rouge">gpg2 --armor --export &lt;gpg key ID&gt;</code></li>
+  <li>輸出 : <code class="language-html highlighter-rouge">gpg2 --armor --export <span class="nt">&lt;gpg</span> <span class="na">key</span> <span class="na">ID</span><span class="nt">&gt;</span></code></li>
   <li>複製，貼到 <a href="https://help.github.com/articles/adding-a-new-gpg-key-to-your-github-account/">github gpg keys</a> 中即可</li>
 </ul>
 
@@ -235,21 +235,21 @@ sub   4096R/Z832QR89 2016-04-05
   <li>基本上在 git config 下，要有這兩個參數</li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user.signingkey=&lt;your public key&gt;
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>user.signingkey=<span class="nt">&lt;your</span> <span class="na">public</span> <span class="na">key</span><span class="nt">&gt;</span>
 commit.gpgsign=true
 </code></pre></div></div>
 
 <ul>
-  <li><code class="highlighter-rouge">git config</code>
+  <li><code class="language-html highlighter-rouge">git config</code>
     <ul>
-      <li><code class="highlighter-rouge">--global user.signingkey &lt;public GPG key&gt;</code></li>
-      <li><code class="highlighter-rouge">--local  user.signingkey &lt;public GPG key&gt;</code></li>
+      <li><code class="language-html highlighter-rouge">--global user.signingkey <span class="nt">&lt;public</span> <span class="na">GPG</span> <span class="na">key</span><span class="nt">&gt;</span></code></li>
+      <li><code class="language-html highlighter-rouge">--local  user.signingkey <span class="nt">&lt;public</span> <span class="na">GPG</span> <span class="na">key</span><span class="nt">&gt;</span></code></li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">git config</code>
+  <li><code class="language-html highlighter-rouge">git config</code>
     <ul>
-      <li><code class="highlighter-rouge">--global commit.gpgsign true</code></li>
-      <li><code class="highlighter-rouge">--local  commit.gpgsign true</code></li>
+      <li><code class="language-html highlighter-rouge">--global commit.gpgsign true</code></li>
+      <li><code class="language-html highlighter-rouge">--local  commit.gpgsign true</code></li>
     </ul>
   </li>
 </ul>
@@ -259,14 +259,14 @@ commit.gpgsign=true
   <p>Note: GitHub Desktop does not support GPG signing.</p>
 </blockquote>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit -m "your commit message"
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>git commit -m "your commit message"
 # 第一次使用時，會要求輸入在建立 GPG key 時輸入的 **passphrase**
 # 往後無需使用
 </code></pre></div></div>
 
 <h3 id="查看-push-後的-verified">查看 push 後的 verified</h3>
 <ol>
-  <li><code class="highlighter-rouge">git push</code> 後，登入 github 的該 repo</li>
+  <li><code class="language-html highlighter-rouge">git push</code> 後，登入 github 的該 repo</li>
   <li>點選 Commits</li>
   <li>可以看到 <strong>verified signature,</strong></li>
 </ol>
@@ -277,8 +277,8 @@ commit.gpgsign=true
 </blockquote>
 
 <ol>
-  <li><code class="highlighter-rouge">git tag -s [tag-name]</code></li>
-  <li>驗證 <code class="highlighter-rouge">git tag -v [tag-name]</code></li>
+  <li><code class="language-html highlighter-rouge">git tag -s [tag-name]</code></li>
+  <li>驗證 <code class="language-html highlighter-rouge">git tag -v [tag-name]</code></li>
 </ol>
 
 <h2 id="測試心得">測試心得</h2>
@@ -308,19 +308,19 @@ commit.gpgsign=true
       <a href="https://jhaoheng.github.io/blogpost" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

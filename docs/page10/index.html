@@ -124,6 +124,67 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-05-18T08:19:00+08:00"><a href="https://jhaoheng.github.io/blogpost/hls/aws/HLS-AWS/">May 18, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/hls/aws/HLS-AWS/" rel="bookmark" title="【AWS S3】播放 HLS 時，發生 crossdomain access denied" itemprop="url">【AWS S3】播放 HLS 時，發生 crossdomain access denied</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="環境">環境</h1>
+
+<ul>
+  <li>player : http://video-dev.github.io/hls.js/demo/</li>
+  <li>aws s3
+    <ul>
+      <li>將 ts 與 m3u8 均放在上面</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="問題描述">問題描述</h1>
+
+<ol>
+  <li>VLC 可播放</li>
+  <li>丟入其他播放器，無法播放
+    <ul>
+      <li>某些播放器會說明 crossdomain access denied</li>
+      <li>持續轉圈圈</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="解決-crossdomain-access-denied">解決 crossdomain access denied</h1>
+
+<ul>
+  <li>aws file : http://docs.aws.amazon.com/AmazonS3/latest/dev/cors.html</li>
+  <li>console 設定
+    <ul>
+      <li>進入 bucket</li>
+      <li>進入所選定的 folder 中</li>
+      <li>選擇 Permissions</li>
+      <li>看到 AllowedHeader</li>
+      <li>寫入 *</li>
+    </ul>
+  </li>
+</ul>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/hls/aws/HLS-AWS/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2017-05-17T02:14:00+08:00"><a href="https://jhaoheng.github.io/blogpost/ossrscompile-ffmpeg/">May 17, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -147,13 +208,13 @@ Reading time ~1 minute
 <h1 id="question">question</h1>
 
 <ol>
-  <li><code class="highlighter-rouge">./configure --osx --full --with-ffmpeg</code></li>
+  <li><code class="language-html highlighter-rouge">./configure --osx --full --with-ffmpeg</code></li>
 </ol>
 
 <p>error : Libtool library uesd but ‘LIBTOOL’ is undefined</p>
 
 <ol>
-  <li>fixed <code class="highlighter-rouge">brew install libtool</code></li>
+  <li>fixed <code class="language-html highlighter-rouge">brew install libtool</code></li>
 </ol>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/ossrscompile-ffmpeg/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
@@ -189,7 +250,7 @@ MongoDB.so , 非 mongo.so</p>
   <li>yum install openssl-devel -y</li>
   <li>wget http://pear.php.net/go-pear.phar</li>
   <li>php go-pear.phar</li>
-  <li>vi <code class="highlighter-rouge">which pecl</code> =&gt; 拿掉 -n , 原因 https://serverfault.com/questions/589877/pecl-command-produces-long-list-of-errors</li>
+  <li>vi <code class="language-html highlighter-rouge">which pecl</code> =&gt; 拿掉 -n , 原因 https://serverfault.com/questions/589877/pecl-command-produces-long-list-of-errors</li>
   <li>pecl install mongodb</li>
   <li>echo “extension=mongodb.so” » /etc/php.d/20-mongodb.ini</li>
   <li>
@@ -207,7 +268,7 @@ MongoDB.so , 非 mongo.so</p>
 <h2 id="docker">docker</h2>
 <ul>
   <li>https://hub.docker.com/r/jhaoheng/php_env/</li>
-  <li><code class="highlighter-rouge">docker pull jhaoheng/php_env:1.1</code></li>
+  <li><code class="language-html highlighter-rouge">docker pull jhaoheng/php_env:1.1</code></li>
 </ul>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/mongo-php7-drivecentos7/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
@@ -249,13 +310,13 @@ Reading time ~1 minute
 <h1 id="安裝-mongodb">安裝 mongodb</h1>
 
 <ol>
-  <li><code class="highlighter-rouge">$ brew install mongodb</code></li>
-  <li>可在 <code class="highlighter-rouge">$ cat /usr/local/etc/mongod.conf</code>，看到 mongodb 設定
+  <li><code class="language-html highlighter-rouge">$ brew install mongodb</code></li>
+  <li>可在 <code class="language-html highlighter-rouge">$ cat /usr/local/etc/mongod.conf</code>，看到 mongodb 設定
     <ul>
       <li>注意位置 /data/db，確定是否存在，若不存在則建立一個，記得打開權限</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">$ mongod</code> 啟動 mongodb</li>
+  <li><code class="language-html highlighter-rouge">$ mongod</code> 啟動 mongodb</li>
 </ol>
 
 <h1 id="設定-php-drive">設定 php drive</h1>
@@ -269,22 +330,22 @@ Reading time ~1 minute
 </blockquote>
 
 <ol>
-  <li><code class="highlighter-rouge">$ brew install php70-mongodb</code></li>
-  <li><code class="highlighter-rouge">$ cd /usr/local/Cellar/php70-mongodb</code> =&gt; 找到 mongodb.so</li>
-  <li><code class="highlighter-rouge">$ php -i | grep extension</code> =&gt; 找到 extension 的位置</li>
-  <li><code class="highlighter-rouge">$ mv mongodb.so {extension 位置}</code></li>
-  <li><code class="highlighter-rouge">$ php --ini</code> =&gt; 找到 php.ini</li>
-  <li><code class="highlighter-rouge">$ vim php.ini</code>
+  <li><code class="language-html highlighter-rouge">$ brew install php70-mongodb</code></li>
+  <li><code class="language-html highlighter-rouge">$ cd /usr/local/Cellar/php70-mongodb</code> =&gt; 找到 mongodb.so</li>
+  <li><code class="language-html highlighter-rouge">$ php -i | grep extension</code> =&gt; 找到 extension 的位置</li>
+  <li><code class="language-html highlighter-rouge">$ mv mongodb.so {extension 位置}</code></li>
+  <li><code class="language-html highlighter-rouge">$ php --ini</code> =&gt; 找到 php.ini</li>
+  <li><code class="language-html highlighter-rouge">$ vim php.ini</code>
     <ul>
       <li>在 extension 中，加入 extension=mongodb.so</li>
     </ul>
   </li>
-  <li>驗證在 <code class="highlighter-rouge">$ php -i | grep mongo</code> 驗證版本應該跟下載的相同</li>
+  <li>驗證在 <code class="language-html highlighter-rouge">$ php -i | grep mongo</code> 驗證版本應該跟下載的相同</li>
 </ol>
 
 <h2 id="當執行-mongo-提取資料時出現">當執行 mongo 提取資料時出現</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dyld: lazy symbol binding failed: Symbol not found: _clock_gettime
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dyld: lazy symbol binding failed: Symbol not found: _clock_gettime
   Referenced from: /usr/local/opt/php70-mongodb/mongodb.so
   Expected in: /usr/lib/libSystem.B.dylib
 
@@ -354,63 +415,16 @@ Reading time ~1 minute
 
 <h1 id="flow">flow</h1>
 <ol>
-  <li><code class="highlighter-rouge">brew search pcntl</code>，找尋要安裝的版本</li>
-  <li><code class="highlighter-rouge">brew install php70-pcntl</code>，得到 pcntl 的安裝位置 =&gt; pcntl__path</li>
-  <li>安裝完畢後，確認 php, <code class="highlighter-rouge">which php</code>，得到路徑 =&gt; php__path</li>
+  <li><code class="language-html highlighter-rouge">brew search pcntl</code>，找尋要安裝的版本</li>
+  <li><code class="language-html highlighter-rouge">brew install php70-pcntl</code>，得到 pcntl 的安裝位置 =&gt; pcntl__path</li>
+  <li>安裝完畢後，確認 php, <code class="language-html highlighter-rouge">which php</code>，得到路徑 =&gt; php__path</li>
   <li>ls -al 路徑(php__path)，確認 php 的 source 指到的是 MAMP 的 php 路徑</li>
   <li>在 pcntl__path 中，取得 pcntl.so 的檔案，copy 到 MAMP 的 extension 中</li>
-  <li>編輯 localhost 的 php.ini 與 MAMP 的 php.ini，加入 <code class="highlighter-rouge">extension=pcntl.so</code></li>
-  <li>在 terminal 中，<code class="highlighter-rouge">php -i | grep pcntl</code>，可看到版本訊息</li>
+  <li>編輯 localhost 的 php.ini 與 MAMP 的 php.ini，加入 <code class="language-html highlighter-rouge">extension=pcntl.so</code></li>
+  <li>在 terminal 中，<code class="language-html highlighter-rouge">php -i | grep pcntl</code>，可看到版本訊息</li>
 </ol>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/php-mamp-pcntl-installation/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2017-03-15T09:41:00+08:00"><a href="https://jhaoheng.github.io/blogpost/git/Git-attribute/">March 15, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/git/Git-attribute/" rel="bookmark" title="【Git】attribute, 合併後保留原本的設定檔" itemprop="url">【Git】attribute, 合併後保留原本的設定檔</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="git--gitattributes">git : [.gitattributes]</h1>
-
-<h2 id="合併策略">合併策略</h2>
-
-<ul>
-  <li>在 project 的路徑下，同一層有 .git，建立 <code class="highlighter-rouge">.gitattributes</code></li>
-  <li>建立要維持固定不變的設定檔 : config.json</li>
-  <li>在 <code class="highlighter-rouge">.gitattributes</code> 中新增合併策略 <code class="highlighter-rouge">config.json merge=ours</code></li>
-  <li>完成後，查詢 <code class="highlighter-rouge">git config --global -l</code>，是否有 <code class="highlighter-rouge">merge.ours.driver=true</code> 的參數設定</li>
-  <li>若無則下指令 : <code class="highlighter-rouge">git config --global merge.ours.driver true</code></li>
-</ul>
-
-<h2 id="step-flow">step flow</h2>
-
-<ol>
-  <li><code class="highlighter-rouge">git checkout -b [branch]</code></li>
-  <li>edit config.json &amp; commit</li>
-  <li>git checkout master</li>
-  <li>edit config.json &amp; commit</li>
-  <li>此時下 <code class="highlighter-rouge">git log --all --graph --pretty=format:'%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)'</code>，會看到 branch 分別在兩條線，若是在同一條線上，並不會產生 conflict</li>
-  <li>git merge [branch]，讓兩條合併，此時產生 conflict，但因為設定的 <code class="highlighter-rouge">.gitattributes</code> 的規則，會讓每個分支合併後，以原本分支的檔案為主</li>
-  <li>查看 <code class="highlighter-rouge">git log --all --graph --pretty=format:'%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)'</code></li>
-</ol>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/git/Git-attribute/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

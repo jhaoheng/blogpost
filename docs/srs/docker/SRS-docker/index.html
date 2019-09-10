@@ -132,56 +132,56 @@ Reading time ~1 minute
 <h1 id="完成品">完成品</h1>
 <ul>
   <li>https://hub.docker.com/r/jhaoheng/srs-release2.0/</li>
-  <li><code class="highlighter-rouge">docker run -d -t -p 1935:1935 {image}</code></li>
-  <li>位置 : <code class="highlighter-rouge">/opt/srs/trunk</code>，執行 srs 即可</li>
+  <li><code class="language-html highlighter-rouge">docker run -d -t -p 1935:1935 {image}</code></li>
+  <li>位置 : <code class="language-html highlighter-rouge">/opt/srs/trunk</code>，執行 srs 即可</li>
 </ul>
 
 <h1 id="base">base</h1>
 <ul>
-  <li><code class="highlighter-rouge">docker pull centos:latest</code></li>
-  <li><code class="highlighter-rouge">docker run -d -t -p 1935:1935 [centos:latest]</code></li>
-  <li><code class="highlighter-rouge">docker exec -it [container] /bin/bash</code></li>
+  <li><code class="language-html highlighter-rouge">docker pull centos:latest</code></li>
+  <li><code class="language-html highlighter-rouge">docker run -d -t -p 1935:1935 [centos:latest]</code></li>
+  <li><code class="language-html highlighter-rouge">docker exec -it [container] /bin/bash</code></li>
 </ul>
 
 <h1 id="安裝">安裝</h1>
 <ul>
-  <li><code class="highlighter-rouge">yum update</code></li>
+  <li><code class="language-html highlighter-rouge">yum update</code></li>
   <li>required
     <ul>
-      <li><code class="highlighter-rouge">yum install -y gcc</code></li>
-      <li><code class="highlighter-rouge">yum install -y gcc-c++</code></li>
-      <li><code class="highlighter-rouge">yum install -y make</code></li>
-      <li><code class="highlighter-rouge">yum install -y patch</code></li>
-      <li><code class="highlighter-rouge">yum install -y unzip</code></li>
-      <li><code class="highlighter-rouge">yum install -y pcre-devel</code></li>
-      <li><code class="highlighter-rouge">yum install -y automake</code></li>
-      <li><code class="highlighter-rouge">yum install -y libtool</code></li>
-      <li><code class="highlighter-rouge">yum install -y zlib-devel</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y gcc</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y gcc-c++</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y make</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y patch</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y unzip</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y pcre-devel</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y automake</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y libtool</code></li>
+      <li><code class="language-html highlighter-rouge">yum install -y zlib-devel</code></li>
     </ul>
   </li>
   <li>git clone [source]</li>
-  <li>安裝 <code class="highlighter-rouge">./trunk/3rdparty/CherryPy-3.2.4</code>
+  <li>安裝 <code class="language-html highlighter-rouge">./trunk/3rdparty/CherryPy-3.2.4</code>
     <ul>
-      <li><code class="highlighter-rouge">unzip ./trunk/3rdparty/CherryPy-3.2.4.zip &amp;&amp; mv CherryPy-3.2.4 ../objs/</code></li>
+      <li><code class="language-html highlighter-rouge">unzip ./trunk/3rdparty/CherryPy-3.2.4.zip <span class="err">&amp;&amp;</span> mv CherryPy-3.2.4 ../objs/</code></li>
     </ul>
   </li>
-  <li>compile srs : <code class="highlighter-rouge">./configure --full --with-ffmpeg --with-research &amp;&amp; make</code>
+  <li>compile srs : <code class="language-html highlighter-rouge">./configure --full --with-ffmpeg --with-research <span class="err">&amp;&amp;</span> make</code>
     <ul>
-      <li><code class="highlighter-rouge">./configure -h</code> : 可查看所有安裝選項</li>
+      <li><code class="language-html highlighter-rouge">./configure -h</code> : 可查看所有安裝選項</li>
     </ul>
   </li>
-  <li>start srs : <code class="highlighter-rouge">./objs/srs -c conf/srs.conf</code></li>
+  <li>start srs : <code class="language-html highlighter-rouge">./objs/srs -c conf/srs.conf</code></li>
 </ul>
 
 <h1 id="測試">測試</h1>
 <ul>
-  <li><code class="highlighter-rouge">tail -f ./trunk/srs.log</code></li>
+  <li><code class="language-html highlighter-rouge">tail -f ./trunk/srs.log</code></li>
   <li>將桌面的畫面推送給 docker:srs
     <ul>
-      <li><code class="highlighter-rouge">ffmpeg -f avfoundation -i "1" -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp://localhost:1935/live/desktop</code></li>
+      <li><code class="language-html highlighter-rouge">ffmpeg -f avfoundation -i "1" -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp://localhost:1935/live/desktop</code></li>
     </ul>
   </li>
-  <li>透過 VLC 播放 <code class="highlighter-rouge">rtmp://localhost:1935/live/desktop</code></li>
+  <li>透過 VLC 播放 <code class="language-html highlighter-rouge">rtmp://localhost:1935/live/desktop</code></li>
 </ul>
 
       <footer class="entry-meta">
@@ -203,19 +203,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/hls/HLS-m3u8/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

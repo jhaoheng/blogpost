@@ -136,11 +136,11 @@ Reading time ~1 minute
       <li>或者把影片存成 mp4 後，放到 server 上</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">docker run --rm jrottenberg/ffmpeg:ubuntu -re -i http://... -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp:...</code>
+  <li><code class="language-html highlighter-rouge">docker run --rm jrottenberg/ffmpeg:ubuntu -re -i http://... -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp:...</code>
     <ul>
-      <li><code class="highlighter-rouge">-re</code> : Read input at native frame rate. Mainly used to simulate a grab device.  or live input stream (e.g. when reading from a file). Should not be used with actual grab devices or live input streams (where it can cause packet loss).  By default ffmpeg attempts to read the input(s) as fast as possible.  This option will slow down the reading of the input(s) to the native frame rate of the input(s). It is useful for real-time output (e.g. live streaming).</li>
-      <li><code class="highlighter-rouge">http://...</code> : 輸入的 mp4 影片位置，也可用 file 來替代</li>
-      <li><code class="highlighter-rouge">rmpt://...</code> : 要串流的 rtmp server 位置</li>
+      <li><code class="language-html highlighter-rouge">-re</code> : Read input at native frame rate. Mainly used to simulate a grab device.  or live input stream (e.g. when reading from a file). Should not be used with actual grab devices or live input streams (where it can cause packet loss).  By default ffmpeg attempts to read the input(s) as fast as possible.  This option will slow down the reading of the input(s) to the native frame rate of the input(s). It is useful for real-time output (e.g. live streaming).</li>
+      <li><code class="language-html highlighter-rouge">http://...</code> : 輸入的 mp4 影片位置，也可用 file 來替代</li>
+      <li><code class="language-html highlighter-rouge">rmpt://...</code> : 要串流的 rtmp server 位置</li>
     </ul>
   </li>
 </ol>
@@ -164,19 +164,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/playerhls-rtmp/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

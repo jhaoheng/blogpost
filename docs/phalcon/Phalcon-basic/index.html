@@ -130,9 +130,9 @@ Reading time ~1 minute
   <li>github : https://github.com/phalcon/cphalcon</li>
   <li>install from github
     <ul>
-      <li><code class="highlighter-rouge">git clone</code></li>
-      <li><code class="highlighter-rouge">cd cphalcon/build</code></li>
-      <li><code class="highlighter-rouge">sudo ./install</code></li>
+      <li><code class="language-html highlighter-rouge">git clone</code></li>
+      <li><code class="language-html highlighter-rouge">cd cphalcon/build</code></li>
+      <li><code class="language-html highlighter-rouge">sudo ./install</code></li>
     </ul>
   </li>
   <li>遇到問題，參考 troubleshoot</li>
@@ -141,7 +141,7 @@ Reading time ~1 minute
 <h2 id="check">check</h2>
 
 <ol>
-  <li><code class="highlighter-rouge">phpinfo();</code>
+  <li><code class="language-html highlighter-rouge">phpinfo();</code>
     <ul>
       <li>找 phalcon extension，沒意外的話是 2.0.13</li>
     </ul>
@@ -149,7 +149,7 @@ Reading time ~1 minute
   <li>安裝環境</li>
 </ol>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>環境
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>環境
 - `php -m | grep -i phalcon`
   - if output `phalcon` mean it is ok to use phalcon cmd
 - `apachectl -v`
@@ -163,17 +163,17 @@ Reading time ~1 minute
 <h2 id="troubleshoot">troubleshoot</h2>
 
 <ol>
-  <li>若 gcc 編譯失敗，<code class="highlighter-rouge">free -g</code>，查看 memory or swap 是否有 1g 可供 compile
+  <li>若 gcc 編譯失敗，<code class="language-html highlighter-rouge">free -g</code>，查看 memory or swap 是否有 1g 可供 compile
     <ul>
-      <li>1g memory <code class="highlighter-rouge">https://github.com/phalcon/cphalcon/issues/10478</code></li>
+      <li>1g memory <code class="language-html highlighter-rouge">https://github.com/phalcon/cphalcon/issues/10478</code></li>
     </ul>
   </li>
   <li>因為目前僅支援 5.4/5.5/5.6 版本，故如果用 7.x 版本編譯時，會產生名稱錯誤</li>
-  <li>設定 <code class="highlighter-rouge">extension=phalcon.so</code>，出現 <code class="highlighter-rouge">PHP Warning:  Module 'phalcon' already loaded in Unknown on line 0</code>
+  <li>設定 <code class="language-html highlighter-rouge">extension=phalcon.so</code>，出現 <code class="language-html highlighter-rouge">PHP Warning:  Module 'phalcon' already loaded in Unknown on line 0</code>
     <ul>
       <li><a href="http://www.somacon.com/p520.php">info</a></li>
-      <li>在 php.ini 中，將 <code class="highlighter-rouge">extension=phalcon.so</code> 前面加 <code class="highlighter-rouge">;</code> -&gt; <code class="highlighter-rouge">;extension=phalcon.so</code></li>
-      <li>執行 <code class="highlighter-rouge">php -m | grep -i phalcon</code>，正常</li>
+      <li>在 php.ini 中，將 <code class="language-html highlighter-rouge">extension=phalcon.so</code> 前面加 <code class="language-html highlighter-rouge">;</code> -&gt; <code class="language-html highlighter-rouge">;extension=phalcon.so</code></li>
+      <li>執行 <code class="language-html highlighter-rouge">php -m | grep -i phalcon</code>，正常</li>
     </ul>
   </li>
 </ol>
@@ -189,47 +189,47 @@ Reading time ~1 minute
   <li><a href="https://github.com/phalcon/phalcon-devtools">install</a>
     <ul>
       <li>installation via Git</li>
-      <li><code class="highlighter-rouge">sudo ln -s ~/path/phalcon.php /usr/local/bin/phalcon</code> mac 要放在 <code class="highlighter-rouge">/usr/local/bin</code> 下</li>
+      <li><code class="language-html highlighter-rouge">sudo ln -s ~/path/phalcon.php /usr/local/bin/phalcon</code> mac 要放在 <code class="language-html highlighter-rouge">/usr/local/bin</code> 下</li>
     </ul>
   </li>
-  <li>執行 <code class="highlighter-rouge">phalcon</code></li>
+  <li>執行 <code class="language-html highlighter-rouge">phalcon</code></li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Phalcon</span> <span class="n">DevTools</span> <span class="p">(</span><span class="m">2.0.13</span><span class="p">)</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Phalcon DevTools (2.0.13)
 
-<span class="n">Help</span><span class="p">:</span>
-  <span class="n">Lists</span> <span class="n">the</span> <span class="n">commands</span> <span class="n">available</span> <span class="k">in</span> <span class="n">Phalcon</span> <span class="n">devtools</span>
+Help:
+  Lists the commands available in Phalcon devtools
 
-<span class="n">Available</span> <span class="n">commands</span><span class="p">:</span>
-  <span class="n">commands</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="k">list</span><span class="p">,</span> <span class="n">enumerate</span><span class="p">)</span>
-  <span class="n">controller</span>       <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">controller</span><span class="p">)</span>
-  <span class="n">module</span>           <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">module</span><span class="p">)</span>
-  <span class="k">model</span>            <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="k">model</span><span class="p">)</span>
-  <span class="n">all</span><span class="p">-</span><span class="n">models</span>       <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">all</span><span class="p">-</span><span class="n">models</span><span class="p">)</span>
-  <span class="n">project</span>          <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">project</span><span class="p">)</span>
-  <span class="n">scaffold</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">scaffold</span><span class="p">)</span>
-  <span class="n">migration</span>        <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">migration</span><span class="p">)</span>
-  <span class="n">webtools</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">webtools</span><span class="p">)</span>
+Available commands:
+  commands         (alias of: list, enumerate)
+  controller       (alias of: create-controller)
+  module           (alias of: create-module)
+  model            (alias of: create-model)
+  all-models       (alias of: create-all-models)
+  project          (alias of: create-project)
+  scaffold         (alias of: create-scaffold)
+  migration        (alias of: create-migration)
+  webtools         (alias of: create-webtools)
 </code></pre></div></div>
 <ul>
-  <li>查看語法，直接執行 <code class="highlighter-rouge">phalcon [command]</code> 即可
+  <li>查看語法，直接執行 <code class="language-html highlighter-rouge">phalcon [command]</code> 即可
     <ul>
-      <li><code class="highlighter-rouge">phalcon controller</code></li>
-      <li><code class="highlighter-rouge">phalcon webtools</code></li>
+      <li><code class="language-html highlighter-rouge">phalcon controller</code></li>
+      <li><code class="language-html highlighter-rouge">phalcon webtools</code></li>
     </ul>
   </li>
   <li>啟用 WebTools
     <ul>
-      <li>在影片中，可以用 browser 的方式，進行設定，在網頁資料夾下，<code class="highlighter-rouge">phalcon webtools --action=enable</code>
+      <li>在影片中，可以用 browser 的方式，進行設定，在網頁資料夾下，<code class="language-html highlighter-rouge">phalcon webtools --action=enable</code>
         <ul>
           <li>有新舊版本的問題，查看 github readme</li>
         </ul>
       </li>
     </ul>
   </li>
-  <li>快速建立一個基本的 project : <code class="highlighter-rouge">phalcon create-project store</code>
+  <li>快速建立一個基本的 project : <code class="language-html highlighter-rouge">phalcon create-project store</code>
     <ul>
-      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code></li>
+      <li>檢視網頁 : <code class="language-html highlighter-rouge">localhost:[yourport]/store</code></li>
     </ul>
   </li>
 </ul>
@@ -253,19 +253,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/iosapns-with-http-2/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

@@ -179,7 +179,7 @@ Reading time ~1 minute
 <ol>
   <li>找出 nginx.conf : nginx -h</li>
   <li>vi {$path}/nginx.conf</li>
-  <li>server 設定參數可參考 <code class="highlighter-rouge">https://docs.phalconphp.com/zh/latest/reference/nginx.html</code>
+  <li>server 設定參數可參考 <code class="language-html highlighter-rouge">https://docs.phalconphp.com/zh/latest/reference/nginx.html</code>
     <ul>
       <li>請將 fastcgi 設定為 127.0.0.1:9000 &lt;— 必須符合 php-fpm 的 listen 位置</li>
     </ul>
@@ -245,7 +245,7 @@ Reading time ~1 minute
   <li>make &amp;&amp; make install</li>
   <li>確定是否將 .so 放入 module 中 :
     <ol>
-      <li><code class="highlighter-rouge">php -i | grep extension_dir</code></li>
+      <li><code class="language-html highlighter-rouge">php -i | grep extension_dir</code></li>
       <li>cd {dir}</li>
       <li>檢查是否有 memcached.so</li>
     </ol>
@@ -270,7 +270,7 @@ Reading time ~1 minute
   <li>進入官網 : https://mosquitto.org/download/</li>
   <li>找到 centos7 的 re 的 conf</li>
   <li>將檔案 mosquitto.repo 放入 /etc/yum.repos.d 即可
-<code class="highlighter-rouge">The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto.</code></li>
+<code class="language-html highlighter-rouge">The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto.</code></li>
   <li>安裝 : yum install libmosquitto-devel</li>
   <li>安裝後的 lib 路徑, 系統安裝後會提示, 無意外是 /usr/lib64/libmosquitto.so…..</li>
 </ol>
@@ -280,7 +280,7 @@ Reading time ~1 minute
   <li>下載 git source 後 : https://github.com/mgdm/Mosquitto-PHP</li>
   <li>cd Mosquitto-PHP</li>
   <li>phpize</li>
-  <li><code class="highlighter-rouge">./configure --with-mosquitto=/usr/lib64/libmosquitto.so</code></li>
+  <li><code class="language-html highlighter-rouge">./configure --with-mosquitto=/usr/lib64/libmosquitto.so</code></li>
   <li>make &amp;&amp; make install</li>
   <li>驗證 module 是否有 mosquitto.so</li>
   <li>在 php.ini 中設定 extension=mosquitto.so</li>
@@ -315,19 +315,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/php/PHP-Memcached/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

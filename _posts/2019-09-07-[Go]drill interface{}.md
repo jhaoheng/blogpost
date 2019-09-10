@@ -3,6 +3,7 @@ layout: post
 title: 【Go】Drill interface{}
 date: 2019-09-07 16:17
 categories: Golang
+tags: Golang
 ---
 
 # interface{}

@@ -158,7 +158,7 @@ Reading time ~1 minute
 
 <h2 id="第一次建立的-m3u8-file-每次詢問時都給予相同的-m3u8-檔案">第一次建立的 m3u8 file, 每次詢問時都給予相同的 m3u8 檔案</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#EXTM3U
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#EXTM3U
 #EXT-X-VERSION:3
 #EXT-X-ALLOW-CACHE:YES
 #EXT-X-TARGETDURATION:8.334
@@ -186,7 +186,7 @@ EXT-X-MEDIA-SEQUENCE:1
 <h2 id="結論">結論</h2>
 
 <p>每次的 log 的時間、間隔，</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>log_2 - log_1 , duration = 16
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>log_2 - log_1 , duration = 16
 log_3 - log_2 , duration = 8
 log_4 - log_3 , duration = 8
 log_5 - log_4 , duration = 8
@@ -198,7 +198,7 @@ log_4 : 第三個 ts 播放完畢, 開始播放第四個
 log_5 : 第四個 ts 播放完畢, 開始播放第五個
 </code></pre></div></div>
 <p>播放器在每次播放完 ts 的檔案後，都會進行 api 的詢問，透過詢問，可產生下一次的 m3u8 檔案，
-若更新 m3u8 後，記得需同時 <code class="highlighter-rouge">EXT-X-MEDIA-SEQUENCE</code> 進行 +1</p>
+若更新 m3u8 後，記得需同時 <code class="language-html highlighter-rouge">EXT-X-MEDIA-SEQUENCE</code> 進行 +1</p>
 
       <footer class="entry-meta">
         <span class="entry-tags"></span>
@@ -219,19 +219,19 @@ log_5 : 第四個 ts 播放完畢, 開始播放第五個
       <a href="https://jhaoheng.github.io/blogpost/aws-dynamodblocalhost/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

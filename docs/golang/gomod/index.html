@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>【Golang】Go module &#8211; Max 乎~</title>
 <meta name="description" content="修煉!">
-<meta name="keywords" content="">
+<meta name="keywords" content="Golang">
 
 
 
@@ -136,13 +136,13 @@ Reading time ~1 minute
 <ul>
   <li>支援 GO 1.11 以後版本
     <ul>
-      <li>確認版本 <code class="highlighter-rouge">go version</code>，檢查環境變數 : <code class="highlighter-rouge">go env</code></li>
+      <li>確認版本 <code class="language-html highlighter-rouge">go version</code>，檢查環境變數 : <code class="language-html highlighter-rouge">go env</code></li>
     </ul>
   </li>
   <li>調用方式有兩種
     <ul>
       <li>在 GOPATH 外，確定 GO111MODULE 沒有設定或者設定為 auto，並在專案中建立 go.mod</li>
-      <li>在 GOPAHT 中，設定 <code class="highlighter-rouge">export GO111MODULE=on</code>，就可直接在 GOPATH 中使用</li>
+      <li>在 GOPAHT 中，設定 <code class="language-html highlighter-rouge">export GO111MODULE=on</code>，就可直接在 GOPATH 中使用</li>
     </ul>
   </li>
 </ul>
@@ -155,14 +155,14 @@ Reading time ~1 minute
 
 <h2 id="1-建立-repo">1. 建立 repo</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ mkdir -p /tmp/scratchpad/repo
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ mkdir -p /tmp/scratchpad/repo
 $ cd /tmp/scratchpad/repo
 $ git init -q
 $ git remote add origin https://github.com/my/repo
 </code></pre></div></div>
 
 <h2 id="2-初始化-go-module">2. 初始化 go module</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ go mod init github.com/my/repo
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ go mod init github.com/my/repo
 </code></pre></div></div>
 
 <ul>
@@ -170,38 +170,38 @@ $ git remote add origin https://github.com/my/repo
 </ul>
 
 <h2 id="3-設定-maingo">3. 設定 main.go</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">$</span> <span class="n">cat</span> <span class="p">&lt;&lt;</span><span class="n">EOF</span> <span class="p">&gt;</span> <span class="n">hello</span><span class="p">.</span><span class="n">go</span>
-<span class="k">package</span> <span class="n">main</span>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ cat <span class="nt">&lt;</span><span class="err">&lt;</span><span class="na">EOF</span> <span class="nt">&gt;</span> hello.go
+package main
 
-<span class="n">import</span> <span class="p">(</span>
-    <span class="s2">"fmt"</span>
-    <span class="s2">"rsc.io/quote"</span>
-<span class="p">)</span>
+import (
+    "fmt"
+    "rsc.io/quote"
+)
 
-<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-    <span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="nf">quote</span><span class="p">.</span><span class="n">Hello</span><span class="p">())</span>
-<span class="p">}</span>
-<span class="n">EOF</span>
+func main() {
+    fmt.Println(quote.Hello())
+}
+EOF
 </code></pre></div></div>
 
 <h2 id="4-建立-hello-執行檔">4. 建立 hello 執行檔</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ go build -o hello
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$ go build -o hello
 $ ./hello
 </code></pre></div></div>
 
 <ul>
-  <li><code class="highlighter-rouge">go build|test|install</code> : 都會下載 pkg 到 <code class="highlighter-rouge">$GOPATH/pkg/mod</code> 目錄下
+  <li><code class="language-html highlighter-rouge">go build|test|install</code> : 都會下載 pkg 到 <code class="language-html highlighter-rouge">$GOPATH/pkg/mod</code> 目錄下
     <ul>
-      <li>使用 <code class="highlighter-rouge">go mod download</code></li>
+      <li>使用 <code class="language-html highlighter-rouge">go mod download</code></li>
     </ul>
   </li>
-  <li>因為並沒有明確設定 go.mod 中 <code class="highlighter-rouge">rsc.io/quote</code> 的版本，會自動下載最新版本，可以去 go.mod 中檢查變動</li>
-  <li>可以注意到並沒有用 <code class="highlighter-rouge">go get</code> 的指令</li>
-  <li>當想要變更版本，可以使用 <code class="highlighter-rouge">go get foo@v1.2.3</code>, <code class="highlighter-rouge">go get foo@master</code>, <code class="highlighter-rouge">go get foo@e3702bed2</code>, 或者直接編輯 <code class="highlighter-rouge">go.mod</code> 然後執行下載.</li>
+  <li>因為並沒有明確設定 go.mod 中 <code class="language-html highlighter-rouge">rsc.io/quote</code> 的版本，會自動下載最新版本，可以去 go.mod 中檢查變動</li>
+  <li>可以注意到並沒有用 <code class="language-html highlighter-rouge">go get</code> 的指令</li>
+  <li>當想要變更版本，可以使用 <code class="language-html highlighter-rouge">go get foo@v1.2.3</code>, <code class="language-html highlighter-rouge">go get foo@master</code>, <code class="language-html highlighter-rouge">go get foo@e3702bed2</code>, 或者直接編輯 <code class="language-html highlighter-rouge">go.mod</code> 然後執行下載.</li>
 </ul>
 
 <h1 id="一個標準的-gomod">一個標準的 go.mod</h1>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module maxtest
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module maxtest
 require (
 	github.com/joho/godotenv v1.3.0
 	rsc.io/quote v1.5.2
@@ -210,8 +210,8 @@ go 1.12
 </code></pre></div></div>
 
 <ul>
-  <li>下載的 go pkg 都會放在 <code class="highlighter-rouge">GOPATH/pkg/mod/...</code> 路徑中</li>
-  <li>gomod 不會在 <code class="highlighter-rouge">$GOPATH/src</code> 目錄下保存 pkg 包的源碼，而是包源碼和鏈接庫保存在 <code class="highlighter-rouge">$GOPATH/pkg/mod</code> 目錄下。</li>
+  <li>下載的 go pkg 都會放在 <code class="language-html highlighter-rouge">GOPATH/pkg/mod/...</code> 路徑中</li>
+  <li>gomod 不會在 <code class="language-html highlighter-rouge">$GOPATH/src</code> 目錄下保存 pkg 包的源碼，而是包源碼和鏈接庫保存在 <code class="language-html highlighter-rouge">$GOPATH/pkg/mod</code> 目錄下。</li>
 </ul>
 
 <h1 id="一些會用到的相關指令">一些會用到的相關指令</h1>
@@ -220,37 +220,37 @@ go 1.12
 </blockquote>
 
 <ul>
-  <li><code class="highlighter-rouge">go list -m all</code>
+  <li><code class="language-html highlighter-rouge">go list -m all</code>
     <ul>
       <li>查看所有目前 build 後有使用的相依版本(direct and indirect 都會列出)</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">go list -u -m all</code>
+  <li><code class="language-html highlighter-rouge">go list -u -m all</code>
     <ul>
       <li>對所有的 direct 與 indirect 相依，查看有效的最小版本與補丁升級。(details)</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">go list -u -m -json all</code>
+  <li><code class="language-html highlighter-rouge">go list -u -m -json all</code>
     <ul>
       <li>用 json 格式顯示詳細資料</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">go get -u</code> or <code class="highlighter-rouge">go get -u=patch</code>
+  <li><code class="language-html highlighter-rouge">go get -u</code> or <code class="language-html highlighter-rouge">go get -u=patch</code>
     <ul>
       <li>更新所有相依到最新的版本號或者補丁升級(pre-releases 會被忽略)</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">go build ./...</code> or <code class="highlighter-rouge">go test ./...</code>
+  <li><code class="language-html highlighter-rouge">go build ./...</code> or <code class="language-html highlighter-rouge">go test ./...</code>
     <ul>
       <li>在根目錄執行 build 與 test 會下載 module</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">go mod tidy</code>
+  <li><code class="language-html highlighter-rouge">go mod tidy</code>
     <ul>
       <li>從 go.mod 中，新增或移除沒用的 modules</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">go mod vendor</code>
+  <li><code class="language-html highlighter-rouge">go mod vendor</code>
     <ul>
       <li>若你有在使用 vendor, 可使用此指令, 將 modules 複製到 vendor 目錄下</li>
     </ul>
@@ -260,8 +260,8 @@ go 1.12
 <h1 id="其他">其他</h1>
 <ul>
   <li>go list 只是把 cache 更新, 要用 go mod download 才會下載</li>
-  <li><code class="highlighter-rouge">go mod edit -fmt</code> : 重新格式化 go.mod 的格式, ex : 如果版本不是 3 位數，會補齊</li>
-  <li>清除下載的 pkg &amp; cache : <code class="highlighter-rouge">go clean -i -x -modcache</code></li>
+  <li><code class="language-html highlighter-rouge">go mod edit -fmt</code> : 重新格式化 go.mod 的格式, ex : 如果版本不是 3 位數，會補齊</li>
+  <li>清除下載的 pkg &amp; cache : <code class="language-html highlighter-rouge">go clean -i -x -modcache</code></li>
 </ul>
 
 <h2 id="gomod-與-gosum">go.mod 與 go.sum</h2>
@@ -274,7 +274,7 @@ go 1.12
 </ul>
 
       <footer class="entry-meta">
-        <span class="entry-tags"></span>
+        <span class="entry-tags"><a href="https://jhaoheng.github.io/blogpost/tags/#Golang" title="Pages tagged Golang" class="tag"><span class="term">Golang</span></a></span>
         
         <div class="social-share">
   <ul class="socialcount socialcount-small inline-list">
@@ -292,19 +292,19 @@ go 1.12
       <a href="https://jhaoheng.github.io/blogpost/ubuntu/log/logrotate/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

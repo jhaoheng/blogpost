@@ -1,0 +1,375 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js lt-ie9 lt-ie8" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js lt-ie9" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"><!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>【Go】利用 struct 優化（一） &#8211; Max 乎~</title>
+<meta name="description" content="修煉!">
+<meta name="keywords" content="Golang">
+
+
+
+<!-- Open Graph -->
+<meta property="og:locale" content="en_US">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Go】利用 struct 優化（一）">
+<meta property="og:description" content="修煉!">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">
+<meta property="og:site_name" content="Max 乎~">
+
+
+
+
+
+<link rel="canonical" href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">
+<link href="https://jhaoheng.github.io/blogpost/feed.xml" type="application/atom+xml" rel="alternate" title="Max 乎~ Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="https://jhaoheng.github.io/blogpost/assets/css/main.css">
+<!-- Webfonts -->
+<link href="//fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic" rel="stylesheet" type="text/css">
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.ico">
+<!-- 32x32 -->
+<link rel="shortcut icon" href="https://jhaoheng.github.io/blogpost/favicon.png">
+<!-- 57x57 (precomposed) for iPhone 3GS, pre-2011 iPod Touch and older Android devices -->
+<link rel="apple-touch-icon-precomposed" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-precomposed.png">
+<!-- 72x72 (precomposed) for 1st generation iPad, iPad 2 and iPad mini -->
+<link rel="apple-touch-icon-precomposed" sizes="72x72" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-72x72-precomposed.png">
+<!-- 114x114 (precomposed) for iPhone 4, 4S, 5 and post-2011 iPod Touch -->
+<link rel="apple-touch-icon-precomposed" sizes="114x114" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-114x114-precomposed.png">
+<!-- 144x144 (precomposed) for iPad 3rd and 4th generation -->
+<link rel="apple-touch-icon-precomposed" sizes="144x144" href="https://jhaoheng.github.io/blogpost/images/apple-touch-icon-144x144-precomposed.png">
+
+
+
+</head>
+
+<body id="post" >
+
+<!--[if lt IE 9]><div class="upgrade"><strong><a href="http://whatbrowser.org/">Your browser is quite old!</strong> Why not upgrade to a different browser to better enjoy this site?</a></div><![endif]-->
+<nav id="dl-menu" class="dl-menuwrapper" role="navigation">
+	<button class="dl-trigger">Open Menu</button>
+	<ul class="dl-menu">
+		<li><a href="https://jhaoheng.github.io/blogpost/">Home</a></li>
+		<li>
+			<a href="#">About</a>
+			<ul class="dl-submenu">
+				<li>
+					<img src="https://jhaoheng.github.io/blogpost/images/avatar2.jpg" alt="Max Hu photo" class="author-photo">
+					<h4>Max Hu</h4>
+					<p>developer</p>
+				</li>
+				<li><a href="https://jhaoheng.github.io/blogpost/about/"><span class="btn btn-inverse">Learn More</span></a></li>
+				<li>
+					<a href="mailto:jhaoheng@gmail.com"><i class="fa fa-fw fa-envelope"></i> Email</a>
+				</li>
+				
+				
+				
+				
+				<li>
+					<a href="https://github.com/https://github.com/jhaoheng"><i class="fa fa-fw fa-github"></i> GitHub</a>
+				</li>
+				
+				
+				
+				
+			</ul><!-- /.dl-submenu -->
+		</li>
+		<li>
+			<a href="#">Posts</a>
+			<ul class="dl-submenu">
+				<li><a href="https://jhaoheng.github.io/blogpost/posts/">All Posts</a></li>
+				<li><a href="https://jhaoheng.github.io/blogpost/tags/">All Tags</a></li>
+			</ul>
+		</li>
+		
+	</ul><!-- /.dl-menu -->
+</nav><!-- /.dl-menuwrapper -->
+
+
+
+
+<div id="main" role="main">
+  <article class="hentry">
+    <header class="header-title">
+      <div class="header-title-wrap">
+        
+          <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" rel="bookmark" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h1>
+        
+        <h2><span class="entry-date date published"><time datetime="2019-09-10T13:51:00+08:00">September 10, 2019</time></span></h2>
+        
+        <p class="entry-reading-time">
+          <i class="fa fa-clock-o"></i>
+          
+Reading time ~1 minute
+        </p><!-- /.entry-reading-time -->
+        
+      </div><!-- /.header-title-wrap -->
+    </header>
+    <div class="entry-content">
+      <h2 id="synopsis">Synopsis</h2>
+<ol>
+  <li>透過 struct 方式，容易看懂程式</li>
+  <li>透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)</li>
+  <li>使用 func as method 方式，讓程式碼在 func 使用上更容易被理解</li>
+</ol>
+
+<h1 id="example">Example</h1>
+<p>一般來說，如果要用程式碼計算『圓形面積』、『長方形面積』，可以用一些簡單的方式攥寫</p>
+
+<div>
+    <iframe src="https://play.golang.org/p/fzSt0Hz56WP" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<p>但回頭看這個程式碼，會發現</p>
+<ul>
+  <li>如果要追蹤『rx1, ry1, rx2, ry2』或者『cx, cy, cr』當程式碼一長 or 複雜，就很難理解這個參數的意義</li>
+  <li>儘管有寫註解，在 function 中，一樣很難快速理解</li>
+</ul>
+
+<p>解決方案 : 使用 struct 來幫助理解</p>
+
+<!--more-->
+
+<h1 id="use-struct">use struct</h1>
+<p><code class="language-html highlighter-rouge">struct</code> 是一種 <code class="language-html highlighter-rouge">type</code>, 它包含了名稱的欄位, 例如：可以把 Rectangle 寫成如下方式</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>type Coordinate struct {
+	x float64
+	y float64
+}
+
+type Rectangle struct {
+	start Coordinate
+	end   Coordinate
+}
+</code></pre></div></div>
+
+<ul>
+  <li>新增一個 Coordinate 的物件, 類型(type)是 struct, 裡面夾帶 (x,y) 欄位</li>
+  <li>新增一個 Rectangle, 類型(type)是 struct 的物件, 裡面夾帶 ‘起始座標’ 與 ‘結束座標’</li>
+</ul>
+
+<blockquote>
+  <p>宣告方法可以有以下幾種</p>
+</blockquote>
+
+<ol>
+  <li>以下都相同，跟 (2) 不同的是，返回是一個指標
+    <ul>
+      <li><code class="language-html highlighter-rouge">r := new(Rectangle)</code>, 而 new 的主要作用是為 type 申請 memory，並<code class="language-html highlighter-rouge">返回指向 memory 的指標</code>。</li>
+      <li><code class="language-html highlighter-rouge">r := <span class="err">&amp;</span>Rectangle{}</code></li>
+    </ul>
+  </li>
+  <li>以下也都相同
+    <ul>
+      <li><code class="language-html highlighter-rouge">var r Rectangle</code></li>
+      <li><code class="language-html highlighter-rouge">r := Rectangle{}</code></li>
+      <li><code class="language-html highlighter-rouge">r := Rectangle{Coordinate{}, Coordinate{}}</code></li>
+      <li><code class="language-html highlighter-rouge">r := Rectangle{ start: Coordinate{}, end:   Coordinate{},}</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="優化開始">優化開始</h1>
+
+<ul>
+  <li>steps
+    <ol>
+      <li>將 func() 參數物件改為傳遞 struct</li>
+      <li>將 func() 中 strct 設定為指標</li>
+      <li>function as a method</li>
+    </ol>
+  </li>
+</ul>
+
+<h2 id="1-將-func-參數物件改為傳遞-struct">1. 將 func() 參數物件改為傳遞 struct</h2>
+
+<p>從上面的基本操作，建立了 Rectangle 物件, type 是 struct
+所以將 rectangleArea() 與 distance() 變更為</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func rectangleArea(r Rectangle) float64 {
+	l := r.end.x - r.start.x
+	w := r.end.y - r.start.y
+	return l * w
+}
+</code></pre></div></div>
+
+<p>在 main 中, 可以改為, 如此可以輕鬆地理解 r 來自於 Rectangle 這個結構中的欄位</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>r := Rectangle{
+	start: Coordinate{
+		x: 1,
+		y: 1,
+	},
+	end: Coordinate{
+		x: 10,
+		y: 10,
+	},
+}
+fmt.Println(rectangleArea(r))
+</code></pre></div></div>
+
+<h2 id="2-將-func-中-strct-設定為指標">2. 將 func() 中 strct 設定為指標</h2>
+<p>以上 func 中, 重新宣告了一個 Rectangle 的物件
+可以使用 <code class="language-html highlighter-rouge">fmt.Printf("%p\n", ThePointer)</code> 查看記憶體位置的變化</p>
+
+<p>for example</p>
+
+<pre>
+0xc00009c000 &lt;= main 中的 Rectangle
+0xc00009c020 &lt;= func 中的 Rectangle
+</pre>
+
+<p>但可以用 pointer, 避免重複宣告並佔用 memory, 浪費資源</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func rectangleArea(r *Rectangle) float64 {
+    fmt.Printf("%p", r) // 因為這邊的 r 已經是 pointer
+	l := r.end.x - r.start.x
+	w := r.end.y - r.start.y
+	return l * w
+}
+</code></pre></div></div>
+
+<p>在 main 中</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>r := Rectangle{
+	start: Coordinate{
+		x: 1,
+		y: 1,
+	},
+	end: Coordinate{
+		x: 10,
+		y: 10,
+	},
+}
+fmt.Printf("%p\n", <span class="err">&amp;</span>r)
+fmt.Println(rectangleArea(<span class="err">&amp;</span>r))
+</code></pre></div></div>
+
+<h2 id="3-function-as-a-method">3. function as a method</h2>
+<p>解決了以上的問題，會發現</p>
+<ol>
+  <li>rectangle 與 circle 都有 area, 雖然可以在命名上作區別, 但有更好的方法
+且可以透過 <code class="language-html highlighter-rouge">.</code> 的方式, 快速地在編輯器上引用此 method</li>
+  <li>在 main 中，帶入的物件是 <code class="language-html highlighter-rouge"><span class="err">&amp;</span>r</code> 會有點難以理解</li>
+</ol>
+
+<blockquote>
+  <p>將 rectangleArea() 改為 rectangle 的 method</p>
+</blockquote>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>func (r *Rectangle) area() float64 {
+	fmt.Printf("%p\n", r)
+	l := r.end.x - r.start.x
+	w := r.end.y - r.start.y
+	return l * w
+}
+</code></pre></div></div>
+
+<p>在 main 中</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>fmt.Println(r.area())
+</code></pre></div></div>
+
+<h2 id="優化結束">優化結束</h2>
+
+<div>
+    <iframe src="https://play.golang.org/p/ZQ3xAB8o5R9" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<p>這是一個簡短的例子，當我們將功能越寫越多時，程式碼會越複雜
+我們可以透過此方法達成以下三個目的</p>
+<ol>
+  <li>透過 struct 方式，容易看懂程式</li>
+  <li>透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)</li>
+  <li>使用 func as method 方式，讓程式碼在 func 使用上更容易被理解</li>
+</ol>
+
+<h2 id="結論">結論</h2>
+<ol>
+  <li>過於複雜的參數傳遞，雖然我們可以用命名方式來釐清，但名稱越長，也會使程式碼難以理解</li>
+  <li>優化並非將程式碼縮短(但的確在大型架構下，可以縮短，並更容易理解)</li>
+</ol>
+
+<h1 id="問題">問題</h1>
+<p>一個人裡有各種資訊物件，身分證、健保卡、護照，都用在不同的地方，也都有各自的 ID
+可以透過 struct 將 『身分證、健保卡、護照』 各自建立起來，用在不同的目的上
+但是否有方法整合這些物件？</p>
+
+<p>『參考下篇 struct 優化（二）』</p>
+
+
+      <footer class="entry-meta">
+        <span class="entry-tags"><a href="https://jhaoheng.github.io/blogpost/tags/#Golang" title="Pages tagged Golang" class="tag"><span class="term">Golang</span></a></span>
+        
+        <div class="social-share">
+  <ul class="socialcount socialcount-small inline-list">
+    <li class="facebook"><a href="https://www.facebook.com/sharer/sharer.php?u=https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="Share on Facebook"><span class="count"><i class="fa fa-facebook-square"></i> Like</span></a></li>
+    <li class="twitter"><a href="https://twitter.com/intent/tweet?text=https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="Share on Twitter"><span class="count"><i class="fa fa-twitter-square"></i> Tweet</span></a></li>
+    <li class="googleplus"><a href="https://plus.google.com/share?url=https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="Share on Google Plus"><span class="count"><i class="fa fa-google-plus-square"></i> +1</span></a></li>
+  </ul>
+</div><!-- /.social-share -->
+      </footer>
+    </div><!-- /.entry-content -->
+    
+    <div class="read-more">
+  
+    <div class="read-more-header">
+      <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" class="read-more-btn">Read More</a>
+    </div><!-- /.read-more-header -->
+    <div class="read-more-content">
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
+      <p>interface{}Explore  When set object is an interface{}  Set object is an interface{}  Use pointer to set object value is int / string / st...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+    </div><!-- /.read-more-content -->
+  
+  <div class="read-more-list">
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+      <div class="list-item">
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <span>Published on September 06, 2019</span>
+      </div><!-- /.list-item -->
+    
+  </div><!-- /.read-more-list -->
+</div><!-- /.read-more -->
+  </article>
+</div><!-- /#main -->
+
+<div class="footer-wrapper">
+  <footer role="contentinfo">
+    <span>&copy; 2019 Max Hu. Powered by <a href="http://jekyllrb.com" rel="nofollow">Jekyll</a> using the <a href="https://mademistakes.com/work/hpstr-jekyll-theme/" rel="nofollow">HPSTR Theme</a>.</span>
+  </footer>
+</div><!-- /.footer-wrapper -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="https://jhaoheng.github.io/blogpost/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="https://jhaoheng.github.io/blogpost/assets/js/scripts.min.js"></script>
+
+
+
+	        
+
+</body>
+</html>

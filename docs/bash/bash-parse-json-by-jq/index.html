@@ -130,21 +130,21 @@ Reading time ~1 minute
 <h2 id="install-on-mac">install on mac</h2>
 
 <ul>
-  <li>mac : <code class="highlighter-rouge">brew install jq</code></li>
+  <li>mac : <code class="language-html highlighter-rouge">brew install jq</code></li>
 </ul>
 
 <h2 id="install-on-linux">install on linux</h2>
 
 <ul>
-  <li>linux(32bit) : <code class="highlighter-rouge">wget http://stedolan.github.io/jq/download/linux32/jq</code></li>
-  <li>linux(64bit) : <code class="highlighter-rouge">wget http://stedolan.github.io/jq/download/linux64/jq</code></li>
-  <li><code class="highlighter-rouge">chmod +x ./jq</code></li>
-  <li><code class="highlighter-rouge">sudo cp jq /usr/bin</code></li>
+  <li>linux(32bit) : <code class="language-html highlighter-rouge">wget http://stedolan.github.io/jq/download/linux32/jq</code></li>
+  <li>linux(64bit) : <code class="language-html highlighter-rouge">wget http://stedolan.github.io/jq/download/linux64/jq</code></li>
+  <li><code class="language-html highlighter-rouge">chmod +x ./jq</code></li>
+  <li><code class="language-html highlighter-rouge">sudo cp jq /usr/bin</code></li>
 </ul>
 
 <h2 id="example-file">example file</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
         "name": "Google",
         "location":
                 {
@@ -174,25 +174,25 @@ Reading time ~1 minute
 <h2 id="use">use</h2>
 
 <ul>
-  <li>To parse a JSON object: <code class="highlighter-rouge">cat json.txt | jq '.name'</code>
+  <li>To parse a JSON object: <code class="language-html highlighter-rouge">cat json.txt | jq '.name'</code>
     <ul>
       <li>output : “Google”</li>
     </ul>
   </li>
-  <li>To parse a nested JSON object: <code class="highlighter-rouge">cat json.txt | jq '.location.city'</code>
+  <li>To parse a nested JSON object: <code class="language-html highlighter-rouge">cat json.txt | jq '.location.city'</code>
     <ul>
       <li>output : “Mountain View”</li>
     </ul>
   </li>
-  <li>To parse a JSON array: <code class="highlighter-rouge">cat json.txt | jq '.employees[0].name'</code>
+  <li>To parse a JSON array: <code class="language-html highlighter-rouge">cat json.txt | jq '.employees[0].name'</code>
     <ul>
       <li>output : “Michael”</li>
     </ul>
   </li>
-  <li>To extract specific fields from a JSON object: <code class="highlighter-rouge">cat json.txt | jq '.location | {street, city}'</code>
+  <li>To extract specific fields from a JSON object: <code class="language-html highlighter-rouge">cat json.txt | jq '.location | {street, city}'</code>
     <ul>
       <li>output :
-        <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+        <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
 "city": "Mountain View",
 "street": "1600 Amphitheatre Parkway"
 }
@@ -221,19 +221,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/mampcant-connect-to-local-mysql-server-through-socket/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

@@ -124,6 +124,36 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2019-08-31T20:14:00+08:00"><a href="https://jhaoheng.github.io/blogpost/golang/gomod/">August 31, 2019</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/golang/gomod/" rel="bookmark" title="【Golang】Go module" itemprop="url">【Golang】Go module</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="環境">環境</h1>
+<ul>
+  <li>go version go1.12.9 darwin/amd64</li>
+  <li>官方教學 : https://github.com/golang/go/wiki/Modules#quick-start</li>
+</ul>
+
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/golang/gomod/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2018-10-25T07:30:00+08:00"><a href="https://jhaoheng.github.io/blogpost/ubuntu/log/logrotate/">October 25, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -142,22 +172,22 @@ Reading time ~1 minute
 <ul>
   <li>ubuntu</li>
   <li>必須確認有 cron 服務</li>
-  <li>doc : <code class="highlighter-rouge">https://linux.die.net/man/8/logrotate</code></li>
-  <li>必須確定已經有 log, 若無 log file, 系統會報錯 <code class="highlighter-rouge">error: stat of /root/xxxx.log failed: No such file or directory</code></li>
+  <li>doc : <code class="language-html highlighter-rouge">https://linux.die.net/man/8/logrotate</code></li>
+  <li>必須確定已經有 log, 若無 log file, 系統會報錯 <code class="language-html highlighter-rouge">error: stat of /root/xxxx.log failed: No such file or directory</code></li>
 </ul>
 
 <h1 id="說明">說明</h1>
 <ul>
-  <li><code class="highlighter-rouge">apt-get install -y logrotate</code></li>
-  <li>配置文件 : <code class="highlighter-rouge">/etc/logrotate.conf</code></li>
-  <li>設定檔為至 : <code class="highlighter-rouge">/etc/logrotate.d/</code>
+  <li><code class="language-html highlighter-rouge">apt-get install -y logrotate</code></li>
+  <li>配置文件 : <code class="language-html highlighter-rouge">/etc/logrotate.conf</code></li>
+  <li>設定檔為至 : <code class="language-html highlighter-rouge">/etc/logrotate.d/</code>
     <ul>
-      <li>若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 <code class="highlighter-rouge">/etc/logrotate.d/</code> 中, 建立相關的設定</li>
+      <li>若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 <code class="language-html highlighter-rouge">/etc/logrotate.d/</code> 中, 建立相關的設定</li>
     </ul>
   </li>
-  <li>檢查設定 <code class="highlighter-rouge">sudo logrotate /etc/logrotate.conf --debug</code></li>
-  <li>logrotate 歷史紀錄 <code class="highlighter-rouge">cat /var/lib/logrotate/status</code></li>
-  <li>強迫 logrotate 立即執行 : <code class="highlighter-rouge">logrotate -f /etc/logrotate.conf</code>
+  <li>檢查設定 <code class="language-html highlighter-rouge">sudo logrotate /etc/logrotate.conf --debug</code></li>
+  <li>logrotate 歷史紀錄 <code class="language-html highlighter-rouge">cat /var/lib/logrotate/status</code></li>
+  <li>強迫 logrotate 立即執行 : <code class="language-html highlighter-rouge">logrotate -f /etc/logrotate.conf</code>
     <ul>
       <li>透過 [logrotate 歷史紀錄] 可查看執行時間</li>
     </ul>
@@ -182,7 +212,7 @@ Reading time ~1 minute
 </ul>
 
 <h2 id="ex-">ex :</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/tmp/sample_output.log {
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/tmp/sample_output.log {
 	size 1k
 	create 700 root root
 	rotate 4
@@ -191,7 +221,7 @@ Reading time ~1 minute
 </code></pre></div></div>
 
 <h2 id="ex--nginx">ex : nginx</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/log/nginx/*.log {
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/log/nginx/*.log {
     daily
     missingok
     rotate 52
@@ -353,42 +383,6 @@ Reading time ~1 minute
 
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/kubenetes/docker/Kubernetes&Docker/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2018-02-04T04:30:00+08:00"><a href="https://jhaoheng.github.io/blogpost/drone/Drone/">February 04, 2018</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/drone/Drone/" rel="bookmark" title="【CI&CD】Use DRONE" itemprop="url">【CI&CD】Use DRONE</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="synopsis">SYNOPSIS</h1>
-
-<blockquote>
-  <p>目的 : 使用 Drone 來佈建 CI &amp; CD, 輕量化, 好操作, 分布式建構</p>
-</blockquote>
-
-<ol>
-  <li>buid Drone with docker</li>
-  <li>code coverage with Drone</li>
-  <li>notify with Drone</li>
-</ol>
-
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/drone/Drone/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

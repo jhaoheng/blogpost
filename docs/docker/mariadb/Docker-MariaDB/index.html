@@ -128,13 +128,13 @@ Reading time ~1 minute
 <ul>
   <li>目的 : 在 docker 架構下，解決 mariadb container 建立後，自動加入 schema 到 db 中</li>
   <li>可參考 https://stackoverflow.com/questions/36617682/docker-compose-mysql-import-sql</li>
-  <li>解決 : 在 mariadb 起來後，會自動去執行 <code class="highlighter-rouge">/docker-entrypoint-initdb.d/</code> 底下的 sql 指令，就會自動建立好預設的 database &amp; table</li>
+  <li>解決 : 在 mariadb 起來後，會自動去執行 <code class="language-html highlighter-rouge">/docker-entrypoint-initdb.d/</code> 底下的 sql 指令，就會自動建立好預設的 database &amp; table</li>
 </ul>
 
 <h2 id="example--docker-compose">example : docker-compose</h2>
 
 <h3 id="sql-file--save-as-testsql">sql file : save as test.sql</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#
 # SQL Export
 # Created by Querious (1068)
 # Created: 2017年9月5日 GMT+8 上午9:27:31
@@ -159,7 +159,7 @@ SET FOREIGN_KEY_CHECKS = @PREVIOUS_FOREIGN_KEY_CHECKS;
 </code></pre></div></div>
 
 <h3 id="docker-composeyml">docker-compose.yml</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '3.0'
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '3.0'
 services:
   mariadb:
     image: mariadb
@@ -175,7 +175,7 @@ services:
 <h3 id="驗證">驗證</h3>
 
 <ol>
-  <li><code class="highlighter-rouge">docker exec some-mariadb mysql -u root --password=1234 --database=test -e "show tables;"</code></li>
+  <li><code class="language-html highlighter-rouge">docker exec some-mariadb mysql -u root --password=1234 --database=test -e "show tables;"</code></li>
 </ol>
 
       <footer class="entry-meta">
@@ -197,19 +197,19 @@ services:
       <a href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-ECR-S3-EB-Deploy/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

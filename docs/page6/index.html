@@ -124,6 +124,40 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2017-09-14T07:47:00+08:00"><a href="https://jhaoheng.github.io/blogpost/docker/papertrail/remotesyslog/Docker-Papertrial-RemoteSyslog/">September 14, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/docker/papertrail/remotesyslog/Docker-Papertrial-RemoteSyslog/" rel="bookmark" title="【Docker】papertrail+remote_syslog" itemprop="url">【Docker】papertrail+remote_syslog</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="目標">目標</h1>
+<ul>
+  <li>透過 <code class="language-html highlighter-rouge">remote_syslog</code> 將 app log 送到 papertrail 中</li>
+  <li>官方建議的 docker image : <code class="language-html highlighter-rouge">https://github.com/octohost/remote_syslog</code>
+    <ul>
+      <li>說明 : https://help.papertrailapp.com/kb/configuration/configuring-centralized-logging-from-docker/#mount</li>
+    </ul>
+  </li>
+</ul>
+
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/docker/papertrail/remotesyslog/Docker-Papertrial-RemoteSyslog/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2017-09-08T14:08:00+08:00"><a href="https://jhaoheng.github.io/blogpost/raspberry/facebookatc/Raspberry-FacebookATC/">September 08, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -142,11 +176,11 @@ Reading time ~1 minute
 
 <ol>
   <li>建立好 wifi ap</li>
-  <li>安裝 ATC : <code class="highlighter-rouge">http://facebook.github.io/augmented-traffic-control/docs/install.html</code></li>
+  <li>安裝 ATC : <code class="language-html highlighter-rouge">http://facebook.github.io/augmented-traffic-control/docs/install.html</code></li>
   <li>安裝完畢 atc django-ui 後，在執行 atcd 前，必須先知道 wan &amp; lan 的端口
     <ul>
-      <li>透過 <code class="highlighter-rouge">route</code> 查詢</li>
-      <li>啟動 <code class="highlighter-rouge">sudo atcd --atcd-lan xxxx --atcd-wan xxxx</code></li>
+      <li>透過 <code class="language-html highlighter-rouge">route</code> 查詢</li>
+      <li>啟動 <code class="language-html highlighter-rouge">sudo atcd --atcd-lan xxxx --atcd-wan xxxx</code></li>
     </ul>
   </li>
   <li>執行 python manage.py runserver 0.0.0.0:8000</li>
@@ -217,15 +251,15 @@ Reading time ~1 minute
   <div class="entry-content">
     <h2 id="initial-check">initial check</h2>
 <ol>
-  <li>檢查網路是否支援 AP : <code class="highlighter-rouge">iw list</code>，須找到支援 AP 的選項</li>
-  <li>檢察網路 : <code class="highlighter-rouge">ifconfig -a</code>，會看到
+  <li>檢查網路是否支援 AP : <code class="language-html highlighter-rouge">iw list</code>，須找到支援 AP 的選項</li>
+  <li>檢察網路 : <code class="language-html highlighter-rouge">ifconfig -a</code>，會看到
     <ul>
       <li>eth0 : 在我的 pi3 下顯示的是 enxb87ebbb66cf，在 iptables 的 package transfer 將 eth0 設定成此值</li>
       <li>lo</li>
       <li>wlan0</li>
     </ul>
   </li>
-  <li>接上 乙太網路線，先測試 raspberry pi 上的網路是否正常，透過 <code class="highlighter-rouge">route</code> 指令檢查 default 的 gateway，可得知 Iface 的名稱，也就是 eth0</li>
+  <li>接上 乙太網路線，先測試 raspberry pi 上的網路是否正常，透過 <code class="language-html highlighter-rouge">route</code> 指令檢查 default 的 gateway，可得知 Iface 的名稱，也就是 eth0</li>
   <li>整個目標就是透過 iptable 的方式，交換 wifi 與乙太網路的資訊</li>
 </ol>
 
@@ -235,11 +269,11 @@ Reading time ~1 minute
 </ul>
 
 <ol>
-  <li>編輯 DHCP Client 設定資訊 : <code class="highlighter-rouge">vim /etc/dhcpcd.conf</code></li>
+  <li>編輯 DHCP Client 設定資訊 : <code class="language-html highlighter-rouge">vim /etc/dhcpcd.conf</code></li>
   <li>在最下方，新增
     <ol>
-      <li><code class="highlighter-rouge">interface  wlan0</code></li>
-      <li><code class="highlighter-rouge">static ip_address=10.0.7.1/24</code> : 指定 wlan0 的 ip 位置</li>
+      <li><code class="language-html highlighter-rouge">interface  wlan0</code></li>
+      <li><code class="language-html highlighter-rouge">static ip_address=10.0.7.1/24</code> : 指定 wlan0 的 ip 位置</li>
     </ol>
   </li>
 </ol>
@@ -250,85 +284,85 @@ Reading time ~1 minute
 </ul>
 
 <ol>
-  <li>開啟 ipv4 路由轉發功能，檔案位置 <code class="highlighter-rouge">/etc/sysctl.conf</code>
+  <li>開啟 ipv4 路由轉發功能，檔案位置 <code class="language-html highlighter-rouge">/etc/sysctl.conf</code>
     <ul>
-      <li>查詢 : <code class="highlighter-rouge">cat /etc/sysctl.conf | grep ip_forward</code></li>
-      <li>變更設定 : 至 <code class="highlighter-rouge">/etc/sysctl.conf</code>，找到 <code class="highlighter-rouge">net.ipv4.ip_forward</code> 並設定為 1
+      <li>查詢 : <code class="language-html highlighter-rouge">cat /etc/sysctl.conf | grep ip_forward</code></li>
+      <li>變更設定 : 至 <code class="language-html highlighter-rouge">/etc/sysctl.conf</code>，找到 <code class="language-html highlighter-rouge">net.ipv4.ip_forward</code> 並設定為 1
         <ul>
-          <li>或透過指令變更 : <code class="highlighter-rouge">sudo sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf</code></li>
+          <li>或透過指令變更 : <code class="language-html highlighter-rouge">sudo sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf</code></li>
         </ul>
       </li>
     </ul>
   </li>
-  <li>更新 iptable，將內部的 wlan0 封包轉給 eth0，詳細原理可參考 : <code class="highlighter-rouge">http://web.mit.edu/rhel-doc/4/RH-DOCS/rhel-sg-zh_tw-4/s1-firewall-ipt-fwd.html</code>
+  <li>更新 iptable，將內部的 wlan0 封包轉給 eth0，詳細原理可參考 : <code class="language-html highlighter-rouge">http://web.mit.edu/rhel-doc/4/RH-DOCS/rhel-sg-zh_tw-4/s1-firewall-ipt-fwd.html</code>
     <ol>
-      <li><code class="highlighter-rouge">sudo iptables -F</code></li>
-      <li><code class="highlighter-rouge">sudo iptables -F -t nat</code></li>
-      <li><code class="highlighter-rouge">sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</code></li>
-      <li><code class="highlighter-rouge">sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT</code></li>
-      <li><code class="highlighter-rouge">sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -F</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -F -t nat</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT</code></li>
     </ol>
   </li>
   <li>儲存設定，讓每次開機都自動設定
     <ol>
-      <li><code class="highlighter-rouge">vim /etc/rc.local</code></li>
-      <li>在 <code class="highlighter-rouge">exit 0</code> 之前，加入<code class="highlighter-rouge">sudo iptables-save &gt; /etc/network/iptables.ipv4.nat</code></li>
+      <li><code class="language-html highlighter-rouge">vim /etc/rc.local</code></li>
+      <li>在 <code class="language-html highlighter-rouge">exit 0</code> 之前，加入<code class="language-html highlighter-rouge">sudo iptables-save &gt; /etc/network/iptables.ipv4.nat</code></li>
     </ol>
   </li>
   <li>查看 iptable
     <ul>
-      <li><code class="highlighter-rouge">sudo iptables -t nat -S</code></li>
-      <li><code class="highlighter-rouge">sudo iptables -S</code></li>
-      <li><code class="highlighter-rouge">sudo iptables -L</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -t nat -S</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -S</code></li>
+      <li><code class="language-html highlighter-rouge">sudo iptables -L</code></li>
     </ul>
   </li>
 </ol>
 
 <h2 id="架設-dhcp-server">架設 DHCP Server</h2>
 <ol>
-  <li><code class="highlighter-rouge">sudo apt-get -y install dnsmasq</code></li>
-  <li><code class="highlighter-rouge">sudo vim /etc/dnsmasq.conf</code>，在最下方編輯
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>interface=wlan0
+  <li><code class="language-html highlighter-rouge">sudo apt-get -y install dnsmasq</code></li>
+  <li><code class="language-html highlighter-rouge">sudo vim /etc/dnsmasq.conf</code>，在最下方編輯
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>interface=wlan0
 dhcp-range=10.0.7.101,10.0.7.200,255.255.255.0,12h
 </code></pre></div>    </div>
   </li>
-  <li>重新啟動 dnsmasq : <code class="highlighter-rouge">sudo systemctl restart dnsmasq &amp;&amp; sudo systemctl enable dnsmasq</code></li>
+  <li>重新啟動 dnsmasq : <code class="language-html highlighter-rouge">sudo systemctl restart dnsmasq <span class="err">&amp;&amp;</span> sudo systemctl enable dnsmasq</code></li>
 </ol>
 
 <h2 id="設定-hostapd">設定 hostapd</h2>
 
 <ol>
-  <li><code class="highlighter-rouge">sudo apt-get install hostapd -y</code></li>
-  <li><code class="highlighter-rouge">cp /usr/share/doc/hostapd/examples/hostapd.conf.gz /etc/hostapd/</code></li>
-  <li><code class="highlighter-rouge">gunzip /usr/share/doc/hostapd/examples/hostapd.conf.gz</code></li>
+  <li><code class="language-html highlighter-rouge">sudo apt-get install hostapd -y</code></li>
+  <li><code class="language-html highlighter-rouge">cp /usr/share/doc/hostapd/examples/hostapd.conf.gz /etc/hostapd/</code></li>
+  <li><code class="language-html highlighter-rouge">gunzip /usr/share/doc/hostapd/examples/hostapd.conf.gz</code></li>
   <li>編輯 hostapd.conf
     <ol>
-      <li><code class="highlighter-rouge">interface=wlan0</code></li>
-      <li><code class="highlighter-rouge">driver=nl80211</code></li>
-      <li><code class="highlighter-rouge">ssid=RPI-AP</code></li>
-      <li><code class="highlighter-rouge">hw_mode=g</code></li>
-      <li><code class="highlighter-rouge">channel=11</code></li>
-      <li><code class="highlighter-rouge">macaddr_acl=0</code></li>
-      <li><code class="highlighter-rouge">auth_algs=1</code></li>
-      <li><code class="highlighter-rouge">ignore_broadcast_ssid=0</code></li>
-      <li><code class="highlighter-rouge">wpa=2</code></li>
-      <li><code class="highlighter-rouge">wpa_passphrase=12345678</code> : 設定無線網路密碼</li>
-      <li><code class="highlighter-rouge">wpa_key_mgmt=WPA-PSK</code></li>
-      <li><code class="highlighter-rouge">rsn_pairwise=CCMP</code></li>
+      <li><code class="language-html highlighter-rouge">interface=wlan0</code></li>
+      <li><code class="language-html highlighter-rouge">driver=nl80211</code></li>
+      <li><code class="language-html highlighter-rouge">ssid=RPI-AP</code></li>
+      <li><code class="language-html highlighter-rouge">hw_mode=g</code></li>
+      <li><code class="language-html highlighter-rouge">channel=11</code></li>
+      <li><code class="language-html highlighter-rouge">macaddr_acl=0</code></li>
+      <li><code class="language-html highlighter-rouge">auth_algs=1</code></li>
+      <li><code class="language-html highlighter-rouge">ignore_broadcast_ssid=0</code></li>
+      <li><code class="language-html highlighter-rouge">wpa=2</code></li>
+      <li><code class="language-html highlighter-rouge">wpa_passphrase=12345678</code> : 設定無線網路密碼</li>
+      <li><code class="language-html highlighter-rouge">wpa_key_mgmt=WPA-PSK</code></li>
+      <li><code class="language-html highlighter-rouge">rsn_pairwise=CCMP</code></li>
     </ol>
   </li>
-  <li>測試 : <code class="highlighter-rouge">sudo hostapd -dd /etc/hostapd/hostapd.conf</code>
+  <li>測試 : <code class="language-html highlighter-rouge">sudo hostapd -dd /etc/hostapd/hostapd.conf</code>
     <ul>
       <li>測試時，可以透過其他裝置，並連接上 wifi ap</li>
-      <li>如果連接得上，但沒有辦法看網頁，為 iptables 設定錯誤，請檢查你的 iptables : <code class="highlighter-rouge">iptables -L</code></li>
+      <li>如果連接得上，但沒有辦法看網頁，為 iptables 設定錯誤，請檢查你的 iptables : <code class="language-html highlighter-rouge">iptables -L</code></li>
     </ul>
   </li>
-  <li>指定 hostapd daemon 的位置 : <code class="highlighter-rouge">sudo sed -i 's/#DAEMON_CONF=""/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/g' /etc/default/hostapd</code></li>
+  <li>指定 hostapd daemon 的位置 : <code class="language-html highlighter-rouge">sudo sed -i 's/#DAEMON_CONF=""/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/g' /etc/default/hostapd</code></li>
 </ol>
 
 <h2 id="重新開機讓所有的設定值都生效">重新開機讓所有的設定值都生效</h2>
 <ul>
-  <li><code class="highlighter-rouge">sudo systemctl enable hostapd &amp;&amp; sudo reboot</code></li>
+  <li><code class="language-html highlighter-rouge">sudo systemctl enable hostapd <span class="err">&amp;&amp;</span> sudo reboot</code></li>
 </ul>
 
 <h2 id="troubleshooting">troubleshooting</h2>
@@ -348,12 +382,12 @@ dhcp-range=10.0.7.101,10.0.7.200,255.255.255.0,12h
 
 <h2 id="檢查錯誤訊息">檢查錯誤訊息</h2>
 <ul>
-  <li><code class="highlighter-rouge">/var/log/syslog</code></li>
+  <li><code class="language-html highlighter-rouge">/var/log/syslog</code></li>
 </ul>
 
 <h2 id="如何關閉-wifi-ap">如何關閉 wifi ap</h2>
 <ul>
-  <li>停掉 hostapd 服務即可 : <code class="highlighter-rouge">sudo systemctl hostapd stop</code></li>
+  <li>停掉 hostapd 服務即可 : <code class="language-html highlighter-rouge">sudo systemctl hostapd stop</code></li>
 </ul>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/raspberry/RPI3-wifiAp/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
@@ -384,13 +418,13 @@ Reading time ~1 minute
 <ul>
   <li>目的 : 在 docker 架構下，解決 mariadb container 建立後，自動加入 schema 到 db 中</li>
   <li>可參考 https://stackoverflow.com/questions/36617682/docker-compose-mysql-import-sql</li>
-  <li>解決 : 在 mariadb 起來後，會自動去執行 <code class="highlighter-rouge">/docker-entrypoint-initdb.d/</code> 底下的 sql 指令，就會自動建立好預設的 database &amp; table</li>
+  <li>解決 : 在 mariadb 起來後，會自動去執行 <code class="language-html highlighter-rouge">/docker-entrypoint-initdb.d/</code> 底下的 sql 指令，就會自動建立好預設的 database &amp; table</li>
 </ul>
 
 <h2 id="example--docker-compose">example : docker-compose</h2>
 
 <h3 id="sql-file--save-as-testsql">sql file : save as test.sql</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#
 # SQL Export
 # Created by Querious (1068)
 # Created: 2017年9月5日 GMT+8 上午9:27:31
@@ -415,7 +449,7 @@ SET FOREIGN_KEY_CHECKS = @PREVIOUS_FOREIGN_KEY_CHECKS;
 </code></pre></div></div>
 
 <h3 id="docker-composeyml">docker-compose.yml</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '3.0'
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: '3.0'
 services:
   mariadb:
     image: mariadb
@@ -431,7 +465,7 @@ services:
 <h3 id="驗證">驗證</h3>
 
 <ol>
-  <li><code class="highlighter-rouge">docker exec some-mariadb mysql -u root --password=1234 --database=test -e "show tables;"</code></li>
+  <li><code class="language-html highlighter-rouge">docker exec some-mariadb mysql -u root --password=1234 --database=test -e "show tables;"</code></li>
 </ol>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/docker/mariadb/Docker-MariaDB/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
@@ -468,15 +502,15 @@ Reading time ~1 minute
   </li>
   <li>按照 ecs 中，的說明 aws ecr get-login 後，會產生出 docker login … 的語法，透過這個進行 docker login
     <ol>
-      <li><code class="highlighter-rouge">aws ecr get-login --no-include-email --region us-east-1</code> : 取得 <code class="highlighter-rouge">docker login -u AWS -p .... </code></li>
+      <li><code class="language-html highlighter-rouge">aws ecr get-login --no-include-email --region us-east-1</code> : 取得 <code class="language-html highlighter-rouge">docker login -u AWS -p .... </code></li>
       <li>依據 1 中取得的 login 指令，進行 docker login</li>
     </ol>
   </li>
   <li>上傳 docker image 到 ECR 中
     <ol>
-      <li><code class="highlighter-rouge">docker build -t xxx {image}</code></li>
-      <li><code class="highlighter-rouge">docker tag xxx your-ecr-position/your-repo-name:latest</code></li>
-      <li><code class="highlighter-rouge">docker push your-ecr-position/your-repo-name:latest</code></li>
+      <li><code class="language-html highlighter-rouge">docker build -t xxx {image}</code></li>
+      <li><code class="language-html highlighter-rouge">docker tag xxx your-ecr-position/your-repo-name:latest</code></li>
+      <li><code class="language-html highlighter-rouge">docker push your-ecr-position/your-repo-name:latest</code></li>
     </ol>
   </li>
 </ol>
@@ -485,25 +519,25 @@ Reading time ~1 minute
 
 <ol>
   <li>建立好一個 eb application</li>
-  <li>設定好 <code class="highlighter-rouge">Dockerrun.aws.json</code>
+  <li>設定好 <code class="language-html highlighter-rouge">Dockerrun.aws.json</code>
     <ul>
-      <li><code class="highlighter-rouge">envsubst</code> 可善用此指令</li>
+      <li><code class="language-html highlighter-rouge">envsubst</code> 可善用此指令</li>
     </ul>
   </li>
   <li>壓縮 含有設定檔的 folder，並上傳到 aws s3
     <ul>
-      <li><code class="highlighter-rouge">cd folder &amp;&amp; zip -r $folder.zip ./ &amp;&amp; aws s3 cp $folder.zip s3://{bucket_name}/{folder.zip}</code></li>
+      <li><code class="language-html highlighter-rouge">cd folder <span class="err">&amp;&amp;</span> zip -r $folder.zip ./ <span class="err">&amp;&amp;</span> aws s3 cp $folder.zip s3://{bucket_name}/{folder.zip}</code></li>
     </ul>
   </li>
   <li>建立 eb 新的版本
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws elasticbeanstalk create-application-version \
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws elasticbeanstalk create-application-version \
 --application-name {your-eb-application-name} \
   --version-label {your-eb-version-label}\
   --source-bundle S3Bucket={bucket_name},S3Key={folder.zip}
 </code></pre></div>    </div>
   </li>
   <li>部署新版本
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws elasticbeanstalk update-environment \
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>aws elasticbeanstalk update-environment \
 --environment-name {your-eb-application-name} \
   --version-label {your-eb-version-label}
 </code></pre></div>    </div>
@@ -511,157 +545,6 @@ Reading time ~1 minute
 </ol>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-ECR-S3-EB-Deploy/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2017-08-25T03:59:00+08:00"><a href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-configure/">August 25, 2017</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-configure/" rel="bookmark" title="【AWS CLI】profile : configure" itemprop="url">【AWS CLI】profile : configure</a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h1 id="purpose">PURPOSE</h1>
-<ol>
-  <li>了解 aws cli profile 運作方式</li>
-  <li>了解 aws cli configure 操作方法</li>
-</ol>
-
-<h1 id="aws-cli">aws cli</h1>
-
-<ul>
-  <li>github : https://github.com/aws/aws-cli/releases</li>
-  <li>安裝 &amp; 更新 &amp; 反安裝 : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/installing.html</code></li>
-  <li>cli 中指令的參考 : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/index.html</code>
-    <ul>
-      <li><code class="highlighter-rouge">aws help</code> : 可看到所有指令</li>
-    </ul>
-  </li>
-  <li>查詢各類指令說明 :
-    <ul>
-      <li><code class="highlighter-rouge">aws help</code></li>
-      <li><code class="highlighter-rouge">aws {command} help</code></li>
-      <li><code class="highlighter-rouge">aws {command} {sub-cmd} help</code></li>
-    </ul>
-  </li>
-  <li>aws Command Completion : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/cli-command-completion.html</code>
-    <ul>
-      <li>透過 tab 搜尋 aws 相關指令, install :
-        <ol>
-          <li><code class="highlighter-rouge">echo $SHELL</code></li>
-          <li>find path : <code class="highlighter-rouge">which aws_completer</code></li>
-          <li>enable : <code class="highlighter-rouge">complete -C '/usr/local/bin/aws_completer' aws</code></li>
-        </ol>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="設定-profile">設定 profile</h2>
-<ul>
-  <li>resource : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html</code></li>
-  <li>請到 iam 取得以下
-    <ul>
-      <li>AWS Access Key ID</li>
-      <li>AWS Secret Access Key</li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">aws configure help</code> : 查詢在 configure 中的指令有哪些可用</li>
-  <li>設定 profile
-    <ul>
-      <li><code class="highlighter-rouge">aws configure</code></li>
-      <li><code class="highlighter-rouge">aws configure --profile user2</code></li>
-    </ul>
-  </li>
-  <li>列出 profile
-    <ul>
-      <li><code class="highlighter-rouge">aws configure list</code> : 預設</li>
-      <li><code class="highlighter-rouge">aws configure list --profile default</code> : 指定身份</li>
-    </ul>
-  </li>
-  <li>使用 profile
-    <ul>
-      <li><code class="highlighter-rouge">aws ec2 describe-instance</code></li>
-      <li><code class="highlighter-rouge">aws ec2 describe-instance --profile user2</code></li>
-    </ul>
-  </li>
-  <li>指定使用哪一個 profile
-    <ul>
-      <li><code class="highlighter-rouge">export AWS_PROFILE=user2</code> : AWS_PROFILE 為 Environment Variables</li>
-      <li><code class="highlighter-rouge">unset AWS_PROFILE</code> : 回到預設值</li>
-      <li>Profile Environment Variables
-        <ul>
-          <li>AWS_ACCESS_KEY_ID</li>
-          <li>AWS_SECRET_ACCESS_KEY</li>
-          <li>AWS_SESSION_TOKEN</li>
-          <li>AWS_DEFAULT_REGION</li>
-          <li>AWS_DEFAULT_OUTPUT</li>
-          <li>AWS_PROFILE</li>
-          <li>AWS_CA_BUNDLE</li>
-          <li>AWS_SHARED_CREDENTIALS_FILE</li>
-          <li>AWS_CONFIG_FILE</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>Options
-    <ul>
-      <li><code class="highlighter-rouge">--profile</code>		: 指定使用 profile</li>
-      <li><code class="highlighter-rouge">--region</code> 		: 指定地區
-        <ul>
-          <li>顯示地區列表 : <code class="highlighter-rouge">aws ec2 describe-regions --output table</code></li>
-        </ul>
-      </li>
-      <li>
-        <table>
-          <tbody>
-            <tr>
-              <td><code class="highlighter-rouge">--output</code> 		: json</td>
-              <td>text</td>
-              <td>table</td>
-            </tr>
-          </tbody>
-        </table>
-      </li>
-      <li><code class="highlighter-rouge">--endpoint-url</code> : 指定</li>
-      <li>ex : <code class="highlighter-rouge">aws ec2 describe-instances --output table --region ap-northeast-2</code></li>
-    </ul>
-  </li>
-</ul>
-
-<h1 id="example">example</h1>
-
-<ol>
-  <li>想要列出目前預設使用的 profile 使哪一張
-    <ul>
-      <li><code class="highlighter-rouge">aws configure list</code></li>
-    </ul>
-  </li>
-  <li>想指定預設的 profile
-    <ul>
-      <li><code class="highlighter-rouge">export AWS_PROFILE=xxx</code></li>
-    </ul>
-  </li>
-  <li>想取消指定 profile，回到 default
-    <ul>
-      <li><code class="highlighter-rouge">unset AWS_PROFILE</code></li>
-    </ul>
-  </li>
-</ol>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/aws/AWS-CLI-configure/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->

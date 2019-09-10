@@ -7,7 +7,7 @@
 <meta charset="utf-8">
 <title>【Log】Use Logrotate at ubuntu16.04 &#8211; Max 乎~</title>
 <meta name="description" content="修煉!">
-<meta name="keywords" content="">
+<meta name="keywords" content="Ubuntu, Log">
 
 
 
@@ -127,22 +127,22 @@ Reading time ~1 minute
 <ul>
   <li>ubuntu</li>
   <li>必須確認有 cron 服務</li>
-  <li>doc : <code class="highlighter-rouge">https://linux.die.net/man/8/logrotate</code></li>
-  <li>必須確定已經有 log, 若無 log file, 系統會報錯 <code class="highlighter-rouge">error: stat of /root/xxxx.log failed: No such file or directory</code></li>
+  <li>doc : <code class="language-html highlighter-rouge">https://linux.die.net/man/8/logrotate</code></li>
+  <li>必須確定已經有 log, 若無 log file, 系統會報錯 <code class="language-html highlighter-rouge">error: stat of /root/xxxx.log failed: No such file or directory</code></li>
 </ul>
 
 <h1 id="說明">說明</h1>
 <ul>
-  <li><code class="highlighter-rouge">apt-get install -y logrotate</code></li>
-  <li>配置文件 : <code class="highlighter-rouge">/etc/logrotate.conf</code></li>
-  <li>設定檔為至 : <code class="highlighter-rouge">/etc/logrotate.d/</code>
+  <li><code class="language-html highlighter-rouge">apt-get install -y logrotate</code></li>
+  <li>配置文件 : <code class="language-html highlighter-rouge">/etc/logrotate.conf</code></li>
+  <li>設定檔為至 : <code class="language-html highlighter-rouge">/etc/logrotate.d/</code>
     <ul>
-      <li>若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 <code class="highlighter-rouge">/etc/logrotate.d/</code> 中, 建立相關的設定</li>
+      <li>若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 <code class="language-html highlighter-rouge">/etc/logrotate.d/</code> 中, 建立相關的設定</li>
     </ul>
   </li>
-  <li>檢查設定 <code class="highlighter-rouge">sudo logrotate /etc/logrotate.conf --debug</code></li>
-  <li>logrotate 歷史紀錄 <code class="highlighter-rouge">cat /var/lib/logrotate/status</code></li>
-  <li>強迫 logrotate 立即執行 : <code class="highlighter-rouge">logrotate -f /etc/logrotate.conf</code>
+  <li>檢查設定 <code class="language-html highlighter-rouge">sudo logrotate /etc/logrotate.conf --debug</code></li>
+  <li>logrotate 歷史紀錄 <code class="language-html highlighter-rouge">cat /var/lib/logrotate/status</code></li>
+  <li>強迫 logrotate 立即執行 : <code class="language-html highlighter-rouge">logrotate -f /etc/logrotate.conf</code>
     <ul>
       <li>透過 [logrotate 歷史紀錄] 可查看執行時間</li>
     </ul>
@@ -167,7 +167,7 @@ Reading time ~1 minute
 </ul>
 
 <h2 id="ex-">ex :</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/tmp/sample_output.log {
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/tmp/sample_output.log {
 	size 1k
 	create 700 root root
 	rotate 4
@@ -176,7 +176,7 @@ Reading time ~1 minute
 </code></pre></div></div>
 
 <h2 id="ex--nginx">ex : nginx</h2>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/log/nginx/*.log {
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/log/nginx/*.log {
     daily
     missingok
     rotate 52
@@ -194,7 +194,7 @@ Reading time ~1 minute
 </code></pre></div></div>
 
       <footer class="entry-meta">
-        <span class="entry-tags"></span>
+        <span class="entry-tags"><a href="https://jhaoheng.github.io/blogpost/tags/#Ubuntu" title="Pages tagged Ubuntu" class="tag"><span class="term">Ubuntu</span></a><a href="https://jhaoheng.github.io/blogpost/tags/#Log" title="Pages tagged Log" class="tag"><span class="term">Log</span></a></span>
         
         <div class="social-share">
   <ul class="socialcount socialcount-small inline-list">
@@ -212,19 +212,19 @@ Reading time ~1 minute
       <a href="https://jhaoheng.github.io/blogpost/aws/redis/AWS-ElastiCache-Access/" class="read-more-btn">Read More</a>
     </div><!-- /.read-more-header -->
     <div class="read-more-content">
-      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h3>
-      <p># interface{}## Explore> When set object is an interface{}1. Set object is an interface{}2. Use pointer to set object value is int / stri...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/">Continue reading</a></p>
+      <h3><a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/" title="【Go】利用 struct 優化（一）">【Go】利用 struct 優化（一）</a></h3>
+      <p>## Synopsis1. 透過 struct 方式，容易看懂程式2. 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)3. 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解# ...&hellip; <a href="https://jhaoheng.github.io/blogpost/golang/Go-struct-%E5%84%AA%E5%8C%96/">Continue reading</a></p>
     </div><!-- /.read-more-content -->
   
   <div class="read-more-list">
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
-        <span>Published on September 06, 2019</span>
+        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-drill-interface/" title="【Go】Drill interface{}">【Go】Drill interface{}</a></h4>
+        <span>Published on September 07, 2019</span>
       </div><!-- /.list-item -->
     
       <div class="list-item">
-        <h4><a href="https://jhaoheng.github.io/blogpost/golang/Go-func&pointer/" title="【Golang】func & pointer">【Golang】func & pointer</a></h4>
+        <h4><a href="https://jhaoheng.github.io/blogpost/kubenetes/minikube/Apache-Proxy&UseExpressions/" title="【Apache】Proxy & Use Expressions To Restricted Access">【Apache】Proxy & Use Expressions To Restricted Access</a></h4>
         <span>Published on September 06, 2019</span>
       </div><!-- /.list-item -->
     

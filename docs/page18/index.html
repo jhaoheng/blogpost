@@ -124,6 +124,50 @@
   <header>
     
     <div class="entry-meta">
+      <span class="entry-date date published updated"><time datetime="2016-06-26T06:21:00+08:00"><a href="https://jhaoheng.github.io/blogpost/xcode-framework-dynamic-static-diff/">June 26, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
+      
+      <span class="entry-reading-time">
+        <i class="fa fa-clock-o"></i>
+        
+Reading time ~1 minute
+      </span><!-- /.entry-reading-time -->
+      
+    </div><!-- /.entry-meta -->
+    
+      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/xcode-framework-dynamic-static-diff/" rel="bookmark" title="【xcode】framework 動/靜 diff" itemprop="url">【xcode】framework 動/靜 diff</a></h1>
+    
+  </header>
+  <div class="entry-content">
+    <h1 id="framework-靜態動態-庫">framework 靜態/動態 庫</h1>
+
+<h2 id="env">env</h2>
+
+<ul>
+  <li>xcode : 7.3.1</li>
+  <li>ios 9</li>
+</ul>
+
+<h2 id="diff">diff</h2>
+
+<ul>
+  <li>取出 bundle file
+    <ul>
+      <li>靜態庫，無法取得 framework.plist 的資訊</li>
+      <li>動態庫，可</li>
+    </ul>
+  </li>
+  <li>包裝後的編譯檔，file 也會不同</li>
+</ul>
+
+    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/xcode-framework-dynamic-static-diff/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
+    </p>
+  </div><!-- /.entry-content -->
+</article><!-- /.hentry -->
+
+<article class="hentry">
+  <header>
+    
+    <div class="entry-meta">
       <span class="entry-date date published updated"><time datetime="2016-06-25T16:14:00+08:00"><a href="https://jhaoheng.github.io/blogpost/xcodecombine-framework-with-auto-build/">June 25, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
       
       <span class="entry-reading-time">
@@ -149,18 +193,18 @@ Reading time ~1 minute
   </li>
   <li>Create a New Target from your framework project
     <ul>
-      <li>Select <code class="highlighter-rouge">Other</code> -&gt; Aggregate -&gt; set Name is <code class="highlighter-rouge">xxx-Universal</code></li>
+      <li>Select <code class="language-html highlighter-rouge">Other</code> -&gt; Aggregate -&gt; set Name is <code class="language-html highlighter-rouge">xxx-Universal</code></li>
     </ul>
   </li>
-  <li>Copy below code, and paste to <code class="highlighter-rouge">New Target:Aggregate</code> script</li>
-  <li>Go to scheme manager and <code class="highlighter-rouge">Click the [shared]</code> with <code class="highlighter-rouge">project name</code> and <code class="highlighter-rouge">xxx-Universal name</code></li>
-  <li>Run the <code class="highlighter-rouge">New Target:Aggregate</code>, and folder include universal-framework will be open.</li>
+  <li>Copy below code, and paste to <code class="language-html highlighter-rouge">New Target:Aggregate</code> script</li>
+  <li>Go to scheme manager and <code class="language-html highlighter-rouge">Click the [shared]</code> with <code class="language-html highlighter-rouge">project name</code> and <code class="language-html highlighter-rouge">xxx-Universal name</code></li>
+  <li>Run the <code class="language-html highlighter-rouge">New Target:Aggregate</code>, and folder include universal-framework will be open.</li>
 </ol>
 
-<p>ps : If xcode alert <code class="highlighter-rouge">No find xxx.framework from Debug-iphoneos and Debug-iphonesimulator</code>
+<p>ps : If xcode alert <code class="language-html highlighter-rouge">No find xxx.framework from Debug-iphoneos and Debug-iphonesimulator</code>
 Go to check the name of workspace and project, the name should be the same.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>######################
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>######################
 # Options
 ######################
 
@@ -181,9 +225,9 @@ FRAMEWORK="${UNIVERSAL_LIBRARY_DIR}/${FRAMEWORK_NAME}.framework"
 # Build Frameworks
 ######################
 
-xcodebuild -workspace ${PROJECT_NAME}.xcworkspace -scheme ${PROJECT_NAME} -sdk iphonesimulator -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator 2&gt;&amp;1
+xcodebuild -workspace ${PROJECT_NAME}.xcworkspace -scheme ${PROJECT_NAME} -sdk iphonesimulator -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphonesimulator 2&gt;<span class="err">&amp;</span>1
 
-xcodebuild -workspace ${PROJECT_NAME}.xcworkspace -scheme ${PROJECT_NAME} -sdk iphoneos -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos 2&gt;&amp;1
+xcodebuild -workspace ${PROJECT_NAME}.xcworkspace -scheme ${PROJECT_NAME} -sdk iphoneos -configuration ${CONFIGURATION} clean build CONFIGURATION_BUILD_DIR=${BUILD_DIR}/${CONFIGURATION}-iphoneos 2&gt;<span class="err">&amp;</span>1
 
 ######################
 # Create directory for universal
@@ -260,47 +304,47 @@ Reading time ~1 minute
 
 <p>透過 Wildcards 可以一次訂閱想要的主題，Wildcards 只能運用於 sub 不能用於 pub</p>
 
-<p><code class="highlighter-rouge">myhome/ground/room/temperature</code></p>
+<p><code class="language-html highlighter-rouge">myhome/ground/room/temperature</code></p>
 
-<p>每一個 <code class="highlighter-rouge">/</code> 的兩邊，代表的兩個 topic level</p>
+<p>每一個 <code class="language-html highlighter-rouge">/</code> 的兩邊，代表的兩個 topic level</p>
 
 <h2 id="single-lever---單一層級萬用字元">Single Lever : + (單一層級萬用字元)</h2>
 
-<p>Single Level 是指取代此一層的主題(topic level)，<code class="highlighter-rouge">+</code> 代表此 topic level 有著 single level wildcard 的特性</p>
+<p>Single Level 是指取代此一層的主題(topic level)，<code class="language-html highlighter-rouge">+</code> 代表此 topic level 有著 single level wildcard 的特性</p>
 
-<p><code class="highlighter-rouge">myhome/groundfloor/+/temperature</code></p>
+<p><code class="language-html highlighter-rouge">myhome/groundfloor/+/temperature</code></p>
 
 <p>在此標誌下，以下均為相同的主題</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myhome/groundfloor/a/temperature
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myhome/groundfloor/a/temperature
 myhome/groundfloor/b/temperature
 myhome/groundfloor/c/temperature
 </code></pre></div></div>
 
 <p>以下為不相同的訂閱主題</p>
 
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myhome/ground/a/temperature
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myhome/ground/a/temperature
 myhome/groundfloor/a/brightness
 </code></pre></div></div>
 
 <p>ex2:</p>
 
 <ul>
-  <li><code class="highlighter-rouge">home/[position]/[devices]/temperature</code> : 訂閱’家中單一房間，單一個 device 的溫度’</li>
-  <li><code class="highlighter-rouge">home/+/+/temperature</code> : 訂閱’家中所有房間中的裝置的溫度’</li>
+  <li><code class="language-html highlighter-rouge">home/[position]/[devices]/temperature</code> : 訂閱’家中單一房間，單一個 device 的溫度’</li>
+  <li><code class="language-html highlighter-rouge">home/+/+/temperature</code> : 訂閱’家中所有房間中的裝置的溫度’</li>
 </ul>
 
 <h2 id="multi-level-">Multi Level :</h2>
 
-<p>Multi Level 總是放在最後 : <code class="highlighter-rouge">myhome/groundfloor/#</code></p>
+<p>Multi Level 總是放在最後 : <code class="language-html highlighter-rouge">myhome/groundfloor/#</code></p>
 
 <p>以下為相同的主題</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myhome/groundfloor/livingroom/temperature
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myhome/groundfloor/livingroom/temperature
 myhome/groundfloor/livingroom/brightness
 </code></pre></div></div>
 
 <p>以下為不相同的主題</p>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myhome/outside/temperature
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>myhome/outside/temperature
 </code></pre></div></div>
 
 <h2 id="topics-beginning-with-">Topics beginning with $</h2>
@@ -309,20 +353,20 @@ myhome/groundfloor/livingroom/brightness
 
 <h1 id="注意">注意</h1>
 <ul>
-  <li><code class="highlighter-rouge">/</code> 符號，別放在第一位，ex : <code class="highlighter-rouge">/ex1/ex2</code></li>
+  <li><code class="language-html highlighter-rouge">/</code> 符號，別放在第一位，ex : <code class="language-html highlighter-rouge">/ex1/ex2</code></li>
   <li>在 topic level 中，不要空白</li>
   <li>保持你的 topic level 簡短與簡單明瞭</li>
   <li>使用 ASC II 字符，並免使用無法印出的符號</li>
   <li>透過在 topic level 中，使用 clientId，可有效區分『消息來源』與『訊息區別』
     <ul>
-      <li>client1 只能被授權 publish 透過 <code class="highlighter-rouge">client1/status</code>，不被允許 publish 給 <code class="highlighter-rouge">client2/status</code></li>
+      <li>client1 只能被授權 publish 透過 <code class="language-html highlighter-rouge">client1/status</code>，不被允許 publish 給 <code class="language-html highlighter-rouge">client2/status</code></li>
     </ul>
   </li>
-  <li>不使用 <code class="highlighter-rouge">#</code></li>
+  <li>不使用 <code class="language-html highlighter-rouge">#</code></li>
   <li>注意擴展性、延展性</li>
   <li>使用特定的 topics，取代攏統的設定
     <ul>
-      <li>使用 <code class="highlighter-rouge">myhome/livingroom/temperature</code>,<code class="highlighter-rouge">myhome/livingroom/brightness</code> 與 <code class="highlighter-rouge">myhome/livingroom/humidity</code>，避免使用 <code class="highlighter-rouge">myhome/livingroom/</code> 來接收所有的訊息</li>
+      <li>使用 <code class="language-html highlighter-rouge">myhome/livingroom/temperature</code>,<code class="language-html highlighter-rouge">myhome/livingroom/brightness</code> 與 <code class="language-html highlighter-rouge">myhome/livingroom/humidity</code>，避免使用 <code class="language-html highlighter-rouge">myhome/livingroom/</code> 來接收所有的訊息</li>
     </ul>
   </li>
 </ul>
@@ -352,14 +396,14 @@ Reading time ~1 minute
   <div class="entry-content">
     <h2 id="why">Why</h2>
 
-<p>直接在 xcode 中，產生出適合 <code class="highlighter-rouge">armv7 -arch armv7s</code> 與 <code class="highlighter-rouge">x86_64</code> 的 framework
-若透過預設的方法產出，會有兩種版本，必須再使用 <code class="highlighter-rouge">lipo create</code> 進行合併
-此方法是透過 script 在 compile 時，直接進行 build 與 <code class="highlighter-rouge">lipo create</code> 的動作</p>
+<p>直接在 xcode 中，產生出適合 <code class="language-html highlighter-rouge">armv7 -arch armv7s</code> 與 <code class="language-html highlighter-rouge">x86_64</code> 的 framework
+若透過預設的方法產出，會有兩種版本，必須再使用 <code class="language-html highlighter-rouge">lipo create</code> 進行合併
+此方法是透過 script 在 compile 時，直接進行 build 與 <code class="language-html highlighter-rouge">lipo create</code> 的動作</p>
 
 <h3 id="基本設定">基本設定</h3>
 <ol>
   <li>設置靜態庫，將 Mach-o type 從動態設定為 Static Library
-    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>|-MyFirstFramework
+    <div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>|-MyFirstFramework
  |-TARGETS
   	|-Build Settings
  	|-Linking
@@ -400,10 +444,10 @@ Reading time ~1 minute
       <li>要注意的是 xxx-name.framework，只是一包資料夾，要進行合併的是底下的 [xxx-name] 
       - 真機路徑(path_1) : Debug-iphoneos/[name].framework/[name]
       - 模擬機路徑(path_2) : Debug-iphonesimulator/[name].framework/[name]
-      - <code class="highlighter-rouge">lipo -create path_1 path_2 -output [name]</code>
-      - 產生出的 name 為執行檔，copy <code class="highlighter-rouge">Debug-iphoneos/[name].framework</code> 到適當位置
+      - <code class="language-html highlighter-rouge">lipo -create path_1 path_2 -output [name]</code>
+      - 產生出的 name 為執行檔，copy <code class="language-html highlighter-rouge">Debug-iphoneos/[name].framework</code> 到適當位置
       - 將剛剛產生出的 [name]，取代掉上一行 framwork 中原本的 [name]
-      - <code class="highlighter-rouge">lipo -info [name]</code>
+      - <code class="language-html highlighter-rouge">lipo -info [name]</code>
       - 將整包調整過後的 framework 放入 xcode 測試</li>
     </ul>
   </li>
@@ -452,70 +496,6 @@ Reading time ~1 minute
 <p><a href="http://algorithms.tutorialhorizon.com/introduction-to-dynamic-programming-fibonacci-series/">參考資料</a></p>
 
     <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/dynamic-programming/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
-    </p>
-  </div><!-- /.entry-content -->
-</article><!-- /.hentry -->
-
-<article class="hentry">
-  <header>
-    
-    <div class="entry-meta">
-      <span class="entry-date date published updated"><time datetime="2016-05-23T03:55:00+08:00"><a href="https://jhaoheng.github.io/blogpost/objc-c-toll-free-bridging-non-destructive-bridge/">May 23, 2016</a></time></span><span class="author vcard"><span class="fn"><a href="https://jhaoheng.github.io/blogpost/about/" title="About Max Hu">Max Hu</a></span></span>
-      
-      <span class="entry-reading-time">
-        <i class="fa fa-clock-o"></i>
-        
-Reading time ~1 minute
-      </span><!-- /.entry-reading-time -->
-      
-    </div><!-- /.entry-meta -->
-    
-      <h1 class="entry-title"><a href="https://jhaoheng.github.io/blogpost/objc-c-toll-free-bridging-non-destructive-bridge/" rel="bookmark" title="【Objc-C】Toll-Free Bridging : 無損橋接 " itemprop="url">【Objc-C】Toll-Free Bridging : 無損橋接 </a></h1>
-    
-  </header>
-  <div class="entry-content">
-    <h2 id="toll-free-bridging--無損橋接">Toll-Free Bridging : 無損橋接</h2>
-
-<p>在 ARC 管理中，常會看到這個名詞</p>
-
-<p>簡單來說就是因為 OC 是 C 的執行庫，而為了讓 OC 可以與 C 進行資料交換，就得利用 Toll-Free Bridging 進行資料格式的交換
-如 NSArray 與 CFArray <a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Reference/CFArrayRef/index.html#//apple_ref/c/tdef/CFArrayRef">參考</a></p>
-
-<blockquote>
-  <p>CFArray is “toll-free bridged” with its Cocoa Foundation counterpart, NSArray. This means that the Core Foundation type is interchangeable in function or method calls with the bridged Foundation object. Therefore, in a method where you see an NSArray * parameter, you can pass in a CFArrayRef, and in a function where you see a CFArrayRef parameter, you can pass in an NSArray instance. This also applies to concrete subclasses of NSArray. See Toll-Free Bridged Types for more information on toll-free bridging.</p>
-</blockquote>
-
-<p><a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Conceptual/CFDesignConcepts/Articles/tollFreeBridgedTypes.html#//apple_ref/doc/uid/TP40010677">Toll-Free Bridged Types</a></p>
-
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSArray *_array = [[NSArray alloc]init]; 
-NSString *values = {@"foo",@"bar"}; 
-CFArrayRef arrayRef = CFArrayCreate(kCFAllocatorDefault, (void *)values, (CFIndex)2,NULL); 
-NSArray *array = (__bridgeNSArray *)arrayRef;//注意這一行的__bridge 
-NSDa
-</code></pre></div></div>
-
-<h3 id="nsstring---cfstring">NSString -&gt; CFString</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NSString *foo = @"bar"; 
-CFStringRef bar = (__bridge CFStringRef)(foo); 
-NSLog(@"%ld", CFStringGetLength(bar));
-</code></pre></div></div>
-
-<h3 id="cfstring---nsstring">CFString -&gt; NSString</h3>
-<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>CFStringRef foo = CFStringCreateWithCString(kCFAllocatorDefault, "foo", kCFStringEncodingUTF8); 
-NSString *bar = (__bridge NSString *)(foo);
-NSLog(@"%ld", bar.length); 
-CFRelease(foo);
-</code></pre></div></div>
-
-<h3 id="__bridge">__bridge</h3>
-<p>目的在於處理 ARC &lt;-&gt; MRC 間的溝通</p>
-
-<p>而 <strong>『MRC 下的 Toll－Free Bridging 因為不涉及記憶體管理的轉移，相互之間可以直接交換使用。』</strong></p>
-
-<p><a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Conceptual/CFDesignConcepts/Articles/tollFreeBridgedTypes.html#//apple_ref/doc/uid/TP40010677">Toll-Free Bridged Types</a> 
-中，有支援 Toll-Free Bridging 的對照表</p>
-
-    <p><a class="btn btn-sm btn-primary" href="https://jhaoheng.github.io/blogpost/objc-c-toll-free-bridging-non-destructive-bridge/#read-more" role="button">Read more <i class="fa fa-arrow-circle-right"></i></a>
     </p>
   </div><!-- /.entry-content -->
 </article><!-- /.hentry -->
