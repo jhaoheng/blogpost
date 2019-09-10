@@ -1,0 +1,889 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="使用 Phalcon-devtools 這是一種透過 cmd 的方式來自動建立某些模組 版本 執行 phalcon 確認版本 : Phalcon DevTools (2.0.13) 建立專案 快速建立一個基本的 project : phalcon create-project store 檢視網頁 : localhost:[yourport]/store 在非 phalcon direction，只能使用 phalcon project 的指令建立 project 的結構 在該 project 下，可以使用其他的指令 phalcon webtools enable 啟用 web 介面的 phalcon 編輯器 http://[localhost]/[project_name]/webtools.php 資料庫設定 PATH : store/app/config 中的 config.php 若在 create 專案時，有特別指定使用 .ini 為其擴展名，才會特別使用。(--use-config-ini) 使用 phalcon project --help 查詢指令 models 建立模型，目的在於制式化處理某些事情，或者驗證，如每次呼叫模型的某個 method，都希望得到『用戶名稱』 建立 model 前，須先把 db 與 schema 建立完成 建立完成後，才可以建立 phalcon model [model_name] 如果沒有該 table name : [Error: Table “people” does not exist.] Troubleshoot : ERROR: SQLSTATE[HY000] [2002] No such file or directory php --ini vim php.ini 搜尋 mysql.default_socket 因我使用 mamp 所以填入 : /Applications/MAMP/tmp/mysql/mysql.sock 查詢 socket mysql -u root -p show variables like &apos;%socket%&apos;; 填入該路徑即可 在專案的根目錄下 : phalcon model，有基本的 Usage Scaffold a CRUD Phalcon-devtool 可以快速生成整套的 CRUD 框架 : controller / model / view Notice : 注意 model 產生時，必須要有對應的 table-name phalcon scaffold --table-name products 會產生 app/controllers/ProductsController.php app/models/Products.php app/views/layout/products.phtml app/views/products/new.phtml app/views/products/edit.phtml app/views/products/search.phtml 在輸入測試資料與其他應用時，可以再進行修改 啟用 WebTools 透過 web 的介面，進行操作 model / controller 路徑 : http://[localhost:port]/store/webtools.php 啟用 : phalcon webtools --action=enable">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Phalcon】develop tool">
+<meta property="og:url" content="/2016/07/11/phalcondevelop-tool/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="使用 Phalcon-devtools 這是一種透過 cmd 的方式來自動建立某些模組 版本 執行 phalcon 確認版本 : Phalcon DevTools (2.0.13) 建立專案 快速建立一個基本的 project : phalcon create-project store 檢視網頁 : localhost:[yourport]/store 在非 phalcon direction，只能使用 phalcon project 的指令建立 project 的結構 在該 project 下，可以使用其他的指令 phalcon webtools enable 啟用 web 介面的 phalcon 編輯器 http://[localhost]/[project_name]/webtools.php 資料庫設定 PATH : store/app/config 中的 config.php 若在 create 專案時，有特別指定使用 .ini 為其擴展名，才會特別使用。(--use-config-ini) 使用 phalcon project --help 查詢指令 models 建立模型，目的在於制式化處理某些事情，或者驗證，如每次呼叫模型的某個 method，都希望得到『用戶名稱』 建立 model 前，須先把 db 與 schema 建立完成 建立完成後，才可以建立 phalcon model [model_name] 如果沒有該 table name : [Error: Table “people” does not exist.] Troubleshoot : ERROR: SQLSTATE[HY000] [2002] No such file or directory php --ini vim php.ini 搜尋 mysql.default_socket 因我使用 mamp 所以填入 : /Applications/MAMP/tmp/mysql/mysql.sock 查詢 socket mysql -u root -p show variables like &apos;%socket%&apos;; 填入該路徑即可 在專案的根目錄下 : phalcon model，有基本的 Usage Scaffold a CRUD Phalcon-devtool 可以快速生成整套的 CRUD 框架 : controller / model / view Notice : 注意 model 產生時，必須要有對應的 table-name phalcon scaffold --table-name products 會產生 app/controllers/ProductsController.php app/models/Products.php app/views/layout/products.phtml app/views/products/new.phtml app/views/products/edit.phtml app/views/products/search.phtml 在輸入測試資料與其他應用時，可以再進行修改 啟用 WebTools 透過 web 的介面，進行操作 model / controller 路徑 : http://[localhost:port]/store/webtools.php 啟用 : phalcon webtools --action=enable">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Phalcon】develop tool">
+<meta name="twitter:description" content="使用 Phalcon-devtools 這是一種透過 cmd 的方式來自動建立某些模組 版本 執行 phalcon 確認版本 : Phalcon DevTools (2.0.13) 建立專案 快速建立一個基本的 project : phalcon create-project store 檢視網頁 : localhost:[yourport]/store 在非 phalcon direction，只能使用 phalcon project 的指令建立 project 的結構 在該 project 下，可以使用其他的指令 phalcon webtools enable 啟用 web 介面的 phalcon 編輯器 http://[localhost]/[project_name]/webtools.php 資料庫設定 PATH : store/app/config 中的 config.php 若在 create 專案時，有特別指定使用 .ini 為其擴展名，才會特別使用。(--use-config-ini) 使用 phalcon project --help 查詢指令 models 建立模型，目的在於制式化處理某些事情，或者驗證，如每次呼叫模型的某個 method，都希望得到『用戶名稱』 建立 model 前，須先把 db 與 schema 建立完成 建立完成後，才可以建立 phalcon model [model_name] 如果沒有該 table name : [Error: Table “people” does not exist.] Troubleshoot : ERROR: SQLSTATE[HY000] [2002] No such file or directory php --ini vim php.ini 搜尋 mysql.default_socket 因我使用 mamp 所以填入 : /Applications/MAMP/tmp/mysql/mysql.sock 查詢 socket mysql -u root -p show variables like &apos;%socket%&apos;; 填入該路徑即可 在專案的根目錄下 : phalcon model，有基本的 Usage Scaffold a CRUD Phalcon-devtool 可以快速生成整套的 CRUD 框架 : controller / model / view Notice : 注意 model 產生時，必須要有對應的 table-name phalcon scaffold --table-name products 會產生 app/controllers/ProductsController.php app/models/Products.php app/views/layout/products.phtml app/views/products/new.phtml app/views/products/edit.phtml app/views/products/search.phtml 在輸入測試資料與其他應用時，可以再進行修改 啟用 WebTools 透過 web 的介面，進行操作 model / controller 路徑 : http://[localhost:port]/store/webtools.php 啟用 : phalcon webtools --action=enable">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【Phalcon】develop tool | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/2016/07/11/phalcondevelop-tool/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【Phalcon】develop tool
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-11T07:48:00+08:00">
+                2016-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="使用-phalcon-devtools">使用 Phalcon-devtools</h1>
+
+<ul>
+  <li>這是一種透過 cmd 的方式來自動建立某些模組</li>
+</ul>
+
+<h2 id="版本">版本</h2>
+
+<ul>
+  <li>執行 <code class="highlighter-rouge">phalcon</code> 確認版本 : <code class="highlighter-rouge">Phalcon DevTools (2.0.13)</code></li>
+</ul>
+
+<h2 id="建立專案">建立專案</h2>
+
+<ul>
+  <li>快速建立一個基本的 project : <code class="highlighter-rouge">phalcon create-project store</code>
+    <ul>
+      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code></li>
+    </ul>
+  </li>
+  <li>在非 phalcon direction，只能使用 <code class="highlighter-rouge">phalcon project</code> 的指令建立 project 的結構</li>
+  <li>在該 project 下，可以使用其他的指令
+    <ul>
+      <li><code class="highlighter-rouge">phalcon webtools enable</code>
+        <ul>
+          <li>啟用 web 介面的 phalcon 編輯器</li>
+          <li><code class="highlighter-rouge">http://[localhost]/[project_name]/webtools.php</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="資料庫設定">資料庫設定</h2>
+
+<ul>
+  <li>PATH : <code class="highlighter-rouge">store/app/config</code> 中的 config.php
+    <ul>
+      <li>若在 create 專案時，有特別指定使用 <code class="highlighter-rouge">.ini</code> 為其擴展名，才會特別使用。(<code class="highlighter-rouge">--use-config-ini</code>)</li>
+      <li>使用 <code class="highlighter-rouge">phalcon project --help</code> 查詢指令</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="models">models</h2>
+
+<ul>
+  <li>建立模型，目的在於制式化處理某些事情，或者驗證，如每次呼叫模型的某個 method，都希望得到『用戶名稱』</li>
+  <li>建立 model 前，須先把 db 與 schema 建立完成
+    <ul>
+      <li>建立完成後，才可以建立 <code class="highlighter-rouge">phalcon model [model_name]</code>
+        <ul>
+          <li>如果沒有該 table name : [Error: Table “people” does not exist.]</li>
+        </ul>
+      </li>
+      <li>Troubleshoot : <code class="highlighter-rouge">ERROR: SQLSTATE[HY000] [2002] No such file or directory</code>
+        <ul>
+          <li><code class="highlighter-rouge">php --ini</code></li>
+          <li><code class="highlighter-rouge">vim php.ini</code></li>
+          <li>搜尋 <code class="highlighter-rouge">mysql.default_socket</code>
+            <ul>
+              <li>因我使用 mamp 所以填入 : <code class="highlighter-rouge">/Applications/MAMP/tmp/mysql/mysql.sock</code></li>
+              <li>查詢 socket
+                <ul>
+                  <li><code class="highlighter-rouge">mysql -u root -p</code></li>
+                  <li><code class="highlighter-rouge">show variables like '%socket%';</code> 填入該路徑即可</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>在專案的根目錄下 : <code class="highlighter-rouge">phalcon model</code>，有基本的 Usage</li>
+</ul>
+
+<h2 id="scaffold-a-crud">Scaffold a CRUD</h2>
+
+<ul>
+  <li>Phalcon-devtool 可以快速生成整套的 CRUD 框架 : controller / model / view
+    <ul>
+      <li>Notice : 注意 model 產生時，必須要有對應的 table-name</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">phalcon scaffold --table-name products</code> 會產生
+    <ul>
+      <li>app/controllers/ProductsController.php</li>
+      <li>app/models/Products.php</li>
+      <li>app/views/layout/products.phtml</li>
+      <li>app/views/products/new.phtml</li>
+      <li>app/views/products/edit.phtml</li>
+      <li>app/views/products/search.phtml</li>
+    </ul>
+  </li>
+  <li>在輸入測試資料與其他應用時，可以再進行修改</li>
+</ul>
+
+<h2 id="啟用-webtools">啟用 WebTools</h2>
+
+<ul>
+  <li>透過 web 的介面，進行操作 model / controller</li>
+  <li>路徑 : <code class="highlighter-rouge">http://[localhost:port]/store/webtools.php</code></li>
+  <li>啟用 : <code class="highlighter-rouge">phalcon webtools --action=enable</code></li>
+</ul>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/12/phalcondi/" rel="next" title="【phalcon】Di">
+                <i class="fa fa-chevron-left"></i> 【phalcon】Di
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/phalcon/2016/07/07/Phalcon-basic/" rel="prev" title="【Phalcon】basic">
+                【Phalcon】basic <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#使用-phalcon-devtools"> <span class="nav-text">使用 Phalcon-devtools</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#版本"> <span class="nav-text">版本</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#建立專案"> <span class="nav-text">建立專案</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#資料庫設定"> <span class="nav-text">資料庫設定</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#models"> <span class="nav-text">models</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#scaffold-a-crud"> <span class="nav-text">Scaffold a CRUD</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#啟用-webtools"> <span class="nav-text">啟用 WebTools</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

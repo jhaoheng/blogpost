@@ -1,0 +1,944 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Golang," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="slice &amp;amp; array 差別 https://blog.golang.org/go-slices-usage-and-internals Array Go&apos;s arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that&apos;s a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value. - An array&apos;s size is fixed; - Arrays do not need to be initialized Slice The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length. A slice can be created with the built-in function called make, which has the signature, `func make([]T, len, cap) []T` Glance : Difference between both 兩者在宣告方式不同 兩者 type 不同 兩者 kind 不同 兩者在宣告後, 不設定 content, 印出內容 兩者在新增/修改值上不同 兩者 func 中，使用原理方式不同">
+<meta name="keywords" content="Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Golang】Diff - slice &amp; array">
+<meta property="og:url" content="/golang/2019/09/06/Go-diff-slice&array/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="slice &amp;amp; array 差別 https://blog.golang.org/go-slices-usage-and-internals Array Go&apos;s arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that&apos;s a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value. - An array&apos;s size is fixed; - Arrays do not need to be initialized Slice The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length. A slice can be created with the built-in function called make, which has the signature, `func make([]T, len, cap) []T` Glance : Difference between both 兩者在宣告方式不同 兩者 type 不同 兩者 kind 不同 兩者在宣告後, 不設定 content, 印出內容 兩者在新增/修改值上不同 兩者 func 中，使用原理方式不同">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Golang】Diff - slice &amp; array">
+<meta name="twitter:description" content="slice &amp;amp; array 差別 https://blog.golang.org/go-slices-usage-and-internals Array Go&apos;s arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that&apos;s a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value. - An array&apos;s size is fixed; - Arrays do not need to be initialized Slice The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length. A slice can be created with the built-in function called make, which has the signature, `func make([]T, len, cap) []T` Glance : Difference between both 兩者在宣告方式不同 兩者 type 不同 兩者 kind 不同 兩者在宣告後, 不設定 content, 印出內容 兩者在新增/修改值上不同 兩者 func 中，使用原理方式不同">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【Golang】Diff - slice & array | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/golang/2019/09/06/Go-diff-slice&array/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【Golang】Diff - slice & array
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-06T14:31:00+08:00">
+                2019-09-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="slice--array-差別">slice &amp; array 差別</h1>
+<blockquote>
+  <p>https://blog.golang.org/go-slices-usage-and-internals</p>
+</blockquote>
+
+<h1 id="array">Array</h1>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value.
+- An array's size is fixed;
+- Arrays do not need to be initialized
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="slice">Slice</h1>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length.
+A slice can be created with the built-in function called make, which has the signature,
+`func make([]T, len, cap) []T`
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="glance--difference-between-both">Glance : Difference between both</h1>
+
+<ul>
+  <li>兩者在宣告方式不同</li>
+  <li>兩者 type 不同</li>
+  <li>兩者 kind 不同</li>
+  <li>兩者在宣告後, 不設定 content, 印出內容</li>
+  <li>兩者在新增/修改值上不同</li>
+  <li>兩者 func 中，使用原理方式不同</li>
+</ul>
+
+<!--more-->
+
+<h2 id="兩者在宣告方式不同-">兩者在宣告方式不同 :</h2>
+<ul>
+  <li>array : Go’s arrays are values.
+    <ul>
+      <li><code class="highlighter-rouge">var arrObject [4]int</code></li>
+      <li><code class="highlighter-rouge">arrObject := [4]int{0, 1, 2, 3}</code></li>
+      <li><code class="highlighter-rouge">arrObject := [...]int{0, 1, 2, 3}</code></li>
+    </ul>
+  </li>
+  <li>slice : 用 make 建立
+    <ul>
+      <li><code class="highlighter-rouge">var sliceObject []int</code></li>
+      <li><code class="highlighter-rouge">sliceObject := []int{}</code></li>
+      <li><code class="highlighter-rouge">sliceObject := []int{1,2,3,4}</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="兩者-type-不同">兩者 type 不同</h2>
+<ul>
+  <li>array : <code class="highlighter-rouge">fmt.Println(reflect.TypeOf(arrObject))</code>, 顯示 [4]int</li>
+  <li>slice : <code class="highlighter-rouge">fmt.Println(reflect.TypeOf(sliceObject))</code>, 顯示 []int</li>
+</ul>
+
+<div>
+    <iframe src="https://play.golang.org/p/WLS7doOuphz" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<h2 id="兩者-kind-不同-">兩者 kind 不同 :</h2>
+<ul>
+  <li>array : <code class="highlighter-rouge">fmt.Println(reflect.TypeOf(arrObject).Kind())</code>, 顯示 array</li>
+  <li>slice : <code class="highlighter-rouge">fmt.Println(reflect.TypeOf(sliceObject).Kind())</code>, 顯示 slice</li>
+</ul>
+
+<div>
+    <iframe src="https://play.golang.org/p/6BD2qUVm00l" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<h2 id="兩者在宣告後-不設定-content-印出內容">兩者在宣告後, 不設定 content, 印出內容</h2>
+
+<ul>
+  <li>array : An array’s size is fixed</li>
+  <li>slice : A slice type has no specified length.</li>
+</ul>
+
+<div>
+    <iframe src="https://play.golang.org/p/xXnbKIC5WhV" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<h2 id="兩者在新增修改值上不同">兩者在新增/修改值上不同</h2>
+<ul>
+  <li>array
+    <ul>
+      <li>arr 長度固定, 無法新增</li>
+      <li>新增、修改 : <code class="highlighter-rouge">arrObject[0] = 999</code></li>
+    </ul>
+  </li>
+  <li>slice
+    <ul>
+      <li>新增 : <code class="highlighter-rouge">sliceObject = append(sliceObject, 1,2,3,4)</code></li>
+      <li>修改 : <code class="highlighter-rouge">sliceObject[0] = 999</code></li>
+    </ul>
+  </li>
+</ul>
+
+<div>
+    <iframe src="https://play.golang.org/p/HY7kVBdV-KZ" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<h2 id="兩者-func-中使用原理方式不同">兩者 func 中，使用原理方式不同</h2>
+<blockquote>
+  <p>範例中用到的 func, 需要注意 pointer</p>
+</blockquote>
+
+<ul>
+  <li>array 在 func 中, 是用 copy 的方式. 故最好用 pointer 的方式在傳遞 array</li>
+  <li>slice 本身就是一個 pointer, 故可以在 func 中, 看到 address 相同</li>
+</ul>
+
+<div>
+    <iframe src="https://play.golang.org/p/Tt8rJNMjDAm" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<h1 id="the-same">The same</h1>
+
+<h2 id="兩者在切割方式上相同-">兩者在切割方式上<strong>相同</strong> :</h2>
+<ul>
+  <li><code class="highlighter-rouge">arr[:2]</code> = <code class="highlighter-rouge">sliceObject[:2]</code></li>
+</ul>
+
+<h2 id="顯示長度上">顯示長度上</h2>
+<ul>
+  <li>array : <code class="highlighter-rouge">fmt.Println(len(arrayObject))</code>, 顯示 4</li>
+  <li>slice : <code class="highlighter-rouge">fmt.Println(len(sliceObject))</code> 顯示 0</li>
+</ul>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/Golang" rel="tag"># Golang</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/golang/2019/09/06/Go-func&pointer/" rel="next" title="【Golang】func & pointer">
+                <i class="fa fa-chevron-left"></i> 【Golang】func & pointer
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/golang/2019/08/31/gomod/" rel="prev" title="【Golang】Go module">
+                【Golang】Go module <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#slice--array-差別"> <span class="nav-text">slice &amp; array 差別</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#array"> <span class="nav-text">Array</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#slice"> <span class="nav-text">Slice</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#glance--difference-between-both"> <span class="nav-text">Glance : Difference between both</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#兩者在宣告方式不同-"> <span class="nav-text">兩者在宣告方式不同 :</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#兩者-type-不同"> <span class="nav-text">兩者 type 不同</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#兩者-kind-不同-"> <span class="nav-text">兩者 kind 不同 :</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#兩者在宣告後-不設定-content-印出內容"> <span class="nav-text">兩者在宣告後, 不設定 content, 印出內容</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#兩者在新增修改值上不同"> <span class="nav-text">兩者在新增/修改值上不同</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#兩者-func-中使用原理方式不同"> <span class="nav-text">兩者 func 中，使用原理方式不同</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#the-same"> <span class="nav-text">The same</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#兩者在切割方式上相同-"> <span class="nav-text">兩者在切割方式上相同 :</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#顯示長度上"> <span class="nav-text">顯示長度上</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

@@ -1,0 +1,1015 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="完整的 bash script base on AWS centos7 : git@github.com:jhaoheng/centos-nginx-php7.x-extension.git 執行 sh env.sh 即可，整體安裝約 20 分鐘 start 至 aws launch new instance market search centos choose centos7 centos7 安裝 nginx yum -y install epel-release yum install nginx 驗證在瀏覽器開啟 ip, 注意 port 80 是否有開啟 操作 /bin/systemctl restart nginx centos7 安裝 php7.x yum -y install epel-release yum install wget wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm rpm -ivh ./remi-release-7.rpm yum install –enablerepo=remi,remi-php70 php-fpm php-devel php-mbstring php-pdo php-gd php-xml php-curl php-mysqlnd php-pdo_mysql php-mysqli php-json php-soap php-zip php-sockets php-session php-mcrypt php-date php-openssl php-yaml source 下載位置 http://php.net/downloads.php 可參考目前的 ext 手動新增 ext, ex: cd xml phpize ./configure make &amp;amp;&amp;amp; make install 查看 module 是否有此套件 操作 /bin/systemctl restart php-fpm 測試 找出 nginx.conf : nginx -h vi {$path}/nginx.conf server 設定參數可參考 https://docs.phalconphp.com/zh/latest/reference/nginx.html 請將 fastcgi 設定為 127.0.0.1:9000 &amp;lt;— 必須符合 php-fpm 的 listen 位置 在適當位置建立 的 index.php 在 browser 輸入 ip 與 index.php centos7 安裝 phalcon with php7.x yun install git yum install php-devel pcre-devel gcc make re2c 安裝編譯工具 : git clone https://github.com/phalcon/zephir cd zephir/ ./install-nosudo 下載 phalcon source : git clone git://github.com/phalcon/cphalcon.git cd cphalcon/ git checkout 適當的版本 {$Path}/zephir build 將 extension=phalcon.so 放入 php.ini php -i grep phalcon trouble undefined symbol: php_json_decode_ex in Unknown on line 0 原因在於此 extension=phalcon.so 不能直接放在 php.ini 中，請放置 /etc/php.d/ centos7 安裝 libmemcached 編譯 memcached.so 安裝 libmemcached 至官網下載 https://launchpad.net/libmemcached wget …. cd /libmemcached-1.x.x yum groupinstall “Development Tools” yum install zlib-static ./configure –disable-memcached-sasl make &amp;amp;&amp;amp; make install 編譯 memcached.so git clone https://github.com/php-memcached-dev/php-memcached.git git checkout php7 phpize ./configure make &amp;amp;&amp;amp; make install 確定是否將 .so 放入 module 中 : php -i | grep extension_dir cd {dir} 檢查是否有 memcached.so 確定 extension 是否有加入到 php.ini 驗證 php -i grep memcached centos7 安裝 libmosquitto 編譯 mosquitto.so 安裝 libmosquitto 進入官網 : https://mosquitto.org/download/ 找到 centos7 的 re 的 conf 將檔案 mosquitto.repo 放入 /etc/yum.repos.d 即可 The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto. 安裝 : yum install libmosquitto-devel 安裝後的 lib 路徑, 系統安裝後會提示, 無意外是 /usr/lib64/libmosquitto.so….. 編譯 mosquitto.so 下載 git source 後 : https://github.com/mgdm/Mosquitto-PHP cd Mosquitto-PHP phpize ./configure --with-mosquitto=/usr/lib64/libmosquitto.so make &amp;amp;&amp;amp; make install 驗證 module 是否有 mosquitto.so 在 php.ini 中設定 extension=mosquitto.so 驗證 : php -i grep mosquitto">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【AWS-centos7-php7.x】phalcon / memcached / mosquitto">
+<meta property="og:url" content="/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="完整的 bash script base on AWS centos7 : git@github.com:jhaoheng/centos-nginx-php7.x-extension.git 執行 sh env.sh 即可，整體安裝約 20 分鐘 start 至 aws launch new instance market search centos choose centos7 centos7 安裝 nginx yum -y install epel-release yum install nginx 驗證在瀏覽器開啟 ip, 注意 port 80 是否有開啟 操作 /bin/systemctl restart nginx centos7 安裝 php7.x yum -y install epel-release yum install wget wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm rpm -ivh ./remi-release-7.rpm yum install –enablerepo=remi,remi-php70 php-fpm php-devel php-mbstring php-pdo php-gd php-xml php-curl php-mysqlnd php-pdo_mysql php-mysqli php-json php-soap php-zip php-sockets php-session php-mcrypt php-date php-openssl php-yaml source 下載位置 http://php.net/downloads.php 可參考目前的 ext 手動新增 ext, ex: cd xml phpize ./configure make &amp;amp;&amp;amp; make install 查看 module 是否有此套件 操作 /bin/systemctl restart php-fpm 測試 找出 nginx.conf : nginx -h vi {$path}/nginx.conf server 設定參數可參考 https://docs.phalconphp.com/zh/latest/reference/nginx.html 請將 fastcgi 設定為 127.0.0.1:9000 &amp;lt;— 必須符合 php-fpm 的 listen 位置 在適當位置建立 的 index.php 在 browser 輸入 ip 與 index.php centos7 安裝 phalcon with php7.x yun install git yum install php-devel pcre-devel gcc make re2c 安裝編譯工具 : git clone https://github.com/phalcon/zephir cd zephir/ ./install-nosudo 下載 phalcon source : git clone git://github.com/phalcon/cphalcon.git cd cphalcon/ git checkout 適當的版本 {$Path}/zephir build 將 extension=phalcon.so 放入 php.ini php -i grep phalcon trouble undefined symbol: php_json_decode_ex in Unknown on line 0 原因在於此 extension=phalcon.so 不能直接放在 php.ini 中，請放置 /etc/php.d/ centos7 安裝 libmemcached 編譯 memcached.so 安裝 libmemcached 至官網下載 https://launchpad.net/libmemcached wget …. cd /libmemcached-1.x.x yum groupinstall “Development Tools” yum install zlib-static ./configure –disable-memcached-sasl make &amp;amp;&amp;amp; make install 編譯 memcached.so git clone https://github.com/php-memcached-dev/php-memcached.git git checkout php7 phpize ./configure make &amp;amp;&amp;amp; make install 確定是否將 .so 放入 module 中 : php -i | grep extension_dir cd {dir} 檢查是否有 memcached.so 確定 extension 是否有加入到 php.ini 驗證 php -i grep memcached centos7 安裝 libmosquitto 編譯 mosquitto.so 安裝 libmosquitto 進入官網 : https://mosquitto.org/download/ 找到 centos7 的 re 的 conf 將檔案 mosquitto.repo 放入 /etc/yum.repos.d 即可 The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto. 安裝 : yum install libmosquitto-devel 安裝後的 lib 路徑, 系統安裝後會提示, 無意外是 /usr/lib64/libmosquitto.so….. 編譯 mosquitto.so 下載 git source 後 : https://github.com/mgdm/Mosquitto-PHP cd Mosquitto-PHP phpize ./configure --with-mosquitto=/usr/lib64/libmosquitto.so make &amp;amp;&amp;amp; make install 驗證 module 是否有 mosquitto.so 在 php.ini 中設定 extension=mosquitto.so 驗證 : php -i grep mosquitto">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【AWS-centos7-php7.x】phalcon / memcached / mosquitto">
+<meta name="twitter:description" content="完整的 bash script base on AWS centos7 : git@github.com:jhaoheng/centos-nginx-php7.x-extension.git 執行 sh env.sh 即可，整體安裝約 20 分鐘 start 至 aws launch new instance market search centos choose centos7 centos7 安裝 nginx yum -y install epel-release yum install nginx 驗證在瀏覽器開啟 ip, 注意 port 80 是否有開啟 操作 /bin/systemctl restart nginx centos7 安裝 php7.x yum -y install epel-release yum install wget wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm rpm -ivh ./remi-release-7.rpm yum install –enablerepo=remi,remi-php70 php-fpm php-devel php-mbstring php-pdo php-gd php-xml php-curl php-mysqlnd php-pdo_mysql php-mysqli php-json php-soap php-zip php-sockets php-session php-mcrypt php-date php-openssl php-yaml source 下載位置 http://php.net/downloads.php 可參考目前的 ext 手動新增 ext, ex: cd xml phpize ./configure make &amp;amp;&amp;amp; make install 查看 module 是否有此套件 操作 /bin/systemctl restart php-fpm 測試 找出 nginx.conf : nginx -h vi {$path}/nginx.conf server 設定參數可參考 https://docs.phalconphp.com/zh/latest/reference/nginx.html 請將 fastcgi 設定為 127.0.0.1:9000 &amp;lt;— 必須符合 php-fpm 的 listen 位置 在適當位置建立 的 index.php 在 browser 輸入 ip 與 index.php centos7 安裝 phalcon with php7.x yun install git yum install php-devel pcre-devel gcc make re2c 安裝編譯工具 : git clone https://github.com/phalcon/zephir cd zephir/ ./install-nosudo 下載 phalcon source : git clone git://github.com/phalcon/cphalcon.git cd cphalcon/ git checkout 適當的版本 {$Path}/zephir build 將 extension=phalcon.so 放入 php.ini php -i grep phalcon trouble undefined symbol: php_json_decode_ex in Unknown on line 0 原因在於此 extension=phalcon.so 不能直接放在 php.ini 中，請放置 /etc/php.d/ centos7 安裝 libmemcached 編譯 memcached.so 安裝 libmemcached 至官網下載 https://launchpad.net/libmemcached wget …. cd /libmemcached-1.x.x yum groupinstall “Development Tools” yum install zlib-static ./configure –disable-memcached-sasl make &amp;amp;&amp;amp; make install 編譯 memcached.so git clone https://github.com/php-memcached-dev/php-memcached.git git checkout php7 phpize ./configure make &amp;amp;&amp;amp; make install 確定是否將 .so 放入 module 中 : php -i | grep extension_dir cd {dir} 檢查是否有 memcached.so 確定 extension 是否有加入到 php.ini 驗證 php -i grep memcached centos7 安裝 libmosquitto 編譯 mosquitto.so 安裝 libmosquitto 進入官網 : https://mosquitto.org/download/ 找到 centos7 的 re 的 conf 將檔案 mosquitto.repo 放入 /etc/yum.repos.d 即可 The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto. 安裝 : yum install libmosquitto-devel 安裝後的 lib 路徑, 系統安裝後會提示, 無意外是 /usr/lib64/libmosquitto.so….. 編譯 mosquitto.so 下載 git source 後 : https://github.com/mgdm/Mosquitto-PHP cd Mosquitto-PHP phpize ./configure --with-mosquitto=/usr/lib64/libmosquitto.so make &amp;amp;&amp;amp; make install 驗證 module 是否有 mosquitto.so 在 php.ini 中設定 extension=mosquitto.so 驗證 : php -i grep mosquitto">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【AWS-centos7-php7.x】phalcon / memcached / mosquitto | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【AWS-centos7-php7.x】phalcon / memcached / mosquitto
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-08T09:55:00+08:00">
+                2017-02-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Phalcon" itemprop="url" rel="index">
+                    <span itemprop="name">Phalcon</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Memcached" itemprop="url" rel="index">
+                    <span itemprop="name">Memcached</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Mosquitto" itemprop="url" rel="index">
+                    <span itemprop="name">Mosquitto</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/MQTT" itemprop="url" rel="index">
+                    <span itemprop="name">MQTT</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="完整的-bash-script">完整的 bash script</h1>
+<p><strong>base on AWS centos7</strong> : git@github.com:jhaoheng/centos-nginx-php7.x-extension.git
+執行 sh env.sh 即可，整體安裝約 20 分鐘</p>
+
+<h1 id="start">start</h1>
+<ol>
+  <li>至 aws</li>
+  <li>launch new instance</li>
+  <li>market search centos</li>
+  <li>choose centos7</li>
+</ol>
+
+<h1 id="centos7-安裝-nginx">centos7 安裝 nginx</h1>
+
+<ol>
+  <li>yum -y install epel-release</li>
+  <li>yum install nginx</li>
+  <li>驗證在瀏覽器開啟 ip, 注意 port 80 是否有開啟</li>
+</ol>
+
+<h2 id="操作">操作</h2>
+<p>/bin/systemctl restart nginx</p>
+
+<h1 id="centos7-安裝-php7x">centos7 安裝 php7.x</h1>
+
+<ol>
+  <li>yum -y install epel-release</li>
+  <li>yum install wget</li>
+  <li>wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm</li>
+  <li>rpm -ivh ./remi-release-7.rpm</li>
+  <li>yum install –enablerepo=remi,remi-php70 php-fpm php-devel php-mbstring php-pdo php-gd php-xml php-curl php-mysqlnd php-pdo_mysql php-mysqli php-json php-soap php-zip php-sockets php-session php-mcrypt php-date php-openssl php-yaml</li>
+</ol>
+
+<h2 id="source">source</h2>
+<ol>
+  <li>下載位置 http://php.net/downloads.php</li>
+  <li>可參考目前的 ext</li>
+  <li>手動新增 ext, ex:
+    <ol>
+      <li>cd xml</li>
+      <li>phpize</li>
+      <li>./configure</li>
+      <li>make &amp;&amp; make install</li>
+    </ol>
+  </li>
+  <li>查看 module 是否有此套件</li>
+</ol>
+
+<h2 id="操作-1">操作</h2>
+<p>/bin/systemctl restart php-fpm</p>
+
+<h2 id="測試">測試</h2>
+
+<ol>
+  <li>找出 nginx.conf : nginx -h</li>
+  <li>vi {$path}/nginx.conf</li>
+  <li>server 設定參數可參考 <code class="highlighter-rouge">https://docs.phalconphp.com/zh/latest/reference/nginx.html</code>
+    <ul>
+      <li>請將 fastcgi 設定為 127.0.0.1:9000 &lt;— 必須符合 php-fpm 的 listen 位置</li>
+    </ul>
+  </li>
+  <li>在適當位置建立 <?php phpinfo()?> 的 index.php</li>
+  <li>在 browser 輸入 ip 與 index.php</li>
+</ol>
+
+<h1 id="centos7-安裝-phalcon-with-php7x">centos7 安裝 phalcon with php7.x</h1>
+
+<ol>
+  <li>yun install git</li>
+  <li>yum install php-devel pcre-devel gcc make re2c</li>
+  <li>安裝編譯工具 : git clone https://github.com/phalcon/zephir</li>
+  <li>cd zephir/</li>
+  <li>./install-nosudo</li>
+  <li>下載 phalcon source : git clone git://github.com/phalcon/cphalcon.git</li>
+  <li>cd cphalcon/</li>
+  <li>git checkout 適當的版本</li>
+  <li>{$Path}/zephir build</li>
+  <li>將 extension=phalcon.so 放入 php.ini</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>php -i</td>
+          <td>grep phalcon</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+<h2 id="trouble">trouble</h2>
+<ul>
+  <li>undefined symbol: php_json_decode_ex in Unknown on line 0
+    <ul>
+      <li>原因在於此 extension=phalcon.so 不能直接放在 php.ini 中，請放置 /etc/php.d/</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="centos7-安裝-libmemcached-編譯-memcachedso">centos7 安裝 libmemcached 編譯 memcached.so</h1>
+
+<h2 id="安裝-libmemcached">安裝 libmemcached</h2>
+
+<ol>
+  <li>至官網下載 https://launchpad.net/libmemcached</li>
+  <li>wget ….</li>
+  <li>cd /libmemcached-1.x.x</li>
+  <li>yum groupinstall “Development Tools”</li>
+  <li>yum install zlib-static</li>
+  <li>./configure –disable-memcached-sasl</li>
+  <li>make &amp;&amp; make install</li>
+</ol>
+
+<h2 id="編譯-memcachedso">編譯 memcached.so</h2>
+<ol>
+  <li>git clone https://github.com/php-memcached-dev/php-memcached.git</li>
+  <li>git checkout php7</li>
+  <li>phpize</li>
+  <li>./configure</li>
+  <li>make &amp;&amp; make install</li>
+  <li>確定是否將 .so 放入 module 中 :
+    <ol>
+      <li><code class="highlighter-rouge">php -i | grep extension_dir</code></li>
+      <li>cd {dir}</li>
+      <li>檢查是否有 memcached.so</li>
+    </ol>
+  </li>
+  <li>確定 extension 是否有加入到 php.ini</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>驗證 php -i</td>
+          <td>grep memcached</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+<h1 id="centos7-安裝-libmosquitto-編譯-mosquittoso">centos7 安裝 libmosquitto 編譯 mosquitto.so</h1>
+
+<h2 id="安裝-libmosquitto">安裝 libmosquitto</h2>
+<ol>
+  <li>進入官網 : https://mosquitto.org/download/</li>
+  <li>找到 centos7 的 re 的 conf</li>
+  <li>將檔案 mosquitto.repo 放入 /etc/yum.repos.d 即可
+<code class="highlighter-rouge">The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto.</code></li>
+  <li>安裝 : yum install libmosquitto-devel</li>
+  <li>安裝後的 lib 路徑, 系統安裝後會提示, 無意外是 /usr/lib64/libmosquitto.so…..</li>
+</ol>
+
+<h2 id="編譯-mosquittoso">編譯 mosquitto.so</h2>
+<ol>
+  <li>下載 git source 後 : https://github.com/mgdm/Mosquitto-PHP</li>
+  <li>cd Mosquitto-PHP</li>
+  <li>phpize</li>
+  <li><code class="highlighter-rouge">./configure --with-mosquitto=/usr/lib64/libmosquitto.so</code></li>
+  <li>make &amp;&amp; make install</li>
+  <li>驗證 module 是否有 mosquitto.so</li>
+  <li>在 php.ini 中設定 extension=mosquitto.so</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>驗證 : php -i</td>
+          <td>grep mosquitto</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/git/2017/03/15/Git-attribute/" rel="next" title="【Git】attribute, 合併後保留原本的設定檔">
+                <i class="fa fa-chevron-left"></i> 【Git】attribute, 合併後保留原本的設定檔
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/php/2017/01/15/PHP-Memcached/" rel="prev" title="【php】memcached">
+                【php】memcached <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#完整的-bash-script"> <span class="nav-text">完整的 bash script</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#start"> <span class="nav-text">start</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#centos7-安裝-nginx"> <span class="nav-text">centos7 安裝 nginx</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#操作"> <span class="nav-text">操作</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#centos7-安裝-php7x"> <span class="nav-text">centos7 安裝 php7.x</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#source"> <span class="nav-text">source</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#操作-1"> <span class="nav-text">操作</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#測試"> <span class="nav-text">測試</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#centos7-安裝-phalcon-with-php7x"> <span class="nav-text">centos7 安裝 phalcon with php7.x</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#trouble"> <span class="nav-text">trouble</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#centos7-安裝-libmemcached-編譯-memcachedso"> <span class="nav-text">centos7 安裝 libmemcached 編譯 memcached.so</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#安裝-libmemcached"> <span class="nav-text">安裝 libmemcached</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#編譯-memcachedso"> <span class="nav-text">編譯 memcached.so</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#centos7-安裝-libmosquitto-編譯-mosquittoso"> <span class="nav-text">centos7 安裝 libmosquitto 編譯 mosquitto.so</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#安裝-libmosquitto"> <span class="nav-text">安裝 libmosquitto</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#編譯-mosquittoso"> <span class="nav-text">編譯 mosquitto.so</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

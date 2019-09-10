@@ -1,0 +1,1007 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Golang," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Synopsis 透過 struct 方式，容易看懂程式 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory) 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解 Example 一般來說，如果要用程式碼計算『圓形面積』、『長方形面積』，可以用一些簡單的方式攥寫 但回頭看這個程式碼，會發現 如果要追蹤『rx1, ry1, rx2, ry2』或者『cx, cy, cr』當程式碼一長 or 複雜，就很難理解這個參數的意義 儘管有寫註解，在 function 中，一樣很難快速理解 解決方案 : 使用 struct 來幫助理解">
+<meta name="keywords" content="Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Go】利用 struct 優化（一）">
+<meta property="og:url" content="/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="Synopsis 透過 struct 方式，容易看懂程式 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory) 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解 Example 一般來說，如果要用程式碼計算『圓形面積』、『長方形面積』，可以用一些簡單的方式攥寫 但回頭看這個程式碼，會發現 如果要追蹤『rx1, ry1, rx2, ry2』或者『cx, cy, cr』當程式碼一長 or 複雜，就很難理解這個參數的意義 儘管有寫註解，在 function 中，一樣很難快速理解 解決方案 : 使用 struct 來幫助理解">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Go】利用 struct 優化（一）">
+<meta name="twitter:description" content="Synopsis 透過 struct 方式，容易看懂程式 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory) 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解 Example 一般來說，如果要用程式碼計算『圓形面積』、『長方形面積』，可以用一些簡單的方式攥寫 但回頭看這個程式碼，會發現 如果要追蹤『rx1, ry1, rx2, ry2』或者『cx, cy, cr』當程式碼一長 or 複雜，就很難理解這個參數的意義 儘管有寫註解，在 function 中，一樣很難快速理解 解決方案 : 使用 struct 來幫助理解">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【Go】利用 struct 優化（一） | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【Go】利用 struct 優化（一）
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-10T13:51:00+08:00">
+                2019-09-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="synopsis">Synopsis</h2>
+<ol>
+  <li>透過 struct 方式，容易看懂程式</li>
+  <li>透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)</li>
+  <li>使用 func as method 方式，讓程式碼在 func 使用上更容易被理解</li>
+</ol>
+
+<h1 id="example">Example</h1>
+<p>一般來說，如果要用程式碼計算『圓形面積』、『長方形面積』，可以用一些簡單的方式攥寫</p>
+
+<div>
+    <iframe src="https://play.golang.org/p/fzSt0Hz56WP" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<p>但回頭看這個程式碼，會發現</p>
+<ul>
+  <li>如果要追蹤『rx1, ry1, rx2, ry2』或者『cx, cy, cr』當程式碼一長 or 複雜，就很難理解這個參數的意義</li>
+  <li>儘管有寫註解，在 function 中，一樣很難快速理解</li>
+</ul>
+
+<p>解決方案 : 使用 struct 來幫助理解</p>
+
+<!--more-->
+
+<h1 id="use-struct">use struct</h1>
+<p><code class="highlighter-rouge">struct</code> 是一種 <code class="highlighter-rouge">type</code>, 它包含了名稱的欄位, 例如：可以把 Rectangle 寫成如下方式</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>type Coordinate struct {
+	x float64
+	y float64
+}
+
+type Rectangle struct {
+	start Coordinate
+	end   Coordinate
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>新增一個 Coordinate 的物件, 類型(type)是 struct, 裡面夾帶 (x,y) 欄位</li>
+  <li>新增一個 Rectangle, 類型(type)是 struct 的物件, 裡面夾帶 ‘起始座標’ 與 ‘結束座標’</li>
+</ul>
+
+<blockquote>
+  <p>宣告方法可以有以下幾種</p>
+</blockquote>
+
+<ol>
+  <li>以下都相同，跟 (2) 不同的是，返回是一個指標
+    <ul>
+      <li><code class="highlighter-rouge">r := new(Rectangle)</code>, 而 new 的主要作用是為 type 申請 memory，並<code class="highlighter-rouge">返回指向 memory 的指標</code>。</li>
+      <li><code class="highlighter-rouge">r := &amp;Rectangle{}</code></li>
+    </ul>
+  </li>
+  <li>以下也都相同
+    <ul>
+      <li><code class="highlighter-rouge">var r Rectangle</code></li>
+      <li><code class="highlighter-rouge">r := Rectangle{}</code></li>
+      <li><code class="highlighter-rouge">r := Rectangle{Coordinate{}, Coordinate{}}</code></li>
+      <li><code class="highlighter-rouge">r := Rectangle{ start: Coordinate{}, end:   Coordinate{},}</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="優化開始">優化開始</h1>
+
+<ul>
+  <li>steps
+    <ol>
+      <li>將 func() 參數物件改為傳遞 struct</li>
+      <li>將 func() 中 strct 設定為指標</li>
+      <li>function as a method</li>
+    </ol>
+  </li>
+</ul>
+
+<h2 id="1-將-func-參數物件改為傳遞-struct">1. 將 func() 參數物件改為傳遞 struct</h2>
+
+<p>從上面的基本操作，建立了 Rectangle 物件, type 是 struct
+所以將 rectangleArea() 與 distance() 變更為</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>func rectangleArea(r Rectangle) float64 {
+	l := r.end.x - r.start.x
+	w := r.end.y - r.start.y
+	return l * w
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>在 main 中, 可以改為, 如此可以輕鬆地理解 r 來自於 Rectangle 這個結構中的欄位</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11</pre></td><td class="code"><pre class="highlight"><code>r := Rectangle{
+	start: Coordinate{
+		x: 1,
+		y: 1,
+	},
+	end: Coordinate{
+		x: 10,
+		y: 10,
+	},
+}
+fmt.Println(rectangleArea(r))
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="2-將-func-中-strct-設定為指標">2. 將 func() 中 strct 設定為指標</h2>
+<p>以上 func 中, 重新宣告了一個 Rectangle 的物件
+可以使用 <code class="highlighter-rouge">fmt.Printf("%p\n", ThePointer)</code> 查看記憶體位置的變化</p>
+
+<p>for example</p>
+
+<pre>
+0xc00009c000 &lt;= main 中的 Rectangle
+0xc00009c020 &lt;= func 中的 Rectangle
+</pre>
+
+<p>但可以用 pointer, 避免重複宣告並佔用 memory, 浪費資源</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code>func rectangleArea(r *Rectangle) float64 {
+    fmt.Printf("%p", r) // 因為這邊的 r 已經是 pointer
+	l := r.end.x - r.start.x
+	w := r.end.y - r.start.y
+	return l * w
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>在 main 中</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12</pre></td><td class="code"><pre class="highlight"><code>r := Rectangle{
+	start: Coordinate{
+		x: 1,
+		y: 1,
+	},
+	end: Coordinate{
+		x: 10,
+		y: 10,
+	},
+}
+fmt.Printf("%p\n", &amp;r)
+fmt.Println(rectangleArea(&amp;r))
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="3-function-as-a-method">3. function as a method</h2>
+<p>解決了以上的問題，會發現</p>
+<ol>
+  <li>rectangle 與 circle 都有 area, 雖然可以在命名上作區別, 但有更好的方法
+且可以透過 <code class="highlighter-rouge">.</code> 的方式, 快速地在編輯器上引用此 method</li>
+  <li>在 main 中，帶入的物件是 <code class="highlighter-rouge">&amp;r</code> 會有點難以理解</li>
+</ol>
+
+<blockquote>
+  <p>將 rectangleArea() 改為 rectangle 的 method</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code>func (r *Rectangle) area() float64 {
+	fmt.Printf("%p\n", r)
+	l := r.end.x - r.start.x
+	w := r.end.y - r.start.y
+	return l * w
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>在 main 中</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>fmt.Println(r.area())
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="優化結束">優化結束</h2>
+
+<div>
+    <iframe src="https://play.golang.org/p/ZQ3xAB8o5R9" height="315" width="560" allowfullscreen="" frameborder="1">
+    </iframe>
+</div>
+
+<p>這是一個簡短的例子，當我們將功能越寫越多時，程式碼會越複雜
+我們可以透過此方法達成以下三個目的</p>
+<ol>
+  <li>透過 struct 方式，容易看懂程式</li>
+  <li>透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)</li>
+  <li>使用 func as method 方式，讓程式碼在 func 使用上更容易被理解</li>
+</ol>
+
+<h2 id="結論">結論</h2>
+<ol>
+  <li>過於複雜的參數傳遞，雖然我們可以用命名方式來釐清，但名稱越長，也會使程式碼難以理解</li>
+  <li>優化並非將程式碼縮短(但的確在大型架構下，可以縮短，並更容易理解)</li>
+</ol>
+
+<h1 id="問題">問題</h1>
+<p>一個人裡有各種資訊物件，身分證、健保卡、護照，都用在不同的地方，也都有各自的 ID
+可以透過 struct 將 『身分證、健保卡、護照』 各自建立起來，用在不同的目的上
+但是否有方法整合這些物件？</p>
+
+<p>參考下篇: <a href="/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/">struct優化（二）:interface</a></p>
+
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/tag/#/Golang" rel="tag"># Golang</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/" rel="next" title="【Go】利用 struct 優化（二）:interface">
+                <i class="fa fa-chevron-left"></i> 【Go】利用 struct 優化（二）:interface
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/golang/2019/09/07/Go-drill-interface/" rel="prev" title="【Go】Drill interface{}">
+                【Go】Drill interface{} <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#example"> <span class="nav-text">Example</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#use-struct"> <span class="nav-text">use struct</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#優化開始"> <span class="nav-text">優化開始</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#1-將-func-參數物件改為傳遞-struct"> <span class="nav-text">1. 將 func() 參數物件改為傳遞 struct</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#2-將-func-中-strct-設定為指標"> <span class="nav-text">2. 將 func() 中 strct 設定為指標</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#3-function-as-a-method"> <span class="nav-text">3. function as a method</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#優化結束"> <span class="nav-text">優化結束</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#結論"> <span class="nav-text">結論</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#問題"> <span class="nav-text">問題</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

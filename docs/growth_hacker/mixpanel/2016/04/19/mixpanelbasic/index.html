@@ -1,0 +1,1029 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="https://mixpanel.com first 註冊完畢 進行第一次設定 js 中有 token 將此 js 放入 html 中，並將 track 設定好，可於下方進行測試，完成後，即可進行下一步 我個人覺得，可能多數人在第一次使用時，遇上了問題，所以 Mixpanel 才會如此進行他的流程 若直接在 settings 中 Reset Project Data，則不會影響 token 的變更，只需重新在 Segmentation 中重新初始化一遍即可 settings Management 專案名稱設定 URL 時區設定 Data points : That simply means that you have sent in any events, You can send in events using track method Number of users : set up any user people profiles, set up profiles using people.set method Token API Secret Options reset delete transfer Team 團隊管理 Notifications 可上傳設定 GCM(API Key) / APNS(p12) 的憑證 Data Management 管理 event 與 properties 中的參數，何者不需要被監控 Access security 可啟用二階段驗證 基本：五個關鍵指標 Acquisition, Activation, Retention, Referral, and Revenue.">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Mixpanel】basic">
+<meta property="og:url" content="/growth_hacker/mixpanel/2016/04/19/mixpanelbasic/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="https://mixpanel.com first 註冊完畢 進行第一次設定 js 中有 token 將此 js 放入 html 中，並將 track 設定好，可於下方進行測試，完成後，即可進行下一步 我個人覺得，可能多數人在第一次使用時，遇上了問題，所以 Mixpanel 才會如此進行他的流程 若直接在 settings 中 Reset Project Data，則不會影響 token 的變更，只需重新在 Segmentation 中重新初始化一遍即可 settings Management 專案名稱設定 URL 時區設定 Data points : That simply means that you have sent in any events, You can send in events using track method Number of users : set up any user people profiles, set up profiles using people.set method Token API Secret Options reset delete transfer Team 團隊管理 Notifications 可上傳設定 GCM(API Key) / APNS(p12) 的憑證 Data Management 管理 event 與 properties 中的參數，何者不需要被監控 Access security 可啟用二階段驗證 基本：五個關鍵指標 Acquisition, Activation, Retention, Referral, and Revenue.">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="http://mpdocs.s3.amazonaws.com/images/dual%20virality%20events.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Mixpanel】basic">
+<meta name="twitter:description" content="https://mixpanel.com first 註冊完畢 進行第一次設定 js 中有 token 將此 js 放入 html 中，並將 track 設定好，可於下方進行測試，完成後，即可進行下一步 我個人覺得，可能多數人在第一次使用時，遇上了問題，所以 Mixpanel 才會如此進行他的流程 若直接在 settings 中 Reset Project Data，則不會影響 token 的變更，只需重新在 Segmentation 中重新初始化一遍即可 settings Management 專案名稱設定 URL 時區設定 Data points : That simply means that you have sent in any events, You can send in events using track method Number of users : set up any user people profiles, set up profiles using people.set method Token API Secret Options reset delete transfer Team 團隊管理 Notifications 可上傳設定 GCM(API Key) / APNS(p12) 的憑證 Data Management 管理 event 與 properties 中的參數，何者不需要被監控 Access security 可啟用二階段驗證 基本：五個關鍵指標 Acquisition, Activation, Retention, Referral, and Revenue.">
+<meta name="twitter:image" content="http://mpdocs.s3.amazonaws.com/images/dual%20virality%20events.png">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【Mixpanel】basic | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/growth_hacker/mixpanel/2016/04/19/mixpanelbasic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【Mixpanel】basic
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-19T04:19:00+08:00">
+                2016-04-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/growth_hacker" itemprop="url" rel="index">
+                    <span itemprop="name">growth_hacker</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/mixpanel" itemprop="url" rel="index">
+                    <span itemprop="name">mixpanel</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <p>https://mixpanel.com</p>
+
+<h2 id="first">first</h2>
+<p>註冊完畢
+進行第一次設定
+js 中有 token
+將此 js 放入 html 中，並將 track 設定好，可於下方進行測試，完成後，即可進行下一步
+<strong>我個人覺得，可能多數人在第一次使用時，遇上了問題，所以 Mixpanel 才會如此進行他的流程</strong></p>
+
+<p>若直接在 settings 中 Reset Project Data，則不會影響 token 的變更，只需重新在 Segmentation 中重新初始化一遍即可</p>
+
+<h2 id="settings">settings</h2>
+<ul>
+  <li>Management
+    <ul>
+      <li>專案名稱設定</li>
+      <li>URL</li>
+      <li>時區設定</li>
+      <li>Data points : That simply means that you have sent in any events, <a href="https://mixpanel.com/help/reference/javascript#sending-events">You can send in events using track method</a></li>
+      <li>Number of users : set up any user people profiles, <a href="https://mixpanel.com/help/reference/javascript#storing-user-profiles">set up profiles using people.set method</a></li>
+      <li>Token</li>
+      <li>API Secret</li>
+      <li>Options
+        <ul>
+          <li>reset</li>
+          <li>delete</li>
+          <li>transfer</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Team
+    <ul>
+      <li>團隊管理</li>
+    </ul>
+  </li>
+  <li>Notifications
+    <ul>
+      <li>可上傳設定 GCM(API Key) / APNS(p12) 的憑證</li>
+    </ul>
+  </li>
+  <li>Data Management
+    <ul>
+      <li>管理 event 與 properties 中的參數，何者不需要被監控</li>
+    </ul>
+  </li>
+  <li>Access security
+    <ul>
+      <li>可啟用二階段驗證</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="基本五個關鍵指標">基本：五個關鍵指標</h2>
+<p>Acquisition, Activation, Retention, Referral, and Revenue.
+<!--more--></p>
+
+<ul>
+  <li>用戶從何處知道了此服務，開發者在這些服務來源中，了解到用戶從哪些地方知道此服務，在行銷上就可強化該服務，可能是一個電影的廣告…等等</li>
+  <li>並進行了註冊</li>
+  <li>用戶持續的使用</li>
+  <li>透過用戶進行病毒式的行銷</li>
+  <li>從這些廣大的用戶中，瞭解哪些用戶是金童，並瞭解他們的喜好</li>
+</ul>
+
+<p>當服務建立好後，先從第一步放置追蹤代碼，等到部署到第三步，就可不斷的循環找尋痛點，取得第五步的收益
+至於第四步，若讓用戶已經很喜愛你的產品，即可使用第四步進行行銷，若尚未保證用戶對產品有一定的認同度，結果只是招來一堆蒼蠅罷了</p>
+
+<p>以前錯誤的例子：</p>
+
+<ul>
+  <li>err_1 : 以為只要放到 fb，就會有一堆粉絲</li>
+  <li>err_2 : 無腦的直接使用病毒式行銷，希望透過 fb 的 share 進行推廣產品的可見度</li>
+  <li>結論：無法取得用戶的回流，且可見度也有限，做了一堆無用的工</li>
+</ul>
+
+<h3 id="acquisition">Acquisition</h3>
+<p>泛指強調獲取資訊的方法
+獲取用戶是從哪些位置或者說是來源，給予你有價值的回饋 = 表現最好的轉換通道
+強化這些來源</p>
+
+<p>可從這些來源中，取得開發團隊要取得的資訊，如年齡、性別、地域性
+並且可進一步的分析，是哪些搜尋關鍵字，讓你知道誰是你的客戶群</p>
+
+<h3 id="activation">Activation</h3>
+<blockquote>
+  <p>happy first visit.
+Do they move through your app or website seamlessly?
+Are there certain pages or steps where you are losing or stalling a chunk of your traffic?
+key goal of increasing conversion.</p>
+</blockquote>
+
+<p>激活用戶，進行註冊等等
+讓這些用戶從了解到你的服務，倒變成你真正的註冊用戶</p>
+
+<p>不斷的優化 landing page，讓用戶無論從 app or website 的轉換過程中，是流暢的
+並且了解到用戶在第一次的接觸中，會想要進行註冊，並觀察是否在某一流程中，用戶</p>
+
+<p>進行註冊的用戶，將會取得一組 distinct_id，這將會是 mixpanel 進行分析用戶資料的判斷</p>
+
+<h3 id="retention">Retention</h3>
+
+<p>簡言：回流率</p>
+
+<p>當你讓一些陌生人，變為你網站的客戶，你並需讓他們經常性的回流到你的網站</p>
+
+<p>The key to monitoring changes in retention is to view it by cohort groups.
+Q:This is all well and good, but how do I get my retention to go up</p>
+
+<p>舉例：
+可以指定在過去兩個星期中，尚未登入網站，並曾於過去多次購買的用戶，讓他們知道你在舊金山有辦活動
+之後使用 funnel 去觀察，這些用戶是否通過通知有回到你的網站，或者讓這些用戶帶來更多的效益</p>
+
+<p>讓你的用戶經常性地回到你的服務中
+ex : 透過某些行銷行為，讓這些用戶感興趣，並且回到你的服務中</p>
+
+<h3 id="referral">Referral</h3>
+<blockquote>
+  <p>Once your product is battle-tested and beloved, it’s time for viral marketing.
+how many of your users send invites, and what percentage of those invites become new users.</p>
+</blockquote>
+
+<p>以下為用戶 A 邀請用戶 B 成為會員的追蹤(必須要學會描述故事，在此前提先畫出 flow) <code class="highlighter-rouge">mixpanel.track("event", {"distinct_id": "Other ID"});</code>
+(必須著重在，A 與 B 之間的對話方式)</p>
+
+<p><img src="http://mpdocs.s3.amazonaws.com/images/dual%20virality%20events.png" alt="img" /></p>
+
+<p><strong>distinct_id 是讓 mixpanel 可辨別的清晰的代碼</strong></p>
+
+<p>如何跟蹤發送邀請與接收邀請的比例的轉換數
+跟蹤工具，應該是說，因為推廣，可觀察到哪些推廣代碼，被引用，並且成功轉換為用戶</p>
+
+<ul>
+  <li>K-factor : http://en.wikipedia.org/wiki/K-factor_(marketing)
+    <ul>
+      <li>用於描述網站或者 app 的增長速度</li>
+      <li>k = i * c ; i 為每個用戶寄送的邀請數量 ; c 為轉換為新用戶的預測百分比
+        <ul>
+          <li>ex : i=5 ; c=.2 ; k=1，若 k&gt;1 則代表正成長， k&lt;1 則代表負成長</li>
+        </ul>
+      </li>
+      <li>透過 mixpanel，可觀察到哪些 user 對於推廣有助</li>
+    </ul>
+  </li>
+  <li>mixpanel.people.increment
+    <ul>
+      <li>可觀察到，哪些事件對於推廣是有助益的</li>
+    </ul>
+  </li>
+</ul>
+
+<p>例如可在 mail 中，url 的參數放入邀請者的 id 或者可將整個事件的 json 轉為 base64 掛於 url 後方</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>//將 json 轉為 base64
+http://api.mixpanel.com/track/?data=ew0KICAgICJldmVudCI6ICJTaWduZWQgVXAiLA0KICAgICJwcm9wZXJ0aWVzIjogew0KICAgICAgICAiZGlzdGluY3RfaWQiOiAiMTM3OTMiLA0KICAgICAgICAidG9rZW4iOiAiZTNiYzQxMDAzMzBjMzU3MjI3NDBmYjhjNmY1YWJkZGMiLA0KICAgICAgICAiUmVmZXJyZWQgQnkiOiAiRnJpZW5kIg0KICAgIH0NCn0=
+</code></pre></td></tr></tbody></table></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13</pre></td><td class="code"><pre class="highlight"><code>//將 json 轉為 base64，json 格式
+// Sends an event "Signed Up", associated with user 13793,
+// with a property "Referred By"
+{
+    "event": "Signed Up",
+    "properties": {
+        // "distinct_id" and "token" are
+        // special properties, described below.
+        "distinct_id": "13793",
+        "token": "e3bc4100330c35722740fb8c6f5abddc",
+        "Referred By": "Friend"
+    }
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<p><a href="https://mixpanel.com/help/reference/http">mixpanel http 參數設定</a></p>
+
+<h3 id="revenue">Revenue</h3>
+<p>以上的四個方法，都只是為了最後的收益</p>
+
+<p>當你透過以上方法了解到，哪些是最有價值的用戶，就可以針對這些用戶的喜好進行開發、行銷推廣
+例如:可以知道，18 歲的青少年，21 歲的女性，在你的 app 中進行了哪些購買，
+針對這些有價值的客戶群，進行特別的推廣活動，讓你的行銷更為精準</p>
+
+<h2 id="一些簡單的樣版規則">一些簡單的樣版規則</h2>
+<p>http://mpdocs.s3.amazonaws.com/docs/Sample%20Mixpanel%20implementation%20Spec%20with%20People.xls</p>
+
+<h2 id="區隔-develop--production-的設定">區隔 develop / production 的設定</h2>
+
+<ol>
+  <li>在 mixpanel 控制台中，建立兩個專案，分別為 develop 與 production，此時根據會產生個別的 token</li>
+  <li>當在 website 時，透過 js，檢查 host 是否為 productionHost</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12</pre></td><td class="code"><pre class="highlight"><code>var productionHost = 'Your production Domain'; 
+
+var devToken = 'Development Token';
+var prodToken = 'Production Token';
+
+/* If the hostname is anything other than your production domain, initialize the Mixpanel library with your Development Token */
+
+if (window.location.hostname.toLowerCase().search(productionHost) &lt; 0) {
+    mixpanel.init(devToken);
+} else {
+    mixpanel.init(prodToken);
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<ol>
+  <li>同理在 ios / android 亦可參照類似方法</li>
+</ol>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/sublime/ide/2016/04/20/sublime-text-3basic/" rel="next" title="【sublime text 3】basic">
+                <i class="fa fa-chevron-left"></i> 【sublime text 3】basic
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/line/2016/04/15/linedevelop/" rel="prev" title="【LINE】develop intro">
+                【LINE】develop intro <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#first"> <span class="nav-text">first</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#settings"> <span class="nav-text">settings</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#基本五個關鍵指標"> <span class="nav-text">基本：五個關鍵指標</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#acquisition"> <span class="nav-text">Acquisition</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#activation"> <span class="nav-text">Activation</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#retention"> <span class="nav-text">Retention</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#referral"> <span class="nav-text">Referral</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#revenue"> <span class="nav-text">Revenue</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#一些簡單的樣版規則"> <span class="nav-text">一些簡單的樣版規則</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#區隔-develop--production-的設定"> <span class="nav-text">區隔 develop / production 的設定</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

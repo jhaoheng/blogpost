@@ -1,0 +1,926 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="目標 首先這是一個替 nginx 動態增加 module 的程序 利用 docker : nginx 來建立已經安裝好 nginx 的環境 因為動態安裝 module，必須要相同的 nginx 版本，與相同的設定資訊">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【nginx】add dynamic module to an existing nginx">
+<meta property="og:url" content="/docker/nginx/module/2017/11/04/nginx_add_dynamic_module/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="目標 首先這是一個替 nginx 動態增加 module 的程序 利用 docker : nginx 來建立已經安裝好 nginx 的環境 因為動態安裝 module，必須要相同的 nginx 版本，與相同的設定資訊">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【nginx】add dynamic module to an existing nginx">
+<meta name="twitter:description" content="目標 首先這是一個替 nginx 動態增加 module 的程序 利用 docker : nginx 來建立已經安裝好 nginx 的環境 因為動態安裝 module，必須要相同的 nginx 版本，與相同的設定資訊">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【nginx】add dynamic module to an existing nginx | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/docker/nginx/module/2017/11/04/nginx_add_dynamic_module/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【nginx】add dynamic module to an existing nginx
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-04T16:17:00+08:00">
+                2017-11-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/docker" itemprop="url" rel="index">
+                    <span itemprop="name">docker</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/nginx" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/module" itemprop="url" rel="index">
+                    <span itemprop="name">module</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="目標">目標</h1>
+<ol>
+  <li>首先這是一個替 nginx 動態增加 module 的程序</li>
+  <li>利用 docker : nginx 來建立已經安裝好 nginx 的環境</li>
+  <li>因為動態安裝 module，必須要相同的 nginx 版本，與相同的設定資訊
+<!--more-->
+    <h1 id="環境">環境</h1>
+    <ul>
+      <li>osx</li>
+      <li>docker, nginx:latest</li>
+      <li>安裝的 module : <code class="highlighter-rouge">https://github.com/kwojtek/nginx-rtmpt-proxy-module</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="first-at-all">first at all</h1>
+<p><code class="highlighter-rouge">docker run -it -p 80:80 -p 443:443 nginx:latest /bin/bash</code></p>
+
+<h1 id="可能會用到的套件">可能會用到的套件</h1>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8</pre></td><td class="code"><pre class="highlight"><code>apt-get update &amp;&amp; \
+apt-get install iputils-ping -y &amp;&amp; \
+apt-get install procps -y &amp;&amp; \
+apt-get install vim -y &amp;&amp; \
+apt-get install lsof -y &amp;&amp; \
+apt-get install curl -y &amp;&amp; \
+apt-get install git -y &amp;&amp; \
+apt-get install wget -y
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="安裝-gcc">安裝 gcc</h1>
+<p>apt-get install build-essential -y</p>
+
+<h1 id="檢查-nginx-取得">檢查 nginx, 取得</h1>
+
+<p><code class="highlighter-rouge">nginx -V</code></p>
+
+<ol>
+  <li>版本號</li>
+  <li>設定參數 : 編譯時，需要用到，否則會有二進制不相容問題, ex : configure arguments: –prefix=/etc/nginx ….</li>
+</ol>
+
+<h1 id="下載-nginx--依照版本號碼">下載 nginx : 依照版本號碼</h1>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>wget http://nginx.org/download/nginx-{version}.tar.gz
+tar xvf nginx-{version}.tar.gz
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="下載-module">下載 module</h1>
+<p><code class="highlighter-rouge">git clone https://github.com/kwojtek/nginx-rtmpt-proxy-module.git</code></p>
+
+<h1 id="取得編譯時需要的-dependency">取得編譯時需要的 dependency</h1>
+<h2 id="pcre">PCRE</h2>
+<ul>
+  <li><code class="highlighter-rouge">wget https://ftp.pcre.org/pub/pcre/pcre-8.40.tar.gz &amp;&amp; tar xzvf pcre-8.40.tar.gz</code></li>
+  <li>編譯時加上 : <code class="highlighter-rouge">--with-pcre=&lt;path&gt;</code>
+    <h2 id="zlib">zlib</h2>
+  </li>
+  <li><code class="highlighter-rouge">wget http://www.zlib.net/zlib-1.2.11.tar.gz &amp;&amp; tar xzvf zlib-1.2.11.tar.gz</code></li>
+  <li>編譯時加上 : <code class="highlighter-rouge">--with-zlib=&lt;path&gt;</code></li>
+</ul>
+
+<h2 id="openssl">openssl</h2>
+<ul>
+  <li><code class="highlighter-rouge">wget https://www.openssl.org/source/openssl-1.1.0f.tar.gz &amp;&amp; tar xzvf openssl-1.1.0f.tar.gz</code></li>
+  <li>編譯時加上 : <code class="highlighter-rouge">--with-openssl=&lt;path&gt;</code></li>
+</ul>
+
+<h1 id="開始編譯">開始編譯</h1>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>./configure --add-dynamic-module=/root/nginx-rtmpt-proxy-module \
+--with-openssl=/root/openssl-1.1.0f/ \
+--with-pcre=/root/pcre-8.40/ \
+--with-zlib=/root/zlib-1.2.11/ \
+{--prefix=/etc/nginx --sbin-path=....} &lt;---- 加入設定參數
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>ex:</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>./configure --add-dynamic-module=/root/nginx-rtmpt-proxy-module \
+--with-openssl=/root/openssl-1.1.0f/ \
+--with-pcre=/root/pcre-8.40/ \
+--with-zlib=/root/zlib-1.2.11/ \
+--prefix=/etc/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/var/run/nginx.pid --lock-path=/var/run/nginx.lock --http-client-body-temp-path=/var/cache/nginx/client_temp --http-proxy-temp-path=/var/cache/nginx/proxy_temp --http-fastcgi-temp-path=/var/cache/nginx/fastcgi_temp --http-uwsgi-temp-path=/var/cache/nginx/uwsgi_temp --http-scgi-temp-path=/var/cache/nginx/scgi_temp --user=nginx --group=nginx --with-compat --with-file-aio --with-threads --with-http_addition_module --with-http_auth_request_module --with-http_dav_module --with-http_flv_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_mp4_module --with-http_random_index_module --with-http_realip_module --with-http_secure_link_module --with-http_slice_module --with-http_ssl_module --with-http_stub_status_module --with-http_sub_module --with-http_v2_module --with-mail --with-mail_ssl_module --with-stream --with-stream_realip_module --with-stream_ssl_module --with-stream_ssl_preread_module --with-cc-opt='-g -O2 -fdebug-prefix-map=/data/builder/debuild/nginx-1.13.6/debian/debuild-base/nginx-1.13.6=. -specs=/usr/share/dpkg/no-pie-compile.specs -fstack-protector-strong -Wformat -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -fPIC' --with-ld-opt='-specs=/usr/share/dpkg/no-pie-link.specs -Wl,-z,relro -Wl,-z,now -Wl,--as-needed -pie'
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="產生-modules">產生 modules</h1>
+<p><code class="highlighter-rouge">make modules</code></p>
+
+<h1 id="將-moduels-放到目前版本的-nginxmodule-下">將 moduels 放到目前版本的 nginx/module 下</h1>
+<p><code class="highlighter-rouge">cp {path}/nginx-{version}/objs/ngx_rtmpt_proxy_module.so /etc/nginx/modules</code></p>
+
+<h1 id="更改-nginxconf--在最上層加入此行">更改 nginx.conf : 在最上層加入此行</h1>
+<blockquote>
+  <p>not within the http or stream context</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>load_module modules/ngx_rtmpt_proxy_module.so;
+</code></pre></td></tr></tbody></table></div></div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/docker/nginx/rtmpt/rtmp/ossrs/2017/11/05/rtmpt&rtmp/" rel="next" title="【nginx】rtmpt(tunnel by http:80) to rtmp:1935">
+                <i class="fa fa-chevron-left"></i> 【nginx】rtmpt(tunnel by http:80) to rtmp:1935
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/docker/mairadb/2017/11/03/docker&mariadb/" rel="prev" title="【Docker:mariadb】set init when first running">
+                【Docker:mariadb】set init when first running <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#目標"> <span class="nav-text">目標</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#環境"> <span class="nav-text">環境</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#first-at-all"> <span class="nav-text">first at all</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#可能會用到的套件"> <span class="nav-text">可能會用到的套件</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#安裝-gcc"> <span class="nav-text">安裝 gcc</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#檢查-nginx-取得"> <span class="nav-text">檢查 nginx, 取得</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#下載-nginx--依照版本號碼"> <span class="nav-text">下載 nginx : 依照版本號碼</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#下載-module"> <span class="nav-text">下載 module</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#取得編譯時需要的-dependency"> <span class="nav-text">取得編譯時需要的 dependency</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#pcre"> <span class="nav-text">PCRE</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#zlib"> <span class="nav-text">zlib</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#openssl"> <span class="nav-text">openssl</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#開始編譯"> <span class="nav-text">開始編譯</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#產生-modules"> <span class="nav-text">產生 modules</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#將-moduels-放到目前版本的-nginxmodule-下"> <span class="nav-text">將 moduels 放到目前版本的 nginx/module 下</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#更改-nginxconf--在最上層加入此行"> <span class="nav-text">更改 nginx.conf : 在最上層加入此行</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

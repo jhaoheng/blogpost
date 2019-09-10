@@ -1,0 +1,992 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="GPG 什麼是 GPG https://www.gnupg.org/index.html 可產生不同的 key，並針對這些 key 進行管理 當產生後，會依據設定的『用戶名稱』、『你設定的 mail』產生 GPG key 主要產生 public_GPG_key、subordinate private keys 而過程中會要求是否設定 passphrase，是用來保護 subordinate private keys ex key: pub rsa4096/&amp;lt;public_GPG_key&amp;gt; 2016-04-09 [SC] uid [ultimate&amp;lt;設定的存活時間&amp;gt;] maxhu&amp;lt;設定名稱&amp;gt; (fot github&amp;lt;設定備註&amp;gt;) xxxx@gmail.com&amp;lt;設定email&amp;gt; sub rsa4096/&amp;lt;subordinate private keys&amp;gt; 2016-04-09 [E] 開源，為什麼要用 GPG? https://github.com/blog/2144-gpg-signature-verification 開源開發，開發者來自世界各地，有時驗證該 commit 或 tag 來自被驗證過的來源是很重要的事 若 commit 或 tag 後，就會在 repo commits 中，出現 Verified 字樣，代表此來源，有被驗證過">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【GPG】GNU Privacy Guard with git">
+<meta property="og:url" content="/git/github/gpg/2016/04/09/gpggnu-privacy-guard-with-git/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="GPG 什麼是 GPG https://www.gnupg.org/index.html 可產生不同的 key，並針對這些 key 進行管理 當產生後，會依據設定的『用戶名稱』、『你設定的 mail』產生 GPG key 主要產生 public_GPG_key、subordinate private keys 而過程中會要求是否設定 passphrase，是用來保護 subordinate private keys ex key: pub rsa4096/&amp;lt;public_GPG_key&amp;gt; 2016-04-09 [SC] uid [ultimate&amp;lt;設定的存活時間&amp;gt;] maxhu&amp;lt;設定名稱&amp;gt; (fot github&amp;lt;設定備註&amp;gt;) xxxx@gmail.com&amp;lt;設定email&amp;gt; sub rsa4096/&amp;lt;subordinate private keys&amp;gt; 2016-04-09 [E] 開源，為什麼要用 GPG? https://github.com/blog/2144-gpg-signature-verification 開源開發，開發者來自世界各地，有時驗證該 commit 或 tag 來自被驗證過的來源是很重要的事 若 commit 或 tag 後，就會在 repo commits 中，出現 Verified 字樣，代表此來源，有被驗證過">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【GPG】GNU Privacy Guard with git">
+<meta name="twitter:description" content="GPG 什麼是 GPG https://www.gnupg.org/index.html 可產生不同的 key，並針對這些 key 進行管理 當產生後，會依據設定的『用戶名稱』、『你設定的 mail』產生 GPG key 主要產生 public_GPG_key、subordinate private keys 而過程中會要求是否設定 passphrase，是用來保護 subordinate private keys ex key: pub rsa4096/&amp;lt;public_GPG_key&amp;gt; 2016-04-09 [SC] uid [ultimate&amp;lt;設定的存活時間&amp;gt;] maxhu&amp;lt;設定名稱&amp;gt; (fot github&amp;lt;設定備註&amp;gt;) xxxx@gmail.com&amp;lt;設定email&amp;gt; sub rsa4096/&amp;lt;subordinate private keys&amp;gt; 2016-04-09 [E] 開源，為什麼要用 GPG? https://github.com/blog/2144-gpg-signature-verification 開源開發，開發者來自世界各地，有時驗證該 commit 或 tag 來自被驗證過的來源是很重要的事 若 commit 或 tag 後，就會在 repo commits 中，出現 Verified 字樣，代表此來源，有被驗證過">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【GPG】GNU Privacy Guard with git | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/git/github/gpg/2016/04/09/gpggnu-privacy-guard-with-git/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【GPG】GNU Privacy Guard with git
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-09T15:45:00+08:00">
+                2016-04-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/git" itemprop="url" rel="index">
+                    <span itemprop="name">git</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/github" itemprop="url" rel="index">
+                    <span itemprop="name">github</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/gpg" itemprop="url" rel="index">
+                    <span itemprop="name">gpg</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="gpg">GPG</h1>
+
+<h2 id="什麼是-gpg">什麼是 GPG</h2>
+
+<p><a href="https://www.gnupg.org/index.html">https://www.gnupg.org/index.html</a></p>
+
+<ul>
+  <li>可產生不同的 key，並針對這些 key 進行管理</li>
+  <li>當產生後，會依據設定的『用戶名稱』、『你設定的 mail』產生 GPG key
+    <ul>
+      <li>主要產生 <code class="highlighter-rouge">public_GPG_key</code>、<code class="highlighter-rouge">subordinate private keys</code></li>
+      <li>而過程中會要求是否設定 passphrase，是用來保護 <code class="highlighter-rouge">subordinate private keys</code></li>
+    </ul>
+  </li>
+  <li>ex key:
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>pub   rsa4096/&lt;public_GPG_key&gt; 2016-04-09 [SC]
+uid         [ultimate&lt;設定的存活時間&gt;] maxhu&lt;設定名稱&gt; (fot github&lt;設定備註&gt;) xxxx@gmail.com&lt;設定email&gt;
+sub   rsa4096/&lt;subordinate private keys&gt; 2016-04-09 [E]
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+</ul>
+
+<h2 id="開源為什麼要用-gpg">開源，為什麼要用 GPG?</h2>
+
+<p><a href="https://github.com/blog/2144-gpg-signature-verification">https://github.com/blog/2144-gpg-signature-verification</a></p>
+
+<p>開源開發，開發者來自世界各地，有時驗證該 commit 或 tag 來自被驗證過的來源是很重要的事
+若 commit 或 tag 後，就會在 repo commits 中，出現 <strong>Verified</strong> 字樣，代表此來源，有被驗證過</p>
+
+<!--more-->
+
+<blockquote>
+  <p>When you view a signed commit or tag, you will see a badge indicating if the signature could be verified using any of the contributor’s GPG keys uploaded to GitHub. You can upload your GPG keys by visiting the <a href="https://github.com/settings/keys">keys settings page</a>.</p>
+</blockquote>
+
+<p><strong>NOTICE</strong> : GitHub Desktop does not support GPG signing.</p>
+
+<h1 id="安裝-gpg">安裝 GPG</h1>
+<blockquote>
+  <p>homebrew 上的 gpg (GnuPG) 2.0.30 在 gpg-agent 上有問題，不建議安裝</p>
+</blockquote>
+
+<ul>
+  <li>安裝環境
+    <ul>
+      <li>mac OSX EI Capitan 10.11.4</li>
+    </ul>
+  </li>
+  <li>https://sourceforge.net/p/gpgosx/docu/Download/
+    <ul>
+      <li>GnuPG-2.1.11-002.dmg</li>
+      <li>(SHA-1: 558e20f8d938f2d870aae3bab59ce98649625c01) <strong>安裝檔中有說明，如何『驗證』與如何『移轉已存在的 gpg key』</strong></li>
+    </ul>
+  </li>
+  <li>安裝路徑 <code class="highlighter-rouge">/usr/local/gnupg-2.1/</code></li>
+</ul>
+
+<blockquote>
+  <p>因 github 預設使用 gpg，安裝後指令為 gpg2，故
+<code class="highlighter-rouge">ln -s /usr/local/gnupg-2.1/bin/gpg2 /usr/local/bin/gpg</code></p>
+</blockquote>
+
+<h2 id="移除-gpg">移除 GPG</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>rm '/usr/local/bin/gpg*'
+cd /usr/local
+sudo rm -rf gnupg-2.1/
+rm -rf ~/.gnupg
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="產生-gpg-key">產生 GPG key</h2>
+
+<ul>
+  <li>執行 <code class="highlighter-rouge">gpg --full-gen-key</code> ，依序選擇
+    <ul>
+      <li>(1) RSA and RSA (default)</li>
+      <li>What keysize do you want? (2048) 4096</li>
+      <li>0 = key does not expire</li>
+      <li>輸入 name</li>
+      <li>輸入指定的 email <strong>此為設定 github 的 email</strong></li>
+    </ul>
+  </li>
+  <li>而 key 的存放位置為 <code class="highlighter-rouge">/Users/&lt;user&gt;/.gnupg</code> 下</li>
+  <li>查看 key <code class="highlighter-rouge">gpg --list-keys</code></li>
+</ul>
+
+<h2 id="將-gpg-key-放入-github">將 GPG key 放入 github</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">gpg --list-keys</code> : 找出要使用的 gpg key id : A8F99211
+    <div class="language-bash highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>/Users/hubot/.gnupg/pubring.gpg
+<span class="nt">------------------------------------</span>
+pub   4096R/A8F99211 2016-04-05
+uid                  Hubot 
+sub   4096R/Z832QR89 2016-04-05
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>輸出 : <code class="highlighter-rouge">gpg2 --armor --export &lt;gpg key ID&gt;</code></li>
+  <li>複製，貼到 <a href="https://help.github.com/articles/adding-a-new-gpg-key-to-your-github-account/">github gpg keys</a> 中即可</li>
+</ul>
+
+<h2 id="設定本機端-git-的-gpg-key">設定本機端 git 的 GPG key</h2>
+<p><strong><a href="https://help.github.com/articles/telling-git-about-your-gpg-key/">Telling Git about your GPG key</a></strong></p>
+
+<p>在設定好上述動作後，接下來需要讓 git 知道你要使用哪個 GPG key。</p>
+
+<ul>
+  <li>可以針對某個 .git 使用某個特別的 key</li>
+  <li>也可以透過 global 的方式建立通用 key</li>
+  <li>基本上在 git config 下，要有這兩個參數</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>user.signingkey=&lt;your public key&gt;
+commit.gpgsign=true
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">git config</code>
+    <ul>
+      <li><code class="highlighter-rouge">--global user.signingkey &lt;public GPG key&gt;</code></li>
+      <li><code class="highlighter-rouge">--local  user.signingkey &lt;public GPG key&gt;</code></li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">git config</code>
+    <ul>
+      <li><code class="highlighter-rouge">--global commit.gpgsign true</code></li>
+      <li><code class="highlighter-rouge">--local  commit.gpgsign true</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="commit-with-gpg-key">Commit With GPG key</h2>
+<blockquote>
+  <p>Note: GitHub Desktop does not support GPG signing.</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>git commit -m "your commit message"
+# 第一次使用時，會要求輸入在建立 GPG key 時輸入的 **passphrase**
+# 往後無需使用
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="查看-push-後的-verified">查看 push 後的 verified</h3>
+<ol>
+  <li><code class="highlighter-rouge">git push</code> 後，登入 github 的該 repo</li>
+  <li>點選 Commits</li>
+  <li>可以看到 <strong>verified signature,</strong></li>
+</ol>
+
+<h2 id="tags-using-gpg">tags using GPG</h2>
+<blockquote>
+  <p>Note: GitHub Desktop does not support GPG signing.</p>
+</blockquote>
+
+<ol>
+  <li><code class="highlighter-rouge">git tag -s [tag-name]</code></li>
+  <li>驗證 <code class="highlighter-rouge">git tag -v [tag-name]</code></li>
+</ol>
+
+<h2 id="測試心得">測試心得</h2>
+
+<ul>
+  <li>只有第一次使用該 gpg 憑證時，會要求輸入 passphrase</li>
+  <li>透過 global 與 local 的設定，可分別針對不同的 git 進行是否使用該憑證的要求</li>
+  <li>但 gpg 上傳到 github 上，應該只是讓 commit 上多一個 <strong>此 commit 經過驗證</strong>，似乎無法阻止非 <strong>無通過驗證的用戶 commit</strong></li>
+</ul>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/line/2016/04/15/linedevelop/" rel="next" title="【LINE】develop intro">
+                <i class="fa fa-chevron-left"></i> 【LINE】develop intro
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#gpg"> <span class="nav-text">GPG</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#什麼是-gpg"> <span class="nav-text">什麼是 GPG</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#開源為什麼要用-gpg"> <span class="nav-text">開源，為什麼要用 GPG?</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#安裝-gpg"> <span class="nav-text">安裝 GPG</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#移除-gpg"> <span class="nav-text">移除 GPG</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#產生-gpg-key"> <span class="nav-text">產生 GPG key</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#將-gpg-key-放入-github"> <span class="nav-text">將 GPG key 放入 github</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#設定本機端-git-的-gpg-key"> <span class="nav-text">設定本機端 git 的 GPG key</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#commit-with-gpg-key"> <span class="nav-text">Commit With GPG key</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#查看-push-後的-verified"> <span class="nav-text">查看 push 後的 verified</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#tags-using-gpg"> <span class="nav-text">tags using GPG</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#測試心得"> <span class="nav-text">測試心得</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

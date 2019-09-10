@@ -1,0 +1,917 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="SYNOPSIS 目的 : 透過 bonjour 的服務註冊，讓開發者能在同一個網路下，進行 bonjour 服務的搜尋，就不用找尋特定的 ip 安裝 avahi-daemon 與測試連線 註冊 bonjour 廣播的服務內容 在 osx 上，透過 command 進行 bonjour 的服務搜尋 更新 raspberry 上的 host">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Raspberry】bonjour broadcast">
+<meta property="og:url" content="/raspberry/bonjour/2018/02/03/raspberry-bonjour/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="SYNOPSIS 目的 : 透過 bonjour 的服務註冊，讓開發者能在同一個網路下，進行 bonjour 服務的搜尋，就不用找尋特定的 ip 安裝 avahi-daemon 與測試連線 註冊 bonjour 廣播的服務內容 在 osx 上，透過 command 進行 bonjour 的服務搜尋 更新 raspberry 上的 host">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Raspberry】bonjour broadcast">
+<meta name="twitter:description" content="SYNOPSIS 目的 : 透過 bonjour 的服務註冊，讓開發者能在同一個網路下，進行 bonjour 服務的搜尋，就不用找尋特定的 ip 安裝 avahi-daemon 與測試連線 註冊 bonjour 廣播的服務內容 在 osx 上，透過 command 進行 bonjour 的服務搜尋 更新 raspberry 上的 host">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【Raspberry】bonjour broadcast | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/raspberry/bonjour/2018/02/03/raspberry-bonjour/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【Raspberry】bonjour broadcast
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-02-03T04:30:00+08:00">
+                2018-02-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/raspberry" itemprop="url" rel="index">
+                    <span itemprop="name">raspberry</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/bonjour" itemprop="url" rel="index">
+                    <span itemprop="name">bonjour</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="synopsis">SYNOPSIS</h1>
+<blockquote>
+  <p>目的 : 透過 bonjour 的服務註冊，讓開發者能在同一個網路下，進行 bonjour 服務的搜尋，就不用找尋特定的 ip</p>
+</blockquote>
+
+<ol>
+  <li>安裝 avahi-daemon 與測試連線</li>
+  <li>註冊 bonjour 廣播的服務內容</li>
+  <li>在 osx 上，透過 command 進行 bonjour 的服務搜尋</li>
+  <li>更新 raspberry 上的 host</li>
+</ol>
+
+<!--more-->
+
+<h1 id="raspberry-install-bonjour">raspberry install bonjour</h1>
+<blockquote>
+  <p>以往安裝的 Raspberry Pi 都輸入了固定 IP 地址，在家使用沒有問題；但拿到別的地方用時，由於網域不同，造成無法連線。最好的方法是利用 DHCP 分派 IP 地址。但這又衍生另一問題，怎樣知道 Raspberry Pi 的地址呢？尤其是沒有接上顯示屏的情況。要解決以上問題，只要安裝 Bonjour 就可以。安裝方法如下：</p>
+</blockquote>
+
+<ol>
+  <li>sudo apt-get update</li>
+  <li>sudo apt-get upgrade</li>
+  <li>sudo apt-get install avahi-daemon</li>
+</ol>
+
+<p>成功安裝後，便能以「ssh pi@raspberrypi.local」來遙距登入 Raspberry Pi。</p>
+
+<ul>
+  <li>安裝完畢後，可透過 <code class="highlighter-rouge">avahi-daemon -h</code> 進行功能查詢，基本上已經正在跑，可以用 <code class="highlighter-rouge">avahi-daemon</code> 可以知道服務正在執行
+    <ul>
+      <li>可測試把服務刪除後，是否可透過 host 進行連線</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="使用-avahi-daemon-進行-bonjour-的服務註冊">使用 avahi-daemon 進行 bonjour 的服務註冊</h1>
+<blockquote>
+  <p>目的是讓 client 可以透過 bonjour 的方式進行搜尋</p>
+</blockquote>
+
+<ol>
+  <li>在 raspberry 中，<code class="highlighter-rouge">vi /etc/avahi/services/multiple.service</code>，編輯內容如下，意思就是建立 bonjour 的搜尋內容，若無定義，則找不到服務</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18</pre></td><td class="code"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" standalone='no'?&gt;</span>
+<span class="cp">&lt;!DOCTYPE service-group SYSTEM "avahi-service.dtd"&gt;</span>
+<span class="nt">&lt;service-group&gt;</span>
+        <span class="nt">&lt;name</span> <span class="na">replace-wildcards=</span><span class="s">"yes"</span><span class="nt">&gt;</span>%h<span class="nt">&lt;/name&gt;</span>
+        <span class="nt">&lt;service&gt;</span>
+                <span class="nt">&lt;type&gt;</span>_device-info._tcp<span class="nt">&lt;/type&gt;</span>
+                <span class="nt">&lt;port&gt;</span>0<span class="nt">&lt;/port&gt;</span>
+                <span class="nt">&lt;txt-record&gt;</span>model=RackMac<span class="nt">&lt;/txt-record&gt;</span>
+        <span class="nt">&lt;/service&gt;</span>
+        <span class="nt">&lt;service&gt;</span>
+                <span class="nt">&lt;type&gt;</span>_ssh._tcp<span class="nt">&lt;/type&gt;</span>
+                <span class="nt">&lt;port&gt;</span>22<span class="nt">&lt;/port&gt;</span>
+        <span class="nt">&lt;/service&gt;</span>
+        <span class="nt">&lt;service&gt;</span>
+                <span class="nt">&lt;type&gt;</span>_http._tcp<span class="nt">&lt;/type&gt;</span>
+                <span class="nt">&lt;port&gt;</span>80<span class="nt">&lt;/port&gt;</span>
+        <span class="nt">&lt;/service&gt;</span>
+<span class="nt">&lt;/service-group&gt;</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>完成後，請執行 <code class="highlighter-rouge">/etc/init.d/avahi-daemon restart</code> or <code class="highlighter-rouge">avahi-daemon -r</code></li>
+  <li>基本上只要安裝好 avahi 後，就可以直接透過該預設的 host : raspberry.local 連到該機器，以上的設定，只是為了讓 bonjour client 在 lan 下，搜尋是否搜尋到服務的一個廣播
+    <ul>
+      <li>應用實例 : 安裝後，透過 osx command : <code class="highlighter-rouge">dns-sd</code> 進行 bonjour 註冊服務的搜尋，若 raspberry 沒有設定 ‘multiple.service’ 則找不到該機器</li>
+      <li>問題，如果有兩個相同的 raspberry.local 那該如何判別？</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="在-osx-上透過-dns-sd-進行搜尋-bonjour-的服務">在 osx 上，透過 dns-sd 進行搜尋 bonjour 的服務</h1>
+<ul>
+  <li>執行 <code class="highlighter-rouge">dns-sd -B &lt;type&gt;</code>, type 可以是 <code class="highlighter-rouge">_http._tcp</code> or <code class="highlighter-rouge">_ssh._tcp</code>，回應結果如下
+    <pre><code class="language-return">Browsing for _http._tcp
+DATE: ---Sat 03 Feb 2018---
+ 4:12:37.611  ...STARTING...
+Timestamp     A/R    Flags  if Domain               Service Type         Instance Name
+ 4:12:37.612  Add        2   5 local.               _http._tcp.          raspberrypi
+</code></pre>
+  </li>
+  <li>找到裝置後，就可以透過  <code class="highlighter-rouge">raspberrypi.local</code> 進行連線 … ，至於服務端的定義，如 80 port, 22 port, 就看設定檔如何設定</li>
+</ul>
+
+<h1 id="更新-host">更新 host</h1>
+<blockquote>
+  <p>更新「raspberrypi.local」這個名稱</p>
+</blockquote>
+
+<ol>
+  <li>可以在 SSH 登入之後輸入「sudo nano /etc/hosts」。把 127.0.1.1 那行後方的「raspberrypi」改成想要的名字；</li>
+  <li>儲存後輸入「sudo nano /etc/hostname」，同樣把「raspberrypi」改成想要的名字並儲存。</li>
+  <li>最後輸入「sudo /etc/init.d/hostname.sh」把以上改動生效</li>
+  <li>再以「sudo reboot」重新啟動便能完成。</li>
+</ol>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/drone/2018/02/04/Drone/" rel="next" title="【CI&CD】Use DRONE">
+                <i class="fa fa-chevron-left"></i> 【CI&CD】Use DRONE
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/raspberry/rtmp/2018/01/18/raspi-gstreamer/" rel="prev" title="【Raspberry】use rtmp to media-server">
+                【Raspberry】use rtmp to media-server <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#synopsis"> <span class="nav-text">SYNOPSIS</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#raspberry-install-bonjour"> <span class="nav-text">raspberry install bonjour</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#使用-avahi-daemon-進行-bonjour-的服務註冊"> <span class="nav-text">使用 avahi-daemon 進行 bonjour 的服務註冊</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#在-osx-上透過-dns-sd-進行搜尋-bonjour-的服務"> <span class="nav-text">在 osx 上，透過 dns-sd 進行搜尋 bonjour 的服務</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#更新-host"> <span class="nav-text">更新 host</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

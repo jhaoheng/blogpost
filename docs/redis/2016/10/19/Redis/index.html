@@ -1,0 +1,1038 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="安裝 redis http://redis.io/ 下載後，執行網頁上安裝方法 將 redis 安裝到 /usr/local/bin 的方法 make install 更改預設安裝位置 : make PREFIX=/some/other/directory install 此方法會安裝 binaries 到系統中，但相關的 script 與配置檔，並不會放到是到的位置，因為只是 play 若需要安裝到正式的系統中，請使用 cd utils ./install_server.sh 此種安裝方式會詢問幾個設定的問題，並且在 sys reboot 後會自動重新啟動 手動停止與啟動 : /etc/init.d/redis_&amp;lt;portnumber&amp;gt; use 啟用伺服器 直接啟用 : src/redis-server 制定設定檔 : ./src/redis-server /path/to/redis.conf 透過指令直接覆蓋設定檔 : ./redis-server --port 9999 --slaveof 127.0.0.1 6379 ./redis-server /etc/redis/6379.conf --loglevel debug 在 redis.conf 中的參數名稱，全部都支援使用 command line 進行設定。 啟用 client src/redis-cli，進入互動介面 測試 ping set foo bar get foo 可直接下指令 ./redis_cli get foo 取得參數 ./redis_cli --help : 查看一般指令 ./redis_cli help {cmd} : 取得指令相關資訊 ./redis_cli command : 取得全部指令 特性 redis 是一個 key-value 的資料庫 資料結構儲存的特性 儲存於 disk 上，儘管修改是透過 server memory。代表 redis 是快速的，也代表儲存是持久性的。 在相同的高階編程語言下，redis 的效能結構儲存，相對優秀 Redis 提供很多 database 上習慣性的方法，如複製、tunable levels of durability、叢集、高度擴展 Redis 提供更多複雜的使用方法，在 memcached 上。 more Introduction to Redis data types. http://redis.io/topics/data-types-intro Try Redis directly inside your browser. http://try.redis.io The full list of Redis commands. http://redis.io/commands There is much more inside the Redis official documentation. http://redis.io/documentation 資料類型 : strings, arrays, integers, NULL, errors and so forth 測試 將 server 關閉後，依然取得到 key-value redis-cli basic 計數 : redis-cli incr {變數名稱} 寫入檔案 : redis-cli incr {變數名稱} &amp;gt; ./output.txt 取得 : redis-cli get {變數名稱} 指定輸出為 raw redis-cli --raw get {變數名稱} 刪除 : ./redis-cli del {變數名稱} ./redis-cli flushall : 刪除全部 keys from all db ./redis-cli flushdb : 從目前的 db 刪除掉所有的 keys 設定 : redis-cli set {變數名稱} 查看變數編碼屬性 : OBJECT ENCODING {變數名稱} int raw embstr more : http://redisbook.com/preview/object/string.html 接續 : redis-cli append {變數名稱} &quot;{延伸內容}&quot; 列出所有的 {變數名稱} : KEYS * 列出指定內容的 {變數名稱} : KEYS *o* 查看 {變數名稱} 是否存在 : ./redis-cli exists {變數名稱} ... Host, port, password and database Host, port 預設的 ./redis-cli 設定為 server : 127.0.0.1 port : 6379 specify -h &amp;amp; -p : ./redis-cli -h redis15.localnet.org -p 6390 ping password ./redis-cli a {password} ping database 預設會有 16 個 db，db 的名稱是用數字表達 basic 查詢 db 數量 : ./redis-cli CONFIG GET databases 查詢每個 db 中的內存 : ./redis-cli INFO keyspace 指定 db 設定參數 : ./redis-cli -n 1 set {變數名稱} {內容} n 預設為 0 顯示目前此 db 的 key 數量 : ./redis-cli dbsize 移動 key 到另一個 db : ./redis-cli move {db_number} Special modes of operation : ./redis-cli --help 即時查看系統狀態 : ./redis-cli --stat 分析 key : redis-cli --bigkeys Getting a list of keys : ./redis-cli --scan | head -10 ./redis-cli --scan --pattern &apos;*-11*&apos; redis-cli --scan --pattern &apos;user:*&apos; | wc -l Pub/sub mode publish {channel} {message} subscribe {channel} ... psubscribe {pattern} : 設定 pattern 直接訂閱相關的頻道 pattern : ?, * , [ab] h?llo 訂閱所有 h?ll0 相關頻道，只有一個字元 h*llo 訂閱所有 h*llo 相關頻道，* 可以是多個字元 h[ae]llo 訂閱 hallo 與 hello 頻道 即時監控目前 redis 所有的參數 : ./redis-cli monitor 測試＋模擬 redis 的延遲 (以毫秒計): 基本 : ./redis-cli --latency -h {host} -p {port}，可跨伺服器測試，預設為 localhost:6390 每 15 秒 重新產生一次測試 : ./redis-cli --latency-history 圖像化顯示 : ./redis-cli --latency-dist 測試 redis 內部延遲，此依賴 cpu 效能 ./redis-cli --intrinsic-latency {秒數} : 在 {秒數} 內測試 文章 淺談 Redis 超時 Redis性能調優：保存SNAPSHOT對性能的影響 Remote backups of RDB files ./redis-cli --rdb /tmp/dump.rdb 透過此指令，會複製 redis 上面載入的指令，到 slave，可清楚的看到下的指令順序是否正確 redis-cli --slave Performing an LRU simulation 使用 LRU 測試，模擬效能 透過設定 memory 與測試的 keys，來觀察效率 miss 的比例 http://redis.io/topics/rediscli#performing-an-lru-simulation 此篇有測試的過程">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【redis】basic 心得">
+<meta property="og:url" content="/redis/2016/10/19/Redis/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="安裝 redis http://redis.io/ 下載後，執行網頁上安裝方法 將 redis 安裝到 /usr/local/bin 的方法 make install 更改預設安裝位置 : make PREFIX=/some/other/directory install 此方法會安裝 binaries 到系統中，但相關的 script 與配置檔，並不會放到是到的位置，因為只是 play 若需要安裝到正式的系統中，請使用 cd utils ./install_server.sh 此種安裝方式會詢問幾個設定的問題，並且在 sys reboot 後會自動重新啟動 手動停止與啟動 : /etc/init.d/redis_&amp;lt;portnumber&amp;gt; use 啟用伺服器 直接啟用 : src/redis-server 制定設定檔 : ./src/redis-server /path/to/redis.conf 透過指令直接覆蓋設定檔 : ./redis-server --port 9999 --slaveof 127.0.0.1 6379 ./redis-server /etc/redis/6379.conf --loglevel debug 在 redis.conf 中的參數名稱，全部都支援使用 command line 進行設定。 啟用 client src/redis-cli，進入互動介面 測試 ping set foo bar get foo 可直接下指令 ./redis_cli get foo 取得參數 ./redis_cli --help : 查看一般指令 ./redis_cli help {cmd} : 取得指令相關資訊 ./redis_cli command : 取得全部指令 特性 redis 是一個 key-value 的資料庫 資料結構儲存的特性 儲存於 disk 上，儘管修改是透過 server memory。代表 redis 是快速的，也代表儲存是持久性的。 在相同的高階編程語言下，redis 的效能結構儲存，相對優秀 Redis 提供很多 database 上習慣性的方法，如複製、tunable levels of durability、叢集、高度擴展 Redis 提供更多複雜的使用方法，在 memcached 上。 more Introduction to Redis data types. http://redis.io/topics/data-types-intro Try Redis directly inside your browser. http://try.redis.io The full list of Redis commands. http://redis.io/commands There is much more inside the Redis official documentation. http://redis.io/documentation 資料類型 : strings, arrays, integers, NULL, errors and so forth 測試 將 server 關閉後，依然取得到 key-value redis-cli basic 計數 : redis-cli incr {變數名稱} 寫入檔案 : redis-cli incr {變數名稱} &amp;gt; ./output.txt 取得 : redis-cli get {變數名稱} 指定輸出為 raw redis-cli --raw get {變數名稱} 刪除 : ./redis-cli del {變數名稱} ./redis-cli flushall : 刪除全部 keys from all db ./redis-cli flushdb : 從目前的 db 刪除掉所有的 keys 設定 : redis-cli set {變數名稱} 查看變數編碼屬性 : OBJECT ENCODING {變數名稱} int raw embstr more : http://redisbook.com/preview/object/string.html 接續 : redis-cli append {變數名稱} &quot;{延伸內容}&quot; 列出所有的 {變數名稱} : KEYS * 列出指定內容的 {變數名稱} : KEYS *o* 查看 {變數名稱} 是否存在 : ./redis-cli exists {變數名稱} ... Host, port, password and database Host, port 預設的 ./redis-cli 設定為 server : 127.0.0.1 port : 6379 specify -h &amp;amp; -p : ./redis-cli -h redis15.localnet.org -p 6390 ping password ./redis-cli a {password} ping database 預設會有 16 個 db，db 的名稱是用數字表達 basic 查詢 db 數量 : ./redis-cli CONFIG GET databases 查詢每個 db 中的內存 : ./redis-cli INFO keyspace 指定 db 設定參數 : ./redis-cli -n 1 set {變數名稱} {內容} n 預設為 0 顯示目前此 db 的 key 數量 : ./redis-cli dbsize 移動 key 到另一個 db : ./redis-cli move {db_number} Special modes of operation : ./redis-cli --help 即時查看系統狀態 : ./redis-cli --stat 分析 key : redis-cli --bigkeys Getting a list of keys : ./redis-cli --scan | head -10 ./redis-cli --scan --pattern &apos;*-11*&apos; redis-cli --scan --pattern &apos;user:*&apos; | wc -l Pub/sub mode publish {channel} {message} subscribe {channel} ... psubscribe {pattern} : 設定 pattern 直接訂閱相關的頻道 pattern : ?, * , [ab] h?llo 訂閱所有 h?ll0 相關頻道，只有一個字元 h*llo 訂閱所有 h*llo 相關頻道，* 可以是多個字元 h[ae]llo 訂閱 hallo 與 hello 頻道 即時監控目前 redis 所有的參數 : ./redis-cli monitor 測試＋模擬 redis 的延遲 (以毫秒計): 基本 : ./redis-cli --latency -h {host} -p {port}，可跨伺服器測試，預設為 localhost:6390 每 15 秒 重新產生一次測試 : ./redis-cli --latency-history 圖像化顯示 : ./redis-cli --latency-dist 測試 redis 內部延遲，此依賴 cpu 效能 ./redis-cli --intrinsic-latency {秒數} : 在 {秒數} 內測試 文章 淺談 Redis 超時 Redis性能調優：保存SNAPSHOT對性能的影響 Remote backups of RDB files ./redis-cli --rdb /tmp/dump.rdb 透過此指令，會複製 redis 上面載入的指令，到 slave，可清楚的看到下的指令順序是否正確 redis-cli --slave Performing an LRU simulation 使用 LRU 測試，模擬效能 透過設定 memory 與測試的 keys，來觀察效率 miss 的比例 http://redis.io/topics/rediscli#performing-an-lru-simulation 此篇有測試的過程">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【redis】basic 心得">
+<meta name="twitter:description" content="安裝 redis http://redis.io/ 下載後，執行網頁上安裝方法 將 redis 安裝到 /usr/local/bin 的方法 make install 更改預設安裝位置 : make PREFIX=/some/other/directory install 此方法會安裝 binaries 到系統中，但相關的 script 與配置檔，並不會放到是到的位置，因為只是 play 若需要安裝到正式的系統中，請使用 cd utils ./install_server.sh 此種安裝方式會詢問幾個設定的問題，並且在 sys reboot 後會自動重新啟動 手動停止與啟動 : /etc/init.d/redis_&amp;lt;portnumber&amp;gt; use 啟用伺服器 直接啟用 : src/redis-server 制定設定檔 : ./src/redis-server /path/to/redis.conf 透過指令直接覆蓋設定檔 : ./redis-server --port 9999 --slaveof 127.0.0.1 6379 ./redis-server /etc/redis/6379.conf --loglevel debug 在 redis.conf 中的參數名稱，全部都支援使用 command line 進行設定。 啟用 client src/redis-cli，進入互動介面 測試 ping set foo bar get foo 可直接下指令 ./redis_cli get foo 取得參數 ./redis_cli --help : 查看一般指令 ./redis_cli help {cmd} : 取得指令相關資訊 ./redis_cli command : 取得全部指令 特性 redis 是一個 key-value 的資料庫 資料結構儲存的特性 儲存於 disk 上，儘管修改是透過 server memory。代表 redis 是快速的，也代表儲存是持久性的。 在相同的高階編程語言下，redis 的效能結構儲存，相對優秀 Redis 提供很多 database 上習慣性的方法，如複製、tunable levels of durability、叢集、高度擴展 Redis 提供更多複雜的使用方法，在 memcached 上。 more Introduction to Redis data types. http://redis.io/topics/data-types-intro Try Redis directly inside your browser. http://try.redis.io The full list of Redis commands. http://redis.io/commands There is much more inside the Redis official documentation. http://redis.io/documentation 資料類型 : strings, arrays, integers, NULL, errors and so forth 測試 將 server 關閉後，依然取得到 key-value redis-cli basic 計數 : redis-cli incr {變數名稱} 寫入檔案 : redis-cli incr {變數名稱} &amp;gt; ./output.txt 取得 : redis-cli get {變數名稱} 指定輸出為 raw redis-cli --raw get {變數名稱} 刪除 : ./redis-cli del {變數名稱} ./redis-cli flushall : 刪除全部 keys from all db ./redis-cli flushdb : 從目前的 db 刪除掉所有的 keys 設定 : redis-cli set {變數名稱} 查看變數編碼屬性 : OBJECT ENCODING {變數名稱} int raw embstr more : http://redisbook.com/preview/object/string.html 接續 : redis-cli append {變數名稱} &quot;{延伸內容}&quot; 列出所有的 {變數名稱} : KEYS * 列出指定內容的 {變數名稱} : KEYS *o* 查看 {變數名稱} 是否存在 : ./redis-cli exists {變數名稱} ... Host, port, password and database Host, port 預設的 ./redis-cli 設定為 server : 127.0.0.1 port : 6379 specify -h &amp;amp; -p : ./redis-cli -h redis15.localnet.org -p 6390 ping password ./redis-cli a {password} ping database 預設會有 16 個 db，db 的名稱是用數字表達 basic 查詢 db 數量 : ./redis-cli CONFIG GET databases 查詢每個 db 中的內存 : ./redis-cli INFO keyspace 指定 db 設定參數 : ./redis-cli -n 1 set {變數名稱} {內容} n 預設為 0 顯示目前此 db 的 key 數量 : ./redis-cli dbsize 移動 key 到另一個 db : ./redis-cli move {db_number} Special modes of operation : ./redis-cli --help 即時查看系統狀態 : ./redis-cli --stat 分析 key : redis-cli --bigkeys Getting a list of keys : ./redis-cli --scan | head -10 ./redis-cli --scan --pattern &apos;*-11*&apos; redis-cli --scan --pattern &apos;user:*&apos; | wc -l Pub/sub mode publish {channel} {message} subscribe {channel} ... psubscribe {pattern} : 設定 pattern 直接訂閱相關的頻道 pattern : ?, * , [ab] h?llo 訂閱所有 h?ll0 相關頻道，只有一個字元 h*llo 訂閱所有 h*llo 相關頻道，* 可以是多個字元 h[ae]llo 訂閱 hallo 與 hello 頻道 即時監控目前 redis 所有的參數 : ./redis-cli monitor 測試＋模擬 redis 的延遲 (以毫秒計): 基本 : ./redis-cli --latency -h {host} -p {port}，可跨伺服器測試，預設為 localhost:6390 每 15 秒 重新產生一次測試 : ./redis-cli --latency-history 圖像化顯示 : ./redis-cli --latency-dist 測試 redis 內部延遲，此依賴 cpu 效能 ./redis-cli --intrinsic-latency {秒數} : 在 {秒數} 內測試 文章 淺談 Redis 超時 Redis性能調優：保存SNAPSHOT對性能的影響 Remote backups of RDB files ./redis-cli --rdb /tmp/dump.rdb 透過此指令，會複製 redis 上面載入的指令，到 slave，可清楚的看到下的指令順序是否正確 redis-cli --slave Performing an LRU simulation 使用 LRU 測試，模擬效能 透過設定 memory 與測試的 keys，來觀察效率 miss 的比例 http://redis.io/topics/rediscli#performing-an-lru-simulation 此篇有測試的過程">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【redis】basic 心得 | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/redis/2016/10/19/Redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【redis】basic 心得
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-19T10:00:00+08:00">
+                2016-10-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Redis" itemprop="url" rel="index">
+                    <span itemprop="name">Redis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="安裝-redis">安裝 redis</h2>
+
+<ul>
+  <li>http://redis.io/</li>
+  <li>下載後，執行網頁上安裝方法</li>
+</ul>
+
+<h3 id="將-redis-安裝到-usrlocalbin-的方法">將 redis 安裝到 /usr/local/bin 的方法</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">make install</code>
+    <ul>
+      <li>更改預設安裝位置 : <code class="highlighter-rouge">make PREFIX=/some/other/directory install</code></li>
+    </ul>
+  </li>
+  <li>此方法會安裝 binaries 到系統中，但相關的 script 與配置檔，並不會放到是到的位置，因為只是 play</li>
+  <li>若需要安裝到正式的系統中，請使用
+    <ul>
+      <li><code class="highlighter-rouge">cd utils</code></li>
+      <li><code class="highlighter-rouge">./install_server.sh</code></li>
+      <li>此種安裝方式會詢問幾個設定的問題，並且在 sys reboot 後會自動重新啟動</li>
+      <li>手動停止與啟動 : <code class="highlighter-rouge">/etc/init.d/redis_&lt;portnumber&gt;</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="use">use</h2>
+
+<ul>
+  <li>啟用伺服器
+    <ul>
+      <li>直接啟用 : <code class="highlighter-rouge">src/redis-server</code></li>
+      <li>制定設定檔 : <code class="highlighter-rouge">./src/redis-server /path/to/redis.conf</code></li>
+      <li>透過指令直接覆蓋設定檔 :
+        <ul>
+          <li><code class="highlighter-rouge">./redis-server --port 9999 --slaveof 127.0.0.1 6379</code></li>
+          <li><code class="highlighter-rouge">./redis-server /etc/redis/6379.conf --loglevel debug</code></li>
+          <li>在 redis.conf 中的參數名稱，全部都支援使用 command line 進行設定。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>啟用 client
+    <ul>
+      <li><code class="highlighter-rouge">src/redis-cli</code>，進入互動介面</li>
+      <li>測試
+        <ul>
+          <li><code class="highlighter-rouge">ping</code></li>
+          <li><code class="highlighter-rouge">set foo bar</code></li>
+          <li><code class="highlighter-rouge">get foo</code></li>
+        </ul>
+      </li>
+      <li>可直接下指令 <code class="highlighter-rouge">./redis_cli get foo</code> 取得參數</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">./redis_cli --help</code> : 查看一般指令</li>
+  <li><code class="highlighter-rouge">./redis_cli help {cmd}</code> : 取得指令相關資訊</li>
+  <li><code class="highlighter-rouge">./redis_cli command</code> : 取得全部指令</li>
+</ul>
+
+<h2 id="特性">特性</h2>
+
+<ul>
+  <li>redis 是一個 key-value 的資料庫</li>
+  <li>資料結構儲存的特性
+    <ul>
+      <li>儲存於 disk 上，儘管修改是透過 server memory。代表 redis 是快速的，也代表儲存是持久性的。</li>
+      <li>在相同的高階編程語言下，redis 的效能結構儲存，相對優秀</li>
+      <li>Redis 提供很多 database 上習慣性的方法，如複製、tunable levels of durability、叢集、高度擴展</li>
+    </ul>
+  </li>
+  <li>Redis 提供更多複雜的使用方法，在 memcached 上。</li>
+  <li>more
+    <ul>
+      <li>Introduction to Redis data types. http://redis.io/topics/data-types-intro</li>
+      <li>Try Redis directly inside your browser. http://try.redis.io</li>
+      <li>The full list of Redis commands. http://redis.io/commands</li>
+      <li>There is much more inside the Redis official documentation. http://redis.io/documentation</li>
+    </ul>
+  </li>
+  <li>資料類型 : strings, arrays, integers, NULL, errors and so forth</li>
+</ul>
+
+<h2 id="測試">測試</h2>
+
+<ul>
+  <li>將 server 關閉後，依然取得到 key-value</li>
+</ul>
+
+<h2 id="redis-cli">redis-cli</h2>
+
+<h3 id="basic">basic</h3>
+
+<ul>
+  <li>計數 : <code class="highlighter-rouge">redis-cli incr {變數名稱}</code></li>
+  <li>寫入檔案 : <code class="highlighter-rouge">redis-cli incr {變數名稱} &gt; ./output.txt</code></li>
+  <li>取得 : <code class="highlighter-rouge">redis-cli get {變數名稱}</code>
+    <ul>
+      <li>指定輸出為 raw <code class="highlighter-rouge">redis-cli --raw get {變數名稱}</code></li>
+    </ul>
+  </li>
+  <li>刪除 :
+    <ul>
+      <li><code class="highlighter-rouge">./redis-cli del {變數名稱}</code></li>
+      <li><code class="highlighter-rouge">./redis-cli flushall</code> : 刪除全部 keys from all db</li>
+      <li><code class="highlighter-rouge">./redis-cli flushdb</code> : 從目前的 db 刪除掉所有的 keys</li>
+    </ul>
+  </li>
+  <li>設定 : <code class="highlighter-rouge">redis-cli set {變數名稱}</code></li>
+  <li>查看變數編碼屬性 : <code class="highlighter-rouge">OBJECT ENCODING {變數名稱}</code>
+    <ul>
+      <li>int</li>
+      <li>raw</li>
+      <li>embstr</li>
+      <li>more : <a href="http://redisbook.com/preview/object/string.html">http://redisbook.com/preview/object/string.html</a></li>
+    </ul>
+  </li>
+  <li>接續 : <code class="highlighter-rouge">redis-cli append {變數名稱} "{延伸內容}"</code></li>
+  <li>列出所有的 {變數名稱} : <code class="highlighter-rouge">KEYS *</code>
+    <ul>
+      <li>列出指定內容的 {變數名稱} : <code class="highlighter-rouge">KEYS *o*</code></li>
+    </ul>
+  </li>
+  <li>查看 {變數名稱} 是否存在 : <code class="highlighter-rouge">./redis-cli exists {變數名稱} ...</code></li>
+</ul>
+
+<h3 id="host-port-password-and-database">Host, port, password and database</h3>
+
+<ul>
+  <li>Host, port
+    <ul>
+      <li>預設的 ./redis-cli 設定為
+        <ul>
+          <li>server : 127.0.0.1</li>
+          <li>port : 6379</li>
+        </ul>
+      </li>
+      <li>specify <code class="highlighter-rouge">-h</code> &amp; <code class="highlighter-rouge">-p</code> : <code class="highlighter-rouge">./redis-cli -h redis15.localnet.org -p 6390 ping</code></li>
+    </ul>
+  </li>
+  <li>password
+    <ul>
+      <li><code class="highlighter-rouge">./redis-cli a {password} ping</code></li>
+    </ul>
+  </li>
+  <li>database
+    <ul>
+      <li>預設會有 16 個 db，db 的名稱是用數字表達</li>
+      <li>basic
+        <ul>
+          <li>查詢 db 數量 : <code class="highlighter-rouge">./redis-cli CONFIG GET databases</code></li>
+          <li>查詢每個 db 中的內存 : <code class="highlighter-rouge">./redis-cli INFO keyspace</code></li>
+          <li>指定 db 設定參數 : <code class="highlighter-rouge">./redis-cli -n 1 set {變數名稱} {內容}</code>
+            <ul>
+              <li>n 預設為 0</li>
+            </ul>
+          </li>
+          <li>顯示目前此 db 的 key 數量 : <code class="highlighter-rouge">./redis-cli dbsize</code></li>
+          <li>移動 key 到另一個 db : <code class="highlighter-rouge">./redis-cli move {db_number}</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="special-modes-of-operation--redis-cli---help">Special modes of operation : <code class="highlighter-rouge">./redis-cli --help</code></h3>
+
+<ul>
+  <li>即時查看系統狀態 : <code class="highlighter-rouge">./redis-cli --stat</code></li>
+  <li>分析 key : <code class="highlighter-rouge">redis-cli --bigkeys</code></li>
+  <li>Getting a list of keys :
+    <ul>
+      <li><code class="highlighter-rouge">./redis-cli --scan | head -10</code></li>
+      <li><code class="highlighter-rouge">./redis-cli --scan --pattern '*-11*'</code></li>
+      <li><code class="highlighter-rouge">redis-cli --scan --pattern 'user:*' | wc -l</code></li>
+    </ul>
+  </li>
+  <li>Pub/sub mode
+    <ul>
+      <li><code class="highlighter-rouge">publish {channel} {message}</code></li>
+      <li><code class="highlighter-rouge">subscribe {channel} ...</code></li>
+      <li><code class="highlighter-rouge">psubscribe {pattern}</code> : 設定 pattern 直接訂閱相關的頻道
+        <ul>
+          <li>pattern : <code class="highlighter-rouge">?, * , [ab]</code>
+            <ul>
+              <li><code class="highlighter-rouge">h?llo</code> 訂閱所有 <code class="highlighter-rouge">h?ll0</code> 相關頻道，只有一個字元</li>
+              <li><code class="highlighter-rouge">h*llo</code> 訂閱所有 <code class="highlighter-rouge">h*llo</code> 相關頻道，<code class="highlighter-rouge">*</code> 可以是多個字元</li>
+              <li><code class="highlighter-rouge">h[ae]llo</code> 訂閱 hallo 與 hello 頻道</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>即時監控目前 redis 所有的參數 : <code class="highlighter-rouge">./redis-cli monitor</code></li>
+  <li>測試＋模擬 redis 的延遲 (以毫秒計):
+    <ul>
+      <li>基本 : <code class="highlighter-rouge">./redis-cli --latency -h {host} -p {port}</code>，可跨伺服器測試，預設為 localhost:6390</li>
+      <li>每 15 秒 重新產生一次測試 : <code class="highlighter-rouge">./redis-cli --latency-history</code></li>
+      <li>圖像化顯示 : <code class="highlighter-rouge">./redis-cli --latency-dist</code></li>
+      <li>測試 redis 內部延遲，此依賴 cpu 效能
+        <ul>
+          <li><code class="highlighter-rouge">./redis-cli --intrinsic-latency {秒數}</code> : 在 {秒數} 內測試</li>
+        </ul>
+      </li>
+      <li>文章
+        <ul>
+          <li><a href="https://read01.com/yz68z4.html">淺談 Redis 超時</a></li>
+          <li><a href="https://read01.com/O3a48K.html">Redis性能調優：保存SNAPSHOT對性能的影響</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Remote backups of RDB files
+    <ul>
+      <li><code class="highlighter-rouge">./redis-cli --rdb /tmp/dump.rdb</code></li>
+    </ul>
+  </li>
+  <li>透過此指令，會複製 redis 上面載入的指令，到 slave，可清楚的看到下的指令順序是否正確
+    <ul>
+      <li><code class="highlighter-rouge">redis-cli --slave</code></li>
+    </ul>
+  </li>
+  <li>Performing an LRU simulation
+    <ul>
+      <li>使用 LRU 測試，模擬效能</li>
+      <li>透過設定 memory 與測試的 keys，來觀察效率 miss 的比例</li>
+      <li><a href="http://redis.io/topics/rediscli#performing-an-lru-simulation">http://redis.io/topics/rediscli#performing-an-lru-simulation</a> 此篇有測試的過程</li>
+    </ul>
+  </li>
+</ul>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/php/2016/10/22/PHP-http2/" rel="next" title="【PHP】push with http2">
+                <i class="fa fa-chevron-left"></i> 【PHP】push with http2
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/ssh/2016/10/14/SSH-Remote-Access/" rel="prev" title="【SSH】設定簡易遠端登入">
+                【SSH】設定簡易遠端登入 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#安裝-redis"> <span class="nav-text">安裝 redis</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#將-redis-安裝到-usrlocalbin-的方法"> <span class="nav-text">將 redis 安裝到 /usr/local/bin 的方法</span> </a> </li> </ol> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#use"> <span class="nav-text">use</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#特性"> <span class="nav-text">特性</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#測試"> <span class="nav-text">測試</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#redis-cli"> <span class="nav-text">redis-cli</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#basic"> <span class="nav-text">basic</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#host-port-password-and-database"> <span class="nav-text">Host, port, password and database</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#special-modes-of-operation--redis-cli---help"> <span class="nav-text">Special modes of operation : ./redis-cli --help</code</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

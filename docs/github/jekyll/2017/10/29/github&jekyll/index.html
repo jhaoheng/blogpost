@@ -1,0 +1,965 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="First 從 2009 年開始，從 blogger -&amp;gt; 其他的服務 -&amp;gt; HEXO -&amp;gt; blogger -&amp;gt; logdown， 從浪費時間，到專注核心（寫文、po 文），決定了託管(server+頁面的管理)會比較輕鬆，最後選擇了 logdown 沒想到 logdown 也會有服務出問題，甚至讓我覺得可能會中斷服務，讓我覺得挺可惜 最後還是又回到了 github 中，不過這次用的服務是 jekyll">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Github&amp;jekyll】設定">
+<meta property="og:url" content="/github/jekyll/2017/10/29/github&jekyll/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="First 從 2009 年開始，從 blogger -&amp;gt; 其他的服務 -&amp;gt; HEXO -&amp;gt; blogger -&amp;gt; logdown， 從浪費時間，到專注核心（寫文、po 文），決定了託管(server+頁面的管理)會比較輕鬆，最後選擇了 logdown 沒想到 logdown 也會有服務出問題，甚至讓我覺得可能會中斷服務，讓我覺得挺可惜 最後還是又回到了 github 中，不過這次用的服務是 jekyll">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Github&amp;jekyll】設定">
+<meta name="twitter:description" content="First 從 2009 年開始，從 blogger -&amp;gt; 其他的服務 -&amp;gt; HEXO -&amp;gt; blogger -&amp;gt; logdown， 從浪費時間，到專注核心（寫文、po 文），決定了託管(server+頁面的管理)會比較輕鬆，最後選擇了 logdown 沒想到 logdown 也會有服務出問題，甚至讓我覺得可能會中斷服務，讓我覺得挺可惜 最後還是又回到了 github 中，不過這次用的服務是 jekyll">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【Github&jekyll】設定 | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/github/jekyll/2017/10/29/github&jekyll/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【Github&jekyll】設定
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-10-29T02:25:00+08:00">
+                2017-10-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Github" itemprop="url" rel="index">
+                    <span itemprop="name">Github</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Jekyll" itemprop="url" rel="index">
+                    <span itemprop="name">Jekyll</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="first">First</h1>
+<blockquote>
+  <p>從 2009 年開始，從 blogger -&gt; 其他的服務 -&gt; HEXO -&gt; blogger -&gt; logdown，
+從浪費時間，到專注核心（寫文、po 文），決定了託管(server+頁面的管理)會比較輕鬆，最後選擇了 logdown
+沒想到 logdown 也會有服務出問題，甚至讓我覺得可能會中斷服務，讓我覺得挺可惜
+最後還是又回到了 github 中，不過這次用的服務是 <code class="highlighter-rouge">jekyll</code></p>
+</blockquote>
+
+<!--more-->
+
+<ul>
+  <li>環境 : osx</li>
+  <li>index
+    <ul>
+      <li>安裝 jekyll</li>
+      <li>建立 github blog repo</li>
+      <li>在 repo 中，初始化 jekyll
+        <ul>
+          <li>資料夾結構</li>
+        </ul>
+      </li>
+      <li>為了 github 所調整的設定 (avoid css no render)
+        <ul>
+          <li>_config.yml</li>
+          <li>branch : master / gh-pages</li>
+        </ul>
+      </li>
+      <li>版本控管與測試</li>
+      <li>Note_1 : 更新 osx ruby</li>
+      <li>Note_2 : 建立草稿與預覽</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="安裝-jekyll">安裝 jekyll</h1>
+
+<blockquote>
+  <p>若 ruby 版本須更新，請參考下方 [Note_1 : 更新 osx ruby]
+官方 https://jekyllrb.com/</p>
+</blockquote>
+
+<ul>
+  <li>gem install jekyll</li>
+</ul>
+
+<h1 id="建立-github-blog-repo">建立 github blog repo</h1>
+<ol>
+  <li>create a github repo</li>
+  <li>git clone repo</li>
+</ol>
+
+<h1 id="在-repo-中初始化-jekyll">在 repo 中，初始化 jekyll</h1>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>cd {your-repo}
+jekyll new . # 建立一個新專案
+bundle exec jekyll serve
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>在啟動 service 的過程中，發生問題</p>
+<blockquote>
+  <p>kernel_require.rb:55:in `require’: cannot load such file – bundler (LoadError)</p>
+</blockquote>
+
+<p>解決方法</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>gem install bundler
+bundle install
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="jekyll-資料夾結構">jekyll 資料夾結構</h2>
+
+<ul>
+  <li>官方 : https://jekyllrb.com/docs/structure/</li>
+  <li>第一次建立 jekyll 時，某些資料夾並不會一起建立，需要手動建立
+    <ul>
+      <li>_drafts : 請參考 [Note_2 : 建立草稿與預覽]</li>
+      <li>_layouts</li>
+      <li>_sass</li>
+      <li>_data</li>
+      <li>_includes</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="為了-github-所調整的基本設定">為了 github 所調整的基本設定</h1>
+
+<h2 id="_configyml">_config.yml</h2>
+<blockquote>
+  <p>目的是為了讓正式版版本，推送到 github 上時，可以找到正確的相關檔案路徑</p>
+</blockquote>
+
+<ul>
+  <li>baseurl : 請設定為你的 repo 專案名稱</li>
+  <li>url : 請設定 <code class="highlighter-rouge">https://{username}.github.io</code></li>
+  <li>其他設定對第一次使用部會影響太多</li>
+</ul>
+
+<h2 id="branch--master--gh-pages">branch : master / gh-pages</h2>
+
+<blockquote>
+  <p>master : 負責原始的文件檔
+gh-pages : html 靜態頁面，就是 <code class="highlighter-rouge">_site/</code> 的資料夾
+如何分開兩個 branch 與設定，以下說明如何操作</p>
+</blockquote>
+
+<ol>
+  <li>當使用 <code class="highlighter-rouge">jekyll</code> 產生新的樣板時，在 <code class="highlighter-rouge">.gitignore</code> 中，會發現 <code class="highlighter-rouge">_site/</code> 已經被自動忽略</li>
+  <li>設定好 <code class="highlighter-rouge">_config.yml</code> 後，執行 <code class="highlighter-rouge">jekyll build</code> 會建立 <code class="highlighter-rouge">_site/</code> 此為正式要推送到 gp-pages 的版本，<code class="highlighter-rouge">cd _site</code></li>
+  <li>在 <code class="highlighter-rouge">_site</code> 中執行 <code class="highlighter-rouge">git init</code>，新增 <code class="highlighter-rouge">git remote add origin {your_blog_repo}</code></li>
+  <li><code class="highlighter-rouge">git checkout -b gh-pages</code></li>
+  <li><code class="highlighter-rouge">git add .</code> -&gt; <code class="highlighter-rouge">git commit -m "jekyll first build"</code> -&gt; <code class="highlighter-rouge">git push origin gh-pages</code></li>
+  <li>記得要到 repo 中將 GitHub Pages 的 source 設定成 <code class="highlighter-rouge">gh-pages branch</code></li>
+  <li>開啟 GiHub Pages 中顯示的網址即可</li>
+</ol>
+
+<h1 id="測試與正式發佈的版本">測試與正式發佈的版本</h1>
+
+<blockquote>
+  <p>推送錯誤的版本到 github 上，會讓 css 的路徑錯誤</p>
+</blockquote>
+
+<ul>
+  <li>測試 : <code class="highlighter-rouge">jekyll serve</code>，會在 <code class="highlighter-rouge">_site/xxx.html</code> 的 <code class="highlighter-rouge">canonical</code> 中使用 localhost 的位置</li>
+  <li>正式 : <code class="highlighter-rouge">jekyll build</code>，在 <code class="highlighter-rouge">_site/xxx.html</code> 則是用 <code class="highlighter-rouge">_config.yml</code> 中的 url 設定</li>
+  <li>推送正式版本到 github 上
+    <ol>
+      <li><code class="highlighter-rouge">cd _site/</code></li>
+      <li><code class="highlighter-rouge">git push -u origin gh-pages</code></li>
+    </ol>
+  </li>
+  <li>無論使用 <code class="highlighter-rouge">serve</code> or <code class="highlighter-rouge">build</code> 等指令，都會重新在 <code class="highlighter-rouge">_site/</code> 中，重新建立相關資料，我在猜，當文章過多，速度應該會比較慢。</li>
+</ul>
+
+<h1 id="note_1--更新-osx-ruby">Note_1 : 更新 osx ruby</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>\curl -sSL https://get.rvm.io | bash -s stable
+rvm list known
+rvm install ruby-2.4
+rvm use ruby-2.4 --default
+ruby -v
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="note_2--建立草稿與預覽">Note_2 : 建立草稿與預覽</h1>
+
+<ol>
+  <li>因為預設不會產生 <code class="highlighter-rouge">_drafts/</code> 的資料夾，所以需要手動建立</li>
+  <li>預覽草稿 : 使用 <code class="highlighter-rouge">jekyll serve</code> or <code class="highlighter-rouge">jekyll build</code> 時，加入 <code class="highlighter-rouge">--drafts</code> 參數， ex : <code class="highlighter-rouge">jekyll build --drafts</code></li>
+</ol>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/facebook/app/mobile/web/2017/10/29/facebook-%E9%80%B2%E9%9A%8E-OAuth-code-flow/" rel="next" title="【facebook】進階：OAuth code flow">
+                <i class="fa fa-chevron-left"></i> 【facebook】進階：OAuth code flow
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/jekyll/update/2017/10/29/welcome-to-jekyll/" rel="prev" title="Welcome to Jekyll!">
+                Welcome to Jekyll! <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#first"> <span class="nav-text">First</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#安裝-jekyll"> <span class="nav-text">安裝 jekyll</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#建立-github-blog-repo"> <span class="nav-text">建立 github blog repo</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#在-repo-中初始化-jekyll"> <span class="nav-text">在 repo 中，初始化 jekyll</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#jekyll-資料夾結構"> <span class="nav-text">jekyll 資料夾結構</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#為了-github-所調整的基本設定"> <span class="nav-text">為了 github 所調整的基本設定</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#_configyml"> <span class="nav-text">_config.yml</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#branch--master--gh-pages"> <span class="nav-text">branch : master / gh-pages</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#測試與正式發佈的版本"> <span class="nav-text">測試與正式發佈的版本</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#note_1--更新-osx-ruby"> <span class="nav-text">Note_1 : 更新 osx ruby</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#note_2--建立草稿與預覽"> <span class="nav-text">Note_2 : 建立草稿與預覽</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

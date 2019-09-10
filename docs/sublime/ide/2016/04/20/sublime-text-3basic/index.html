@@ -1,0 +1,973 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="環境 mac osx 10.11.4 sublime test 3 移除 sublime 透過 CleanMyMac3 移除檔案 檢查 ~/Application Support/Sublime Text 3 是否存在，若存在則移除">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【sublime text 3】basic">
+<meta property="og:url" content="/sublime/ide/2016/04/20/sublime-text-3basic/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="環境 mac osx 10.11.4 sublime test 3 移除 sublime 透過 CleanMyMac3 移除檔案 檢查 ~/Application Support/Sublime Text 3 是否存在，若存在則移除">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【sublime text 3】basic">
+<meta name="twitter:description" content="環境 mac osx 10.11.4 sublime test 3 移除 sublime 透過 CleanMyMac3 移除檔案 檢查 ~/Application Support/Sublime Text 3 是否存在，若存在則移除">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【sublime text 3】basic | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/sublime/ide/2016/04/20/sublime-text-3basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【sublime text 3】basic
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-20T07:12:00+08:00">
+                2016-04-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/sublime" itemprop="url" rel="index">
+                    <span itemprop="name">sublime</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/IDE" itemprop="url" rel="index">
+                    <span itemprop="name">IDE</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="環境">環境</h2>
+<ul>
+  <li>mac osx 10.11.4</li>
+  <li>sublime test 3</li>
+</ul>
+
+<h2 id="移除-sublime">移除 sublime</h2>
+
+<ul>
+  <li>透過 <a href="http://macpaw.com/cleanmymac">CleanMyMac3</a> 移除檔案</li>
+  <li>檢查 <code class="highlighter-rouge">~/Application Support/Sublime Text 3</code> 是否存在，若存在則移除</li>
+</ul>
+
+<!--more-->
+
+<h2 id="安裝-sublime-text-3">安裝 sublime text 3</h2>
+
+<ol>
+  <li>https://www.sublimetext.com/3</li>
+  <li>輸入序號 : 開啟 sublime text 3，help -&gt; Enter License
+    <ul>
+      <li>crack : <code class="highlighter-rouge">https://gist.github.com/rockdrigo/de9a16a4c8d75d7acb32</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="安裝-package-control-的套件">安裝 package control 的套件</h2>
+
+<ul>
+  <li><a href="https://packagecontrol.io/">https://packagecontrol.io/</a>
+    <ul>
+      <li>此網站也會列出所有套件
+        <ul>
+          <li>Trending</li>
+          <li>New</li>
+          <li>Popular</li>
+          <li>Labels</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>按照指示安裝完畢後，會發現新增 <code class="highlighter-rouge">~/Application Support/Sublime Text 3</code></li>
+  <li>開啟 sublime test 3，執行 <code class="highlighter-rouge">cmd+shift+p</code>，輸入 <code class="highlighter-rouge">pack...</code>，會看到 package control 已經被安裝，且會列出相關指令</li>
+  <li>使用 <code class="highlighter-rouge"><span class="k">package</span> <span class="n">control</span> <span class="p">:</span> <span class="n">install</span> <span class="k">package</span></code>，就會列出目前所有可安裝的 package</li>
+</ul>
+
+<h2 id="navi-feature">Navi Feature</h2>
+
+<ul>
+  <li>
+    <p>Sublime Text</p>
+  </li>
+  <li>
+    <p>File</p>
+  </li>
+  <li>
+    <p>Edit</p>
+  </li>
+  <li>Selections
+    <ul>
+      <li><code class="highlighter-rouge">cmd+shift+l</code> : 先選擇範圍，按下該按鍵，再鍵入一些文字，即可知道效果</li>
+      <li><code class="highlighter-rouge">cmd+d</code> : file 中，第一次按下，會選擇目前的 tag，再按一次，則會選擇到下一個相同的 tag 可以在該，可快速一次修改全部名稱</li>
+    </ul>
+  </li>
+  <li>
+    <p>Find</p>
+  </li>
+  <li>View
+    <ul>
+      <li><code class="highlighter-rouge">ctrl+`</code></li>
+      <li><code class="highlighter-rouge">cmd+ctrl+f</code> : 全螢幕</li>
+      <li><code class="highlighter-rouge">cmd+ctrl+shift+f</code> : 專注模式</li>
+      <li>編輯畫面切割(Split Editing) : View/Layout</li>
+    </ul>
+  </li>
+  <li>GOTO : <code class="highlighter-rouge">cmd+p</code> 在命令框架中
+    <ul>
+      <li>輸入該 folder 中的檔案名稱，則會搜尋並檢視該 file，確認後可直接開啟。</li>
+      <li>輸入 <code class="highlighter-rouge">@</code> 會列出目前 file 中的 symbols</li>
+      <li>輸入 <code class="highlighter-rouge">#</code> 會列出目前 file 中的所有文字元件</li>
+      <li>輸入 <code class="highlighter-rouge">:</code>+數字 可直接跳到該行</li>
+    </ul>
+  </li>
+  <li>Tools
+    <ul>
+      <li>命令面板(Command Palette) : <code class="highlighter-rouge">cmd+shift+p</code>
+        <ul>
+          <li><code class="highlighter-rouge">Package Control:</code>，透過安裝套件，會出現此命令，透過此命令列，可安裝與查詢套件</li>
+          <li><code class="highlighter-rouge">Snippets:</code>，可快速建立語法片段</li>
+        </ul>
+      </li>
+      <li>可在此建立一些自訂的語法、片段、巨集</li>
+    </ul>
+  </li>
+  <li>Project
+    <ul>
+      <li>管理 Project : 將個別不同的檔案，變成一組 project</li>
+      <li>管理 Workspace : project 的集合</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="操作練習">操作練習</h1>
+
+<p>https://www.sublimetext.com/</p>
+
+<blockquote>
+  <p>依照主頁面的圖示，第一張圖與第二張圖</p>
+</blockquote>
+
+<h2 id="ex1--快速選擇後進行更改">ex1 : 快速選擇後，進行更改</h2>
+
+<blockquote>
+  <p>選擇 file 中，相同的 tag</p>
+</blockquote>
+
+<p><strong>copy 以下片段</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10</pre></td><td class="code"><pre class="highlight"><code>&lt;form action="" method="get"&gt;
+  	&lt;input name="" type="hidden" value=''&gt;
+	&lt;input name="" type="hidden" value=""&gt;
+	&lt;input name="" type="hidden" value=""&gt;
+	&lt;input name="" type="hidden" value=""&gt;
+	&lt;input name="" type="hidden" value=""&gt;
+	&lt;input name="" type="hidden" value=""&gt;
+	&lt;input name="" type="hidden" value=""&gt;
+  	&lt;input type="" value="Submit"&gt;
+&lt;/form&gt;
+</code></pre></td></tr></tbody></table></div></div>
+
+<ol>
+  <li>游標移到 <code class="highlighter-rouge">form</code> 上，按下一次 <code class="highlighter-rouge">cmd+d</code>，會看到目前的 tag 已被圈選</li>
+  <li>再按一次 <code class="highlighter-rouge">cmd+d</code> 會發現下一個 <code class="highlighter-rouge">form</code> 也被選擇起來</li>
+  <li>此時修改內容，可看到一次修改</li>
+</ol>
+
+<h2 id="ex2--快速建立格式">ex2 : 快速建立格式</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code>Mon
+Tue
+Wed
+Thu
+Fri
+Sat
+</code></pre></td></tr></tbody></table></div></div>
+<ol>
+  <li>圈選 Mon~Sat</li>
+  <li><code class="highlighter-rouge">cmd+shift+l</code></li>
+  <li><code class="highlighter-rouge">shift+"</code></li>
+  <li>鍵盤向右方向兩次</li>
+  <li>輸入 <code class="highlighter-rouge">,</code></li>
+  <li><code class="highlighter-rouge">cmd+j</code>，刪除最後一個 <code class="highlighter-rouge">,</code></li>
+  <li><code class="highlighter-rouge">cmd+l</code></li>
+  <li>輸入 <code class="highlighter-rouge">[</code></li>
+</ol>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/ios/2016/05/02/ios-disassembler/" rel="next" title="【iOS】反組譯工具">
+                <i class="fa fa-chevron-left"></i> 【iOS】反組譯工具
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/growth_hacker/mixpanel/2016/04/19/mixpanelbasic/" rel="prev" title="【Mixpanel】basic">
+                【Mixpanel】basic <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#操作練習"> <span class="nav-text">操作練習</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#ex1--快速選擇後進行更改"> <span class="nav-text">ex1 : 快速選擇後，進行更改</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#ex2--快速建立格式"> <span class="nav-text">ex2 : 快速建立格式</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

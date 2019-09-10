@@ -1,0 +1,839 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="env aws sdk php v3 php 7.0x ex require &apos;./vendor/autoload.php&apos;; use Aws\S3\S3Client; use Aws\Exception\AwsException; use Aws\CommandPool; $access_key = &quot;&quot;; $secret_access_key = &quot;&quot;; $bucket = &quot;&quot;; $client = S3Client::factory([ &quot;region&quot; =&amp;gt; &quot;ap-northeast-1&quot;, // tokyo &quot;version&quot; =&amp;gt; &quot;latest&quot;, &apos;credentials&apos; =&amp;gt; [ &apos;key&apos; =&amp;gt; $access_key, &apos;secret&apos; =&amp;gt; $secret_access_key, ], ] ); $commands = array(); $binary = file_get_contents(&apos;./images/1.jpg&apos;); $commands[] = $client-&amp;gt;getCommand(&apos;PutObject&apos;, [ &apos;Bucket&apos; =&amp;gt; $bucket, &apos;Key&apos; =&amp;gt; &apos;photos/photo01.jpg&apos;, &apos;Body&apos; =&amp;gt; $binary ] ); $commands[] = $client-&amp;gt;getCommand(&apos;PutObject&apos;, [ &apos;Bucket&apos; =&amp;gt; $bucket, &apos;Key&apos; =&amp;gt; &apos;photos/photo02.jpg&apos;, &apos;Body&apos; =&amp;gt; $binary ] ); $pool = new CommandPool($client, $commands); // Initiate the pool transfers $promise = $pool-&amp;gt;promise(); // Force the pool to complete synchronously try { $result = $promise-&amp;gt;wait(); } catch (AwsException $e) { // handle the error. }">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【AWS-S3】多檔案上傳">
+<meta property="og:url" content="/2017/06/07/aws-s3-multiple-file-upload/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="env aws sdk php v3 php 7.0x ex require &apos;./vendor/autoload.php&apos;; use Aws\S3\S3Client; use Aws\Exception\AwsException; use Aws\CommandPool; $access_key = &quot;&quot;; $secret_access_key = &quot;&quot;; $bucket = &quot;&quot;; $client = S3Client::factory([ &quot;region&quot; =&amp;gt; &quot;ap-northeast-1&quot;, // tokyo &quot;version&quot; =&amp;gt; &quot;latest&quot;, &apos;credentials&apos; =&amp;gt; [ &apos;key&apos; =&amp;gt; $access_key, &apos;secret&apos; =&amp;gt; $secret_access_key, ], ] ); $commands = array(); $binary = file_get_contents(&apos;./images/1.jpg&apos;); $commands[] = $client-&amp;gt;getCommand(&apos;PutObject&apos;, [ &apos;Bucket&apos; =&amp;gt; $bucket, &apos;Key&apos; =&amp;gt; &apos;photos/photo01.jpg&apos;, &apos;Body&apos; =&amp;gt; $binary ] ); $commands[] = $client-&amp;gt;getCommand(&apos;PutObject&apos;, [ &apos;Bucket&apos; =&amp;gt; $bucket, &apos;Key&apos; =&amp;gt; &apos;photos/photo02.jpg&apos;, &apos;Body&apos; =&amp;gt; $binary ] ); $pool = new CommandPool($client, $commands); // Initiate the pool transfers $promise = $pool-&amp;gt;promise(); // Force the pool to complete synchronously try { $result = $promise-&amp;gt;wait(); } catch (AwsException $e) { // handle the error. }">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【AWS-S3】多檔案上傳">
+<meta name="twitter:description" content="env aws sdk php v3 php 7.0x ex require &apos;./vendor/autoload.php&apos;; use Aws\S3\S3Client; use Aws\Exception\AwsException; use Aws\CommandPool; $access_key = &quot;&quot;; $secret_access_key = &quot;&quot;; $bucket = &quot;&quot;; $client = S3Client::factory([ &quot;region&quot; =&amp;gt; &quot;ap-northeast-1&quot;, // tokyo &quot;version&quot; =&amp;gt; &quot;latest&quot;, &apos;credentials&apos; =&amp;gt; [ &apos;key&apos; =&amp;gt; $access_key, &apos;secret&apos; =&amp;gt; $secret_access_key, ], ] ); $commands = array(); $binary = file_get_contents(&apos;./images/1.jpg&apos;); $commands[] = $client-&amp;gt;getCommand(&apos;PutObject&apos;, [ &apos;Bucket&apos; =&amp;gt; $bucket, &apos;Key&apos; =&amp;gt; &apos;photos/photo01.jpg&apos;, &apos;Body&apos; =&amp;gt; $binary ] ); $commands[] = $client-&amp;gt;getCommand(&apos;PutObject&apos;, [ &apos;Bucket&apos; =&amp;gt; $bucket, &apos;Key&apos; =&amp;gt; &apos;photos/photo02.jpg&apos;, &apos;Body&apos; =&amp;gt; $binary ] ); $pool = new CommandPool($client, $commands); // Initiate the pool transfers $promise = $pool-&amp;gt;promise(); // Force the pool to complete synchronously try { $result = $promise-&amp;gt;wait(); } catch (AwsException $e) { // handle the error. }">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【AWS-S3】多檔案上傳 | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/2017/06/07/aws-s3-multiple-file-upload/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【AWS-S3】多檔案上傳
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-07T16:45:00+08:00">
+                2017-06-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="env">env</h1>
+<ul>
+  <li>aws sdk php v3</li>
+  <li>php 7.0x</li>
+</ul>
+
+<h1 id="ex">ex</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46</pre></td><td class="code"><pre class="highlight"><code>require './vendor/autoload.php';
+use Aws\S3\S3Client;
+use Aws\Exception\AwsException;
+use Aws\CommandPool;
+
+$access_key = "";
+$secret_access_key = "";
+$bucket = "";
+
+$client = S3Client::factory([
+        "region" =&gt; "ap-northeast-1", // tokyo
+        "version" =&gt; "latest", 
+        'credentials' =&gt; [
+            'key'    =&gt; $access_key,
+            'secret' =&gt; $secret_access_key,
+        ],
+    ]
+);
+
+$commands = array();
+
+$binary = file_get_contents('./images/1.jpg');
+$commands[] = $client-&gt;getCommand('PutObject', [
+        'Bucket' =&gt; $bucket,
+        'Key'    =&gt; 'photos/photo01.jpg',
+        'Body'   =&gt; $binary
+    ]
+);
+
+$commands[] = $client-&gt;getCommand('PutObject', [
+        'Bucket' =&gt; $bucket,
+        'Key'    =&gt; 'photos/photo02.jpg',
+        'Body'   =&gt; $binary
+    ]
+);
+
+$pool = new CommandPool($client, $commands);
+// Initiate the pool transfers
+$promise = $pool-&gt;promise();
+
+// Force the pool to complete synchronously
+try {
+    $result = $promise-&gt;wait();
+} catch (AwsException $e) {
+    // handle the error.
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/21/playerhls-rtmp/" rel="next" title="【Player】HLS.js / video.js / jwplayer">
+                <i class="fa fa-chevron-left"></i> 【Player】HLS.js / video.js / jwplayer
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/07/dockerenv/" rel="prev" title="【Docker】ENV">
+                【Docker】ENV <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#env"> <span class="nav-text">env</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#ex"> <span class="nav-text">ex</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

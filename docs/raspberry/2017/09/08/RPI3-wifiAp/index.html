@@ -1,0 +1,947 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="initial check 檢查網路是否支援 AP : iw list，須找到支援 AP 的選項 檢察網路 : ifconfig -a，會看到 eth0 : 在我的 pi3 下顯示的是 enxb87ebbb66cf，在 iptables 的 package transfer 將 eth0 設定成此值 lo wlan0 接上 乙太網路線，先測試 raspberry pi 上的網路是否正常，透過 route 指令檢查 default 的 gateway，可得知 Iface 的名稱，也就是 eth0 整個目標就是透過 iptable 的方式，交換 wifi 與乙太網路的資訊 設定 wifi 的資訊 目的 : 接收用戶端連線，設定 raspberry wifi gateway 的位置 編輯 DHCP Client 設定資訊 : vim /etc/dhcpcd.conf 在最下方，新增 interface wlan0 static ip_address=10.0.7.1/24 : 指定 wlan0 的 ip 位置 啟用 NAT 目的 : 透過 iptable 的設定，交換 wifi ap(wlan0) 與 eth0 的網路資訊 開啟 ipv4 路由轉發功能，檔案位置 /etc/sysctl.conf 查詢 : cat /etc/sysctl.conf | grep ip_forward 變更設定 : 至 /etc/sysctl.conf，找到 net.ipv4.ip_forward 並設定為 1 或透過指令變更 : sudo sed -i &apos;s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g&apos; /etc/sysctl.conf 更新 iptable，將內部的 wlan0 封包轉給 eth0，詳細原理可參考 : http://web.mit.edu/rhel-doc/4/RH-DOCS/rhel-sg-zh_tw-4/s1-firewall-ipt-fwd.html sudo iptables -F sudo iptables -F -t nat sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT 儲存設定，讓每次開機都自動設定 vim /etc/rc.local 在 exit 0 之前，加入sudo iptables-save &amp;gt; /etc/network/iptables.ipv4.nat 查看 iptable sudo iptables -t nat -S sudo iptables -S sudo iptables -L 架設 DHCP Server sudo apt-get -y install dnsmasq sudo vim /etc/dnsmasq.conf，在最下方編輯 interface=wlan0 dhcp-range=10.0.7.101,10.0.7.200,255.255.255.0,12h 重新啟動 dnsmasq : sudo systemctl restart dnsmasq &amp;amp;&amp;amp; sudo systemctl enable dnsmasq 設定 hostapd sudo apt-get install hostapd -y cp /usr/share/doc/hostapd/examples/hostapd.conf.gz /etc/hostapd/ gunzip /usr/share/doc/hostapd/examples/hostapd.conf.gz 編輯 hostapd.conf interface=wlan0 driver=nl80211 ssid=RPI-AP hw_mode=g channel=11 macaddr_acl=0 auth_algs=1 ignore_broadcast_ssid=0 wpa=2 wpa_passphrase=12345678 : 設定無線網路密碼 wpa_key_mgmt=WPA-PSK rsn_pairwise=CCMP 測試 : sudo hostapd -dd /etc/hostapd/hostapd.conf 測試時，可以透過其他裝置，並連接上 wifi ap 如果連接得上，但沒有辦法看網頁，為 iptables 設定錯誤，請檢查你的 iptables : iptables -L 指定 hostapd daemon 的位置 : sudo sed -i &apos;s/#DAEMON_CONF=&quot;&quot;/DAEMON_CONF=&quot;\/etc\/hostapd\/hostapd.conf&quot;/g&apos; /etc/default/hostapd 重新開機讓所有的設定值都生效 sudo systemctl enable hostapd &amp;amp;&amp;amp; sudo reboot troubleshooting 找不到 ssid 請重新啟動 hostapd 連上 ssid，卻無法連到外部網路 請檢查 iptables 檢查錯誤訊息 /var/log/syslog 如何關閉 wifi ap 停掉 hostapd 服務即可 : sudo systemctl hostapd stop">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Raspberry pi 3】wifi ap mode">
+<meta property="og:url" content="/raspberry/2017/09/08/RPI3-wifiAp/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="initial check 檢查網路是否支援 AP : iw list，須找到支援 AP 的選項 檢察網路 : ifconfig -a，會看到 eth0 : 在我的 pi3 下顯示的是 enxb87ebbb66cf，在 iptables 的 package transfer 將 eth0 設定成此值 lo wlan0 接上 乙太網路線，先測試 raspberry pi 上的網路是否正常，透過 route 指令檢查 default 的 gateway，可得知 Iface 的名稱，也就是 eth0 整個目標就是透過 iptable 的方式，交換 wifi 與乙太網路的資訊 設定 wifi 的資訊 目的 : 接收用戶端連線，設定 raspberry wifi gateway 的位置 編輯 DHCP Client 設定資訊 : vim /etc/dhcpcd.conf 在最下方，新增 interface wlan0 static ip_address=10.0.7.1/24 : 指定 wlan0 的 ip 位置 啟用 NAT 目的 : 透過 iptable 的設定，交換 wifi ap(wlan0) 與 eth0 的網路資訊 開啟 ipv4 路由轉發功能，檔案位置 /etc/sysctl.conf 查詢 : cat /etc/sysctl.conf | grep ip_forward 變更設定 : 至 /etc/sysctl.conf，找到 net.ipv4.ip_forward 並設定為 1 或透過指令變更 : sudo sed -i &apos;s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g&apos; /etc/sysctl.conf 更新 iptable，將內部的 wlan0 封包轉給 eth0，詳細原理可參考 : http://web.mit.edu/rhel-doc/4/RH-DOCS/rhel-sg-zh_tw-4/s1-firewall-ipt-fwd.html sudo iptables -F sudo iptables -F -t nat sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT 儲存設定，讓每次開機都自動設定 vim /etc/rc.local 在 exit 0 之前，加入sudo iptables-save &amp;gt; /etc/network/iptables.ipv4.nat 查看 iptable sudo iptables -t nat -S sudo iptables -S sudo iptables -L 架設 DHCP Server sudo apt-get -y install dnsmasq sudo vim /etc/dnsmasq.conf，在最下方編輯 interface=wlan0 dhcp-range=10.0.7.101,10.0.7.200,255.255.255.0,12h 重新啟動 dnsmasq : sudo systemctl restart dnsmasq &amp;amp;&amp;amp; sudo systemctl enable dnsmasq 設定 hostapd sudo apt-get install hostapd -y cp /usr/share/doc/hostapd/examples/hostapd.conf.gz /etc/hostapd/ gunzip /usr/share/doc/hostapd/examples/hostapd.conf.gz 編輯 hostapd.conf interface=wlan0 driver=nl80211 ssid=RPI-AP hw_mode=g channel=11 macaddr_acl=0 auth_algs=1 ignore_broadcast_ssid=0 wpa=2 wpa_passphrase=12345678 : 設定無線網路密碼 wpa_key_mgmt=WPA-PSK rsn_pairwise=CCMP 測試 : sudo hostapd -dd /etc/hostapd/hostapd.conf 測試時，可以透過其他裝置，並連接上 wifi ap 如果連接得上，但沒有辦法看網頁，為 iptables 設定錯誤，請檢查你的 iptables : iptables -L 指定 hostapd daemon 的位置 : sudo sed -i &apos;s/#DAEMON_CONF=&quot;&quot;/DAEMON_CONF=&quot;\/etc\/hostapd\/hostapd.conf&quot;/g&apos; /etc/default/hostapd 重新開機讓所有的設定值都生效 sudo systemctl enable hostapd &amp;amp;&amp;amp; sudo reboot troubleshooting 找不到 ssid 請重新啟動 hostapd 連上 ssid，卻無法連到外部網路 請檢查 iptables 檢查錯誤訊息 /var/log/syslog 如何關閉 wifi ap 停掉 hostapd 服務即可 : sudo systemctl hostapd stop">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Raspberry pi 3】wifi ap mode">
+<meta name="twitter:description" content="initial check 檢查網路是否支援 AP : iw list，須找到支援 AP 的選項 檢察網路 : ifconfig -a，會看到 eth0 : 在我的 pi3 下顯示的是 enxb87ebbb66cf，在 iptables 的 package transfer 將 eth0 設定成此值 lo wlan0 接上 乙太網路線，先測試 raspberry pi 上的網路是否正常，透過 route 指令檢查 default 的 gateway，可得知 Iface 的名稱，也就是 eth0 整個目標就是透過 iptable 的方式，交換 wifi 與乙太網路的資訊 設定 wifi 的資訊 目的 : 接收用戶端連線，設定 raspberry wifi gateway 的位置 編輯 DHCP Client 設定資訊 : vim /etc/dhcpcd.conf 在最下方，新增 interface wlan0 static ip_address=10.0.7.1/24 : 指定 wlan0 的 ip 位置 啟用 NAT 目的 : 透過 iptable 的設定，交換 wifi ap(wlan0) 與 eth0 的網路資訊 開啟 ipv4 路由轉發功能，檔案位置 /etc/sysctl.conf 查詢 : cat /etc/sysctl.conf | grep ip_forward 變更設定 : 至 /etc/sysctl.conf，找到 net.ipv4.ip_forward 並設定為 1 或透過指令變更 : sudo sed -i &apos;s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g&apos; /etc/sysctl.conf 更新 iptable，將內部的 wlan0 封包轉給 eth0，詳細原理可參考 : http://web.mit.edu/rhel-doc/4/RH-DOCS/rhel-sg-zh_tw-4/s1-firewall-ipt-fwd.html sudo iptables -F sudo iptables -F -t nat sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT 儲存設定，讓每次開機都自動設定 vim /etc/rc.local 在 exit 0 之前，加入sudo iptables-save &amp;gt; /etc/network/iptables.ipv4.nat 查看 iptable sudo iptables -t nat -S sudo iptables -S sudo iptables -L 架設 DHCP Server sudo apt-get -y install dnsmasq sudo vim /etc/dnsmasq.conf，在最下方編輯 interface=wlan0 dhcp-range=10.0.7.101,10.0.7.200,255.255.255.0,12h 重新啟動 dnsmasq : sudo systemctl restart dnsmasq &amp;amp;&amp;amp; sudo systemctl enable dnsmasq 設定 hostapd sudo apt-get install hostapd -y cp /usr/share/doc/hostapd/examples/hostapd.conf.gz /etc/hostapd/ gunzip /usr/share/doc/hostapd/examples/hostapd.conf.gz 編輯 hostapd.conf interface=wlan0 driver=nl80211 ssid=RPI-AP hw_mode=g channel=11 macaddr_acl=0 auth_algs=1 ignore_broadcast_ssid=0 wpa=2 wpa_passphrase=12345678 : 設定無線網路密碼 wpa_key_mgmt=WPA-PSK rsn_pairwise=CCMP 測試 : sudo hostapd -dd /etc/hostapd/hostapd.conf 測試時，可以透過其他裝置，並連接上 wifi ap 如果連接得上，但沒有辦法看網頁，為 iptables 設定錯誤，請檢查你的 iptables : iptables -L 指定 hostapd daemon 的位置 : sudo sed -i &apos;s/#DAEMON_CONF=&quot;&quot;/DAEMON_CONF=&quot;\/etc\/hostapd\/hostapd.conf&quot;/g&apos; /etc/default/hostapd 重新開機讓所有的設定值都生效 sudo systemctl enable hostapd &amp;amp;&amp;amp; sudo reboot troubleshooting 找不到 ssid 請重新啟動 hostapd 連上 ssid，卻無法連到外部網路 請檢查 iptables 檢查錯誤訊息 /var/log/syslog 如何關閉 wifi ap 停掉 hostapd 服務即可 : sudo systemctl hostapd stop">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【Raspberry pi 3】wifi ap mode | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/raspberry/2017/09/08/RPI3-wifiAp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【Raspberry pi 3】wifi ap mode
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-08T13:16:00+08:00">
+                2017-09-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/Raspberry" itemprop="url" rel="index">
+                    <span itemprop="name">Raspberry</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="initial-check">initial check</h2>
+<ol>
+  <li>檢查網路是否支援 AP : <code class="highlighter-rouge">iw list</code>，須找到支援 AP 的選項</li>
+  <li>檢察網路 : <code class="highlighter-rouge">ifconfig -a</code>，會看到
+    <ul>
+      <li>eth0 : 在我的 pi3 下顯示的是 enxb87ebbb66cf，在 iptables 的 package transfer 將 eth0 設定成此值</li>
+      <li>lo</li>
+      <li>wlan0</li>
+    </ul>
+  </li>
+  <li>接上 乙太網路線，先測試 raspberry pi 上的網路是否正常，透過 <code class="highlighter-rouge">route</code> 指令檢查 default 的 gateway，可得知 Iface 的名稱，也就是 eth0</li>
+  <li>整個目標就是透過 iptable 的方式，交換 wifi 與乙太網路的資訊</li>
+</ol>
+
+<h2 id="設定-wifi-的資訊">設定 wifi 的資訊</h2>
+<ul>
+  <li>目的 : 接收用戶端連線，設定 raspberry wifi gateway 的位置</li>
+</ul>
+
+<ol>
+  <li>編輯 DHCP Client 設定資訊 : <code class="highlighter-rouge">vim /etc/dhcpcd.conf</code></li>
+  <li>在最下方，新增
+    <ol>
+      <li><code class="highlighter-rouge">interface  wlan0</code></li>
+      <li><code class="highlighter-rouge">static ip_address=10.0.7.1/24</code> : 指定 wlan0 的 ip 位置</li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="啟用-nat">啟用 NAT</h2>
+<ul>
+  <li>目的 : 透過 iptable 的設定，交換 wifi ap(wlan0) 與 eth0 的網路資訊</li>
+</ul>
+
+<ol>
+  <li>開啟 ipv4 路由轉發功能，檔案位置 <code class="highlighter-rouge">/etc/sysctl.conf</code>
+    <ul>
+      <li>查詢 : <code class="highlighter-rouge">cat /etc/sysctl.conf | grep ip_forward</code></li>
+      <li>變更設定 : 至 <code class="highlighter-rouge">/etc/sysctl.conf</code>，找到 <code class="highlighter-rouge">net.ipv4.ip_forward</code> 並設定為 1
+        <ul>
+          <li>或透過指令變更 : <code class="highlighter-rouge">sudo sed -i 's/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g' /etc/sysctl.conf</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>更新 iptable，將內部的 wlan0 封包轉給 eth0，詳細原理可參考 : <code class="highlighter-rouge">http://web.mit.edu/rhel-doc/4/RH-DOCS/rhel-sg-zh_tw-4/s1-firewall-ipt-fwd.html</code>
+    <ol>
+      <li><code class="highlighter-rouge">sudo iptables -F</code></li>
+      <li><code class="highlighter-rouge">sudo iptables -F -t nat</code></li>
+      <li><code class="highlighter-rouge">sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</code></li>
+      <li><code class="highlighter-rouge">sudo iptables -A FORWARD -i eth0 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT</code></li>
+      <li><code class="highlighter-rouge">sudo iptables -A FORWARD -i wlan0 -o eth0 -j ACCEPT</code></li>
+    </ol>
+  </li>
+  <li>儲存設定，讓每次開機都自動設定
+    <ol>
+      <li><code class="highlighter-rouge">vim /etc/rc.local</code></li>
+      <li>在 <code class="highlighter-rouge">exit 0</code> 之前，加入<code class="highlighter-rouge">sudo iptables-save &gt; /etc/network/iptables.ipv4.nat</code></li>
+    </ol>
+  </li>
+  <li>查看 iptable
+    <ul>
+      <li><code class="highlighter-rouge">sudo iptables -t nat -S</code></li>
+      <li><code class="highlighter-rouge">sudo iptables -S</code></li>
+      <li><code class="highlighter-rouge">sudo iptables -L</code></li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="架設-dhcp-server">架設 DHCP Server</h2>
+<ol>
+  <li><code class="highlighter-rouge">sudo apt-get -y install dnsmasq</code></li>
+  <li><code class="highlighter-rouge">sudo vim /etc/dnsmasq.conf</code>，在最下方編輯
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>interface=wlan0
+dhcp-range=10.0.7.101,10.0.7.200,255.255.255.0,12h
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>重新啟動 dnsmasq : <code class="highlighter-rouge">sudo systemctl restart dnsmasq &amp;&amp; sudo systemctl enable dnsmasq</code></li>
+</ol>
+
+<h2 id="設定-hostapd">設定 hostapd</h2>
+
+<ol>
+  <li><code class="highlighter-rouge">sudo apt-get install hostapd -y</code></li>
+  <li><code class="highlighter-rouge">cp /usr/share/doc/hostapd/examples/hostapd.conf.gz /etc/hostapd/</code></li>
+  <li><code class="highlighter-rouge">gunzip /usr/share/doc/hostapd/examples/hostapd.conf.gz</code></li>
+  <li>編輯 hostapd.conf
+    <ol>
+      <li><code class="highlighter-rouge">interface=wlan0</code></li>
+      <li><code class="highlighter-rouge">driver=nl80211</code></li>
+      <li><code class="highlighter-rouge">ssid=RPI-AP</code></li>
+      <li><code class="highlighter-rouge">hw_mode=g</code></li>
+      <li><code class="highlighter-rouge">channel=11</code></li>
+      <li><code class="highlighter-rouge">macaddr_acl=0</code></li>
+      <li><code class="highlighter-rouge">auth_algs=1</code></li>
+      <li><code class="highlighter-rouge">ignore_broadcast_ssid=0</code></li>
+      <li><code class="highlighter-rouge">wpa=2</code></li>
+      <li><code class="highlighter-rouge">wpa_passphrase=12345678</code> : 設定無線網路密碼</li>
+      <li><code class="highlighter-rouge">wpa_key_mgmt=WPA-PSK</code></li>
+      <li><code class="highlighter-rouge">rsn_pairwise=CCMP</code></li>
+    </ol>
+  </li>
+  <li>測試 : <code class="highlighter-rouge">sudo hostapd -dd /etc/hostapd/hostapd.conf</code>
+    <ul>
+      <li>測試時，可以透過其他裝置，並連接上 wifi ap</li>
+      <li>如果連接得上，但沒有辦法看網頁，為 iptables 設定錯誤，請檢查你的 iptables : <code class="highlighter-rouge">iptables -L</code></li>
+    </ul>
+  </li>
+  <li>指定 hostapd daemon 的位置 : <code class="highlighter-rouge">sudo sed -i 's/#DAEMON_CONF=""/DAEMON_CONF="\/etc\/hostapd\/hostapd.conf"/g' /etc/default/hostapd</code></li>
+</ol>
+
+<h2 id="重新開機讓所有的設定值都生效">重新開機讓所有的設定值都生效</h2>
+<ul>
+  <li><code class="highlighter-rouge">sudo systemctl enable hostapd &amp;&amp; sudo reboot</code></li>
+</ul>
+
+<h2 id="troubleshooting">troubleshooting</h2>
+
+<ol>
+  <li>找不到 ssid
+    <ul>
+      <li>請重新啟動 hostapd</li>
+    </ul>
+  </li>
+  <li>連上 ssid，卻無法連到外部網路
+    <ul>
+      <li>請檢查 iptables</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="檢查錯誤訊息">檢查錯誤訊息</h2>
+<ul>
+  <li><code class="highlighter-rouge">/var/log/syslog</code></li>
+</ul>
+
+<h2 id="如何關閉-wifi-ap">如何關閉 wifi ap</h2>
+<ul>
+  <li>停掉 hostapd 服務即可 : <code class="highlighter-rouge">sudo systemctl hostapd stop</code></li>
+</ul>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/raspberry/facebookatc/2017/09/08/Raspberry-FacebookATC/" rel="next" title="【Raspberry pi 3】安裝 facebook_atc">
+                <i class="fa fa-chevron-left"></i> 【Raspberry pi 3】安裝 facebook_atc
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/docker/mariadb/2017/09/05/Docker-MariaDB/" rel="prev" title="【docker : mariadb】container 建立後，初始化 schema">
+                【docker : mariadb】container 建立後，初始化 schema <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#initial-check"> <span class="nav-text">initial check</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#設定-wifi-的資訊"> <span class="nav-text">設定 wifi 的資訊</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#啟用-nat"> <span class="nav-text">啟用 NAT</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#架設-dhcp-server"> <span class="nav-text">架設 DHCP Server</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#設定-hostapd"> <span class="nav-text">設定 hostapd</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#重新開機讓所有的設定值都生效"> <span class="nav-text">重新開機讓所有的設定值都生效</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#troubleshooting"> <span class="nav-text">troubleshooting</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#檢查錯誤訊息"> <span class="nav-text">檢查錯誤訊息</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#如何關閉-wifi-ap"> <span class="nav-text">如何關閉 wifi ap</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

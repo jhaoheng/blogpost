@@ -1,0 +1,883 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="hls m3u8 詢問次數測試 目的 : 確認 播放器 在播放 hls 時，更新 m3u8 的機制與時間點 環境 php nginx aws s3 aws dynamoDB VLC player 流程設計 預先儲存 影片(.ts)到 aws s3 資訊到 aws dynamoDB 從 api 給予時間與 key，搜尋影片片段，建立 m3u8 檔案，回傳給播放器 每次 播放器，進行要求建立 m3u8 時，寫入 log 紀錄要求的時間 查詢 log 第一次建立的 m3u8 file, 每次詢問時都給予相同的 m3u8 檔案 #EXTM3U #EXT-X-VERSION:3 #EXT-X-ALLOW-CACHE:YES #EXT-X-TARGETDURATION:8.334 EXT-X-MEDIA-SEQUENCE:1 #EXTINF:8.334, playback {DNS}/1495615390360.ts #EXTINF:8.3, playback {DNS}/1495615398698.ts #EXTINF:8.3, playback {DNS}/1495615407037.ts #EXTINF:8.3, playback {DNS}/1495615415376.ts #EXTINF:8.333, playback {DNS}/1495615423720.ts 寫入的 log [Sun, 28 May 17 20:11:56 +0800][INFO] 找尋 m3u8 +1 : 1495973516.44 [Sun, 28 May 17 20:12:12 +0800][INFO] 找尋 m3u8 +1 : 1495973532.82 [Sun, 28 May 17 20:12:20 +0800][INFO] 找尋 m3u8 +1 : 1495973540.66 [Sun, 28 May 17 20:12:28 +0800][INFO] 找尋 m3u8 +1 : 1495973548.69 [Sun, 28 May 17 20:12:36 +0800][INFO] 找尋 m3u8 +1 : 1495973556.76 結論 每次的 log 的時間、間隔， log_2 - log_1 , duration = 16 log_3 - log_2 , duration = 8 log_4 - log_3 , duration = 8 log_5 - log_4 , duration = 8 log_1 : 第一次開始詢問, 開始播放第一個, 應該包含播放器的準備時間 log_2 : 第一個 ts 播放完畢, 開始播放第二個 log_3 : 第二個 ts 播放完畢, 開始播放第三個 log_4 : 第三個 ts 播放完畢, 開始播放第四個 log_5 : 第四個 ts 播放完畢, 開始播放第五個 播放器在每次播放完 ts 的檔案後，都會進行 api 的詢問，透過詢問，可產生下一次的 m3u8 檔案， 若更新 m3u8 後，記得需同時 EXT-X-MEDIA-SEQUENCE 進行 +1">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【HLS】m3u8 在直播上，播放器詢問次數測試">
+<meta property="og:url" content="/hls/2017/05/28/HLS-m3u8/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="hls m3u8 詢問次數測試 目的 : 確認 播放器 在播放 hls 時，更新 m3u8 的機制與時間點 環境 php nginx aws s3 aws dynamoDB VLC player 流程設計 預先儲存 影片(.ts)到 aws s3 資訊到 aws dynamoDB 從 api 給予時間與 key，搜尋影片片段，建立 m3u8 檔案，回傳給播放器 每次 播放器，進行要求建立 m3u8 時，寫入 log 紀錄要求的時間 查詢 log 第一次建立的 m3u8 file, 每次詢問時都給予相同的 m3u8 檔案 #EXTM3U #EXT-X-VERSION:3 #EXT-X-ALLOW-CACHE:YES #EXT-X-TARGETDURATION:8.334 EXT-X-MEDIA-SEQUENCE:1 #EXTINF:8.334, playback {DNS}/1495615390360.ts #EXTINF:8.3, playback {DNS}/1495615398698.ts #EXTINF:8.3, playback {DNS}/1495615407037.ts #EXTINF:8.3, playback {DNS}/1495615415376.ts #EXTINF:8.333, playback {DNS}/1495615423720.ts 寫入的 log [Sun, 28 May 17 20:11:56 +0800][INFO] 找尋 m3u8 +1 : 1495973516.44 [Sun, 28 May 17 20:12:12 +0800][INFO] 找尋 m3u8 +1 : 1495973532.82 [Sun, 28 May 17 20:12:20 +0800][INFO] 找尋 m3u8 +1 : 1495973540.66 [Sun, 28 May 17 20:12:28 +0800][INFO] 找尋 m3u8 +1 : 1495973548.69 [Sun, 28 May 17 20:12:36 +0800][INFO] 找尋 m3u8 +1 : 1495973556.76 結論 每次的 log 的時間、間隔， log_2 - log_1 , duration = 16 log_3 - log_2 , duration = 8 log_4 - log_3 , duration = 8 log_5 - log_4 , duration = 8 log_1 : 第一次開始詢問, 開始播放第一個, 應該包含播放器的準備時間 log_2 : 第一個 ts 播放完畢, 開始播放第二個 log_3 : 第二個 ts 播放完畢, 開始播放第三個 log_4 : 第三個 ts 播放完畢, 開始播放第四個 log_5 : 第四個 ts 播放完畢, 開始播放第五個 播放器在每次播放完 ts 的檔案後，都會進行 api 的詢問，透過詢問，可產生下一次的 m3u8 檔案， 若更新 m3u8 後，記得需同時 EXT-X-MEDIA-SEQUENCE 進行 +1">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【HLS】m3u8 在直播上，播放器詢問次數測試">
+<meta name="twitter:description" content="hls m3u8 詢問次數測試 目的 : 確認 播放器 在播放 hls 時，更新 m3u8 的機制與時間點 環境 php nginx aws s3 aws dynamoDB VLC player 流程設計 預先儲存 影片(.ts)到 aws s3 資訊到 aws dynamoDB 從 api 給予時間與 key，搜尋影片片段，建立 m3u8 檔案，回傳給播放器 每次 播放器，進行要求建立 m3u8 時，寫入 log 紀錄要求的時間 查詢 log 第一次建立的 m3u8 file, 每次詢問時都給予相同的 m3u8 檔案 #EXTM3U #EXT-X-VERSION:3 #EXT-X-ALLOW-CACHE:YES #EXT-X-TARGETDURATION:8.334 EXT-X-MEDIA-SEQUENCE:1 #EXTINF:8.334, playback {DNS}/1495615390360.ts #EXTINF:8.3, playback {DNS}/1495615398698.ts #EXTINF:8.3, playback {DNS}/1495615407037.ts #EXTINF:8.3, playback {DNS}/1495615415376.ts #EXTINF:8.333, playback {DNS}/1495615423720.ts 寫入的 log [Sun, 28 May 17 20:11:56 +0800][INFO] 找尋 m3u8 +1 : 1495973516.44 [Sun, 28 May 17 20:12:12 +0800][INFO] 找尋 m3u8 +1 : 1495973532.82 [Sun, 28 May 17 20:12:20 +0800][INFO] 找尋 m3u8 +1 : 1495973540.66 [Sun, 28 May 17 20:12:28 +0800][INFO] 找尋 m3u8 +1 : 1495973548.69 [Sun, 28 May 17 20:12:36 +0800][INFO] 找尋 m3u8 +1 : 1495973556.76 結論 每次的 log 的時間、間隔， log_2 - log_1 , duration = 16 log_3 - log_2 , duration = 8 log_4 - log_3 , duration = 8 log_5 - log_4 , duration = 8 log_1 : 第一次開始詢問, 開始播放第一個, 應該包含播放器的準備時間 log_2 : 第一個 ts 播放完畢, 開始播放第二個 log_3 : 第二個 ts 播放完畢, 開始播放第三個 log_4 : 第三個 ts 播放完畢, 開始播放第四個 log_5 : 第四個 ts 播放完畢, 開始播放第五個 播放器在每次播放完 ts 的檔案後，都會進行 api 的詢問，透過詢問，可產生下一次的 m3u8 檔案， 若更新 m3u8 後，記得需同時 EXT-X-MEDIA-SEQUENCE 進行 +1">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【HLS】m3u8 在直播上，播放器詢問次數測試 | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/hls/2017/05/28/HLS-m3u8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【HLS】m3u8 在直播上，播放器詢問次數測試
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-28T12:25:00+08:00">
+                2017-05-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/HLS" itemprop="url" rel="index">
+                    <span itemprop="name">HLS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="hls-m3u8-詢問次數測試">hls m3u8 詢問次數測試</h1>
+
+<ul>
+  <li>目的 : 確認 播放器 在播放 hls 時，更新 m3u8 的機制與時間點</li>
+</ul>
+
+<h2 id="環境">環境</h2>
+
+<ul>
+  <li>php</li>
+  <li>nginx</li>
+  <li>aws s3</li>
+  <li>aws dynamoDB</li>
+  <li>VLC player</li>
+</ul>
+
+<h2 id="流程設計">流程設計</h2>
+
+<ol>
+  <li>預先儲存
+    <ul>
+      <li>影片(.ts)到 aws s3</li>
+      <li>資訊到 aws dynamoDB</li>
+    </ul>
+  </li>
+  <li>從 api 給予時間與 key，搜尋影片片段，建立 m3u8 檔案，回傳給播放器
+    <ul>
+      <li>每次 播放器，進行要求建立 m3u8 時，寫入 log 紀錄要求的時間</li>
+    </ul>
+  </li>
+  <li>查詢 log</li>
+</ol>
+
+<h2 id="第一次建立的-m3u8-file-每次詢問時都給予相同的-m3u8-檔案">第一次建立的 m3u8 file, 每次詢問時都給予相同的 m3u8 檔案</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15</pre></td><td class="code"><pre class="highlight"><code>#EXTM3U
+#EXT-X-VERSION:3
+#EXT-X-ALLOW-CACHE:YES
+#EXT-X-TARGETDURATION:8.334
+EXT-X-MEDIA-SEQUENCE:1
+#EXTINF:8.334, playback
+{DNS}/1495615390360.ts
+#EXTINF:8.3, playback
+{DNS}/1495615398698.ts
+#EXTINF:8.3, playback
+{DNS}/1495615407037.ts
+#EXTINF:8.3, playback
+{DNS}/1495615415376.ts
+#EXTINF:8.333, playback
+{DNS}/1495615423720.ts
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="寫入的-log">寫入的 log</h2>
+
+<p>[Sun, 28 May 17 20:11:56 +0800][INFO] 找尋 m3u8 +1 : 1495973516.44
+[Sun, 28 May 17 20:12:12 +0800][INFO] 找尋 m3u8 +1 : 1495973532.82
+[Sun, 28 May 17 20:12:20 +0800][INFO] 找尋 m3u8 +1 : 1495973540.66
+[Sun, 28 May 17 20:12:28 +0800][INFO] 找尋 m3u8 +1 : 1495973548.69
+[Sun, 28 May 17 20:12:36 +0800][INFO] 找尋 m3u8 +1 : 1495973556.76</p>
+
+<h2 id="結論">結論</h2>
+
+<p>每次的 log 的時間、間隔，</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10</pre></td><td class="code"><pre class="highlight"><code>log_2 - log_1 , duration = 16
+log_3 - log_2 , duration = 8
+log_4 - log_3 , duration = 8
+log_5 - log_4 , duration = 8
+
+log_1 : 第一次開始詢問, 開始播放第一個, 應該包含播放器的準備時間
+log_2 : 第一個 ts 播放完畢, 開始播放第二個
+log_3 : 第二個 ts 播放完畢, 開始播放第三個
+log_4 : 第三個 ts 播放完畢, 開始播放第四個
+log_5 : 第四個 ts 播放完畢, 開始播放第五個
+</code></pre></td></tr></tbody></table></div></div>
+<p>播放器在每次播放完 ts 的檔案後，都會進行 api 的詢問，透過詢問，可產生下一次的 m3u8 檔案，
+若更新 m3u8 後，記得需同時 <code class="highlighter-rouge">EXT-X-MEDIA-SEQUENCE</code> 進行 +1</p>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/srs/docker/2017/05/31/SRS-docker/" rel="next" title="【SRS-release2.0】docker with centos7.3">
+                <i class="fa fa-chevron-left"></i> 【SRS-release2.0】docker with centos7.3
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/22/aws-dynamodblocalhost/" rel="prev" title="【AWS DynamoDB】localhost">
+                【AWS DynamoDB】localhost <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#hls-m3u8-詢問次數測試"> <span class="nav-text">hls m3u8 詢問次數測試</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#環境"> <span class="nav-text">環境</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#流程設計"> <span class="nav-text">流程設計</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#第一次建立的-m3u8-file-每次詢問時都給予相同的-m3u8-檔案"> <span class="nav-text">第一次建立的 m3u8 file, 每次詢問時都給予相同的 m3u8 檔案</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#寫入的-log"> <span class="nav-text">寫入的 log</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#結論"> <span class="nav-text">結論</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

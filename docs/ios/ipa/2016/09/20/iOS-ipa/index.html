@@ -1,0 +1,893 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="手動檢查 將輸出的 .ipa，改為 .zip，解壓縮。 開啟 Terminal 並移動到該 解壓縮後的 Payload 中，會看到 embedded.mobileprovision security cms -D -i embedded.mobileprovision 解析結構就可發現不同點 code NSData *provisioningProfile = nil; NSData *raw = [NSData dataWithContentsOfURL:[NSBundle.mainBundle URLForResource:@&quot;embedded&quot; withExtension:@&quot;mobileprovision&quot;]]; char *start = memmem(raw.bytes, raw.length, &quot;&amp;lt;!DOCTYPE plist PUBLIC \&quot;-//Apple//DTD PLIST 1.0&quot;, 47); if (start) { char *end = memmem(start, (uintptr_t)start - raw.length, &quot;&amp;lt;/plist&amp;gt;&quot;, 8); if (end) { provisioningProfile = [NSData dataWithBytes:start length:8 + end - start]; } } if (provisioningProfile) { NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:provisioningProfile options:NSPropertyListImmutable format:0 error:0]; NSLog(@&quot; Team name: %@&quot;, plist[@&quot;TeamName&quot;]); if ([plist[@&quot;ProvisionsAllDevices&quot;] boolValue]) { NSLog(@&quot;Enterprise&quot;); } else if ([plist[@&quot;ProvisionedDevices&quot;] count] &amp;gt; 0) { if ([plist[@&quot;Entitlements&quot;][@&quot;get-task-allow&quot;] boolValue]) { NSLog(@&quot;Development&quot;); } else { NSLog(@&quot;Ad Hoc&quot;); } } else { NSLog(@&quot;App Store&quot;); } } 分析結構 Dev 若是 Dev build app，會看到 &amp;lt;key&amp;gt;get-task-allow&amp;lt;/key&amp;gt; &amp;lt;true/&amp;gt; Ad-Hoc 若是 Ad-Hoc &amp;lt;key&amp;gt;get-task-allow&amp;lt;/key&amp;gt; &amp;lt;false/&amp;gt; 且 &amp;lt;key&amp;gt;ProvisionedDevices&amp;lt;/key&amp;gt; &amp;lt;array&amp;gt; &amp;lt;string&amp;gt;abcdef01234567890abcdef01234567890abacde&amp;lt;/string&amp;gt; &amp;lt;string&amp;gt;1abcdef01234567890abcdef01234567890abacd&amp;lt;/string&amp;gt; &amp;lt;string&amp;gt;2abcdef01234567890abcdef01234567890abacd&amp;lt;/string&amp;gt; &amp;lt;/array&amp;gt;">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【ipa】check Provision">
+<meta property="og:url" content="/ios/ipa/2016/09/20/iOS-ipa/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="手動檢查 將輸出的 .ipa，改為 .zip，解壓縮。 開啟 Terminal 並移動到該 解壓縮後的 Payload 中，會看到 embedded.mobileprovision security cms -D -i embedded.mobileprovision 解析結構就可發現不同點 code NSData *provisioningProfile = nil; NSData *raw = [NSData dataWithContentsOfURL:[NSBundle.mainBundle URLForResource:@&quot;embedded&quot; withExtension:@&quot;mobileprovision&quot;]]; char *start = memmem(raw.bytes, raw.length, &quot;&amp;lt;!DOCTYPE plist PUBLIC \&quot;-//Apple//DTD PLIST 1.0&quot;, 47); if (start) { char *end = memmem(start, (uintptr_t)start - raw.length, &quot;&amp;lt;/plist&amp;gt;&quot;, 8); if (end) { provisioningProfile = [NSData dataWithBytes:start length:8 + end - start]; } } if (provisioningProfile) { NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:provisioningProfile options:NSPropertyListImmutable format:0 error:0]; NSLog(@&quot; Team name: %@&quot;, plist[@&quot;TeamName&quot;]); if ([plist[@&quot;ProvisionsAllDevices&quot;] boolValue]) { NSLog(@&quot;Enterprise&quot;); } else if ([plist[@&quot;ProvisionedDevices&quot;] count] &amp;gt; 0) { if ([plist[@&quot;Entitlements&quot;][@&quot;get-task-allow&quot;] boolValue]) { NSLog(@&quot;Development&quot;); } else { NSLog(@&quot;Ad Hoc&quot;); } } else { NSLog(@&quot;App Store&quot;); } } 分析結構 Dev 若是 Dev build app，會看到 &amp;lt;key&amp;gt;get-task-allow&amp;lt;/key&amp;gt; &amp;lt;true/&amp;gt; Ad-Hoc 若是 Ad-Hoc &amp;lt;key&amp;gt;get-task-allow&amp;lt;/key&amp;gt; &amp;lt;false/&amp;gt; 且 &amp;lt;key&amp;gt;ProvisionedDevices&amp;lt;/key&amp;gt; &amp;lt;array&amp;gt; &amp;lt;string&amp;gt;abcdef01234567890abcdef01234567890abacde&amp;lt;/string&amp;gt; &amp;lt;string&amp;gt;1abcdef01234567890abcdef01234567890abacd&amp;lt;/string&amp;gt; &amp;lt;string&amp;gt;2abcdef01234567890abcdef01234567890abacd&amp;lt;/string&amp;gt; &amp;lt;/array&amp;gt;">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【ipa】check Provision">
+<meta name="twitter:description" content="手動檢查 將輸出的 .ipa，改為 .zip，解壓縮。 開啟 Terminal 並移動到該 解壓縮後的 Payload 中，會看到 embedded.mobileprovision security cms -D -i embedded.mobileprovision 解析結構就可發現不同點 code NSData *provisioningProfile = nil; NSData *raw = [NSData dataWithContentsOfURL:[NSBundle.mainBundle URLForResource:@&quot;embedded&quot; withExtension:@&quot;mobileprovision&quot;]]; char *start = memmem(raw.bytes, raw.length, &quot;&amp;lt;!DOCTYPE plist PUBLIC \&quot;-//Apple//DTD PLIST 1.0&quot;, 47); if (start) { char *end = memmem(start, (uintptr_t)start - raw.length, &quot;&amp;lt;/plist&amp;gt;&quot;, 8); if (end) { provisioningProfile = [NSData dataWithBytes:start length:8 + end - start]; } } if (provisioningProfile) { NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:provisioningProfile options:NSPropertyListImmutable format:0 error:0]; NSLog(@&quot; Team name: %@&quot;, plist[@&quot;TeamName&quot;]); if ([plist[@&quot;ProvisionsAllDevices&quot;] boolValue]) { NSLog(@&quot;Enterprise&quot;); } else if ([plist[@&quot;ProvisionedDevices&quot;] count] &amp;gt; 0) { if ([plist[@&quot;Entitlements&quot;][@&quot;get-task-allow&quot;] boolValue]) { NSLog(@&quot;Development&quot;); } else { NSLog(@&quot;Ad Hoc&quot;); } } else { NSLog(@&quot;App Store&quot;); } } 分析結構 Dev 若是 Dev build app，會看到 &amp;lt;key&amp;gt;get-task-allow&amp;lt;/key&amp;gt; &amp;lt;true/&amp;gt; Ad-Hoc 若是 Ad-Hoc &amp;lt;key&amp;gt;get-task-allow&amp;lt;/key&amp;gt; &amp;lt;false/&amp;gt; 且 &amp;lt;key&amp;gt;ProvisionedDevices&amp;lt;/key&amp;gt; &amp;lt;array&amp;gt; &amp;lt;string&amp;gt;abcdef01234567890abcdef01234567890abacde&amp;lt;/string&amp;gt; &amp;lt;string&amp;gt;1abcdef01234567890abcdef01234567890abacd&amp;lt;/string&amp;gt; &amp;lt;string&amp;gt;2abcdef01234567890abcdef01234567890abacd&amp;lt;/string&amp;gt; &amp;lt;/array&amp;gt;">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【ipa】check Provision | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/ios/ipa/2016/09/20/iOS-ipa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【ipa】check Provision
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-20T14:38:00+08:00">
+                2016-09-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/iOS" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/ipa" itemprop="url" rel="index">
+                    <span itemprop="name">ipa</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="手動檢查">手動檢查</h2>
+
+<ol>
+  <li>將輸出的 .ipa，改為 .zip，解壓縮。</li>
+  <li>開啟 Terminal 並移動到該 解壓縮後的 Payload 中，會看到 embedded.mobileprovision</li>
+  <li><code class="highlighter-rouge">security cms -D -i embedded.mobileprovision</code></li>
+  <li>解析結構就可發現不同點</li>
+</ol>
+
+<h2 id="code">code</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35</pre></td><td class="code"><pre class="highlight"><code>NSData *provisioningProfile = nil;
+NSData *raw = [NSData dataWithContentsOfURL:[NSBundle.mainBundle URLForResource:@"embedded" withExtension:@"mobileprovision"]];
+char *start = memmem(raw.bytes,
+                     raw.length,
+                     "&lt;!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0",
+                     47);
+if (start) {
+    char *end = memmem(start,
+                       (uintptr_t)start - raw.length,
+                       "&lt;/plist&gt;",
+                       8);
+    if (end) {
+        provisioningProfile = [NSData dataWithBytes:start length:8 + end - start];
+    }
+}
+
+if (provisioningProfile) {
+    NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:provisioningProfile
+                                                                    options:NSPropertyListImmutable
+                                                                     format:0
+                                                                      error:0];
+    NSLog(@"\n\n\nTeam name: %@", plist[@"TeamName"]);
+
+    if ([plist[@"ProvisionsAllDevices"] boolValue]) {
+        NSLog(@"Enterprise");
+    } else if ([plist[@"ProvisionedDevices"] count] &gt; 0) {
+        if ([plist[@"Entitlements"][@"get-task-allow"] boolValue]) {
+            NSLog(@"Development");
+        } else {
+            NSLog(@"Ad Hoc");
+        }
+    } else {
+        NSLog(@"App Store");
+    }
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="分析結構">分析結構</h2>
+
+<h3 id="dev">Dev</h3>
+
+<p>若是 <code class="highlighter-rouge">Dev</code> build app，會看到</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>&lt;key&gt;get-task-allow&lt;/key&gt;
+&lt;true/&gt;
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="ad-hoc">Ad-Hoc</h3>
+
+<p>若是 <code class="highlighter-rouge">Ad-Hoc</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>&lt;key&gt;get-task-allow&lt;/key&gt;
+&lt;false/&gt;
+</code></pre></td></tr></tbody></table></div></div>
+<p>且</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code>&lt;key&gt;ProvisionedDevices&lt;/key&gt;
+&lt;array&gt;
+    &lt;string&gt;abcdef01234567890abcdef01234567890abacde&lt;/string&gt;
+    &lt;string&gt;1abcdef01234567890abcdef01234567890abacd&lt;/string&gt;
+    &lt;string&gt;2abcdef01234567890abcdef01234567890abacd&lt;/string&gt;
+&lt;/array&gt;
+</code></pre></td></tr></tbody></table></div></div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/20/projectnotification-package/" rel="next" title="【Project】iOS Notification Package">
+                <i class="fa fa-chevron-left"></i> 【Project】iOS Notification Package
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/07/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/" rel="prev" title="【MQTT】Login mqtt:8883 SSL/TLS with certificate authority (CA)">
+                【MQTT】Login mqtt:8883 SSL/TLS with certificate authority (CA) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-2"> <a class="nav-link" href="#手動檢查"> <span class="nav-text">手動檢查</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#code"> <span class="nav-text">code</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#分析結構"> <span class="nav-text">分析結構</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-3"> <a class="nav-link" href="#dev"> <span class="nav-text">Dev</span> </a> </li> <li class="nav-item nav-level-3"> <a class="nav-link" href="#ad-hoc"> <span class="nav-text">Ad-Hoc</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

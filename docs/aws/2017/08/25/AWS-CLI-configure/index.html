@@ -1,0 +1,934 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="PURPOSE 了解 aws cli profile 運作方式 了解 aws cli configure 操作方法 aws cli github : https://github.com/aws/aws-cli/releases 安裝 &amp;amp; 更新 &amp;amp; 反安裝 : http://docs.aws.amazon.com/cli/latest/userguide/installing.html cli 中指令的參考 : http://docs.aws.amazon.com/cli/latest/index.html aws help : 可看到所有指令 查詢各類指令說明 : aws help aws {command} help aws {command} {sub-cmd} help aws Command Completion : http://docs.aws.amazon.com/cli/latest/userguide/cli-command-completion.html 透過 tab 搜尋 aws 相關指令, install : echo $SHELL find path : which aws_completer enable : complete -C &apos;/usr/local/bin/aws_completer&apos; aws 設定 profile resource : http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html 請到 iam 取得以下 AWS Access Key ID AWS Secret Access Key aws configure help : 查詢在 configure 中的指令有哪些可用 設定 profile aws configure aws configure --profile user2 列出 profile aws configure list : 預設 aws configure list --profile default : 指定身份 使用 profile aws ec2 describe-instance aws ec2 describe-instance --profile user2 指定使用哪一個 profile export AWS_PROFILE=user2 : AWS_PROFILE 為 Environment Variables unset AWS_PROFILE : 回到預設值 Profile Environment Variables AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_DEFAULT_REGION AWS_DEFAULT_OUTPUT AWS_PROFILE AWS_CA_BUNDLE AWS_SHARED_CREDENTIALS_FILE AWS_CONFIG_FILE Options --profile : 指定使用 profile --region : 指定地區 顯示地區列表 : aws ec2 describe-regions --output table --output : json text table --endpoint-url : 指定 ex : aws ec2 describe-instances --output table --region ap-northeast-2 example 想要列出目前預設使用的 profile 使哪一張 aws configure list 想指定預設的 profile export AWS_PROFILE=xxx 想取消指定 profile，回到 default unset AWS_PROFILE">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【AWS CLI】profile : configure">
+<meta property="og:url" content="/aws/2017/08/25/AWS-CLI-configure/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="PURPOSE 了解 aws cli profile 運作方式 了解 aws cli configure 操作方法 aws cli github : https://github.com/aws/aws-cli/releases 安裝 &amp;amp; 更新 &amp;amp; 反安裝 : http://docs.aws.amazon.com/cli/latest/userguide/installing.html cli 中指令的參考 : http://docs.aws.amazon.com/cli/latest/index.html aws help : 可看到所有指令 查詢各類指令說明 : aws help aws {command} help aws {command} {sub-cmd} help aws Command Completion : http://docs.aws.amazon.com/cli/latest/userguide/cli-command-completion.html 透過 tab 搜尋 aws 相關指令, install : echo $SHELL find path : which aws_completer enable : complete -C &apos;/usr/local/bin/aws_completer&apos; aws 設定 profile resource : http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html 請到 iam 取得以下 AWS Access Key ID AWS Secret Access Key aws configure help : 查詢在 configure 中的指令有哪些可用 設定 profile aws configure aws configure --profile user2 列出 profile aws configure list : 預設 aws configure list --profile default : 指定身份 使用 profile aws ec2 describe-instance aws ec2 describe-instance --profile user2 指定使用哪一個 profile export AWS_PROFILE=user2 : AWS_PROFILE 為 Environment Variables unset AWS_PROFILE : 回到預設值 Profile Environment Variables AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_DEFAULT_REGION AWS_DEFAULT_OUTPUT AWS_PROFILE AWS_CA_BUNDLE AWS_SHARED_CREDENTIALS_FILE AWS_CONFIG_FILE Options --profile : 指定使用 profile --region : 指定地區 顯示地區列表 : aws ec2 describe-regions --output table --output : json text table --endpoint-url : 指定 ex : aws ec2 describe-instances --output table --region ap-northeast-2 example 想要列出目前預設使用的 profile 使哪一張 aws configure list 想指定預設的 profile export AWS_PROFILE=xxx 想取消指定 profile，回到 default unset AWS_PROFILE">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【AWS CLI】profile : configure">
+<meta name="twitter:description" content="PURPOSE 了解 aws cli profile 運作方式 了解 aws cli configure 操作方法 aws cli github : https://github.com/aws/aws-cli/releases 安裝 &amp;amp; 更新 &amp;amp; 反安裝 : http://docs.aws.amazon.com/cli/latest/userguide/installing.html cli 中指令的參考 : http://docs.aws.amazon.com/cli/latest/index.html aws help : 可看到所有指令 查詢各類指令說明 : aws help aws {command} help aws {command} {sub-cmd} help aws Command Completion : http://docs.aws.amazon.com/cli/latest/userguide/cli-command-completion.html 透過 tab 搜尋 aws 相關指令, install : echo $SHELL find path : which aws_completer enable : complete -C &apos;/usr/local/bin/aws_completer&apos; aws 設定 profile resource : http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html 請到 iam 取得以下 AWS Access Key ID AWS Secret Access Key aws configure help : 查詢在 configure 中的指令有哪些可用 設定 profile aws configure aws configure --profile user2 列出 profile aws configure list : 預設 aws configure list --profile default : 指定身份 使用 profile aws ec2 describe-instance aws ec2 describe-instance --profile user2 指定使用哪一個 profile export AWS_PROFILE=user2 : AWS_PROFILE 為 Environment Variables unset AWS_PROFILE : 回到預設值 Profile Environment Variables AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN AWS_DEFAULT_REGION AWS_DEFAULT_OUTPUT AWS_PROFILE AWS_CA_BUNDLE AWS_SHARED_CREDENTIALS_FILE AWS_CONFIG_FILE Options --profile : 指定使用 profile --region : 指定地區 顯示地區列表 : aws ec2 describe-regions --output table --output : json text table --endpoint-url : 指定 ex : aws ec2 describe-instances --output table --region ap-northeast-2 example 想要列出目前預設使用的 profile 使哪一張 aws configure list 想指定預設的 profile export AWS_PROFILE=xxx 想取消指定 profile，回到 default unset AWS_PROFILE">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【AWS CLI】profile : configure | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/aws/2017/08/25/AWS-CLI-configure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【AWS CLI】profile : configure
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-25T03:59:00+08:00">
+                2017-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/category/#/AWS" itemprop="url" rel="index">
+                    <span itemprop="name">AWS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="purpose">PURPOSE</h1>
+<ol>
+  <li>了解 aws cli profile 運作方式</li>
+  <li>了解 aws cli configure 操作方法</li>
+</ol>
+
+<h1 id="aws-cli">aws cli</h1>
+
+<ul>
+  <li>github : https://github.com/aws/aws-cli/releases</li>
+  <li>安裝 &amp; 更新 &amp; 反安裝 : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/installing.html</code></li>
+  <li>cli 中指令的參考 : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/index.html</code>
+    <ul>
+      <li><code class="highlighter-rouge">aws help</code> : 可看到所有指令</li>
+    </ul>
+  </li>
+  <li>查詢各類指令說明 :
+    <ul>
+      <li><code class="highlighter-rouge">aws help</code></li>
+      <li><code class="highlighter-rouge">aws {command} help</code></li>
+      <li><code class="highlighter-rouge">aws {command} {sub-cmd} help</code></li>
+    </ul>
+  </li>
+  <li>aws Command Completion : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/cli-command-completion.html</code>
+    <ul>
+      <li>透過 tab 搜尋 aws 相關指令, install :
+        <ol>
+          <li><code class="highlighter-rouge">echo $SHELL</code></li>
+          <li>find path : <code class="highlighter-rouge">which aws_completer</code></li>
+          <li>enable : <code class="highlighter-rouge">complete -C '/usr/local/bin/aws_completer' aws</code></li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="設定-profile">設定 profile</h2>
+<ul>
+  <li>resource : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html</code></li>
+  <li>請到 iam 取得以下
+    <ul>
+      <li>AWS Access Key ID</li>
+      <li>AWS Secret Access Key</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">aws configure help</code> : 查詢在 configure 中的指令有哪些可用</li>
+  <li>設定 profile
+    <ul>
+      <li><code class="highlighter-rouge">aws configure</code></li>
+      <li><code class="highlighter-rouge">aws configure --profile user2</code></li>
+    </ul>
+  </li>
+  <li>列出 profile
+    <ul>
+      <li><code class="highlighter-rouge">aws configure list</code> : 預設</li>
+      <li><code class="highlighter-rouge">aws configure list --profile default</code> : 指定身份</li>
+    </ul>
+  </li>
+  <li>使用 profile
+    <ul>
+      <li><code class="highlighter-rouge">aws ec2 describe-instance</code></li>
+      <li><code class="highlighter-rouge">aws ec2 describe-instance --profile user2</code></li>
+    </ul>
+  </li>
+  <li>指定使用哪一個 profile
+    <ul>
+      <li><code class="highlighter-rouge">export AWS_PROFILE=user2</code> : AWS_PROFILE 為 Environment Variables</li>
+      <li><code class="highlighter-rouge">unset AWS_PROFILE</code> : 回到預設值</li>
+      <li>Profile Environment Variables
+        <ul>
+          <li>AWS_ACCESS_KEY_ID</li>
+          <li>AWS_SECRET_ACCESS_KEY</li>
+          <li>AWS_SESSION_TOKEN</li>
+          <li>AWS_DEFAULT_REGION</li>
+          <li>AWS_DEFAULT_OUTPUT</li>
+          <li>AWS_PROFILE</li>
+          <li>AWS_CA_BUNDLE</li>
+          <li>AWS_SHARED_CREDENTIALS_FILE</li>
+          <li>AWS_CONFIG_FILE</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Options
+    <ul>
+      <li><code class="highlighter-rouge">--profile</code>		: 指定使用 profile</li>
+      <li><code class="highlighter-rouge">--region</code> 		: 指定地區
+        <ul>
+          <li>顯示地區列表 : <code class="highlighter-rouge">aws ec2 describe-regions --output table</code></li>
+        </ul>
+      </li>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td><code class="highlighter-rouge">--output</code> 		: json</td>
+              <td>text</td>
+              <td>table</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li><code class="highlighter-rouge">--endpoint-url</code> : 指定</li>
+      <li>ex : <code class="highlighter-rouge">aws ec2 describe-instances --output table --region ap-northeast-2</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="example">example</h1>
+
+<ol>
+  <li>想要列出目前預設使用的 profile 使哪一張
+    <ul>
+      <li><code class="highlighter-rouge">aws configure list</code></li>
+    </ul>
+  </li>
+  <li>想指定預設的 profile
+    <ul>
+      <li><code class="highlighter-rouge">export AWS_PROFILE=xxx</code></li>
+    </ul>
+  </li>
+  <li>想取消指定 profile，回到 default
+    <ul>
+      <li><code class="highlighter-rouge">unset AWS_PROFILE</code></li>
+    </ul>
+  </li>
+</ol>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/aws/2017/08/25/AWS-CLI-ECR-S3-EB-Deploy/" rel="next" title="【AWS CLI】ECR & S3 & EB deploy">
+                <i class="fa fa-chevron-left"></i> 【AWS CLI】ECR & S3 & EB deploy
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/papertrial/logspout/2017/08/18/Papertrial-logspout/" rel="prev" title="【log tool】papertrial+logspout">
+                【log tool】papertrial+logspout <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#purpose"> <span class="nav-text">PURPOSE</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#aws-cli"> <span class="nav-text">aws cli</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#設定-profile"> <span class="nav-text">設定 profile</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#example"> <span class="nav-text">example</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

@@ -1,0 +1,994 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Dependency Injection/Service Location Phalcon\Di 是一個實現 Dependency Injection/Service Location 的組件，而且它本身就是一個裝載它們的容器。 透過 Phalcon\Di 可以註冊許多的服務，放在 Di 中，也可以透過 Di 進行傳遞參數的行為 可以很容易的使用自己建立的組件，或者第三方組件，還有進行替換的動作 ex : 替換掉 db 的 config 連線資訊 支援『延遲加載』：主要就是等到需要用到的時候，才會進行加載的行為，使用方法可參考官方文件 可在 Class Phalcon\Di 中查看 methods FactoryDefault 是延伸 class Phalcon\Di，也可以從 Phalcon/Di 中自己建立自己的 Di 底下有介紹 FactoryDefault 作為一個 Di 的延伸，並且預載了許多已經加入過的服務 若不想要預載過多服務，則直接使用 Di 把需要的服務手動加載進去 要看很多範例關於 Di 的設定的話，可參考 https://github.com/phalcon?tab=repositories 初始化 Di 初始化後，才可以使用 Di set 與 get use Phalcon\Di $di = new Phalcon\Di(); 初始化後，若要在 mvc 或者其他的控制器中使用該 Di ex1 : MVC，可用 phalcon-devtools 建立一個 Project 與 Scaffold 可看到範例 $application = new \Phalcon\Mvc\Application($di); 並 echo $application-&amp;gt;handle()-&amp;gt;getContent(); 註冊服務 第一種 $di-&amp;gt;set(&apos;request&apos;, &apos;Phalcon\Http\Request&apos;); 第二種 use Phalcon\Http\Request; $di-&amp;gt;set(&apos;request&apos;, new Request()); 第三種：通過外部參數 $config 變更 di 中的設定。透過 use 協助 use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql; // 把當前域的$config變量傳遞給匿名函數使用 $di-&amp;gt;set(&quot;db&quot;, function () use ($config) { return new PdoMysql( array( &quot;host&quot; =&amp;gt; $config-&amp;gt;host, &quot;username&quot; =&amp;gt; $config-&amp;gt;username, &quot;password&quot; =&amp;gt; $config-&amp;gt;password, &quot;dbname&quot; =&amp;gt; $config-&amp;gt;name ) ); }); 其他還有 : 範例至官方參考 如果要求不用實例化/解析服務，就可以改變定義服務的話，我們需要使用數組的方式去定義服務。 Constructor Injection Setter Injection Properties Injection 所有的都是服務註冊，有比較簡易的註冊方式，也有複雜（詳細）的設定方法 從 di 中取回服務 在 di 中設定好 request $di = new Phalcon\Di(); $di-&amp;gt;set(&quot;request&quot;, &apos;Phalcon\Http\Request&apos;); // 第一個參數是『類別名稱』，第二個是『definition』 // use Phalcon\Http\Request; 使用這兩種方式建立服務也行 // $di-&amp;gt;set(&quot;request&quot;, new Request()); &amp;lt;?php $request = $di-&amp;gt;get(&quot;request&quot;); or $request = $di-&amp;gt;getRequest(); 通過容器的方式傳遞參數 $component = $di-&amp;gt;get(&quot;MyComponent&quot;, array(&quot;some-parameter&quot;, &quot;other&quot;)); 共享服務（Shared services） setShared : 意指可以被註冊成 共享，意味被解析後，此實例將被保存在系統中，每次請求都可以從系統中找回，無需從新註冊或者重新解析 use Phalcon\Session\Adapter\Files as SessionFiles; // 把session服務註冊成「shared」類型 $di-&amp;gt;setShared(&apos;session&apos;, function () { $session = new SessionFiles(); $session-&amp;gt;start(); return $session; }); $session = $di-&amp;gt;get(&apos;session&apos;); // 第一次獲取session服務時，session服務將實例化 $session = $di-&amp;gt;getSession(); // 第二次獲取時，不再實例化，直接返回第一次實例化的對象 如果服務註冊時，並非註冊成 shared 時，又想從 Di 中獲取 shared 的 instance，可使用 getShared 意指，若以註冊成 shared 類型時，則使用 get 即可 Manipulating services individually 這邊的 resolve() 方法不知從哪邊定義，找了 di 沒發現到 目前正在請教 gitter 的群組 將 未註冊的服務 從 Di 中取出 當服務尚未被註冊時（Di 找不到相同名稱的服務），則可以在當下設定該服務 $di-&amp;gt;set(&apos;IndexController&apos;, function () { $component = new Component(); return $component; }, true); 通過此方法，可以隨意註冊一個沒有被定義過的服務，甚至有同樣的服務內容，卻用不同的服務名稱 A 有 abc 服務 B 有 abc 服務 但 A 與 B 裝的資訊內容可能不同，如 db config 在類別或組件 自動注入 Di 當類別或組件，本身需要用到 Di 的服務時，可直接在該類別或者組件中，導入 Di 的服務，不用在外部引入該類別或組件 利用 Di 來避免服務重複的解析 某些服務應用於每次的 request，如此可能會產生重複的解析，故放入 Di 前，先解析一次後，再放入 Di 中，可稍微提升效能 ex : $router = new MyRouter(); 通過 Di 的服務設定，就不用重新再 new 一次（把已解析的對象設置到註冊服務中） ex : $di-&amp;gt;set(&apos;router&apos;, $router); ex : $di-&amp;gt;get(&apos;router&apos;); Q:不確定這種方式跟 shared 差別倒底在哪 使用文件方式定義服務(Organizing services in files) 透過獨立的文件，設定服務內容 $di-&amp;gt;set(&apos;router&apos;, function () { return include &quot;../app/config/routes.php&quot;; }); 在 routes.php 中 $router = new MyRouter(); $router-&amp;gt;post(&apos;/login&apos;); return $router; 使用此方式，可以簡化需設定的服務內容 使用靜態方法存取 Di（Accessing the DI in a static way） use Phalcon\Di; $session = Di::getDefault()-&amp;gt;getSession(); Factory Default DI 這是一開始所提到的 FactoryDefault 這個服務器擴展了 Phalcon\Di ，會自動註冊相應的服務 the developer does not need to register each service individually. 預設的服務名稱 預設名稱 自定義自己的 Di Phalcon\DiInterface 必須被實現">
+<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【phalcon】Di">
+<meta property="og:url" content="/2016/07/12/phalcondi/">
+<meta property="og:site_name" content="MAX HU">
+<meta property="og:description" content="Dependency Injection/Service Location Phalcon\Di 是一個實現 Dependency Injection/Service Location 的組件，而且它本身就是一個裝載它們的容器。 透過 Phalcon\Di 可以註冊許多的服務，放在 Di 中，也可以透過 Di 進行傳遞參數的行為 可以很容易的使用自己建立的組件，或者第三方組件，還有進行替換的動作 ex : 替換掉 db 的 config 連線資訊 支援『延遲加載』：主要就是等到需要用到的時候，才會進行加載的行為，使用方法可參考官方文件 可在 Class Phalcon\Di 中查看 methods FactoryDefault 是延伸 class Phalcon\Di，也可以從 Phalcon/Di 中自己建立自己的 Di 底下有介紹 FactoryDefault 作為一個 Di 的延伸，並且預載了許多已經加入過的服務 若不想要預載過多服務，則直接使用 Di 把需要的服務手動加載進去 要看很多範例關於 Di 的設定的話，可參考 https://github.com/phalcon?tab=repositories 初始化 Di 初始化後，才可以使用 Di set 與 get use Phalcon\Di $di = new Phalcon\Di(); 初始化後，若要在 mvc 或者其他的控制器中使用該 Di ex1 : MVC，可用 phalcon-devtools 建立一個 Project 與 Scaffold 可看到範例 $application = new \Phalcon\Mvc\Application($di); 並 echo $application-&amp;gt;handle()-&amp;gt;getContent(); 註冊服務 第一種 $di-&amp;gt;set(&apos;request&apos;, &apos;Phalcon\Http\Request&apos;); 第二種 use Phalcon\Http\Request; $di-&amp;gt;set(&apos;request&apos;, new Request()); 第三種：通過外部參數 $config 變更 di 中的設定。透過 use 協助 use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql; // 把當前域的$config變量傳遞給匿名函數使用 $di-&amp;gt;set(&quot;db&quot;, function () use ($config) { return new PdoMysql( array( &quot;host&quot; =&amp;gt; $config-&amp;gt;host, &quot;username&quot; =&amp;gt; $config-&amp;gt;username, &quot;password&quot; =&amp;gt; $config-&amp;gt;password, &quot;dbname&quot; =&amp;gt; $config-&amp;gt;name ) ); }); 其他還有 : 範例至官方參考 如果要求不用實例化/解析服務，就可以改變定義服務的話，我們需要使用數組的方式去定義服務。 Constructor Injection Setter Injection Properties Injection 所有的都是服務註冊，有比較簡易的註冊方式，也有複雜（詳細）的設定方法 從 di 中取回服務 在 di 中設定好 request $di = new Phalcon\Di(); $di-&amp;gt;set(&quot;request&quot;, &apos;Phalcon\Http\Request&apos;); // 第一個參數是『類別名稱』，第二個是『definition』 // use Phalcon\Http\Request; 使用這兩種方式建立服務也行 // $di-&amp;gt;set(&quot;request&quot;, new Request()); &amp;lt;?php $request = $di-&amp;gt;get(&quot;request&quot;); or $request = $di-&amp;gt;getRequest(); 通過容器的方式傳遞參數 $component = $di-&amp;gt;get(&quot;MyComponent&quot;, array(&quot;some-parameter&quot;, &quot;other&quot;)); 共享服務（Shared services） setShared : 意指可以被註冊成 共享，意味被解析後，此實例將被保存在系統中，每次請求都可以從系統中找回，無需從新註冊或者重新解析 use Phalcon\Session\Adapter\Files as SessionFiles; // 把session服務註冊成「shared」類型 $di-&amp;gt;setShared(&apos;session&apos;, function () { $session = new SessionFiles(); $session-&amp;gt;start(); return $session; }); $session = $di-&amp;gt;get(&apos;session&apos;); // 第一次獲取session服務時，session服務將實例化 $session = $di-&amp;gt;getSession(); // 第二次獲取時，不再實例化，直接返回第一次實例化的對象 如果服務註冊時，並非註冊成 shared 時，又想從 Di 中獲取 shared 的 instance，可使用 getShared 意指，若以註冊成 shared 類型時，則使用 get 即可 Manipulating services individually 這邊的 resolve() 方法不知從哪邊定義，找了 di 沒發現到 目前正在請教 gitter 的群組 將 未註冊的服務 從 Di 中取出 當服務尚未被註冊時（Di 找不到相同名稱的服務），則可以在當下設定該服務 $di-&amp;gt;set(&apos;IndexController&apos;, function () { $component = new Component(); return $component; }, true); 通過此方法，可以隨意註冊一個沒有被定義過的服務，甚至有同樣的服務內容，卻用不同的服務名稱 A 有 abc 服務 B 有 abc 服務 但 A 與 B 裝的資訊內容可能不同，如 db config 在類別或組件 自動注入 Di 當類別或組件，本身需要用到 Di 的服務時，可直接在該類別或者組件中，導入 Di 的服務，不用在外部引入該類別或組件 利用 Di 來避免服務重複的解析 某些服務應用於每次的 request，如此可能會產生重複的解析，故放入 Di 前，先解析一次後，再放入 Di 中，可稍微提升效能 ex : $router = new MyRouter(); 通過 Di 的服務設定，就不用重新再 new 一次（把已解析的對象設置到註冊服務中） ex : $di-&amp;gt;set(&apos;router&apos;, $router); ex : $di-&amp;gt;get(&apos;router&apos;); Q:不確定這種方式跟 shared 差別倒底在哪 使用文件方式定義服務(Organizing services in files) 透過獨立的文件，設定服務內容 $di-&amp;gt;set(&apos;router&apos;, function () { return include &quot;../app/config/routes.php&quot;; }); 在 routes.php 中 $router = new MyRouter(); $router-&amp;gt;post(&apos;/login&apos;); return $router; 使用此方式，可以簡化需設定的服務內容 使用靜態方法存取 Di（Accessing the DI in a static way） use Phalcon\Di; $session = Di::getDefault()-&amp;gt;getSession(); Factory Default DI 這是一開始所提到的 FactoryDefault 這個服務器擴展了 Phalcon\Di ，會自動註冊相應的服務 the developer does not need to register each service individually. 預設的服務名稱 預設名稱 自定義自己的 Di Phalcon\DiInterface 必須被實現">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【phalcon】Di">
+<meta name="twitter:description" content="Dependency Injection/Service Location Phalcon\Di 是一個實現 Dependency Injection/Service Location 的組件，而且它本身就是一個裝載它們的容器。 透過 Phalcon\Di 可以註冊許多的服務，放在 Di 中，也可以透過 Di 進行傳遞參數的行為 可以很容易的使用自己建立的組件，或者第三方組件，還有進行替換的動作 ex : 替換掉 db 的 config 連線資訊 支援『延遲加載』：主要就是等到需要用到的時候，才會進行加載的行為，使用方法可參考官方文件 可在 Class Phalcon\Di 中查看 methods FactoryDefault 是延伸 class Phalcon\Di，也可以從 Phalcon/Di 中自己建立自己的 Di 底下有介紹 FactoryDefault 作為一個 Di 的延伸，並且預載了許多已經加入過的服務 若不想要預載過多服務，則直接使用 Di 把需要的服務手動加載進去 要看很多範例關於 Di 的設定的話，可參考 https://github.com/phalcon?tab=repositories 初始化 Di 初始化後，才可以使用 Di set 與 get use Phalcon\Di $di = new Phalcon\Di(); 初始化後，若要在 mvc 或者其他的控制器中使用該 Di ex1 : MVC，可用 phalcon-devtools 建立一個 Project 與 Scaffold 可看到範例 $application = new \Phalcon\Mvc\Application($di); 並 echo $application-&amp;gt;handle()-&amp;gt;getContent(); 註冊服務 第一種 $di-&amp;gt;set(&apos;request&apos;, &apos;Phalcon\Http\Request&apos;); 第二種 use Phalcon\Http\Request; $di-&amp;gt;set(&apos;request&apos;, new Request()); 第三種：通過外部參數 $config 變更 di 中的設定。透過 use 協助 use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql; // 把當前域的$config變量傳遞給匿名函數使用 $di-&amp;gt;set(&quot;db&quot;, function () use ($config) { return new PdoMysql( array( &quot;host&quot; =&amp;gt; $config-&amp;gt;host, &quot;username&quot; =&amp;gt; $config-&amp;gt;username, &quot;password&quot; =&amp;gt; $config-&amp;gt;password, &quot;dbname&quot; =&amp;gt; $config-&amp;gt;name ) ); }); 其他還有 : 範例至官方參考 如果要求不用實例化/解析服務，就可以改變定義服務的話，我們需要使用數組的方式去定義服務。 Constructor Injection Setter Injection Properties Injection 所有的都是服務註冊，有比較簡易的註冊方式，也有複雜（詳細）的設定方法 從 di 中取回服務 在 di 中設定好 request $di = new Phalcon\Di(); $di-&amp;gt;set(&quot;request&quot;, &apos;Phalcon\Http\Request&apos;); // 第一個參數是『類別名稱』，第二個是『definition』 // use Phalcon\Http\Request; 使用這兩種方式建立服務也行 // $di-&amp;gt;set(&quot;request&quot;, new Request()); &amp;lt;?php $request = $di-&amp;gt;get(&quot;request&quot;); or $request = $di-&amp;gt;getRequest(); 通過容器的方式傳遞參數 $component = $di-&amp;gt;get(&quot;MyComponent&quot;, array(&quot;some-parameter&quot;, &quot;other&quot;)); 共享服務（Shared services） setShared : 意指可以被註冊成 共享，意味被解析後，此實例將被保存在系統中，每次請求都可以從系統中找回，無需從新註冊或者重新解析 use Phalcon\Session\Adapter\Files as SessionFiles; // 把session服務註冊成「shared」類型 $di-&amp;gt;setShared(&apos;session&apos;, function () { $session = new SessionFiles(); $session-&amp;gt;start(); return $session; }); $session = $di-&amp;gt;get(&apos;session&apos;); // 第一次獲取session服務時，session服務將實例化 $session = $di-&amp;gt;getSession(); // 第二次獲取時，不再實例化，直接返回第一次實例化的對象 如果服務註冊時，並非註冊成 shared 時，又想從 Di 中獲取 shared 的 instance，可使用 getShared 意指，若以註冊成 shared 類型時，則使用 get 即可 Manipulating services individually 這邊的 resolve() 方法不知從哪邊定義，找了 di 沒發現到 目前正在請教 gitter 的群組 將 未註冊的服務 從 Di 中取出 當服務尚未被註冊時（Di 找不到相同名稱的服務），則可以在當下設定該服務 $di-&amp;gt;set(&apos;IndexController&apos;, function () { $component = new Component(); return $component; }, true); 通過此方法，可以隨意註冊一個沒有被定義過的服務，甚至有同樣的服務內容，卻用不同的服務名稱 A 有 abc 服務 B 有 abc 服務 但 A 與 B 裝的資訊內容可能不同，如 db config 在類別或組件 自動注入 Di 當類別或組件，本身需要用到 Di 的服務時，可直接在該類別或者組件中，導入 Di 的服務，不用在外部引入該類別或組件 利用 Di 來避免服務重複的解析 某些服務應用於每次的 request，如此可能會產生重複的解析，故放入 Di 前，先解析一次後，再放入 Di 中，可稍微提升效能 ex : $router = new MyRouter(); 通過 Di 的服務設定，就不用重新再 new 一次（把已解析的對象設置到註冊服務中） ex : $di-&amp;gt;set(&apos;router&apos;, $router); ex : $di-&amp;gt;get(&apos;router&apos;); Q:不確定這種方式跟 shared 差別倒底在哪 使用文件方式定義服務(Organizing services in files) 透過獨立的文件，設定服務內容 $di-&amp;gt;set(&apos;router&apos;, function () { return include &quot;../app/config/routes.php&quot;; }); 在 routes.php 中 $router = new MyRouter(); $router-&amp;gt;post(&apos;/login&apos;); return $router; 使用此方式，可以簡化需設定的服務內容 使用靜態方法存取 Di（Accessing the DI in a static way） use Phalcon\Di; $session = Di::getDefault()-&amp;gt;getSession(); Factory Default DI 這是一開始所提到的 FactoryDefault 這個服務器擴展了 Phalcon\Di ，會自動註冊相應的服務 the developer does not need to register each service individually. 預設的服務名稱 預設名稱 自定義自己的 Di Phalcon\DiInterface 必須被實現">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href=""/>
+
+
+
+
+
+  <title>【phalcon】Di | MAX HU</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX HU</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="/2016/07/12/phalcondi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX HU">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【phalcon】Di
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-12T13:24:00+08:00">
+                2016-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="dependency-injectionservice-location">Dependency Injection/Service Location</h1>
+
+<ul>
+  <li><code class="highlighter-rouge">Phalcon\Di</code> 是一個實現 <code class="highlighter-rouge">Dependency Injection/Service Location</code> 的組件，而且它本身就是一個裝載它們的容器。</li>
+  <li>透過 <code class="highlighter-rouge">Phalcon\Di</code> 可以註冊許多的服務，放在 Di 中，也可以透過 Di 進行傳遞參數的行為
+    <ul>
+      <li>可以很容易的使用自己建立的組件，或者第三方組件，還有進行替換的動作
+        <ul>
+          <li>ex : 替換掉 db 的 config 連線資訊</li>
+        </ul>
+      </li>
+      <li>支援『延遲加載』：主要就是等到需要用到的時候，才會進行加載的行為，使用方法可參考官方文件</li>
+    </ul>
+  </li>
+  <li>可在 Class <code class="highlighter-rouge">Phalcon\Di</code> 中查看 methods</li>
+  <li>FactoryDefault 是延伸 class <code class="highlighter-rouge">Phalcon\Di</code>，也可以從 Phalcon/Di 中自己建立自己的 Di
+    <ul>
+      <li>底下有介紹</li>
+    </ul>
+  </li>
+  <li>FactoryDefault 作為一個 Di 的延伸，並且預載了許多已經加入過的服務
+    <ul>
+      <li>若不想要預載過多服務，則直接使用 Di 把需要的服務手動加載進去</li>
+    </ul>
+  </li>
+  <li>要看很多範例關於 Di 的設定的話，可參考 https://github.com/phalcon?tab=repositories</li>
+</ul>
+
+<h2 id="初始化-di">初始化 Di</h2>
+
+<ul>
+  <li>初始化後，才可以使用 Di set 與 get
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Di
+$di = new Phalcon\Di();
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>初始化後，若要在 mvc 或者其他的控制器中使用該 Di
+    <ul>
+      <li>ex1 : MVC，可用 phalcon-devtools 建立一個 Project 與 Scaffold 可看到範例
+        <ul>
+          <li><code class="highlighter-rouge">$application = new \Phalcon\Mvc\Application($di);</code></li>
+        </ul>
+      </li>
+      <li>並 <code class="highlighter-rouge">echo $application-&gt;handle()-&gt;getContent();</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="註冊服務">註冊服務</h2>
+
+<ul>
+  <li>第一種
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>$di-&gt;set('request', 'Phalcon\Http\Request');
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>第二種
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Http\Request;  
+$di-&gt;set('request', new Request());
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>第三種：通過外部參數 <code class="highlighter-rouge">$config</code> 變更 di 中的設定。透過 use 協助
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql;
+// 把當前域的$config變量傳遞給匿名函數使用
+$di-&gt;set("db", function () use ($config) {
+  return new PdoMysql(
+      array(
+          "host"     =&gt; $config-&gt;host,
+          "username" =&gt; $config-&gt;username,
+          "password" =&gt; $config-&gt;password,
+          "dbname"   =&gt; $config-&gt;name
+      )
+  );
+});
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>其他還有 : 範例至官方參考
+    <ul>
+      <li>如果要求不用實例化/解析服務，就可以改變定義服務的話，我們需要使用數組的方式去定義服務。</li>
+      <li>Constructor Injection</li>
+      <li>Setter Injection</li>
+      <li>Properties Injection</li>
+    </ul>
+  </li>
+  <li>所有的都是服務註冊，有比較簡易的註冊方式，也有複雜（詳細）的設定方法</li>
+</ul>
+
+<h2 id="從-di-中取回服務">從 di 中取回服務</h2>
+
+<ul>
+  <li>在 di 中設定好 request
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>$di = new Phalcon\Di();
+$di-&gt;set("request", 'Phalcon\Http\Request'); // 第一個參數是『類別名稱』，第二個是『definition』
+// use Phalcon\Http\Request; 使用這兩種方式建立服務也行
+// $di-&gt;set("request", new Request()); 
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li><code class="highlighter-rouge">&lt;?php $request = $di-&gt;get("request");</code> or <code class="highlighter-rouge">$request = $di-&gt;getRequest();</code></li>
+  <li>通過容器的方式傳遞參數
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>$component = $di-&gt;get("MyComponent", array("some-parameter", "other"));
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+</ul>
+
+<h2 id="共享服務shared-services">共享服務（Shared services）</h2>
+<ul>
+  <li><code class="highlighter-rouge">setShared</code> : 意指可以被註冊成 共享，意味被解析後，此實例將被保存在系統中，每次請求都可以從系統中找回，無需從新註冊或者重新解析
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Session\Adapter\Files as SessionFiles;
+// 把session服務註冊成「shared」類型
+$di-&gt;setShared('session', function () {
+  $session = new SessionFiles();
+  $session-&gt;start();
+  return $session;
+});
+$session = $di-&gt;get('session'); // 第一次獲取session服務時，session服務將實例化
+$session = $di-&gt;getSession();   // 第二次獲取時，不再實例化，直接返回第一次實例化的對象
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>如果服務註冊時，並非註冊成 shared 時，又想從 Di 中獲取 shared 的 instance，可使用 <code class="highlighter-rouge">getShared</code>
+    <ul>
+      <li>意指，若以註冊成 shared 類型時，則使用 get 即可</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="manipulating-services-individually">Manipulating services individually</h2>
+<p>這邊的 <code class="highlighter-rouge">resolve()</code> 方法不知從哪邊定義，找了 di 沒發現到
+目前正在請教 gitter 的群組</p>
+
+<h2 id="將-未註冊的服務-從-di-中取出">將 未註冊的服務 從 Di 中取出</h2>
+
+<ul>
+  <li>當服務尚未被註冊時（Di 找不到相同名稱的服務），則可以在當下設定該服務
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>$di-&gt;set('IndexController', function () {
+  $component = new Component();
+  return $component;
+}, true);
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>通過此方法，可以隨意註冊一個沒有被定義過的服務，甚至有同樣的服務內容，卻用不同的服務名稱
+    <ul>
+      <li>A 有 abc 服務</li>
+      <li>B 有 abc 服務</li>
+      <li>但 A 與 B 裝的資訊內容可能不同，如 db config</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="在類別或組件-自動注入-di">在類別或組件 自動注入 Di</h2>
+<ul>
+  <li>當類別或組件，本身需要用到 Di 的服務時，可直接在該類別或者組件中，導入 Di 的服務，不用在外部引入該類別或組件</li>
+</ul>
+
+<h2 id="利用-di-來避免服務重複的解析">利用 Di 來避免服務重複的解析</h2>
+<ul>
+  <li>某些服務應用於每次的 request，如此可能會產生重複的解析，故放入 Di 前，先解析一次後，再放入 Di 中，可稍微提升效能
+    <ul>
+      <li>ex : <code class="highlighter-rouge">$router = new MyRouter();</code></li>
+    </ul>
+  </li>
+  <li>通過 Di 的服務設定，就不用重新再 new 一次（把已解析的對象設置到註冊服務中）
+    <ul>
+      <li>ex : <code class="highlighter-rouge">$di-&gt;set('router', $router);</code></li>
+      <li>ex : <code class="highlighter-rouge">$di-&gt;get('router');</code></li>
+    </ul>
+  </li>
+  <li>Q:不確定這種方式跟 <code class="highlighter-rouge">shared</code> 差別倒底在哪</li>
+</ul>
+
+<h2 id="使用文件方式定義服務organizing-services-in-files">使用文件方式定義服務(Organizing services in files)</h2>
+
+<ul>
+  <li>透過獨立的文件，設定服務內容
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>$di-&gt;set('router', function () {
+  return include "../app/config/routes.php";
+});
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>在 routes.php 中
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>$router = new MyRouter();
+$router-&gt;post('/login');
+return $router;
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>使用此方式，可以簡化需設定的服務內容</li>
+</ul>
+
+<h2 id="使用靜態方法存取-diaccessing-the-di-in-a-static-way">使用靜態方法存取 Di（Accessing the DI in a static way）</h2>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Di;
+$session = Di::getDefault()-&gt;getSession();
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="factory-default-di">Factory Default DI</h2>
+
+<ul>
+  <li>這是一開始所提到的 FactoryDefault</li>
+  <li>這個服務器擴展了 <code class="highlighter-rouge">Phalcon\Di </code>，會自動註冊相應的服務</li>
+  <li>the developer does not need to register each service individually.</li>
+</ul>
+
+<h2 id="預設的服務名稱">預設的服務名稱</h2>
+
+<ul>
+  <li><a href="https://docs.phalconphp.com/zh/latest/reference/di.html#service-name-conventions">預設名稱</a></li>
+</ul>
+
+<h2 id="自定義自己的-di">自定義自己的 Di</h2>
+
+<ul>
+  <li>Phalcon\DiInterface 必須被實現</li>
+</ul>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/07/16/phalconsql/" rel="next" title="【phalcon】sql">
+                <i class="fa fa-chevron-left"></i> 【phalcon】sql
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/11/phalcondevelop-tool/" rel="prev" title="【Phalcon】develop tool">
+                【Phalcon】develop tool <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/assets/images/avatar.gif"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#dependency-injectionservice-location"> <span class="nav-text">Dependency Injection/Service Location</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#初始化-di"> <span class="nav-text">初始化 Di</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#註冊服務"> <span class="nav-text">註冊服務</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#從-di-中取回服務"> <span class="nav-text">從 di 中取回服務</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#共享服務shared-services"> <span class="nav-text">共享服務（Shared services）</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#manipulating-services-individually"> <span class="nav-text">Manipulating services individually</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#將-未註冊的服務-從-di-中取出"> <span class="nav-text">將 未註冊的服務 從 Di 中取出</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#在類別或組件-自動注入-di"> <span class="nav-text">在類別或組件 自動注入 Di</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#利用-di-來避免服務重複的解析"> <span class="nav-text">利用 Di 來避免服務重複的解析</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#使用文件方式定義服務organizing-services-in-files"> <span class="nav-text">使用文件方式定義服務(Organizing services in files)</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#使用靜態方法存取-diaccessing-the-di-in-a-static-way"> <span class="nav-text">使用靜態方法存取 Di（Accessing the DI in a static way）</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#factory-default-di"> <span class="nav-text">Factory Default DI</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#預設的服務名稱"> <span class="nav-text">預設的服務名稱</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#自定義自己的-di"> <span class="nav-text">自定義自己的 Di</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+
