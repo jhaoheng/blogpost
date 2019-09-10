@@ -45,7 +45,7 @@ tags: Golang
 
 ## deploy
 - build : `jekyll build -d ./docs`
-- upload : `cd _site && git add . && git commit -m "update" && git push`
+- upload : `git add . && git commit -m "update" && git push origin master`
 
 # update
 
