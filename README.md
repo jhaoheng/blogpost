@@ -36,7 +36,7 @@ tags: Golang
 
 # deploy
 - build : `bundle exec jekyll build`
-- upload : `git add . && git commit -m "update" && git push origin master`
+- upload : `git add . && git commit -m "new post" && git push origin master`
 
 # 環境設定
 - `./config.yml`
