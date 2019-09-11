@@ -281,6 +281,238 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/05/09/phpmongodb/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2017/05/09/phpmongodb/" itemprop="url">
+                【PHP-OSX】mongodb / php-drive / client-lib
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-09T09:10:00+08:00">
+                2017-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="環境">環境</h1>
+<ul>
+  <li>osx</li>
+  <li>php7.0.8</li>
+  <li>mongod 3.3.4</li>
+  <li>mongodb : http://php.net/manual/en/set.mongodb.php
+    <ul>
+      <li>勿與 舊版的 Mongo drive 混淆，因為使用上會有極大差別</li>
+    </ul>
+  </li>
+  <li>php-mongodbClient 1.2.8</li>
+</ul>
+
+<h1 id="安裝-mongodb">安裝 mongodb</h1>
+
+<ol>
+  <li><code class="highlighter-rouge">$ brew install mongodb</code></li>
+  <li>可在 <code class="highlighter-rouge">$ cat /usr/local/etc/mongod.conf</code>，看到 mongodb 設定
+    <ul>
+      <li>注意位置 /data/db，確定是否存在，若不存在則建立一個，記得打開權限</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">$ mongod</code> 啟動 mongodb</li>
+</ol>
+
+<h1 id="設定-php-drive">設定 php drive</h1>
+
+<blockquote>
+  <ul>
+    <li>有分 mongo.so 與 mongodb.so 版本</li>
+    <li>mongodb.so 支援 php7, 用 MongoDB\Driver\xxxxxx 來進行 new 的動作。http://stackoverflow.com/a/38007889</li>
+    <li>mongo.so 是用 MongoClient 來進行管理</li>
+  </ul>
+</blockquote>
+
+<ol>
+  <li><code class="highlighter-rouge">$ brew install php70-mongodb</code></li>
+  <li><code class="highlighter-rouge">$ cd /usr/local/Cellar/php70-mongodb</code> =&gt; 找到 mongodb.so</li>
+  <li><code class="highlighter-rouge">$ php -i | grep extension</code> =&gt; 找到 extension 的位置</li>
+  <li><code class="highlighter-rouge">$ mv mongodb.so {extension 位置}</code></li>
+  <li><code class="highlighter-rouge">$ php --ini</code> =&gt; 找到 php.ini</li>
+  <li><code class="highlighter-rouge">$ vim php.ini</code>
+    <ul>
+      <li>在 extension 中，加入 extension=mongodb.so</li>
+    </ul>
+  </li>
+  <li>驗證在 <code class="highlighter-rouge">$ php -i | grep mongo</code> 驗證版本應該跟下載的相同</li>
+</ol>
+
+<h2 id="當執行-mongo-提取資料時出現">當執行 mongo 提取資料時出現</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>dyld: lazy symbol binding failed: Symbol not found: _clock_gettime
+  Referenced from: /usr/local/opt/php70-mongodb/mongodb.so
+  Expected in: /usr/lib/libSystem.B.dylib
+
+dyld: Symbol not found: _clock_gettime
+  Referenced from: /usr/local/opt/php70-mongodb/mongodb.so
+  Expected in: /usr/lib/libSystem.B.dylib
+</code></pre></td></tr></tbody></table></div></div>
+<p>解決方法 : https://github.com/perftools/xhgui/issues/198#issuecomment-286711319</p>
+
+<h1 id="設定-mamp">設定 MAMP</h1>
+
+<ol>
+  <li>一樣將 mongodb.so 拷貝到 mamp extension 的位置底下</li>
+  <li>編輯 mamp 的 php.ini</li>
+  <li>透過 phpinfo() 來檢查</li>
+</ol>
+
+<h1 id="php-使用-mongodb-drive">php 使用 mongodb drive</h1>
+<ul>
+  <li>http://php.net/manual/en/class.mongodb-driver-manager.php</li>
+</ul>
+
+<h3 id="更有效率地使用-mongodb-drive">更有效率地使用 mongodb drive</h3>
+<ul>
+  <li>https://docs.mongodb.com/php-library/master/tutorial/install-php-library/</li>
+  <li>MongoDB client-libraby github : https://github.com/mongodb/mongo-php-library</li>
+  <li>搜尋的碼
+    <div class="language-php highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MongoDB\Client</span><span class="p">;</span>
+<span class="nv">$collection</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">selectCollection</span><span class="p">(</span><span class="s1">'db'</span><span class="p">,</span> <span class="s1">'collection'</span><span class="p">);</span>
+<span class="nv">$cursor</span> <span class="o">=</span> <span class="nv">$collection</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">();</span>
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$cursor</span> <span class="k">as</span> <span class="nv">$restaurant</span><span class="p">)</span> <span class="p">{</span>
+ <span class="nb">var_dump</span><span class="p">(</span><span class="nv">$restaurant</span><span class="p">);</span>
+<span class="p">};</span>
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2017/05/09/phpmongodb/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/04/05/php-mamp-pcntl-installation/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2295,183 +2527,6 @@ checkPattern2(nomatch, Foo) -&gt;
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/10/24/gclouddocker-push-pull-delete/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="assets/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/10/24/gclouddocker-push-pull-delete/" itemprop="url">
-                【gcloud】docker push/pull/delete
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-24T10:01:00+08:00">
-                2016-10-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h2 id="basic">basic</h2>
-<ol>
-  <li>先 login gcloud</li>
-  <li>安裝 docker</li>
-</ol>
-
-<h2 id="push-to-registry">push to registry</h2>
-
-<ol>
-  <li>檢查目前 images : <code class="highlighter-rouge">docker images</code></li>
-  <li>對要上傳的 image 設定 tag : <code class="highlighter-rouge">docker tag [image_id] [location]/[project_id]/[image_name]</code>
-    <ul>
-      <li><code class="highlighter-rouge">[location]</code> : [‘gcr.io’, ‘us.gcr.io’, ‘eu.gcr.io’, ‘asia.gcr.io’, ‘b.gcr.io’, ‘bucket.gcr.io’, ‘appengine.gcr.io’, ‘gcr.kubernetes.io’]</li>
-    </ul>
-  </li>
-  <li>檢查 <code class="highlighter-rouge">docker images</code> 會發現多了一個 images</li>
-  <li>push : <code class="highlighter-rouge">gcloud docker push [location]/[project_id]/[image_name]</code></li>
-</ol>
-
-<h2 id="移除掉-image_id-locationproject_idimage_name">移除掉 [image_id] [location]/[project_id]/[image_name]</h2>
-
-<ol>
-  <li>本機 : <code class="highlighter-rouge">docker rmi [image_id] [location]/[project_id]/[image_name]</code></li>
-  <li>gcloud : 可直接到 consonle 的 registry 中，進入 image，將該版本刪除</li>
-</ol>
-
-<h2 id="pull">pull</h2>
-
-<ol>
-  <li>登入 console</li>
-  <li>進入 registry</li>
-  <li>選擇 images，取得 pull 指令</li>
-</ol>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/10/24/gclouddocker-push-pull-delete/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2533,7 +2588,7 @@ checkPattern2(nomatch, Foo) -&gt;
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-count">104</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

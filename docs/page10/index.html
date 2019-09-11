@@ -281,6 +281,231 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/xcode%20ios/2016/06/13/xcodecreate-framework/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/xcode%20ios/2016/06/13/xcodecreate-framework/" itemprop="url">
+                【xcode】create framework
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-13T06:18:00+08:00">
+                2016-06-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/xcode%20ios" itemprop="url" rel="index">
+                    <span itemprop="name">xcode ios</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="why">Why</h2>
+
+<p>直接在 xcode 中，產生出適合 <code class="highlighter-rouge">armv7 -arch armv7s</code> 與 <code class="highlighter-rouge">x86_64</code> 的 framework
+若透過預設的方法產出，會有兩種版本，必須再使用 <code class="highlighter-rouge">lipo create</code> 進行合併
+此方法是透過 script 在 compile 時，直接進行 build 與 <code class="highlighter-rouge">lipo create</code> 的動作</p>
+
+<h3 id="基本設定">基本設定</h3>
+<ol>
+  <li>設置靜態庫，將 Mach-o type 從動態設定為 Static Library
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>|-MyFirstFramework
+ |-TARGETS
+  	|-Build Settings
+ 	|-Linking
+   	|-Mach-o Type
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+</ol>
+
+<h2 id="how">How</h2>
+
+<ol>
+  <li>
+    <p>open xcode and select [Framework &amp; Library] -&gt; [Cocoa Touch Framework]</p>
+  </li>
+  <li>Build Phases
+    <ul>
+      <li>Target Dependencies</li>
+      <li><a href="http://stackoverflow.com/questions/17198185/what-is-the-purpose-of-compile-sources-in-xcode">Compile Sources</a></li>
+      <li><a href="https://developer.apple.com/library/ios/recipes/xcode_help-project_editor/Articles/AddingaLibrarytoaTarget.html">Link Binary With Library</a>
+        <ul>
+          <li>連接使用其他 framework</li>
+        </ul>
+      </li>
+      <li>Headers
+        <ul>
+          <li>讓 framework 中的檔案開放程度</li>
+        </ul>
+      </li>
+      <li>Copy Bundle Resources
+        <ul>
+          <li>要使用的 bundle 物件檔</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>產生 framework x2（真機運行與模擬機運行）
+    <ul>
+      <li>要注意的是 xxx-name.framework，只是一包資料夾，要進行合併的是底下的 [xxx-name] 
+      - 真機路徑(path_1) : Debug-iphoneos/[name].framework/[name]
+      - 模擬機路徑(path_2) : Debug-iphonesimulator/[name].framework/[name]
+      - <code class="highlighter-rouge">lipo -create path_1 path_2 -output [name]</code>
+      - 產生出的 name 為執行檔，copy <code class="highlighter-rouge">Debug-iphoneos/[name].framework</code> 到適當位置
+      - 將剛剛產生出的 [name]，取代掉上一行 framwork 中原本的 [name]
+      - <code class="highlighter-rouge">lipo -info [name]</code>
+      - 將整包調整過後的 framework 放入 xcode 測試</li>
+    </ul>
+  </li>
+</ol>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/xcode%20ios/2016/06/13/xcodecreate-framework/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/05/31/dynamic-programming/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1961,198 +2186,6 @@ I want to teach <strong>Intermediate</strong> <strong>Swift 2.2</strong> to <str
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/sublime/ide/2016/04/20/sublime-text-3basic/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="assets/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/sublime/ide/2016/04/20/sublime-text-3basic/" itemprop="url">
-                【sublime text 3】basic
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-20T07:12:00+08:00">
-                2016-04-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/sublime" itemprop="url" rel="index">
-                    <span itemprop="name">sublime</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/IDE" itemprop="url" rel="index">
-                    <span itemprop="name">IDE</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h2 id="環境">環境</h2>
-<ul>
-  <li>mac osx 10.11.4</li>
-  <li>sublime test 3</li>
-</ul>
-
-<h2 id="移除-sublime">移除 sublime</h2>
-
-<ul>
-  <li>透過 <a href="http://macpaw.com/cleanmymac">CleanMyMac3</a> 移除檔案</li>
-  <li>檢查 <code class="highlighter-rouge">~/Application Support/Sublime Text 3</code> 是否存在，若存在則移除</li>
-</ul>
-
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/sublime/ide/2016/04/20/sublime-text-3basic/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2214,7 +2247,7 @@ I want to teach <strong>Intermediate</strong> <strong>Swift 2.2</strong> to <str
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-count">104</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -31,15 +31,12 @@ tags: Golang
 
 
 # localhost test
-- localhost : `sudo jekyll server -b ''`
+- localhost : `bundle exec jekyll server -b ''`
 - 因 theme 在 baseurl 的 localhost 與 gh-pages 在 deploy 會產生衝突，故 config 設定的 baseurl 以 deploy 為主
 
 # deploy
-- build : `jekyll build -d ./docs`
+- build : `bundle exec jekyll build`
 - upload : `git add . && git commit -m "update" && git push origin master`
-
-# 新 clone 請執行
-`bundle install`
 
 # 環境設定
 - `./config.yml`

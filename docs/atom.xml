@@ -1,4 +1,73 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-09-11T00:16:55+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】利用 struct 優化（二）:interface</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/" rel="alternate" type="text/html" title="【Go】利用 struct 優化（二）:interface" /><published>2019-09-10T19:11:00+08:00</published><updated>2019-09-10T19:11:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/10/%5BGo%5Dstruct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/">&lt;h1 id=&quot;sypnosis&quot;&gt;Sypnosis&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-09-11T13:23:15+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】Defer, Panic &amp;amp; Recover</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/11/Go-DeferPanicRecover/" rel="alternate" type="text/html" title="【Go】Defer, Panic &amp; Recover" /><published>2019-09-11T13:18:00+08:00</published><updated>2019-09-11T13:18:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/11/%5BGo%5DDeferPanicRecover</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/11/Go-DeferPanicRecover/">&lt;h1 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;defer {動作} : 當前 func 結束後，會執行的動作。&lt;/li&gt;
+  &lt;li&gt;panic() : 當執行，會強迫中斷程式，並輸出錯誤訊息。&lt;/li&gt;
+  &lt;li&gt;recover() : 當 panic 發生後，無論錯誤在多深層的結構中，都會透過 recover() 取回當前的 error (不用逐層 return)，並讓程序繼續執行。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;測試&quot;&gt;測試&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;在網路上多數的範例都是在於開啟檔案、連線失敗的使用方式&lt;/li&gt;
+  &lt;li&gt;這邊提供另一種使用範例&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;範例&quot;&gt;範例&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;假設我們在一個深層的遞迴中，發生了 panic，要回傳錯誤訊息，並讓程式不因為 panic，而中斷 process&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;設定 Layer/TriggerError 變數，用 pointer 送入到 func
+    &lt;ul&gt;
+      &lt;li&gt;Layer : 用於觀察數字變動&lt;/li&gt;
+      &lt;li&gt;TriggerError : 設定於該次的 function 呼叫時，產生 error，並啟動 panic&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;透過 defer 在 work() 結束後, 執行動作&lt;/li&gt;
+  &lt;li&gt;透過 recover(), 在 panic() 發生後, 將 error 抓回來&lt;/li&gt;
+  &lt;li&gt;最後在 main() 中，輸出 “hello world”&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div&gt;
+    &lt;iframe src=&quot;https://play.golang.org/p/ADukYaPNS_B&quot; height=&quot;600&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
+    &lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;觀察結果&quot;&gt;觀察結果&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;當刪除 &lt;code class=&quot;highlighter-rouge&quot;&gt;recover()&lt;/code&gt; 這一段; 且 &lt;code class=&quot;highlighter-rouge&quot;&gt;TriggerError != 0&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;會造成 process 強迫中斷, 會看到錯誤訊息, 但無法看到接下來的訊息&lt;/li&gt;
+      &lt;li&gt;work() 結束後, 也無法返回 main 中&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;當 &lt;code class=&quot;highlighter-rouge&quot;&gt;TriggerError == 0&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;不會執行 recursion&lt;/li&gt;
+      &lt;li&gt;會看到沒有錯誤訊息&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;The [Layer] value in 'defer' is : 999&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;TriggerError != 0&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;輸出 panic 的 error&lt;/li&gt;
+      &lt;li&gt;輸出 &lt;code class=&quot;highlighter-rouge&quot;&gt;The [Layer] value in 'defer' is : X&lt;/code&gt;, X 是該 func 被執行的次數&lt;/li&gt;
+      &lt;li&gt;跳回 main(), 顯示 &lt;code class=&quot;highlighter-rouge&quot;&gt;Hello World&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;所以當要執行某個工作時，不用刻意的使用 return 回傳錯誤訊息&lt;/li&gt;
+  &lt;li&gt;透過 defer, panic, recovery 可以設計出更優雅、容錯、可讀性高的程式&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">Synopsis defer {動作} : 當前 func 結束後，會執行的動作。 panic() : 當執行，會強迫中斷程式，並輸出錯誤訊息。 recover() : 當 panic 發生後，無論錯誤在多深層的結構中，都會透過 recover() 取回當前的 error (不用逐層 return)，並讓程序繼續執行。 測試 在網路上多數的範例都是在於開啟檔案、連線失敗的使用方式 這邊提供另一種使用範例</summary></entry><entry><title type="html">【Go】利用 struct 優化（二）:interface</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/" rel="alternate" type="text/html" title="【Go】利用 struct 優化（二）:interface" /><published>2019-09-10T19:11:00+08:00</published><updated>2019-09-10T19:11:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/10/%5BGo%5Dstruct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/">&lt;h1 id=&quot;sypnosis&quot;&gt;Sypnosis&lt;/h1&gt;
 
 &lt;p&gt;&lt;a href=&quot;https://jhaoheng.github.io/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96/&quot;&gt;【Go】利用 struct 優化（一）&lt;/a&gt;後，可以得知&lt;/p&gt;
 
@@ -489,86 +558,7 @@ ProxyPreserveHost On&lt;/p&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apache2ctl restart&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:80&lt;/code&gt;, will show ‘proxy’&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt;, be restricted to access&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Apache" /><summary type="html">Goal 80 port proxy to 8080 port. If work, will show ‘proxy’ http://localhost:8080 can’t access, must return 404. Use &amp;lt;If &quot;%{SERVER_PORT} != '80'&quot;&amp;gt; Redirect 404 / &amp;lt;/If&amp;gt; Repo &amp;amp; Env Set source code : https://github.com/jhaoheng/apacheProxy&amp;amp;UseExpressions docker-compose up -d &amp;amp;&amp;amp; docker exec -it ubuntu /bin/bash apt-get update apt-get install -y libapache2-mod-proxy-html libxml2-dev apache2 build-essential Proxy Modules a2enmod proxy proxy_http proxy_ajp rewrite proxy_balancer proxy_connect proxy_html xml2enc</summary></entry><entry><title type="html">【Golang】func &amp;amp; pointer</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&pointer/" rel="alternate" type="text/html" title="【Golang】func &amp; pointer" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/%5BGo%5Dfunc&amp;pointer</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&amp;pointer/">&lt;h1 id=&quot;kind&quot;&gt;kind&lt;/h1&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;Different kinds use a pointer to change the value in Func.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;map&lt;/li&gt;
-  &lt;li&gt;slice&lt;/li&gt;
-  &lt;li&gt;array&lt;/li&gt;
-  &lt;li&gt;string&lt;/li&gt;
-  &lt;li&gt;struct&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div&gt;
-    &lt;iframe src=&quot;https://play.golang.org/p/sUiGkLDt8vJ&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
-    &lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;!--more--&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateMapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;   map =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;slice&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateSliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; slice =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateArrayObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; array =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateStringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;string =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;999&lt;/span&gt;
-
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;struct&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateStructObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;struct =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateMapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateArrayObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateSliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateStringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateStructObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">kind Different kinds use a pointer to change the value in Func. map slice array string struct</summary></entry><entry><title type="html">【Golang】Diff - slice &amp;amp; array</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-diff-slice&array/" rel="alternate" type="text/html" title="【Golang】Diff - slice &amp; array" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/%5BGo%5Ddiff-slice&amp;array</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-diff-slice&amp;array/">&lt;h1 id=&quot;slice--array-差別&quot;&gt;slice &amp;amp; array 差別&lt;/h1&gt;
+&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Apache" /><summary type="html">Goal 80 port proxy to 8080 port. If work, will show ‘proxy’ http://localhost:8080 can’t access, must return 404. Use &amp;lt;If &quot;%{SERVER_PORT} != '80'&quot;&amp;gt; Redirect 404 / &amp;lt;/If&amp;gt; Repo &amp;amp; Env Set source code : https://github.com/jhaoheng/apacheProxy&amp;amp;UseExpressions docker-compose up -d &amp;amp;&amp;amp; docker exec -it ubuntu /bin/bash apt-get update apt-get install -y libapache2-mod-proxy-html libxml2-dev apache2 build-essential Proxy Modules a2enmod proxy proxy_http proxy_ajp rewrite proxy_balancer proxy_connect proxy_html xml2enc</summary></entry><entry><title type="html">【Golang】Diff - slice &amp;amp; array</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-diff-slice&array/" rel="alternate" type="text/html" title="【Golang】Diff - slice &amp; array" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/%5BGo%5Ddiff-slice&amp;array</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-diff-slice&amp;array/">&lt;h1 id=&quot;slice--array-差別&quot;&gt;slice &amp;amp; array 差別&lt;/h1&gt;
 &lt;blockquote&gt;
   &lt;p&gt;https://blog.golang.org/go-slices-usage-and-internals&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -697,7 +687,86 @@ A slice can be created with the built-in function called make, which has the sig
 &lt;ul&gt;
   &lt;li&gt;array : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(len(arrayObject))&lt;/code&gt;, 顯示 4&lt;/li&gt;
   &lt;li&gt;slice : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(len(sliceObject))&lt;/code&gt; 顯示 0&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">slice &amp;amp; array 差別 https://blog.golang.org/go-slices-usage-and-internals Array Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value. - An array's size is fixed; - Arrays do not need to be initialized Slice The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length. A slice can be created with the built-in function called make, which has the signature, `func make([]T, len, cap) []T` Glance : Difference between both 兩者在宣告方式不同 兩者 type 不同 兩者 kind 不同 兩者在宣告後, 不設定 content, 印出內容 兩者在新增/修改值上不同 兩者 func 中，使用原理方式不同</summary></entry><entry><title type="html">【Golang】Go module</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/08/31/gomod/" rel="alternate" type="text/html" title="【Golang】Go module" /><published>2019-08-31T20:14:00+08:00</published><updated>2019-08-31T20:14:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/08/31/gomod</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/08/31/gomod/">&lt;h1 id=&quot;環境&quot;&gt;環境&lt;/h1&gt;
+&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">slice &amp;amp; array 差別 https://blog.golang.org/go-slices-usage-and-internals Array Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value. - An array's size is fixed; - Arrays do not need to be initialized Slice The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length. A slice can be created with the built-in function called make, which has the signature, `func make([]T, len, cap) []T` Glance : Difference between both 兩者在宣告方式不同 兩者 type 不同 兩者 kind 不同 兩者在宣告後, 不設定 content, 印出內容 兩者在新增/修改值上不同 兩者 func 中，使用原理方式不同</summary></entry><entry><title type="html">【Golang】func &amp;amp; pointer</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&pointer/" rel="alternate" type="text/html" title="【Golang】func &amp; pointer" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/%5BGo%5Dfunc&amp;pointer</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&amp;pointer/">&lt;h1 id=&quot;kind&quot;&gt;kind&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Different kinds use a pointer to change the value in Func.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;map&lt;/li&gt;
+  &lt;li&gt;slice&lt;/li&gt;
+  &lt;li&gt;array&lt;/li&gt;
+  &lt;li&gt;string&lt;/li&gt;
+  &lt;li&gt;struct&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div&gt;
+    &lt;iframe src=&quot;https://play.golang.org/p/sUiGkLDt8vJ&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
+    &lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;!--more--&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;updateMapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;   map =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;slice&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;updateSliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; slice =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;updateArrayObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; array =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;updateStringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;string =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;999&lt;/span&gt;
+
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;struct&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;updateStructObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;struct =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateMapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateArrayObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateSliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateStringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateStructObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">kind Different kinds use a pointer to change the value in Func. map slice array string struct</summary></entry><entry><title type="html">【Golang】Go module</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/08/31/gomod/" rel="alternate" type="text/html" title="【Golang】Go module" /><published>2019-08-31T20:14:00+08:00</published><updated>2019-08-31T20:14:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/08/31/gomod</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/08/31/gomod/">&lt;h1 id=&quot;環境&quot;&gt;環境&lt;/h1&gt;
 &lt;ul&gt;
   &lt;li&gt;go version go1.12.9 darwin/amd64&lt;/li&gt;
   &lt;li&gt;官方教學 : https://github.com/golang/go/wiki/Modules#quick-start&lt;/li&gt;
@@ -960,54 +1029,4 @@ Please note that IP-range based access control is currently not enabled for Cach
   &lt;li&gt;執行服務 : &lt;code class=&quot;highlighter-rouge&quot;&gt;redis-commander --redis-host &amp;lt;elasticache endpoint&amp;gt;&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;確定 ec2 security 8081 port 可讓你目前的 ip 進行連線&lt;/li&gt;
   &lt;li&gt;瀏覽器輸入 : &lt;ec2-instance-ip&gt;:8081&lt;/ec2-instance-ip&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name>Max Hu</name></author><category term="AWS" /><category term="Redis" /><summary type="html">透過 redis-cli 連線 elasticache 限制 必須透過 aws ec2 進行連線 : From AWS FAQ: (http://aws.amazon.com/elasticache/faqs/) Please note that IP-range based access control is currently not enabled for Cache Clusters. All clients to a Cache Cluster must be within the EC2 network, and authorized via security groups as described above. 確定 elasticache 建立時的 endpoint Subnet Group Security Group 確定 aws ec2 確保 instance 的 vpc 與 elasticache 的 Subnet Group 相同</summary></entry><entry><title type="html">【Deploy Test】Use Kubernetes &amp;amp; Minikube(local)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/2018/03/02/Kubernetes&Minikube/" rel="alternate" type="text/html" title="【Deploy Test】Use Kubernetes &amp; Minikube(local)" /><published>2018-03-02T07:30:00+08:00</published><updated>2018-03-02T07:30:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/2018/03/02/Kubernetes&amp;Minikube</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/2018/03/02/Kubernetes&amp;Minikube/">&lt;h2 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;透過本地端，練習 kubenetes client&lt;/li&gt;
-  &lt;li&gt;使用 minikube&amp;amp;virtual 當作 kube server&lt;/li&gt;
-  &lt;li&gt;minikube 本身提供像 gcloud 一樣 GUI 介面，方便具有既視感
-    &lt;ul&gt;
-      &lt;li&gt;docker 本身提供的 kubernetes server 目前沒有 GUI 介面&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;environment&quot;&gt;Environment&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;osx&lt;/li&gt;
-  &lt;li&gt;minikube &amp;amp; virtualbox&lt;/li&gt;
-  &lt;li&gt;kubernetes client&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;!--more--&gt;
-
-&lt;h2 id=&quot;install&quot;&gt;Install&lt;/h2&gt;
-&lt;ol&gt;
-  &lt;li&gt;安裝 &lt;a href=&quot;https://www.virtualbox.org/wiki/Downloads&quot;&gt;virtual box&lt;/a&gt;
-    &lt;ul&gt;
-      &lt;li&gt;此次安裝的版本為 5.2.8&lt;/li&gt;
-      &lt;li&gt;mac 安裝失敗問題 : http://blog.csdn.net/u013247765/article/details/78176079&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;osx 安裝 minikube : &lt;code class=&quot;highlighter-rouge&quot;&gt;brew cask install minikube&lt;/code&gt;
-    &lt;ul&gt;
-      &lt;li&gt;minikube start&lt;/li&gt;
-      &lt;li&gt;若遇到失敗 : &lt;code class=&quot;highlighter-rouge&quot;&gt;minikube delete&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;https://kubernetes.io/docs/tutorials/stateless-application/hello-minikube/&quot;&gt;操作方法&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;a href=&quot;https://github.com/kubernetes/minikube&quot;&gt;Github&lt;/a&gt;&lt;/li&gt;
-      &lt;li&gt;開啟 web dashboard : &lt;code class=&quot;highlighter-rouge&quot;&gt;minikube dashboard&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;安裝 kubernetes client &lt;a href=&quot;https://kubernetes.io/docs/imported/release/notes/&quot;&gt;官網安裝&lt;/a&gt;
-    &lt;ol&gt;
-      &lt;li&gt;進入安裝頁面&lt;/li&gt;
-      &lt;li&gt;選擇 client binaries&lt;/li&gt;
-      &lt;li&gt;確定自己電腦的 linux 安裝即可 : osx amd64
-        &lt;ul&gt;
-          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;uname -a&lt;/code&gt; : 看是否是 x86_64&lt;/li&gt;
-          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;shasum -a 256 {the file} | grep {hash}&lt;/code&gt; : 在 osx 驗證 hash&lt;/li&gt;
-        &lt;/ul&gt;
-      &lt;/li&gt;
-      &lt;li&gt;放入 bash_profile, &lt;code class=&quot;highlighter-rouge&quot;&gt;source ~/.bash_profile&lt;/code&gt; 即可&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;</content><author><name>Max Hu</name></author><summary type="html">Synopsis 透過本地端，練習 kubenetes client 使用 minikube&amp;amp;virtual 當作 kube server minikube 本身提供像 gcloud 一樣 GUI 介面，方便具有既視感 docker 本身提供的 kubernetes server 目前沒有 GUI 介面 Environment osx minikube &amp;amp; virtualbox kubernetes client</summary></entry></feed>
+&lt;/ol&gt;</content><author><name>Max Hu</name></author><category term="AWS" /><category term="Redis" /><summary type="html">透過 redis-cli 連線 elasticache 限制 必須透過 aws ec2 進行連線 : From AWS FAQ: (http://aws.amazon.com/elasticache/faqs/) Please note that IP-range based access control is currently not enabled for Cache Clusters. All clients to a Cache Cluster must be within the EC2 network, and authorized via security groups as described above. 確定 elasticache 建立時的 endpoint Subnet Group Security Group 確定 aws ec2 確保 instance 的 vpc 與 elasticache 的 Subnet Group 相同</summary></entry></feed>

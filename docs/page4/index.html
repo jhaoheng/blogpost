@@ -281,6 +281,239 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/docker/mariadb/2017/09/05/Docker-MariaDB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="assets/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/docker/mariadb/2017/09/05/Docker-MariaDB/" itemprop="url">
+                【docker : mariadb】container 建立後，初始化 schema
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-05T06:07:00+08:00">
+                2017-09-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Docker" itemprop="url" rel="index">
+                    <span itemprop="name">Docker</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/MariaDB" itemprop="url" rel="index">
+                    <span itemprop="name">MariaDB</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="first">first</h2>
+
+<ul>
+  <li>目的 : 在 docker 架構下，解決 mariadb container 建立後，自動加入 schema 到 db 中</li>
+  <li>可參考 https://stackoverflow.com/questions/36617682/docker-compose-mysql-import-sql</li>
+  <li>解決 : 在 mariadb 起來後，會自動去執行 <code class="highlighter-rouge">/docker-entrypoint-initdb.d/</code> 底下的 sql 指令，就會自動建立好預設的 database &amp; table</li>
+</ul>
+
+<h2 id="example--docker-compose">example : docker-compose</h2>
+
+<h3 id="sql-file--save-as-testsql">sql file : save as test.sql</h3>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22</pre></td><td class="code"><pre class="highlight"><code>#
+# SQL Export
+# Created by Querious (1068)
+# Created: 2017年9月5日 GMT+8 上午9:27:31
+# Encoding: Unicode (UTF-8)
+#
+
+CREATE DATABASE IF NOT EXISTS `test` DEFAULT CHARACTER SET latin1 DEFAULT COLLATE latin1_swedish_ci;
+USE `test`;
+
+SET @PREVIOUS_FOREIGN_KEY_CHECKS = @@FOREIGN_KEY_CHECKS;
+SET FOREIGN_KEY_CHECKS = 0;
+
+CREATE TABLE `event` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` varchar(128) DEFAULT NULL,
+  `type` varchar(128) DEFAULT NULL,
+  `created_timestamp` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+SET FOREIGN_KEY_CHECKS = @PREVIOUS_FOREIGN_KEY_CHECKS;
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="docker-composeyml">docker-compose.yml</h3>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11</pre></td><td class="code"><pre class="highlight"><code>version: '3.0'
+services:
+  mariadb:
+    image: mariadb
+    container_name: some-mariadb
+    ports:
+      - 3306:3306/tcp
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+    volumes:
+      - test.sql:/docker-entrypoint-initdb.d/test.sql
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="驗證">驗證</h3>
+
+<ol>
+  <li><code class="highlighter-rouge">docker exec some-mariadb mysql -u root --password=1234 --database=test -e "show tables;"</code></li>
+</ol>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/docker/mariadb/2017/09/05/Docker-MariaDB/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/aws/2017/08/25/AWS-CLI-ECR-S3-EB-Deploy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2227,218 +2460,6 @@ aws_secret_access_key = MY-SECRET-KEY
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/06/21/playerhls-rtmp/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="assets/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2017/06/21/playerhls-rtmp/" itemprop="url">
-                【Player】HLS.js / video.js / jwplayer
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-21T06:59:00+08:00">
-                2017-06-21
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="rtmp-live">rtmp live</h1>
-
-<h2 id="使用-videojs-的-issue">使用 video.js 的 issue</h2>
-
-<p>播放後，影片會在左上角，與 player size 不符合</p>
-<ul>
-  <li>bug fixed : https://github.com/videojs/video-js-swf/issues/55
-    <ol>
-      <li>下載 https://github.com/digitalStyx/video-js-swf/blob/master/bin-debug/VideoJS.swf 到本地後</li>
-      <li>在 head 中加入
-        <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code> &lt;script&gt;
-   videojs.options.flash.swf = "VideoJS.swf";
- &lt;/script&gt;
-</code></pre></td></tr></tbody></table></div>        </div>
-      </li>
-      <li>使用參考 : https://coolestguidesontheplanet.com/videodrome/videojs/</li>
-    </ol>
-  </li>
-</ul>
-
-<h1 id="hls-playback">hls playback</h1>
-
-<h2 id="如何進行-offset">如何進行 offset</h2>
-
-<ul>
-  <li>document : https://tools.ietf.org/html/draft-pantos-http-live-streaming-18#section-4.3.5.2</li>
-</ul>
-
-<ol>
-  <li>version 6 以上</li>
-  <li>use like below : <strong>#EXT-X-START:TIME-OFFSET=2</strong></li>
-</ol>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14</pre></td><td class="code"><pre class="highlight"><code>#EXTM3U
-#EXT-X-VERSION:7
-#EXT-X-ALLOW-CACHE:YES
-#EXT-X-TARGETDURATION:7
-#EXT-X-MEDIA-SEQUENCE:1
-#EXT-X-START:TIME-OFFSET=2
-
-#EXTINF:7, 
-1498008625670.ts
-#EXTINF:6, 
-1498008631711.ts
-#EXTINF:6, 
-1498008637927.ts
-
-</code></pre></td></tr></tbody></table></div></div>
-<ol>
-  <li>注意播放器要支援解析, EX: <code class="highlighter-rouge">https://github.com/jhaoheng/html5_hls_test/blob/master/hls.html</code></li>
-</ol>
-
-<h1 id="jwplayer-使用-flash-播放-hls--rtmp">jwplayer 使用 flash 播放 hls / rtmp</h1>
-
-<ul>
-  <li>jwplayer 提供 http / https 的網頁測試
-    <ul>
-      <li>http  : <code class="highlighter-rouge">http://demo.jwplayer.com/developer-tools/http-stream-tester/</code></li>
-      <li>https : <code class="highlighter-rouge">https://developer.jwplayer.com/tools/stream-tester/</code></li>
-    </ul>
-  </li>
-  <li>要讓 jwplayer 透過 flash 支援 hls 的播放，需要加入 crossdomain.xml 檔案
-    <ul>
-      <li>要注意的是，crossdomain.xml 的檔案內容，請勿一次全部 copy，盡量用輸入的，輸入完畢後，透過 browser 顯示，不然有可能會發生，檢查 cros 正確，但 jwplayer 會無法解析的問題，猜測應該是 copy 時，貼上帶入了奇怪的字元</li>
-    </ul>
-  </li>
-  <li>若用 jwplayer，不指定類型，則 jwplayer 會自動根據內容自動切換 flash / html5 的播放類型，如此一來就不用特別使用 crossdomain.xml，只需在 nginx.conf 中設定 crossdomain 即可</li>
-</ul>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2017/06/21/playerhls-rtmp/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2500,7 +2521,7 @@ aws_secret_access_key = MY-SECRET-KEY
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">103</span>
+                <span class="site-state-item-count">104</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
