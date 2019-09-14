@@ -187,6 +187,7 @@ func resetTimer(timerObj *TimerObj) {
 ```
 
 [執行結果]
+```
 =====> 1.002051028s
 =====> 2.006385502s. Time up, auto reset Timer
 Timer Reset 10s
@@ -199,4 +200,5 @@ Timer Reset 10s
 Timer Stop Success!!  Timer Reset 10s
 =====> 1.003484026s
 ^Csignal: interrupt
+```
 
