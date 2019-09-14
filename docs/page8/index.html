@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/blogpost/" class="brand" rel="start">
+      <a href="/blogpost/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -218,7 +218,7 @@
         <li class="menu-item menu-item-home">
           <a href="/blogpost/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
             Home
           </a>
@@ -230,7 +230,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/blogpost/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
             Archives
           </a>
@@ -242,7 +242,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/blogpost/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
             Tags
           </a>
@@ -270,6 +270,249 @@
 
 
 <section id="posts" class="posts-expand">
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/09/07/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/09/07/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/" itemprop="url">
+                【MQTT】Login mqtt:8883 SSL/TLS with certificate authority (CA)
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-07T02:01:00+08:00">
+                2016-09-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="login-mqtt8883-ssltls-certificate-authority-ca">login mqtt:8883 SSL/TLS (certificate authority (CA))</h1>
+
+<ul>
+  <li><a href="https://github.com/jhaoheng/emqttd_test">github</a></li>
+</ul>
+
+<h2 id="required-file">required file</h2>
+
+<p>use below file and cmd[mosquitto_sub] to connect MQTT:8883</p>
+
+<ul>
+  <li>ca.crt – The CA (Certificate Authority, who published the host certificate) public certificate.</li>
+  <li>ssl.crt – The hostname, public certificate.</li>
+  <li>ssl.key – The hostname, private key.</li>
+</ul>
+
+<h2 id="generate_1--use-generate-cash-to-generate">Generate_1 : use <strong>generate-CA.sh</strong> to generate</h2>
+
+<ol>
+  <li>Download generate-CA.sh and create local server CA, and will generate….
+    <ul>
+      <li>ca.srl / ca.crt / ca.key</li>
+      <li>xxx is local server name, xxx.crt / xxx.csr / xxx.key</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">cp xxx.crt ssl.crt</code> and <code class="highlighter-rouge">cp xxx.key ssl.key</code></li>
+</ol>
+
+<h2 id="generate_2--use-cmd-openssl-to-generate">Generate_2 : use cmd [openssl] to generate</h2>
+
+<ol>
+  <li>Generate ca.crt and ca.key
+    <ul>
+      <li><code class="highlighter-rouge">openssl req -newkey rsa:2048 -x509 -nodes -sha512 -days 365 -extensions v3_ca -keyout ca.key -out ca.crt</code></li>
+      <li>check : <code class="highlighter-rouge">openssl x509 -in ca.crt -nameopt multiline -subject -noout</code></li>
+    </ul>
+  </li>
+  <li>Generate server.key
+    <ul>
+      <li><code class="highlighter-rouge">openssl genrsa -out server.key 2048</code></li>
+    </ul>
+  </li>
+  <li>Generate server.csr
+    <ul>
+      <li><code class="highlighter-rouge">openssl req -new -sha512 -out server.csr -key server.key</code></li>
+    </ul>
+  </li>
+  <li>Generate server.crt by server.csr, ca.crt, cae.key, ca.srl
+    <ul>
+      <li><code class="highlighter-rouge">openssl x509 -req -sha512 -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -CAserial ca.srl -out server.crt -days 365 -extensions JPMextensions</code></li>
+      <li>check : <code class="highlighter-rouge">openssl x509 -in server.crt -nameopt multiline -subject -noout</code></li>
+    </ul>
+  </li>
+</ol>
+
+<p>note : <code class="highlighter-rouge">ca.crt</code> and <code class="highlighter-rouge">server.crt</code>, their <code class="highlighter-rouge">commonName</code> should not be the same.</p>
+
+<h2 id="verify-check-servercrt-is-generated-by-cacrt">Verify: check server.crt is generated by ca.crt</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">openssl verify -CAfile ca.crt server.crt</code>
+    <ul>
+      <li>output ssl.crt: OK</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="test">Test</h2>
+
+<ol>
+  <li><code class="highlighter-rouge">mv ssl* to /emqttd/etc/ssl/</code></li>
+  <li>Test : <code class="highlighter-rouge">mosquitto_sub -h [server_ip] -p 8883 -t [topic] -i [clientId] -u [username] -P [password] --cafile ca.crt</code>
+    <ul>
+      <li>Notice where is your <code class="highlighter-rouge">ca.crt</code> file</li>
+    </ul>
+  </li>
+  <li>go to your emqttd console, emqttd:18083, and watch Clients</li>
+</ol>
+
+<h2 id="ex--servercrt">ex : server.crt</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8</pre></td><td class="code"><pre class="highlight"><code>subject= 
+    countryName               = TW
+    stateOrProvinceName       = TAIWAN
+    localityName              = TAIPEI
+    organizationName          = COMPANY
+    organizationalUnitName    = DEV
+    commonName                = dev-mqtt.com
+    emailAddress              = max.hu@mail
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="ex--cacrt">ex : ca.crt</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>subject= 
+    commonName                = An MQTT broker
+    organizationName          = COMPANY
+    organizationalUnitName    = DEV
+    emailAddress              = max.hu@mail
+</code></pre></td></tr></tbody></table></div></div>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/09/07/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
   
     
     
@@ -331,7 +574,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -431,27 +674,21 @@
 
 <p>you can create a config.h or .pch to set your info.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7</pre></td>
-<td class="code"><pre class="highlight"><code>#if DEBUG
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>#if DEBUG
 #define a symbol
 #elseif RELEASE
 #define a symbol
 #else
 #define a symbol
 #endif
-</code></pre></td>
-</tr></tbody></table></div></div>
+</code></pre></td></tr></tbody></table></div></div>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1<br>2<br>3<br>4<br>5</pre></td>
-<td class="code"><pre class="highlight"><code>#if DEBUG==1
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>#if DEBUG==1
 #define debug_only YES
 #else
 #define debug_only NO
 #endif
-</code></pre></td>
-</tr></tbody></table></div></div>
+</code></pre></td></tr></tbody></table></div></div>
 
 <p>Notice <code class="highlighter-rouge">#if</code> and <code class="highlighter-rouge">#ifdef</code> is diff.</p>
 
@@ -459,7 +696,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/xcode/2016/08/31/xcode-macros-scheme/#more" rel="contents">
-              Read more »
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -558,7 +795,7 @@
           </span>
 
           
-            <span class="post-category">
+            <span class="post-category" >
             
               <span class="post-meta-divider">|</span>
             
@@ -628,26 +865,21 @@
 <h2 id="install-on-mac">install on mac</h2>
 
 <ul>
-  <li>mac : <code class="highlighter-rouge">brew install jq</code>
-</li>
+  <li>mac : <code class="highlighter-rouge">brew install jq</code></li>
 </ul>
 
 <h2 id="install-on-linux">install on linux</h2>
 
 <ul>
-  <li>linux(32bit) : <code class="highlighter-rouge">wget http://stedolan.github.io/jq/download/linux32/jq</code>
-</li>
-  <li>linux(64bit) : <code class="highlighter-rouge">wget http://stedolan.github.io/jq/download/linux64/jq</code>
-</li>
+  <li>linux(32bit) : <code class="highlighter-rouge">wget http://stedolan.github.io/jq/download/linux32/jq</code></li>
+  <li>linux(64bit) : <code class="highlighter-rouge">wget http://stedolan.github.io/jq/download/linux64/jq</code></li>
   <li><code class="highlighter-rouge">chmod +x ./jq</code></li>
   <li><code class="highlighter-rouge">sudo cp jq /usr/bin</code></li>
 </ul>
 
 <h2 id="example-file">example file</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25</pre></td>
-<td class="code"><pre class="highlight"><code>{
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25</pre></td><td class="code"><pre class="highlight"><code>{
         "name": "Google",
         "location":
                 {
@@ -672,8 +904,7 @@
                         }
                 ]
 }
-</code></pre></td>
-</tr></tbody></table></div></div>
+</code></pre></td></tr></tbody></table></div></div>
 
 <h2 id="use">use</h2>
 
@@ -696,15 +927,11 @@
   <li>To extract specific fields from a JSON object: <code class="highlighter-rouge">cat json.txt | jq '.location | {street, city}'</code>
     <ul>
       <li>output :
-        <div class="highlighter-rouge">
-<div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1<br>2<br>3<br>4</pre></td>
-<td class="code"><pre class="highlight"><code>{
+        <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>{
 "city": "Mountain View",
 "street": "1600 Amphitheatre Parkway"
 }
-</code></pre></td>
-</tr></tbody></table></div>        </div>
+</code></pre></td></tr></tbody></table></div>        </div>
       </li>
     </ul>
   </li>
@@ -714,7 +941,7 @@
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/bash/2016/08/24/bash-parse-json-by-jq/#more" rel="contents">
-              Read more »
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -866,17 +1093,14 @@
 
 <h2 id="cant-connect-to-local-mysql-server-through-socket-tmpmysqlsock">Can’t connect to local mySql server through socket /tmp/mysql.sock</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1</pre></td>
-<td class="code"><pre class="highlight"><code>ln -s /Application/MAMP/tmp/mysql/mysql.sock /tmp/mysql.sock
-</code></pre></td>
-</tr></tbody></table></div></div>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>ln -s /Application/MAMP/tmp/mysql/mysql.sock /tmp/mysql.sock
+</code></pre></td></tr></tbody></table></div></div>
 
 
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/08/05/mampcant-connect-to-local-mysql-server-through-socket/#more" rel="contents">
-              Read more »
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -948,7 +1172,7 @@
             
                 
                 <a class="post-title-link" href="/blogpost/2016/08/04/phalconinstall-cphalcon-phalcon-tool-by-brew/" itemprop="url">
-                【phalcon】install 'cphalcon', 'phalcon-tool' by brew &amp; mamp
+                【phalcon】install 'cphalcon', 'phalcon-tool' by brew & mamp
               </a>
             
           
@@ -1027,30 +1251,22 @@
   </li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1<br>2</pre></td>
-<td class="code"><pre class="highlight"><code>brew install php70
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>brew install php70
 brew install php70-phalcon
-</code></pre></td>
-</tr></tbody></table></div></div>
+</code></pre></td></tr></tbody></table></div></div>
 <h2 id="check">check</h2>
 
 <ul>
-  <li>
-<code class="highlighter-rouge">php -m | grep -i phalcon</code> -&gt; should output <code class="highlighter-rouge">phalcon</code>
-</li>
+  <li><code class="highlighter-rouge">php -m | grep -i phalcon</code> -&gt; should output <code class="highlighter-rouge">phalcon</code></li>
   <li>cmd <code class="highlighter-rouge">phalcon</code> -&gt; should output phalcon cmd info, include phalcon version</li>
 </ul>
 
 <h2 id="php_info">php_info()</h2>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1<br>2<br>3</pre></td>
-<td class="code"><pre class="highlight"><code>&lt;?
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>&lt;?
 php\_info();
 ?&gt;
-</code></pre></td>
-</tr></tbody></table></div></div>
+</code></pre></td></tr></tbody></table></div></div>
 <h2 id="mamp-install-phalcon">mamp install phalcon</h2>
 
 <ul>
@@ -1073,7 +1289,7 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/08/04/phalconinstall-cphalcon-phalcon-tool-by-brew/#more" rel="contents">
-              Read more »
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1218,38 +1434,29 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
   <li>mac mini</li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1</pre></td>
-<td class="code"><pre class="highlight"><code>echo $PATH
-</code></pre></td>
-</tr></tbody></table></div></div>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>echo $PATH
+</code></pre></td></tr></tbody></table></div></div>
 
 <p>可能存放的位置有</p>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7</pre></td>
-<td class="code"><pre class="highlight"><code>/etc/paths
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>/etc/paths
 /etc/profile
 /etc/bashrc
 ~/.bash\_profile
 ~/.bash\_login
 ~/.profile
 ~/.bashrc
-</code></pre></td>
-</tr></tbody></table></div></div>
+</code></pre></td></tr></tbody></table></div></div>
 
 <p>或者</p>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1</pre></td>
-<td class="code"><pre class="highlight"><code>cat /etc/profile
-</code></pre></td>
-</tr></tbody></table></div></div>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>cat /etc/profile
+</code></pre></td></tr></tbody></table></div></div>
 
 
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/08/04/path/#more" rel="contents">
-              Read more »
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1418,7 +1625,7 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/08/04/mac-appbasic-demo/#more" rel="contents">
-              Read more »
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1567,7 +1774,7 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/07/29/phalconphpstorm-ide/#more" rel="contents">
-              Read more »
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1721,8 +1928,7 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
   </li>
   <li>MAMP -&gt; Hosts，選擇服務
     <ul>
-      <li>General -&gt; Dynamic DNS 選擇 <strong>no-ip.com</strong>
-</li>
+      <li>General -&gt; Dynamic DNS 選擇 <strong>no-ip.com</strong></li>
       <li>下方的 alias name 輸入
         <ul>
           <li>之前在 no-ip 上設定好的 ddns</li>
@@ -1736,7 +1942,7 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/07/22/mampddns/#more" rel="contents">
-              Read more »
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -1886,244 +2092,20 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
 
 <ul>
   <li><code class="highlighter-rouge">phalcon migration --help</code></li>
-  <li>
-<code class="highlighter-rouge">phalcon migration generate</code> : 產生 migration file
+  <li><code class="highlighter-rouge">phalcon migration generate</code> : 產生 migration file
     <ul>
-      <li>
-<code class="highlighter-rouge">migration generate 1.0.1</code> : 1.0.1 為產生的版本號，預設為 1.0.0</li>
-      <li>預設路徑為 <code class="highlighter-rouge">app/migrations/</code>
-</li>
+      <li><code class="highlighter-rouge">migration generate 1.0.1</code> : 1.0.1 為產生的版本號，預設為 1.0.0</li>
+      <li>預設路徑為 <code class="highlighter-rouge">app/migrations/</code></li>
     </ul>
   </li>
-  <li>
-<code class="highlighter-rouge">phalcon migration run</code> : 執行產生的 migration</li>
+  <li><code class="highlighter-rouge">phalcon migration run</code> : 執行產生的 migration</li>
 </ul>
 
 
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/07/19/phalconmigration/#more" rel="contents">
-              Read more »
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/16/phalconsql/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/07/16/phalconsql/" itemprop="url">
-                【phalcon】sql
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-16T15:44:00+08:00">
-                2016-07-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="使用-phql--avoid-sql-injection">使用 phql + Avoid sql injection</h1>
-
-<h2 id="select">select</h2>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7</pre></td>
-<td class="code"><pre class="highlight"><code>$conditions = "Users.id = :id:";
-$parameters = array(
-    "aid" =&gt; '31'
-);
-
-$phql = "SELECT b.* FROM Users as a RIGHT JOIN Devices as b on a.id=:aid:";
-$result = $app-&gt;modelsManager-&gt;executeQuery($phql,$parameters);
-</code></pre></td>
-</tr></tbody></table></div></div>
-<ul>
-  <li>其中的 <code class="highlighter-rouge">$app</code> 為 Micro 建立的物件</li>
-  <li>
-<code class="highlighter-rouge">modelsManager</code> 為 model 的 method</li>
-</ul>
-
-<h2 id="insert">insert</h2>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11</pre></td>
-<td class="code"><pre class="highlight"><code>$parameters = array(
-    "key" =&gt; "123",
-    "user_id" =&gt; 3,
-);
-
-$phql = "INSERT INTO tableName (key, user_id) VALUES (:key:, :user_id:)";
-$result = $app-&gt;modelsManager-&gt;executeQuery($phql, $parameters);
-
-if ($result==true) {
-	echo "success\n\r";
-}
-</code></pre></td>
-</tr></tbody></table></div></div>
-
-<h1 id="使用-抽象層-建立-sql-語法記錄-log">使用 抽象層 建立 sql 語法，記錄 log</h1>
-
-<ul>
-  <li>因若透過抽象層建立 sql，很難直接看出 sql 是否正確，可透過 phalcon 建立 log，並將 db 的所有動作記錄</li>
-</ul>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27</pre></td>
-<td class="code"><pre class="highlight"><code>use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Logger;
-use Phalcon\Logger\Adapter\File as FileLogger;
-use Phalcon\Events\Manager;
-
-$logger = new FileLogger("logs/debug.log");
-$eventsManager = new Manager();
-$connection = $app['db'];
-$eventsManager-&gt;attach('db', function ($event, $connection) use ($logger) {
-        if ($event-&gt;getType() == 'beforeQuery') {
-			$logger-&gt;log($connection-&gt;getSQLStatement(), Logger::INFO);
-        }
-});
-$app['db']-&gt;setEventsManager($eventsManager);// 儲存所有 db 動作
-
-$conditions = "Users.id = :id:";
-$parameters = array(
-    "id" =&gt; '31'
-);
-
-$result = $app-&gt;modelsManager-&gt;createBuilder()
-	-&gt;columns(array('Devices.*'))
-	-&gt;from('Devices')
-	-&gt;rightJoin('Users')
-	-&gt;where($conditions,$parameters)
-	-&gt;getQuery()
-	-&gt;execute();
-</code></pre></td>
-</tr></tbody></table></div></div>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/07/16/phalconsql/#more" rel="contents">
-              Read more »
+              Read more &raquo;
             </a>
           </div>
           <!--/noindex-->
@@ -2170,7 +2152,7 @@ $result = $app-&gt;modelsManager-&gt;createBuilder()
 
 
 
-    <a class="extend prev" rel="prev" href="/blogpost/page7"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">…</span> <a class="page-number" href="/blogpost/page7">7</a> <span class="page-number current">8</span> <a class="page-number" href="/blogpost/page9">9</a> <span class="space">…</span> <a class="page-number" href="/blogpost/page11">11</a> <a class="extend prev" rel="next" href="/blogpost/page9"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/blogpost/page7"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page7">7</a> <span class="page-number current">8</span> <a class="page-number" href="/blogpost/page9">9</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page11">11</a> <a class="extend prev" rel="next" href="/blogpost/page9"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2203,7 +2185,9 @@ $result = $app-&gt;modelsManager-&gt;createBuilder()
 
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image" src="/blogpost/assets/images/avatar3.png" alt="Max Hu">
+          <img class="site-author-image" itemprop="image"
+               src="/blogpost/assets/images/avatar3.png"
+               alt="Max Hu" />
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
               <p class="site-description motion-element" itemprop="description">Welcome!</p>
@@ -2214,7 +2198,7 @@ $result = $app-&gt;modelsManager-&gt;createBuilder()
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-count">105</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2276,10 +2260,10 @@ $result = $app-&gt;modelsManager-&gt;createBuilder()
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">
+        <div class="copyright" >
   
   
-  ©  2016 - 
+  &copy;  2016 - 
   <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>

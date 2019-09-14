@@ -1,0 +1,1030 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Golang," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="type Timer https://golang.org/pkg/time/#Timer type Timer struct { C &amp;lt;-chan Time } Timer 類型是一種事件，當 Timer 到期，目前的時間會送到 C 中，除非 Timer 被 AfterFunc 重新建立。 Timer 必須透過 NewTimer or AfterFunc 建立 Table list func AfterFunc : 建立一個 Timer 並在時間到後，執行 Func func NewTimer : 建立一個 Timer func (*Timer) Reset : 重設置 Timer func (*Timer) Stop : 命令 Timer 停止 範例 Timer 第一次到期為兩秒後, 到期後自動設定 t.Reset(10), 再度自動倒數 每次執行 t.Reset() 後, 到期, 都會重新設定 t.Reset() 按下 Enter 後, Timer 會直接中斷倒數, 並且再度重新執行 t.Reset() ctrl+c 停止運行">
+<meta name="keywords" content="Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Go】Time(一):Timer(定時器)">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/14/Go-time(1)-timer/">
+<meta property="og:site_name" content="MAX 呼~">
+<meta property="og:description" content="type Timer https://golang.org/pkg/time/#Timer type Timer struct { C &amp;lt;-chan Time } Timer 類型是一種事件，當 Timer 到期，目前的時間會送到 C 中，除非 Timer 被 AfterFunc 重新建立。 Timer 必須透過 NewTimer or AfterFunc 建立 Table list func AfterFunc : 建立一個 Timer 並在時間到後，執行 Func func NewTimer : 建立一個 Timer func (*Timer) Reset : 重設置 Timer func (*Timer) Stop : 命令 Timer 停止 範例 Timer 第一次到期為兩秒後, 到期後自動設定 t.Reset(10), 再度自動倒數 每次執行 t.Reset() 後, 到期, 都會重新設定 t.Reset() 按下 Enter 後, Timer 會直接中斷倒數, 並且再度重新執行 t.Reset() ctrl+c 停止運行">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Go】Time(一):Timer(定時器)">
+<meta name="twitter:description" content="type Timer https://golang.org/pkg/time/#Timer type Timer struct { C &amp;lt;-chan Time } Timer 類型是一種事件，當 Timer 到期，目前的時間會送到 C 中，除非 Timer 被 AfterFunc 重新建立。 Timer 必須透過 NewTimer or AfterFunc 建立 Table list func AfterFunc : 建立一個 Timer 並在時間到後，執行 Func func NewTimer : 建立一個 Timer func (*Timer) Reset : 重設置 Timer func (*Timer) Stop : 命令 Timer 停止 範例 Timer 第一次到期為兩秒後, 到期後自動設定 t.Reset(10), 再度自動倒數 每次執行 t.Reset() 後, 到期, 都會重新設定 t.Reset() 按下 Enter 後, Timer 會直接中斷倒數, 並且再度重新執行 t.Reset() ctrl+c 停止運行">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blogpost',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
+
+
+
+
+
+  <title>【Go】Time(一):Timer(定時器) | MAX 呼~</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blogpost/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX 呼~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blogpost/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blogpost/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/blogpost/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/14/Go-time(1)-timer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【Go】Time(一):Timer(定時器)
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-14T21:53:00+08:00">
+                2019-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="type-timer">type Timer</h1>
+<blockquote>
+  <p>https://golang.org/pkg/time/#Timer</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>type Timer struct {
+	C &lt;-chan Time
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>Timer 類型是一種事件，當 Timer 到期，目前的時間會送到 <code class="highlighter-rouge">C</code> 中，除非 Timer 被 <code class="highlighter-rouge">AfterFunc</code> 重新建立。</li>
+  <li>Timer 必須透過 NewTimer or AfterFunc 建立</li>
+</ul>
+
+<h2 id="table-list">Table list</h2>
+<ul>
+  <li><code class="highlighter-rouge">func AfterFunc</code> : 建立一個 Timer 並在時間到後，執行 Func</li>
+  <li><code class="highlighter-rouge">func NewTimer</code> : 建立一個 Timer</li>
+  <li><code class="highlighter-rouge">func (*Timer) Reset</code> : 重設置 Timer</li>
+  <li><code class="highlighter-rouge">func (*Timer) Stop</code> : 命令 Timer 停止</li>
+  <li>範例
+    <ul>
+      <li>Timer 第一次到期為兩秒後, 到期後自動設定 t.Reset(10), 再度自動倒數</li>
+      <li>每次執行 t.Reset() 後, 到期, 都會重新設定 t.Reset()</li>
+      <li>按下 Enter 後, Timer 會直接中斷倒數, 並且再度重新執行 t.Reset()</li>
+      <li>ctrl+c 停止運行</li>
+    </ul>
+  </li>
+</ul>
+
+<!--more-->
+
+<h2 id="func-afterfunc">func AfterFunc</h2>
+<blockquote>
+  <p><code class="highlighter-rouge">func AfterFunc(d Duration, f func()) *Timer</code></p>
+</blockquote>
+
+<ul>
+  <li><code class="highlighter-rouge">func AfterFunc</code> : 建立一個 Timer, 當時間到的時候，會呼叫 f() 在 Timer 自己的 goroutine 中。可以用 Stop 來停止。</li>
+  <li>若執行 stop, stop 並不會等待 f 完成後才停止, 若需要判斷 f 是否完成任務, 必須做其他的判斷處置.</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11</pre></td><td class="code"><pre class="highlight"><code>func main() {
+	var t *time.Timer
+	f := func() {
+		fmt.Printf("Expiration time : %v.\n", time.Now())
+		fmt.Printf("C`s len: %d\n", len(t.C))
+	}
+	t = time.AfterFunc(2*time.Second, f)
+
+	var stop string
+	fmt.Scanln(&amp;stop)
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="func-newtimer">func NewTimer</h2>
+<blockquote>
+  <p><code class="highlighter-rouge">func NewTimer(d Duration) *Timer</code></p>
+</blockquote>
+
+<ul>
+  <li><code class="highlighter-rouge">func NewTimer</code> : 建立一個 new Timer, 會將目前的時間送到 C 中 (C 是 Timer struct 的 channel)</li>
+  <li>所以可以透過 <code class="highlighter-rouge">&lt;-t.C</code> 來等待時間到期</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10</pre></td><td class="code"><pre class="highlight"><code>func main() {
+	// init
+	t := time.NewTimer(2 * time.Second)
+	// Current time
+	now := time.Now()
+	fmt.Printf("time : %v.\n", now)
+
+	expire := &lt;-t.C
+	fmt.Printf("time : %v.\n", expire)
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="func-timer-stop">func (*Timer) Stop</h2>
+<blockquote>
+  <p><code class="highlighter-rouge">func (t *Timer) Stop() bool</code></p>
+</blockquote>
+
+<ul>
+  <li><code class="highlighter-rouge">func (*Timer) Stop</code> : 用於’主動’停止計時器, 當 Timer 尚未停止的時候調用</li>
+  <li>若 timer 已經停止，則 t.Stop() 會返回 false</li>
+  <li>stop 並不會 close the channel, 為了防止不正確地讀取 channel, 所以為了要確保在呼叫 stop() 後 channel 是空的, 必須確認 stop() 的 return, 若是 false, 則必須讓 channel 為空。</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>if !t.Stop() {
+	&lt;-t.C // 釋放掉 channel 的物件
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>Stop() 並不會停止其他 Timer’s channel</li>
+  <li>對於透過 AfterFunc(d,f) 產生的 Timer, 若 t.Stop() 返回 false (代表 timer 已經過期, 且 f 已經在他自己的 goroutine 啟動), Stop 並不會等待 f 完成. 若需要知道 f 是否已經完成, 必須在 f 中做一些協調處理.</li>
+</ul>
+
+<h2 id="func-timer-reset">func (*Timer) Reset</h2>
+<blockquote>
+  <p><code class="highlighter-rouge">func (t *Timer) Reset(d Duration) bool</code></p>
+</blockquote>
+
+<ul>
+  <li>Reset 的調用, 有兩個條件
+    <ol>
+      <li>timer 必須停止或者過期</li>
+      <li>channel 必須為空</li>
+    </ol>
+  </li>
+  <li>Reset 的使用前, 若 Timer 的狀態是過期或已經停止, 則必須確定 t.C 的 channel 為空.</li>
+  <li>程式可以透過 <code class="highlighter-rouge">&lt;-t.C</code> 來判斷是否時間到期，此時 channel 為空, 在此狀況下, t.Reset() 可以直接被使用.</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11</pre></td><td class="code"><pre class="highlight"><code>func main() {
+	now := time.Now()
+	fmt.Printf("           time: %v.\n", now)
+
+	t := time.NewTimer(2 * time.Second)
+	expire := &lt;-t.C
+	fmt.Printf("Expiration time: %v.\n", expire)
+	t.Reset(5 * time.Second)
+	expire = &lt;-t.C
+	fmt.Printf("Expiration time: %v.\n", expire)
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>若程式沒有從 <code class="highlighter-rouge">&lt;-t.C</code> 中接收參數, 但 timer 卻已經使用 stop(), 此時必須讓 channel 為空, 才可以使用.</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>if !t.Stop() {
+	&lt;-t.C
+}
+t.Reset(d)
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="example">Example</h1>
+
+<blockquote>
+  <p>無法透過 go playground, 因為無法讀取 Enter 鍵</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48<br/>49<br/>50<br/>51<br/>52<br/>53<br/>54<br/>55<br/>56<br/>57<br/>58<br/>59<br/>60</pre></td><td class="code"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="n">import</span> <span class="p">(</span>
+	<span class="s2">"fmt"</span>
+	<span class="s2">"time"</span>
+<span class="p">)</span>
+
+<span class="n">type</span> <span class="n">TimerObj</span> <span class="n">struct</span> <span class="p">{</span>
+	<span class="n">timeStart</span>   <span class="n">time</span><span class="p">.</span><span class="n">Time</span>
+	<span class="n">resetTimeIs</span> <span class="n">time</span><span class="p">.</span><span class="n">Duration</span>
+	<span class="n">t</span>           <span class="n">time</span><span class="p">.</span><span class="n">Timer</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+
+	<span class="n">timerObj</span> <span class="p">:=</span> <span class="n">TimerObj</span><span class="p">{</span>
+		<span class="n">timeStart</span><span class="p">:</span>   <span class="n">time</span><span class="p">.</span><span class="n">Now</span><span class="p">(),</span>
+		<span class="n">resetTimeIs</span><span class="p">:</span> <span class="m">10</span><span class="p">,</span>
+		<span class="n">t</span><span class="p">:</span>           <span class="p">*</span><span class="n">time</span><span class="p">.</span><span class="n">NewTimer</span><span class="p">(</span><span class="m">2</span> <span class="p">*</span> <span class="n">time</span><span class="p">.</span><span class="n">Second</span><span class="p">),</span>
+	<span class="p">}</span>
+
+	<span class="n">c</span> <span class="p">:=</span> <span class="n">make</span><span class="p">(</span><span class="n">chan</span> <span class="k">string</span><span class="p">)</span>
+	<span class="n">go</span> <span class="n">func</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">for</span> <span class="p">{</span>
+			<span class="n">var</span> <span class="nf">stop</span> <span class="k">string</span>
+			<span class="n">fmt</span><span class="p">.</span><span class="n">Scanln</span><span class="p">(&amp;</span><span class="nf">stop</span><span class="p">)</span>
+			<span class="n">c</span> <span class="p">&lt;-</span> <span class="s2">"reset"</span>
+		<span class="p">}</span>
+	<span class="p">}()</span>
+
+	<span class="n">for</span> <span class="p">{</span>
+		<span class="n">time</span><span class="p">.</span><span class="nf">Sleep</span><span class="p">(</span><span class="m">1</span> <span class="p">*</span> <span class="n">time</span><span class="p">.</span><span class="n">Second</span><span class="p">)</span>
+		<span class="n">select</span> <span class="p">{</span>
+		<span class="k">case</span> <span class="p">&lt;-</span><span class="n">c</span><span class="p">:</span>
+			<span class="n">showCurrentTime</span><span class="p">(&amp;</span><span class="n">timerObj</span><span class="p">)</span>
+			<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">". Interrupt Timer!!!!!"</span><span class="p">)</span>
+			<span class="n">resetTimer</span><span class="p">(&amp;</span><span class="n">timerObj</span><span class="p">)</span>
+		<span class="k">case</span> <span class="p">&lt;-</span><span class="n">timerObj</span><span class="p">.</span><span class="n">t</span><span class="p">.</span><span class="n">C</span><span class="p">:</span> <span class="p">//</span> <span class="err">時間到期</span>
+			<span class="n">showCurrentTime</span><span class="p">(&amp;</span><span class="n">timerObj</span><span class="p">)</span>
+			<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">". Time up, auto reset Timer"</span><span class="p">)</span>
+			<span class="n">resetTimer</span><span class="p">(&amp;</span><span class="n">timerObj</span><span class="p">)</span>
+		<span class="n">default</span><span class="p">:</span>
+			<span class="n">showCurrentTime</span><span class="p">(&amp;</span><span class="n">timerObj</span><span class="p">)</span>
+			<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">()</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">showCurrentTime</span><span class="p">(</span><span class="n">timerObj</span> <span class="p">*</span><span class="n">TimerObj</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">"=====&gt; %v"</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="n">Now</span><span class="p">().</span><span class="n">Sub</span><span class="p">(</span><span class="n">timerObj</span><span class="p">.</span><span class="n">timeStart</span><span class="p">))</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">resetTimer</span><span class="p">(</span><span class="n">timerObj</span> <span class="p">*</span><span class="n">TimerObj</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">timerObj</span><span class="p">.</span><span class="n">t</span><span class="p">.</span><span class="nf">Stop</span><span class="p">()</span> <span class="p">{</span>
+		<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">"Timer Stop Success!!  "</span><span class="p">)</span>
+	<span class="p">}</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">"Timer Reset %v</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">timerObj</span><span class="p">.</span><span class="n">resetTimeIs</span><span class="p">*</span><span class="n">time</span><span class="p">.</span><span class="n">Second</span><span class="p">)</span>
+	<span class="n">timerObj</span><span class="p">.</span><span class="n">t</span><span class="p">.</span><span class="nf">Reset</span><span class="p">(</span><span class="n">timerObj</span><span class="p">.</span><span class="n">resetTimeIs</span> <span class="p">*</span> <span class="n">time</span><span class="p">.</span><span class="n">Second</span><span class="p">)</span>
+	<span class="n">timerObj</span><span class="p">.</span><span class="n">timeStart</span> <span class="p">=</span> <span class="n">time</span><span class="p">.</span><span class="n">Now</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>[執行結果]
+=====&gt; 1.002051028s
+=====&gt; 2.006385502s. Time up, auto reset Timer
+Timer Reset 10s
+=====&gt; 1.002283105s
+=====&gt; 2.005053556s
+=====&gt; 3.007041044s
+=====&gt; 4.009081465s</p>
+
+<p>=====&gt; 5.010377978s. Interrupt Timer!!!!!
+Timer Stop Success!!  Timer Reset 10s
+=====&gt; 1.003484026s
+^Csignal: interrupt</p>
+
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/blogpost/tag/#/Golang" rel="tag"># Golang</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blogpost/golang/2019/09/11/Go-DeferPanicRecover/" rel="prev" title="【Go】Defer, Panic & Recover">
+                【Go】Defer, Panic & Recover <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/blogpost/assets/images/avatar3.png"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/blogpost/archives/">
+                <span class="site-state-item-count">105</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/blogpost/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/blogpost/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#type-timer"> <span class="nav-text">type Timer</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#table-list"> <span class="nav-text">Table list</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#func-afterfunc"> <span class="nav-text">func AfterFunc</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#func-newtimer"> <span class="nav-text">func NewTimer</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#func-timer-stop"> <span class="nav-text">func (*Timer) Stop</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#func-timer-reset"> <span class="nav-text">func (*Timer) Reset</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#example"> <span class="nav-text">Example</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

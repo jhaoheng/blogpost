@@ -281,6 +281,276 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/11/10/erlanghello-erlang/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/11/10/erlanghello-erlang/" itemprop="url">
+                【erlang】Hello Erlang!
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-11-10T22:59:00+08:00">
+                2016-11-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="hello_erlang_1">hello_erlang_1</h1>
+
+<ul>
+  <li>hello.erl
+    <ul>
+      <li>code
+        <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>-module(hello).
+-export([print/0]).
+print() -&gt; 
+io:format("World!~n").
+</code></pre></td></tr></tbody></table></div>        </div>
+      </li>
+      <li>解析
+        <ul>
+          <li><code class="highlighter-rouge">-module</code></li>
+          <li><code class="highlighter-rouge">-export</code></li>
+          <li><code class="highlighter-rouge">[print/0]</code> : 函數名稱 print , 參數 0 個</li>
+          <li><code class="highlighter-rouge">io:format</code> : 格式化標準輸出函數，參考 <a href="http://erlang.org/doc/man/io.html#fread-2">io : Available control sequences:</a>
+            <ul>
+              <li><code class="highlighter-rouge">~n</code> : Writes a new line.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>test
+    <ul>
+      <li>流程
+        <ol>
+          <li><code class="highlighter-rouge">erl</code></li>
+          <li><code class="highlighter-rouge">pwd().</code></li>
+          <li><code class="highlighter-rouge">ls().</code></li>
+          <li><code class="highlighter-rouge">c(hello).</code> : hello 為 hello.erl 的檔案名稱, c() 為編譯此檔案 -&gt; 會產生 hello.beam 的執行擋</li>
+          <li><code class="highlighter-rouge">hello:print().</code></li>
+        </ol>
+      </li>
+      <li>基本
+        <ul>
+          <li><code class="highlighter-rouge">.</code> : 每一句皆以此，作為一個斷句</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="hello_erlang_2">hello_erlang_2</h1>
+
+<ul>
+  <li>hello2.erl
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>-module(hello2).
+-compile(export_all).
+square(N) -&gt; N*N.
+sum([]) -&gt; 0;
+sum([Num|Ns]) -&gt; Num + sum(Ns).
+sum_square([]) -&gt; 0;
+sum_square([Num|Ns]) -&gt; square(Num) + sum_square(Ns).
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>test
+    <ul>
+      <li><code class="highlighter-rouge">hello2:square(2).</code> : 4</li>
+      <li><code class="highlighter-rouge">hello2:sum([1,2,3,4,5]).</code> : 15</li>
+      <li><code class="highlighter-rouge">;</code> : 代表 or</li>
+      <li><code class="highlighter-rouge">,</code> : 代表 and</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="hello_erlang_3">hello_erlang_3</h1>
+
+<ul>
+  <li>hello3.erl
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>solve(1) -&gt; [1];
+solve(N) when N rem 2 == 0 -&gt; [N|solve(N div 2)];
+solve(N) -&gt; [N|solve(N*3+1)].
+set(N) 	-&gt; {ok, [H|T] = solve(N)}.
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+</ul>
+
+<h1 id="hello_erlang_4--regular-expressions">hello_erlang_4 : regular expressions</h1>
+
+<ul>
+  <li>hello4.erl
+```
+-module(do).
+-compile(export_all).</li>
+</ul>
+
+<p>multire([],_) -&gt;
+    nomatch;
+multire([RE|RegExps],String) -&gt;
+    case re:run(String,RE,[{capture,none}]) of
+    match -&gt;
+        RE;
+    nomatch -&gt;
+        multire(RegExps,String)
+    end.</p>
+
+<p>% 開頭為 Hello, 結尾有 world, 均符合
+test(Foo) -&gt;
+    test2(multire([“^Hello”,”world$”,”^….$”],Foo),Foo).</p>
+
+<p>test2(“^Hello”,Foo) -&gt;
+    io:format(“~p matched the hello pattern~n”,[Foo]);
+test2(“world$”,Foo) -&gt;
+    io:format(“~p matched the world pattern~n”,[Foo]);
+test2(“^….$”,Foo) -&gt;
+    io:format(“~p matched the four chars pattern~n”,[Foo]);
+test2(nomatch,Foo) -&gt;
+    io:format(“~p failed to match~n”,[Foo]).</p>
+
+<p>-define (Email_pattern, “\b[a-zA-Z0-9.!#$%&amp;’<em>+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)</em>\b”).
+-define (Mac_address_pattern, “^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})$”).</p>
+
+<p>checkPattern(Foo) -&gt; 
+  checkPattern2(multire([[?Email_pattern], [?Mac_address_pattern]],Foo),Foo).</p>
+
+<p>checkPattern2([?Email_pattern], Foo) -&gt;
+  io:format(“email format : ~p ~n”, [Foo]);
+checkPattern2([?Mac_address_pattern], Foo) -&gt;
+  io:format(“device format : ~p ~n”, [Foo]);
+checkPattern2(nomatch, Foo) -&gt;
+  io:format(“nomatch : ~p ~n”, [Foo]).
+```</p>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/11/10/erlanghello-erlang/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/10/24/gclouddocker-push-pull-delete/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2391,249 +2661,6 @@ if (provisioningProfile) {
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/09/07/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/09/07/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/" itemprop="url">
-                【MQTT】Login mqtt:8883 SSL/TLS with certificate authority (CA)
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-07T02:01:00+08:00">
-                2016-09-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="login-mqtt8883-ssltls-certificate-authority-ca">login mqtt:8883 SSL/TLS (certificate authority (CA))</h1>
-
-<ul>
-  <li><a href="https://github.com/jhaoheng/emqttd_test">github</a></li>
-</ul>
-
-<h2 id="required-file">required file</h2>
-
-<p>use below file and cmd[mosquitto_sub] to connect MQTT:8883</p>
-
-<ul>
-  <li>ca.crt – The CA (Certificate Authority, who published the host certificate) public certificate.</li>
-  <li>ssl.crt – The hostname, public certificate.</li>
-  <li>ssl.key – The hostname, private key.</li>
-</ul>
-
-<h2 id="generate_1--use-generate-cash-to-generate">Generate_1 : use <strong>generate-CA.sh</strong> to generate</h2>
-
-<ol>
-  <li>Download generate-CA.sh and create local server CA, and will generate….
-    <ul>
-      <li>ca.srl / ca.crt / ca.key</li>
-      <li>xxx is local server name, xxx.crt / xxx.csr / xxx.key</li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">cp xxx.crt ssl.crt</code> and <code class="highlighter-rouge">cp xxx.key ssl.key</code></li>
-</ol>
-
-<h2 id="generate_2--use-cmd-openssl-to-generate">Generate_2 : use cmd [openssl] to generate</h2>
-
-<ol>
-  <li>Generate ca.crt and ca.key
-    <ul>
-      <li><code class="highlighter-rouge">openssl req -newkey rsa:2048 -x509 -nodes -sha512 -days 365 -extensions v3_ca -keyout ca.key -out ca.crt</code></li>
-      <li>check : <code class="highlighter-rouge">openssl x509 -in ca.crt -nameopt multiline -subject -noout</code></li>
-    </ul>
-  </li>
-  <li>Generate server.key
-    <ul>
-      <li><code class="highlighter-rouge">openssl genrsa -out server.key 2048</code></li>
-    </ul>
-  </li>
-  <li>Generate server.csr
-    <ul>
-      <li><code class="highlighter-rouge">openssl req -new -sha512 -out server.csr -key server.key</code></li>
-    </ul>
-  </li>
-  <li>Generate server.crt by server.csr, ca.crt, cae.key, ca.srl
-    <ul>
-      <li><code class="highlighter-rouge">openssl x509 -req -sha512 -in server.csr -CA ca.crt -CAkey ca.key -CAcreateserial -CAserial ca.srl -out server.crt -days 365 -extensions JPMextensions</code></li>
-      <li>check : <code class="highlighter-rouge">openssl x509 -in server.crt -nameopt multiline -subject -noout</code></li>
-    </ul>
-  </li>
-</ol>
-
-<p>note : <code class="highlighter-rouge">ca.crt</code> and <code class="highlighter-rouge">server.crt</code>, their <code class="highlighter-rouge">commonName</code> should not be the same.</p>
-
-<h2 id="verify-check-servercrt-is-generated-by-cacrt">Verify: check server.crt is generated by ca.crt</h2>
-
-<ul>
-  <li><code class="highlighter-rouge">openssl verify -CAfile ca.crt server.crt</code>
-    <ul>
-      <li>output ssl.crt: OK</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="test">Test</h2>
-
-<ol>
-  <li><code class="highlighter-rouge">mv ssl* to /emqttd/etc/ssl/</code></li>
-  <li>Test : <code class="highlighter-rouge">mosquitto_sub -h [server_ip] -p 8883 -t [topic] -i [clientId] -u [username] -P [password] --cafile ca.crt</code>
-    <ul>
-      <li>Notice where is your <code class="highlighter-rouge">ca.crt</code> file</li>
-    </ul>
-  </li>
-  <li>go to your emqttd console, emqttd:18083, and watch Clients</li>
-</ol>
-
-<h2 id="ex--servercrt">ex : server.crt</h2>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8</pre></td><td class="code"><pre class="highlight"><code>subject= 
-    countryName               = TW
-    stateOrProvinceName       = TAIWAN
-    localityName              = TAIPEI
-    organizationName          = COMPANY
-    organizationalUnitName    = DEV
-    commonName                = dev-mqtt.com
-    emailAddress              = max.hu@mail
-</code></pre></td></tr></tbody></table></div></div>
-
-<h2 id="ex--cacrt">ex : ca.crt</h2>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>subject= 
-    commonName                = An MQTT broker
-    organizationName          = COMPANY
-    organizationalUnitName    = DEV
-    emailAddress              = max.hu@mail
-</code></pre></td></tr></tbody></table></div></div>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/09/07/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2695,7 +2722,7 @@ if (provisioningProfile) {
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-count">105</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

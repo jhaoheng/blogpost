@@ -281,6 +281,220 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/06/20/mqtttopic-level/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/06/20/mqtttopic-level/" itemprop="url">
+                【MQTT】Topic Level
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-20T13:16:00+08:00">
+                2016-06-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="mqtt-wildcards萬用字元">MQTT Wildcards(萬用字元)</h1>
+
+<p>透過 Wildcards 可以一次訂閱想要的主題，Wildcards 只能運用於 sub 不能用於 pub</p>
+
+<p><code class="highlighter-rouge">myhome/ground/room/temperature</code></p>
+
+<p>每一個 <code class="highlighter-rouge">/</code> 的兩邊，代表的兩個 topic level</p>
+
+<h2 id="single-lever---單一層級萬用字元">Single Lever : + (單一層級萬用字元)</h2>
+
+<p>Single Level 是指取代此一層的主題(topic level)，<code class="highlighter-rouge">+</code> 代表此 topic level 有著 single level wildcard 的特性</p>
+
+<p><code class="highlighter-rouge">myhome/groundfloor/+/temperature</code></p>
+
+<p>在此標誌下，以下均為相同的主題</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>myhome/groundfloor/a/temperature
+myhome/groundfloor/b/temperature
+myhome/groundfloor/c/temperature
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>以下為不相同的訂閱主題</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>myhome/ground/a/temperature
+myhome/groundfloor/a/brightness
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>ex2:</p>
+
+<ul>
+  <li><code class="highlighter-rouge">home/[position]/[devices]/temperature</code> : 訂閱’家中單一房間，單一個 device 的溫度’</li>
+  <li><code class="highlighter-rouge">home/+/+/temperature</code> : 訂閱’家中所有房間中的裝置的溫度’</li>
+</ul>
+
+<h2 id="multi-level-">Multi Level :</h2>
+
+<p>Multi Level 總是放在最後 : <code class="highlighter-rouge">myhome/groundfloor/#</code></p>
+
+<p>以下為相同的主題</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>myhome/groundfloor/livingroom/temperature
+myhome/groundfloor/livingroom/brightness
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>以下為不相同的主題</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>myhome/outside/temperature
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="topics-beginning-with-">Topics beginning with $</h2>
+
+<p>這是系統預設的識別符，專門 publish 給系統，client 無法使用</p>
+
+<h1 id="注意">注意</h1>
+<ul>
+  <li><code class="highlighter-rouge">/</code> 符號，別放在第一位，ex : <code class="highlighter-rouge">/ex1/ex2</code></li>
+  <li>在 topic level 中，不要空白</li>
+  <li>保持你的 topic level 簡短與簡單明瞭</li>
+  <li>使用 ASC II 字符，並免使用無法印出的符號</li>
+  <li>透過在 topic level 中，使用 clientId，可有效區分『消息來源』與『訊息區別』
+    <ul>
+      <li>client1 只能被授權 publish 透過 <code class="highlighter-rouge">client1/status</code>，不被允許 publish 給 <code class="highlighter-rouge">client2/status</code></li>
+    </ul>
+  </li>
+  <li>不使用 <code class="highlighter-rouge">#</code></li>
+  <li>注意擴展性、延展性</li>
+  <li>使用特定的 topics，取代攏統的設定
+    <ul>
+      <li>使用 <code class="highlighter-rouge">myhome/livingroom/temperature</code>,<code class="highlighter-rouge">myhome/livingroom/brightness</code> 與 <code class="highlighter-rouge">myhome/livingroom/humidity</code>，避免使用 <code class="highlighter-rouge">myhome/livingroom/</code> 來接收所有的訊息</li>
+    </ul>
+  </li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/06/20/mqtttopic-level/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/xcode%20ios/2016/06/13/xcodecreate-framework/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1994,198 +2208,6 @@ I want to teach <strong>Intermediate</strong> <strong>Swift 2.2</strong> to <str
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/ios/2016/05/02/ios-disassembler/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/ios/2016/05/02/ios-disassembler/" itemprop="url">
-                【iOS】反組譯工具
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-02T11:57:00+08:00">
-                2016-05-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/ios" itemprop="url" rel="index">
-                    <span itemprop="name">ios</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="ios-app-反組譯">ios app 反組譯</h1>
-
-<h2 id="事前確認">事前確認</h2>
-<ul>
-  <li>該 app 是否從 app store 上取得</li>
-</ul>
-
-<h2 id="工具">工具</h2>
-
-<ul>
-  <li>解開 app store 的加密層工具
-    <ul>
-      <li>clutch</li>
-      <li>dumpdecrypted</li>
-      <li>gdb</li>
-      <li>AppCrackr</li>
-    </ul>
-  </li>
-  <li>反組譯工具
-    <ul>
-      <li>class-dump</li>
-      <li>Hopper Disassembler</li>
-    </ul>
-  </li>
-</ul>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/ios/2016/05/02/ios-disassembler/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2247,7 +2269,7 @@ I want to teach <strong>Intermediate</strong> <strong>Swift 2.2</strong> to <str
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-count">105</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

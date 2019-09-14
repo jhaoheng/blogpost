@@ -186,7 +186,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/blogpost/"  class="brand" rel="start">
+      <a href="/blogpost/" class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">MAX 呼~</span>
         <span class="logo-line-after"><i></i></span>
@@ -218,7 +218,7 @@
         <li class="menu-item menu-item-home">
           <a href="/blogpost/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
             
             Home
           </a>
@@ -230,7 +230,7 @@
         <li class="menu-item menu-item-archives">
           <a href="/blogpost/archives/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
             
             Archives
           </a>
@@ -242,7 +242,7 @@
         <li class="menu-item menu-item-tags">
           <a href="/blogpost/tags/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
             
             Tags
           </a>
@@ -270,6 +270,226 @@
 
 
 <section id="posts" class="posts-expand">
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/16/phalconsql/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/07/16/phalconsql/" itemprop="url">
+                【phalcon】sql
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-16T15:44:00+08:00">
+                2016-07-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="使用-phql--avoid-sql-injection">使用 phql + Avoid sql injection</h1>
+
+<h2 id="select">select</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7</pre></td>
+<td class="code"><pre class="highlight"><code>$conditions = "Users.id = :id:";
+$parameters = array(
+    "aid" =&gt; '31'
+);
+
+$phql = "SELECT b.* FROM Users as a RIGHT JOIN Devices as b on a.id=:aid:";
+$result = $app-&gt;modelsManager-&gt;executeQuery($phql,$parameters);
+</code></pre></td>
+</tr></tbody></table></div></div>
+<ul>
+  <li>其中的 <code class="highlighter-rouge">$app</code> 為 Micro 建立的物件</li>
+  <li>
+<code class="highlighter-rouge">modelsManager</code> 為 model 的 method</li>
+</ul>
+
+<h2 id="insert">insert</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11</pre></td>
+<td class="code"><pre class="highlight"><code>$parameters = array(
+    "key" =&gt; "123",
+    "user_id" =&gt; 3,
+);
+
+$phql = "INSERT INTO tableName (key, user_id) VALUES (:key:, :user_id:)";
+$result = $app-&gt;modelsManager-&gt;executeQuery($phql, $parameters);
+
+if ($result==true) {
+	echo "success\n\r";
+}
+</code></pre></td>
+</tr></tbody></table></div></div>
+
+<h1 id="使用-抽象層-建立-sql-語法記錄-log">使用 抽象層 建立 sql 語法，記錄 log</h1>
+
+<ul>
+  <li>因若透過抽象層建立 sql，很難直接看出 sql 是否正確，可透過 phalcon 建立 log，並將 db 的所有動作記錄</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27</pre></td>
+<td class="code"><pre class="highlight"><code>use Phalcon\Mvc\Model\Criteria;
+use Phalcon\Logger;
+use Phalcon\Logger\Adapter\File as FileLogger;
+use Phalcon\Events\Manager;
+
+$logger = new FileLogger("logs/debug.log");
+$eventsManager = new Manager();
+$connection = $app['db'];
+$eventsManager-&gt;attach('db', function ($event, $connection) use ($logger) {
+        if ($event-&gt;getType() == 'beforeQuery') {
+			$logger-&gt;log($connection-&gt;getSQLStatement(), Logger::INFO);
+        }
+});
+$app['db']-&gt;setEventsManager($eventsManager);// 儲存所有 db 動作
+
+$conditions = "Users.id = :id:";
+$parameters = array(
+    "id" =&gt; '31'
+);
+
+$result = $app-&gt;modelsManager-&gt;createBuilder()
+	-&gt;columns(array('Devices.*'))
+	-&gt;from('Devices')
+	-&gt;rightJoin('Users')
+	-&gt;where($conditions,$parameters)
+	-&gt;getQuery()
+	-&gt;execute();
+</code></pre></td>
+</tr></tbody></table></div></div>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/07/16/phalconsql/#more" rel="contents">
+              Read more »
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
   
     
     
@@ -374,7 +594,8 @@
   <h1 id="dependency-injectionservice-location">Dependency Injection/Service Location</h1>
 
 <ul>
-  <li><code class="highlighter-rouge">Phalcon\Di</code> 是一個實現 <code class="highlighter-rouge">Dependency Injection/Service Location</code> 的組件，而且它本身就是一個裝載它們的容器。</li>
+  <li>
+<code class="highlighter-rouge">Phalcon\Di</code> 是一個實現 <code class="highlighter-rouge">Dependency Injection/Service Location</code> 的組件，而且它本身就是一個裝載它們的容器。</li>
   <li>透過 <code class="highlighter-rouge">Phalcon\Di</code> 可以註冊許多的服務，放在 Di 中，也可以透過 Di 進行傳遞參數的行為
     <ul>
       <li>可以很容易的使用自己建立的組件，或者第三方組件，還有進行替換的動作
@@ -403,9 +624,13 @@
 
 <ul>
   <li>初始化後，才可以使用 Di set 與 get
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Di
+    <div class="highlighter-rouge">
+<div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2</pre></td>
+<td class="code"><pre class="highlight"><code>use Phalcon\Di
 $di = new Phalcon\Di();
-</code></pre></td></tr></tbody></table></div>    </div>
+</code></pre></td>
+</tr></tbody></table></div>    </div>
   </li>
   <li>初始化後，若要在 mvc 或者其他的控制器中使用該 Di
     <ul>
@@ -414,7 +639,8 @@ $di = new Phalcon\Di();
           <li><code class="highlighter-rouge">$application = new \Phalcon\Mvc\Application($di);</code></li>
         </ul>
       </li>
-      <li>並 <code class="highlighter-rouge">echo $application-&gt;handle()-&gt;getContent();</code></li>
+      <li>並 <code class="highlighter-rouge">echo $application-&gt;handle()-&gt;getContent();</code>
+</li>
     </ul>
   </li>
 </ul>
@@ -423,16 +649,27 @@ $di = new Phalcon\Di();
 
 <ul>
   <li>第一種
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>$di-&gt;set('request', 'Phalcon\Http\Request');
-</code></pre></td></tr></tbody></table></div>    </div>
+    <div class="highlighter-rouge">
+<div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1</pre></td>
+<td class="code"><pre class="highlight"><code>$di-&gt;set('request', 'Phalcon\Http\Request');
+</code></pre></td>
+</tr></tbody></table></div>    </div>
   </li>
   <li>第二種
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Http\Request;  
+    <div class="highlighter-rouge">
+<div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2</pre></td>
+<td class="code"><pre class="highlight"><code>use Phalcon\Http\Request;  
 $di-&gt;set('request', new Request());
-</code></pre></td></tr></tbody></table></div>    </div>
+</code></pre></td>
+</tr></tbody></table></div>    </div>
   </li>
   <li>第三種：通過外部參數 <code class="highlighter-rouge">$config</code> 變更 di 中的設定。透過 use 協助
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql;
+    <div class="highlighter-rouge">
+<div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12</pre></td>
+<td class="code"><pre class="highlight"><code>use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql;
 // 把當前域的$config變量傳遞給匿名函數使用
 $di-&gt;set("db", function () use ($config) {
   return new PdoMysql(
@@ -444,7 +681,8 @@ $di-&gt;set("db", function () use ($config) {
       )
   );
 });
-</code></pre></td></tr></tbody></table></div>    </div>
+</code></pre></td>
+</tr></tbody></table></div>    </div>
   </li>
   <li>其他還有 : 範例至官方參考
     <ul>
@@ -461,23 +699,37 @@ $di-&gt;set("db", function () use ($config) {
 
 <ul>
   <li>在 di 中設定好 request
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>$di = new Phalcon\Di();
+    <div class="highlighter-rouge">
+<div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3<br>4</pre></td>
+<td class="code"><pre class="highlight"><code>$di = new Phalcon\Di();
 $di-&gt;set("request", 'Phalcon\Http\Request'); // 第一個參數是『類別名稱』，第二個是『definition』
 // use Phalcon\Http\Request; 使用這兩種方式建立服務也行
 // $di-&gt;set("request", new Request()); 
-</code></pre></td></tr></tbody></table></div>    </div>
+</code></pre></td>
+</tr></tbody></table></div>    </div>
   </li>
-  <li><code class="highlighter-rouge">&lt;?php $request = $di-&gt;get("request");</code> or <code class="highlighter-rouge">$request = $di-&gt;getRequest();</code></li>
+  <li>
+<code class="highlighter-rouge">&lt;?php $request = $di-&gt;get("request");</code> or <code class="highlighter-rouge">$request = $di-&gt;getRequest();</code>
+</li>
   <li>通過容器的方式傳遞參數
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>$component = $di-&gt;get("MyComponent", array("some-parameter", "other"));
-</code></pre></td></tr></tbody></table></div>    </div>
+    <div class="highlighter-rouge">
+<div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1</pre></td>
+<td class="code"><pre class="highlight"><code>$component = $di-&gt;get("MyComponent", array("some-parameter", "other"));
+</code></pre></td>
+</tr></tbody></table></div>    </div>
   </li>
 </ul>
 
 <h2 id="共享服務shared-services">共享服務（Shared services）</h2>
 <ul>
-  <li><code class="highlighter-rouge">setShared</code> : 意指可以被註冊成 共享，意味被解析後，此實例將被保存在系統中，每次請求都可以從系統中找回，無需從新註冊或者重新解析
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Session\Adapter\Files as SessionFiles;
+  <li>
+<code class="highlighter-rouge">setShared</code> : 意指可以被註冊成 共享，意味被解析後，此實例將被保存在系統中，每次請求都可以從系統中找回，無需從新註冊或者重新解析
+    <div class="highlighter-rouge">
+<div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</pre></td>
+<td class="code"><pre class="highlight"><code>use Phalcon\Session\Adapter\Files as SessionFiles;
 // 把session服務註冊成「shared」類型
 $di-&gt;setShared('session', function () {
   $session = new SessionFiles();
@@ -486,7 +738,8 @@ $di-&gt;setShared('session', function () {
 });
 $session = $di-&gt;get('session'); // 第一次獲取session服務時，session服務將實例化
 $session = $di-&gt;getSession();   // 第二次獲取時，不再實例化，直接返回第一次實例化的對象
-</code></pre></td></tr></tbody></table></div>    </div>
+</code></pre></td>
+</tr></tbody></table></div>    </div>
   </li>
   <li>如果服務註冊時，並非註冊成 shared 時，又想從 Di 中獲取 shared 的 instance，可使用 <code class="highlighter-rouge">getShared</code>
     <ul>
@@ -503,11 +756,15 @@ $session = $di-&gt;getSession();   // 第二次獲取時，不再實例化，直
 
 <ul>
   <li>當服務尚未被註冊時（Di 找不到相同名稱的服務），則可以在當下設定該服務
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>$di-&gt;set('IndexController', function () {
+    <div class="highlighter-rouge">
+<div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3<br>4</pre></td>
+<td class="code"><pre class="highlight"><code>$di-&gt;set('IndexController', function () {
   $component = new Component();
   return $component;
 }, true);
-</code></pre></td></tr></tbody></table></div>    </div>
+</code></pre></td>
+</tr></tbody></table></div>    </div>
   </li>
   <li>通過此方法，可以隨意註冊一個沒有被定義過的服務，甚至有同樣的服務內容，卻用不同的服務名稱
     <ul>
@@ -527,13 +784,16 @@ $session = $di-&gt;getSession();   // 第二次獲取時，不再實例化，直
 <ul>
   <li>某些服務應用於每次的 request，如此可能會產生重複的解析，故放入 Di 前，先解析一次後，再放入 Di 中，可稍微提升效能
     <ul>
-      <li>ex : <code class="highlighter-rouge">$router = new MyRouter();</code></li>
+      <li>ex : <code class="highlighter-rouge">$router = new MyRouter();</code>
+</li>
     </ul>
   </li>
   <li>通過 Di 的服務設定，就不用重新再 new 一次（把已解析的對象設置到註冊服務中）
     <ul>
-      <li>ex : <code class="highlighter-rouge">$di-&gt;set('router', $router);</code></li>
-      <li>ex : <code class="highlighter-rouge">$di-&gt;get('router');</code></li>
+      <li>ex : <code class="highlighter-rouge">$di-&gt;set('router', $router);</code>
+</li>
+      <li>ex : <code class="highlighter-rouge">$di-&gt;get('router');</code>
+</li>
     </ul>
   </li>
   <li>Q:不確定這種方式跟 <code class="highlighter-rouge">shared</code> 差別倒底在哪</li>
@@ -543,24 +803,35 @@ $session = $di-&gt;getSession();   // 第二次獲取時，不再實例化，直
 
 <ul>
   <li>透過獨立的文件，設定服務內容
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>$di-&gt;set('router', function () {
+    <div class="highlighter-rouge">
+<div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3</pre></td>
+<td class="code"><pre class="highlight"><code>$di-&gt;set('router', function () {
   return include "../app/config/routes.php";
 });
-</code></pre></td></tr></tbody></table></div>    </div>
+</code></pre></td>
+</tr></tbody></table></div>    </div>
   </li>
   <li>在 routes.php 中
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>$router = new MyRouter();
+    <div class="highlighter-rouge">
+<div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3</pre></td>
+<td class="code"><pre class="highlight"><code>$router = new MyRouter();
 $router-&gt;post('/login');
 return $router;
-</code></pre></td></tr></tbody></table></div>    </div>
+</code></pre></td>
+</tr></tbody></table></div>    </div>
   </li>
   <li>使用此方式，可以簡化需設定的服務內容</li>
 </ul>
 
 <h2 id="使用靜態方法存取-diaccessing-the-di-in-a-static-way">使用靜態方法存取 Di（Accessing the DI in a static way）</h2>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Di;
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2</pre></td>
+<td class="code"><pre class="highlight"><code>use Phalcon\Di;
 $session = Di::getDefault()-&gt;getSession();
-</code></pre></td></tr></tbody></table></div></div>
+</code></pre></td>
+</tr></tbody></table></div></div>
 
 <h2 id="factory-default-di">Factory Default DI</h2>
 
@@ -586,7 +857,7 @@ $session = Di::getDefault()-&gt;getSession();
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/07/12/phalcondi/#more" rel="contents">
-              Read more &raquo;
+              Read more »
             </a>
           </div>
           <!--/noindex-->
@@ -734,7 +1005,8 @@ $session = Di::getDefault()-&gt;getSession();
 <h2 id="版本">版本</h2>
 
 <ul>
-  <li>執行 <code class="highlighter-rouge">phalcon</code> 確認版本 : <code class="highlighter-rouge">Phalcon DevTools (2.0.13)</code></li>
+  <li>執行 <code class="highlighter-rouge">phalcon</code> 確認版本 : <code class="highlighter-rouge">Phalcon DevTools (2.0.13)</code>
+</li>
 </ul>
 
 <h2 id="建立專案">建立專案</h2>
@@ -742,13 +1014,15 @@ $session = Di::getDefault()-&gt;getSession();
 <ul>
   <li>快速建立一個基本的 project : <code class="highlighter-rouge">phalcon create-project store</code>
     <ul>
-      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code></li>
+      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code>
+</li>
     </ul>
   </li>
   <li>在非 phalcon direction，只能使用 <code class="highlighter-rouge">phalcon project</code> 的指令建立 project 的結構</li>
   <li>在該 project 下，可以使用其他的指令
     <ul>
-      <li><code class="highlighter-rouge">phalcon webtools enable</code>
+      <li>
+<code class="highlighter-rouge">phalcon webtools enable</code>
         <ul>
           <li>啟用 web 介面的 phalcon 編輯器</li>
           <li><code class="highlighter-rouge">http://[localhost]/[project_name]/webtools.php</code></li>
@@ -786,11 +1060,13 @@ $session = Di::getDefault()-&gt;getSession();
           <li><code class="highlighter-rouge">vim php.ini</code></li>
           <li>搜尋 <code class="highlighter-rouge">mysql.default_socket</code>
             <ul>
-              <li>因我使用 mamp 所以填入 : <code class="highlighter-rouge">/Applications/MAMP/tmp/mysql/mysql.sock</code></li>
+              <li>因我使用 mamp 所以填入 : <code class="highlighter-rouge">/Applications/MAMP/tmp/mysql/mysql.sock</code>
+</li>
               <li>查詢 socket
                 <ul>
                   <li><code class="highlighter-rouge">mysql -u root -p</code></li>
-                  <li><code class="highlighter-rouge">show variables like '%socket%';</code> 填入該路徑即可</li>
+                  <li>
+<code class="highlighter-rouge">show variables like '%socket%';</code> 填入該路徑即可</li>
                 </ul>
               </li>
             </ul>
@@ -810,7 +1086,8 @@ $session = Di::getDefault()-&gt;getSession();
       <li>Notice : 注意 model 產生時，必須要有對應的 table-name</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">phalcon scaffold --table-name products</code> 會產生
+  <li>
+<code class="highlighter-rouge">phalcon scaffold --table-name products</code> 會產生
     <ul>
       <li>app/controllers/ProductsController.php</li>
       <li>app/models/Products.php</li>
@@ -827,15 +1104,17 @@ $session = Di::getDefault()-&gt;getSession();
 
 <ul>
   <li>透過 web 的介面，進行操作 model / controller</li>
-  <li>路徑 : <code class="highlighter-rouge">http://[localhost:port]/store/webtools.php</code></li>
-  <li>啟用 : <code class="highlighter-rouge">phalcon webtools --action=enable</code></li>
+  <li>路徑 : <code class="highlighter-rouge">http://[localhost:port]/store/webtools.php</code>
+</li>
+  <li>啟用 : <code class="highlighter-rouge">phalcon webtools --action=enable</code>
+</li>
 </ul>
 
 
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/07/11/phalcondevelop-tool/#more" rel="contents">
-              Read more &raquo;
+              Read more »
             </a>
           </div>
           <!--/noindex-->
@@ -934,7 +1213,7 @@ $session = Di::getDefault()-&gt;getSession();
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -1015,7 +1294,8 @@ $session = Di::getDefault()-&gt;getSession();
 <h2 id="check">check</h2>
 
 <ol>
-  <li><code class="highlighter-rouge">phpinfo();</code>
+  <li>
+<code class="highlighter-rouge">phpinfo();</code>
     <ul>
       <li>找 phalcon extension，沒意外的話是 2.0.13</li>
     </ul>
@@ -1023,7 +1303,9 @@ $session = Di::getDefault()-&gt;getSession();
   <li>安裝環境</li>
 </ol>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>環境
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9</pre></td>
+<td class="code"><pre class="highlight"><code>環境
 - `php -m | grep -i phalcon`
   - if output `phalcon` mean it is ok to use phalcon cmd
 - `apachectl -v`
@@ -1032,21 +1314,24 @@ $session = Di::getDefault()-&gt;getSession();
   - output : `php 5.6.23`
 - `mysql --version`
   - output : `mysql ver 14.14`
-</code></pre></td></tr></tbody></table></div></div>
+</code></pre></td>
+</tr></tbody></table></div></div>
 
 <h2 id="troubleshoot">troubleshoot</h2>
 
 <ol>
   <li>若 gcc 編譯失敗，<code class="highlighter-rouge">free -g</code>，查看 memory or swap 是否有 1g 可供 compile
     <ul>
-      <li>1g memory <code class="highlighter-rouge">https://github.com/phalcon/cphalcon/issues/10478</code></li>
+      <li>1g memory <code class="highlighter-rouge">https://github.com/phalcon/cphalcon/issues/10478</code>
+</li>
     </ul>
   </li>
   <li>因為目前僅支援 5.4/5.5/5.6 版本，故如果用 7.x 版本編譯時，會產生名稱錯誤</li>
   <li>設定 <code class="highlighter-rouge">extension=phalcon.so</code>，出現 <code class="highlighter-rouge">PHP Warning:  Module 'phalcon' already loaded in Unknown on line 0</code>
     <ul>
       <li><a href="http://www.somacon.com/p520.php">info</a></li>
-      <li>在 php.ini 中，將 <code class="highlighter-rouge">extension=phalcon.so</code> 前面加 <code class="highlighter-rouge">;</code> -&gt; <code class="highlighter-rouge">;extension=phalcon.so</code></li>
+      <li>在 php.ini 中，將 <code class="highlighter-rouge">extension=phalcon.so</code> 前面加 <code class="highlighter-rouge">;</code> -&gt; <code class="highlighter-rouge">;extension=phalcon.so</code>
+</li>
       <li>執行 <code class="highlighter-rouge">php -m | grep -i phalcon</code>，正常</li>
     </ul>
   </li>
@@ -1055,21 +1340,27 @@ $session = Di::getDefault()-&gt;getSession();
 <h1 id="二安裝-phalcon-develop-tool">二、安裝 Phalcon develop-tool</h1>
 
 <ul>
-  <li><a href="https://docs.phalconphp.com/zh/latest/reference/tools.html">介紹</a>
+  <li>
+<a href="https://docs.phalconphp.com/zh/latest/reference/tools.html">介紹</a>
     <ul>
       <li>總之就是透過指令可以快速建立模組，連大小寫都處理好，另外還會結合資料庫建立 mode : getter / setter</li>
     </ul>
   </li>
-  <li><a href="https://github.com/phalcon/phalcon-devtools">install</a>
+  <li>
+<a href="https://github.com/phalcon/phalcon-devtools">install</a>
     <ul>
       <li>installation via Git</li>
-      <li><code class="highlighter-rouge">sudo ln -s ~/path/phalcon.php /usr/local/bin/phalcon</code> mac 要放在 <code class="highlighter-rouge">/usr/local/bin</code> 下</li>
+      <li>
+<code class="highlighter-rouge">sudo ln -s ~/path/phalcon.php /usr/local/bin/phalcon</code> mac 要放在 <code class="highlighter-rouge">/usr/local/bin</code> 下</li>
     </ul>
   </li>
-  <li>執行 <code class="highlighter-rouge">phalcon</code></li>
+  <li>執行 <code class="highlighter-rouge">phalcon</code>
+</li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15</pre></td><td class="code"><pre class="highlight"><code><span class="n">Phalcon</span> <span class="n">DevTools</span> <span class="p">(</span><span class="m">2.0.13</span><span class="p">)</span>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15</pre></td>
+<td class="code"><pre class="highlight"><code><span class="n">Phalcon</span> <span class="n">DevTools</span> <span class="p">(</span><span class="m">2.0.13</span><span class="p">)</span>
 
 <span class="n">Help</span><span class="p">:</span>
   <span class="n">Lists</span> <span class="n">the</span> <span class="n">commands</span> <span class="n">available</span> <span class="k">in</span> <span class="n">Phalcon</span> <span class="n">devtools</span>
@@ -1084,7 +1375,8 @@ $session = Di::getDefault()-&gt;getSession();
   <span class="n">scaffold</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">scaffold</span><span class="p">)</span>
   <span class="n">migration</span>        <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">migration</span><span class="p">)</span>
   <span class="n">webtools</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">webtools</span><span class="p">)</span>
-</code></pre></td></tr></tbody></table></div></div>
+</code></pre></td>
+</tr></tbody></table></div></div>
 <ul>
   <li>查看語法，直接執行 <code class="highlighter-rouge">phalcon [command]</code> 即可
     <ul>
@@ -1103,7 +1395,8 @@ $session = Di::getDefault()-&gt;getSession();
   </li>
   <li>快速建立一個基本的 project : <code class="highlighter-rouge">phalcon create-project store</code>
     <ul>
-      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code></li>
+      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code>
+</li>
     </ul>
   </li>
 </ul>
@@ -1112,7 +1405,7 @@ $session = Di::getDefault()-&gt;getSession();
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/phalcon/2016/07/07/Phalcon-basic/#more" rel="contents">
-              Read more &raquo;
+              Read more »
             </a>
           </div>
           <!--/noindex-->
@@ -1263,20 +1556,24 @@ $session = Di::getDefault()-&gt;getSession();
   <li><code class="highlighter-rouge">./curl --version</code></li>
 </ul>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>curl 7.48.0 (x86_64-apple-darwin15.5.0) libcurl/7.48.0 OpenSSL/1.0.2g zlib/1.2.5 nghttp2/1.9.1
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3</pre></td>
+<td class="code"><pre class="highlight"><code>curl 7.48.0 (x86_64-apple-darwin15.5.0) libcurl/7.48.0 OpenSSL/1.0.2g zlib/1.2.5 nghttp2/1.9.1
 Protocols: dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp smb smbs smtp smtps telnet tftp 
 Features: IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP HTTP2 UnixSockets 
-</code></pre></td></tr></tbody></table></div></div>
+</code></pre></td>
+</tr></tbody></table></div></div>
 
 <ul>
-  <li>exec : <code class="highlighter-rouge">./curl -v -d '{"aps":{"alert":"Test Push","sound":"default"}}' --cert [xxx.pem] -H "apns-topic: [bundle_id]" --http2 https://api.development.push.apple.com/3/device/[token]</code></li>
+  <li>exec : <code class="highlighter-rouge">./curl -v -d '{"aps":{"alert":"Test Push","sound":"default"}}' --cert [xxx.pem] -H "apns-topic: [bundle_id]" --http2 https://api.development.push.apple.com/3/device/[token]</code>
+</li>
 </ul>
 
 
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/07/05/iosapns-with-http-2/#more" rel="contents">
-              Read more &raquo;
+              Read more »
             </a>
           </div>
           <!--/noindex-->
@@ -1437,8 +1734,10 @@ Features: IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP HTTP2 UnixSockets
 <ol>
   <li>Open MAMP</li>
   <li>PHP -&gt; default version</li>
-  <li>download suitable <code class="highlighter-rouge">phalcon.so</code> from <a href="https://github.com/majksner/php-phalcon-mamp">github</a></li>
-  <li><code class="highlighter-rouge">cd /Applications/MAMP/bin/php/php5.x.xx</code> and <code class="highlighter-rouge">lib/php/extensions/</code> and ‘no-debug-non-zts-xxxxxxxx’</li>
+  <li>download suitable <code class="highlighter-rouge">phalcon.so</code> from <a href="https://github.com/majksner/php-phalcon-mamp">github</a>
+</li>
+  <li>
+<code class="highlighter-rouge">cd /Applications/MAMP/bin/php/php5.x.xx</code> and <code class="highlighter-rouge">lib/php/extensions/</code> and ‘no-debug-non-zts-xxxxxxxx’</li>
   <li>cp <code class="highlighter-rouge">phalcon.so</code> to (4) path</li>
   <li>open MAMP navigation bar，File -&gt; Edit template -&gt; PHP -&gt; (choose currect php version which want to use)</li>
   <li>Add <code class="highlighter-rouge">extension=phalcon.so</code> of php.ini</li>
@@ -1449,7 +1748,7 @@ Features: IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP HTTP2 UnixSockets
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/07/04/mampinstall-phalcon/#more" rel="contents">
-              Read more &raquo;
+              Read more »
             </a>
           </div>
           <!--/noindex-->
@@ -1733,7 +2032,7 @@ Features: IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP HTTP2 UnixSockets
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/07/03/restfulbasic/#more" rel="contents">
-              Read more &raquo;
+              Read more »
             </a>
           </div>
           <!--/noindex-->
@@ -1889,7 +2188,8 @@ Features: IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP HTTP2 UnixSockets
 <h2 id="流程">流程</h2>
 
 <ol>
-  <li><code class="highlighter-rouge">vim archive.sh</code>
+  <li>
+<code class="highlighter-rouge">vim archive.sh</code>
 ```
 DIR=”$( cd “$( dirname “${BASH_SOURCE[0]}” )” &amp;&amp; pwd )”
 #echo ${DIR}
@@ -1909,7 +2209,7 @@ zip -r “archive-$(date +”%Y-%m-%d”).zip” ./youfile_1/</em> ./yourfilw_2/
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/06/29/bash-package-file-build-executable/#more" rel="contents">
-              Read more &raquo;
+              Read more »
             </a>
           </div>
           <!--/noindex-->
@@ -2073,7 +2373,7 @@ zip -r “archive-$(date +”%Y-%m-%d”).zip” ./youfile_1/</em> ./yourfilw_2/
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/06/26/xcode-framework-dynamic-static-diff/#more" rel="contents">
-              Read more &raquo;
+              Read more »
             </a>
           </div>
           <!--/noindex-->
@@ -2223,18 +2523,22 @@ zip -r “archive-$(date +”%Y-%m-%d”).zip” ./youfile_1/</em> ./yourfilw_2/
   </li>
   <li>Create a New Target from your framework project
     <ul>
-      <li>Select <code class="highlighter-rouge">Other</code> -&gt; Aggregate -&gt; set Name is <code class="highlighter-rouge">xxx-Universal</code></li>
+      <li>Select <code class="highlighter-rouge">Other</code> -&gt; Aggregate -&gt; set Name is <code class="highlighter-rouge">xxx-Universal</code>
+</li>
     </ul>
   </li>
   <li>Copy below code, and paste to <code class="highlighter-rouge">New Target:Aggregate</code> script</li>
-  <li>Go to scheme manager and <code class="highlighter-rouge">Click the [shared]</code> with <code class="highlighter-rouge">project name</code> and <code class="highlighter-rouge">xxx-Universal name</code></li>
+  <li>Go to scheme manager and <code class="highlighter-rouge">Click the [shared]</code> with <code class="highlighter-rouge">project name</code> and <code class="highlighter-rouge">xxx-Universal name</code>
+</li>
   <li>Run the <code class="highlighter-rouge">New Target:Aggregate</code>, and folder include universal-framework will be open.</li>
 </ol>
 
 <p>ps : If xcode alert <code class="highlighter-rouge">No find xxx.framework from Debug-iphoneos and Debug-iphonesimulator</code>
 Go to check the name of workspace and project, the name should be the same.</p>
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48<br/>49<br/>50<br/>51<br/>52<br/>53<br/>54<br/>55<br/>56<br/>57<br/>58<br/>59<br/>60<br/>61<br/>62<br/>63<br/>64<br/>65<br/>66<br/>67<br/>68<br/>69<br/>70<br/>71</pre></td><td class="code"><pre class="highlight"><code>######################
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25<br>26<br>27<br>28<br>29<br>30<br>31<br>32<br>33<br>34<br>35<br>36<br>37<br>38<br>39<br>40<br>41<br>42<br>43<br>44<br>45<br>46<br>47<br>48<br>49<br>50<br>51<br>52<br>53<br>54<br>55<br>56<br>57<br>58<br>59<br>60<br>61<br>62<br>63<br>64<br>65<br>66<br>67<br>68<br>69<br>70<br>71</pre></td>
+<td class="code"><pre class="highlight"><code>######################
 # Options
 ######################
 
@@ -2305,227 +2609,14 @@ cp -r "${FRAMEWORK}" "$OUTPUT_DIR"
 if [ ${REVEAL_ARCHIVE_IN_FINDER} = true ]; then
     open "${OUTPUT_DIR}/"
 fi
-</code></pre></td></tr></tbody></table></div></div>
+</code></pre></td>
+</tr></tbody></table></div></div>
 
 
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/blogpost/2016/06/25/xcodecombine-framework-with-auto-build/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/06/20/mqtttopic-level/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/06/20/mqtttopic-level/" itemprop="url">
-                【MQTT】Topic Level
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-20T13:16:00+08:00">
-                2016-06-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="mqtt-wildcards萬用字元">MQTT Wildcards(萬用字元)</h1>
-
-<p>透過 Wildcards 可以一次訂閱想要的主題，Wildcards 只能運用於 sub 不能用於 pub</p>
-
-<p><code class="highlighter-rouge">myhome/ground/room/temperature</code></p>
-
-<p>每一個 <code class="highlighter-rouge">/</code> 的兩邊，代表的兩個 topic level</p>
-
-<h2 id="single-lever---單一層級萬用字元">Single Lever : + (單一層級萬用字元)</h2>
-
-<p>Single Level 是指取代此一層的主題(topic level)，<code class="highlighter-rouge">+</code> 代表此 topic level 有著 single level wildcard 的特性</p>
-
-<p><code class="highlighter-rouge">myhome/groundfloor/+/temperature</code></p>
-
-<p>在此標誌下，以下均為相同的主題</p>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>myhome/groundfloor/a/temperature
-myhome/groundfloor/b/temperature
-myhome/groundfloor/c/temperature
-</code></pre></td></tr></tbody></table></div></div>
-
-<p>以下為不相同的訂閱主題</p>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>myhome/ground/a/temperature
-myhome/groundfloor/a/brightness
-</code></pre></td></tr></tbody></table></div></div>
-
-<p>ex2:</p>
-
-<ul>
-  <li><code class="highlighter-rouge">home/[position]/[devices]/temperature</code> : 訂閱’家中單一房間，單一個 device 的溫度’</li>
-  <li><code class="highlighter-rouge">home/+/+/temperature</code> : 訂閱’家中所有房間中的裝置的溫度’</li>
-</ul>
-
-<h2 id="multi-level-">Multi Level :</h2>
-
-<p>Multi Level 總是放在最後 : <code class="highlighter-rouge">myhome/groundfloor/#</code></p>
-
-<p>以下為相同的主題</p>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>myhome/groundfloor/livingroom/temperature
-myhome/groundfloor/livingroom/brightness
-</code></pre></td></tr></tbody></table></div></div>
-
-<p>以下為不相同的主題</p>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>myhome/outside/temperature
-</code></pre></td></tr></tbody></table></div></div>
-
-<h2 id="topics-beginning-with-">Topics beginning with $</h2>
-
-<p>這是系統預設的識別符，專門 publish 給系統，client 無法使用</p>
-
-<h1 id="注意">注意</h1>
-<ul>
-  <li><code class="highlighter-rouge">/</code> 符號，別放在第一位，ex : <code class="highlighter-rouge">/ex1/ex2</code></li>
-  <li>在 topic level 中，不要空白</li>
-  <li>保持你的 topic level 簡短與簡單明瞭</li>
-  <li>使用 ASC II 字符，並免使用無法印出的符號</li>
-  <li>透過在 topic level 中，使用 clientId，可有效區分『消息來源』與『訊息區別』
-    <ul>
-      <li>client1 只能被授權 publish 透過 <code class="highlighter-rouge">client1/status</code>，不被允許 publish 給 <code class="highlighter-rouge">client2/status</code></li>
-    </ul>
-  </li>
-  <li>不使用 <code class="highlighter-rouge">#</code></li>
-  <li>注意擴展性、延展性</li>
-  <li>使用特定的 topics，取代攏統的設定
-    <ul>
-      <li>使用 <code class="highlighter-rouge">myhome/livingroom/temperature</code>,<code class="highlighter-rouge">myhome/livingroom/brightness</code> 與 <code class="highlighter-rouge">myhome/livingroom/humidity</code>，避免使用 <code class="highlighter-rouge">myhome/livingroom/</code> 來接收所有的訊息</li>
-    </ul>
-  </li>
-</ul>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/06/20/mqtttopic-level/#more" rel="contents">
-              Read more &raquo;
+              Read more »
             </a>
           </div>
           <!--/noindex-->
@@ -2572,7 +2663,7 @@ myhome/groundfloor/livingroom/brightness
 
 
 
-    <a class="extend prev" rel="prev" href="/blogpost/page8"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page8">8</a> <span class="page-number current">9</span> <a class="page-number" href="/blogpost/page10">10</a> <a class="page-number" href="/blogpost/page11">11</a> <a class="extend prev" rel="next" href="/blogpost/page10"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/blogpost/page8"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">…</span> <a class="page-number" href="/blogpost/page8">8</a> <span class="page-number current">9</span> <a class="page-number" href="/blogpost/page10">10</a> <a class="page-number" href="/blogpost/page11">11</a> <a class="extend prev" rel="next" href="/blogpost/page10"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2605,9 +2696,7 @@ myhome/groundfloor/livingroom/brightness
 
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
-          <img class="site-author-image" itemprop="image"
-               src="/blogpost/assets/images/avatar3.png"
-               alt="Max Hu" />
+          <img class="site-author-image" itemprop="image" src="/blogpost/assets/images/avatar3.png" alt="Max Hu">
           <p class="site-author-name" itemprop="name">Max Hu</p>
            
               <p class="site-description motion-element" itemprop="description">Welcome!</p>
@@ -2618,7 +2707,7 @@ myhome/groundfloor/livingroom/brightness
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-count">105</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -2680,10 +2769,10 @@ myhome/groundfloor/livingroom/brightness
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright" >
+        <div class="copyright">
   
   
-  &copy;  2016 - 
+  ©  2016 - 
   <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>

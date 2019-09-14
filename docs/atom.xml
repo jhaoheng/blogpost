@@ -1,4 +1,222 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-09-11T16:10:06+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】Defer, Panic &amp;amp; Recover</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/11/Go-DeferPanicRecover/" rel="alternate" type="text/html" title="【Go】Defer, Panic &amp; Recover" /><published>2019-09-11T13:18:00+08:00</published><updated>2019-09-11T13:18:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/11/%5BGo%5DDeferPanicRecover</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/11/Go-DeferPanicRecover/">&lt;h1 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-09-14T22:01:44+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】Time(一):Timer(定時器)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/14/Go-time(1)-timer/" rel="alternate" type="text/html" title="【Go】Time(一):Timer(定時器)" /><published>2019-09-14T21:53:00+08:00</published><updated>2019-09-14T21:53:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/14/%5BGo%5Dtime(1)-timer</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/14/Go-time(1)-timer/">&lt;h1 id=&quot;type-timer&quot;&gt;type Timer&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;https://golang.org/pkg/time/#Timer&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;type Timer struct {
+	C &amp;lt;-chan Time
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Timer 類型是一種事件，當 Timer 到期，目前的時間會送到 &lt;code class=&quot;highlighter-rouge&quot;&gt;C&lt;/code&gt; 中，除非 Timer 被 &lt;code class=&quot;highlighter-rouge&quot;&gt;AfterFunc&lt;/code&gt; 重新建立。&lt;/li&gt;
+  &lt;li&gt;Timer 必須透過 NewTimer or AfterFunc 建立&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;table-list&quot;&gt;Table list&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;func AfterFunc&lt;/code&gt; : 建立一個 Timer 並在時間到後，執行 Func&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;func NewTimer&lt;/code&gt; : 建立一個 Timer&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;func (*Timer) Reset&lt;/code&gt; : 重設置 Timer&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;func (*Timer) Stop&lt;/code&gt; : 命令 Timer 停止&lt;/li&gt;
+  &lt;li&gt;範例
+    &lt;ul&gt;
+      &lt;li&gt;Timer 第一次到期為兩秒後, 到期後自動設定 t.Reset(10), 再度自動倒數&lt;/li&gt;
+      &lt;li&gt;每次執行 t.Reset() 後, 到期, 都會重新設定 t.Reset()&lt;/li&gt;
+      &lt;li&gt;按下 Enter 後, Timer 會直接中斷倒數, 並且再度重新執行 t.Reset()&lt;/li&gt;
+      &lt;li&gt;ctrl+c 停止運行&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;func-afterfunc&quot;&gt;func AfterFunc&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;func AfterFunc(d Duration, f func()) *Timer&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;func AfterFunc&lt;/code&gt; : 建立一個 Timer, 當時間到的時候，會呼叫 f() 在 Timer 自己的 goroutine 中。可以用 Stop 來停止。&lt;/li&gt;
+  &lt;li&gt;若執行 stop, stop 並不會等待 f 完成後才停止, 若需要判斷 f 是否完成任務, 必須做其他的判斷處置.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;func main() {
+	var t *time.Timer
+	f := func() {
+		fmt.Printf(&quot;Expiration time : %v.\n&quot;, time.Now())
+		fmt.Printf(&quot;C`s len: %d\n&quot;, len(t.C))
+	}
+	t = time.AfterFunc(2*time.Second, f)
+
+	var stop string
+	fmt.Scanln(&amp;amp;stop)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;func-newtimer&quot;&gt;func NewTimer&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;func NewTimer(d Duration) *Timer&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;func NewTimer&lt;/code&gt; : 建立一個 new Timer, 會將目前的時間送到 C 中 (C 是 Timer struct 的 channel)&lt;/li&gt;
+  &lt;li&gt;所以可以透過 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;-t.C&lt;/code&gt; 來等待時間到期&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;func main() {
+	// init
+	t := time.NewTimer(2 * time.Second)
+	// Current time
+	now := time.Now()
+	fmt.Printf(&quot;time : %v.\n&quot;, now)
+
+	expire := &amp;lt;-t.C
+	fmt.Printf(&quot;time : %v.\n&quot;, expire)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;func-timer-stop&quot;&gt;func (*Timer) Stop&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;func (t *Timer) Stop() bool&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;func (*Timer) Stop&lt;/code&gt; : 用於’主動’停止計時器, 當 Timer 尚未停止的時候調用&lt;/li&gt;
+  &lt;li&gt;若 timer 已經停止，則 t.Stop() 會返回 false&lt;/li&gt;
+  &lt;li&gt;stop 並不會 close the channel, 為了防止不正確地讀取 channel, 所以為了要確保在呼叫 stop() 後 channel 是空的, 必須確認 stop() 的 return, 若是 false, 則必須讓 channel 為空。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if !t.Stop() {
+	&amp;lt;-t.C // 釋放掉 channel 的物件
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Stop() 並不會停止其他 Timer’s channel&lt;/li&gt;
+  &lt;li&gt;對於透過 AfterFunc(d,f) 產生的 Timer, 若 t.Stop() 返回 false (代表 timer 已經過期, 且 f 已經在他自己的 goroutine 啟動), Stop 並不會等待 f 完成. 若需要知道 f 是否已經完成, 必須在 f 中做一些協調處理.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;func-timer-reset&quot;&gt;func (*Timer) Reset&lt;/h2&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;func (t *Timer) Reset(d Duration) bool&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Reset 的調用, 有兩個條件
+    &lt;ol&gt;
+      &lt;li&gt;timer 必須停止或者過期&lt;/li&gt;
+      &lt;li&gt;channel 必須為空&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;Reset 的使用前, 若 Timer 的狀態是過期或已經停止, 則必須確定 t.C 的 channel 為空.&lt;/li&gt;
+  &lt;li&gt;程式可以透過 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;-t.C&lt;/code&gt; 來判斷是否時間到期，此時 channel 為空, 在此狀況下, t.Reset() 可以直接被使用.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;func main() {
+	now := time.Now()
+	fmt.Printf(&quot;           time: %v.\n&quot;, now)
+
+	t := time.NewTimer(2 * time.Second)
+	expire := &amp;lt;-t.C
+	fmt.Printf(&quot;Expiration time: %v.\n&quot;, expire)
+	t.Reset(5 * time.Second)
+	expire = &amp;lt;-t.C
+	fmt.Printf(&quot;Expiration time: %v.\n&quot;, expire)
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;若程式沒有從 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;-t.C&lt;/code&gt; 中接收參數, 但 timer 卻已經使用 stop(), 此時必須讓 channel 為空, 才可以使用.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;if !t.Stop() {
+	&amp;lt;-t.C
+}
+t.Reset(d)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;example&quot;&gt;Example&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;無法透過 go playground, 因為無法讀取 Enter 鍵&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+	&lt;span class=&quot;s2&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
+	&lt;span class=&quot;s2&quot;&gt;&quot;time&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TimerObj&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;timeStart&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Time&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;resetTimeIs&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Duration&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;           &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Timer&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+	&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TimerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;timeStart&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;resetTimeIs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;           &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NewTimer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;make&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;chan&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;go&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;stop&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Scanln&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;stop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;reset&quot;&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}()&lt;/span&gt;
+
+	&lt;span class=&quot;n&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Sleep&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;select&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;showCurrentTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;. Interrupt Timer!!!!!&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;resetTimer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;case&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;lt;-&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;C&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;時間到期&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;showCurrentTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;. Time up, auto reset Timer&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;resetTimer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;default&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;showCurrentTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;showCurrentTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TimerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;=====&amp;gt; %v&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Sub&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timeStart&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;resetTimer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TimerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Stop&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Timer Stop Success!!  &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Timer Reset %v&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resetTimeIs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Reset&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;resetTimeIs&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Second&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;timerObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;timeStart&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;[執行結果]
+=====&amp;gt; 1.002051028s
+=====&amp;gt; 2.006385502s. Time up, auto reset Timer
+Timer Reset 10s
+=====&amp;gt; 1.002283105s
+=====&amp;gt; 2.005053556s
+=====&amp;gt; 3.007041044s
+=====&amp;gt; 4.009081465s&lt;/p&gt;
+
+&lt;p&gt;=====&amp;gt; 5.010377978s. Interrupt Timer!!!!!
+Timer Stop Success!!  Timer Reset 10s
+=====&amp;gt; 1.003484026s
+^Csignal: interrupt&lt;/p&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">type Timer https://golang.org/pkg/time/#Timer type Timer struct { C &amp;lt;-chan Time } Timer 類型是一種事件，當 Timer 到期，目前的時間會送到 C 中，除非 Timer 被 AfterFunc 重新建立。 Timer 必須透過 NewTimer or AfterFunc 建立 Table list func AfterFunc : 建立一個 Timer 並在時間到後，執行 Func func NewTimer : 建立一個 Timer func (*Timer) Reset : 重設置 Timer func (*Timer) Stop : 命令 Timer 停止 範例 Timer 第一次到期為兩秒後, 到期後自動設定 t.Reset(10), 再度自動倒數 每次執行 t.Reset() 後, 到期, 都會重新設定 t.Reset() 按下 Enter 後, Timer 會直接中斷倒數, 並且再度重新執行 t.Reset() ctrl+c 停止運行</summary></entry><entry><title type="html">【Go】Defer, Panic &amp;amp; Recover</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/11/Go-DeferPanicRecover/" rel="alternate" type="text/html" title="【Go】Defer, Panic &amp; Recover" /><published>2019-09-11T13:18:00+08:00</published><updated>2019-09-11T13:18:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/11/%5BGo%5DDeferPanicRecover</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/11/Go-DeferPanicRecover/">&lt;h1 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h1&gt;
 
 &lt;ul&gt;
   &lt;li&gt;defer {動作} : 當前 func 結束後，會執行的動作。&lt;/li&gt;
@@ -558,7 +776,86 @@ ProxyPreserveHost On&lt;/p&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apache2ctl restart&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:80&lt;/code&gt;, will show ‘proxy’&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt;, be restricted to access&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Apache" /><summary type="html">Goal 80 port proxy to 8080 port. If work, will show ‘proxy’ http://localhost:8080 can’t access, must return 404. Use &amp;lt;If &quot;%{SERVER_PORT} != '80'&quot;&amp;gt; Redirect 404 / &amp;lt;/If&amp;gt; Repo &amp;amp; Env Set source code : https://github.com/jhaoheng/apacheProxy&amp;amp;UseExpressions docker-compose up -d &amp;amp;&amp;amp; docker exec -it ubuntu /bin/bash apt-get update apt-get install -y libapache2-mod-proxy-html libxml2-dev apache2 build-essential Proxy Modules a2enmod proxy proxy_http proxy_ajp rewrite proxy_balancer proxy_connect proxy_html xml2enc</summary></entry><entry><title type="html">【Golang】Diff - slice &amp;amp; array</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-diff-slice&array/" rel="alternate" type="text/html" title="【Golang】Diff - slice &amp; array" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/%5BGo%5Ddiff-slice&amp;array</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-diff-slice&amp;array/">&lt;h1 id=&quot;slice--array-差別&quot;&gt;slice &amp;amp; array 差別&lt;/h1&gt;
+&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Apache" /><summary type="html">Goal 80 port proxy to 8080 port. If work, will show ‘proxy’ http://localhost:8080 can’t access, must return 404. Use &amp;lt;If &quot;%{SERVER_PORT} != '80'&quot;&amp;gt; Redirect 404 / &amp;lt;/If&amp;gt; Repo &amp;amp; Env Set source code : https://github.com/jhaoheng/apacheProxy&amp;amp;UseExpressions docker-compose up -d &amp;amp;&amp;amp; docker exec -it ubuntu /bin/bash apt-get update apt-get install -y libapache2-mod-proxy-html libxml2-dev apache2 build-essential Proxy Modules a2enmod proxy proxy_http proxy_ajp rewrite proxy_balancer proxy_connect proxy_html xml2enc</summary></entry><entry><title type="html">【Golang】func &amp;amp; pointer</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&pointer/" rel="alternate" type="text/html" title="【Golang】func &amp; pointer" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/%5BGo%5Dfunc&amp;pointer</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&amp;pointer/">&lt;h1 id=&quot;kind&quot;&gt;kind&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;Different kinds use a pointer to change the value in Func.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;map&lt;/li&gt;
+  &lt;li&gt;slice&lt;/li&gt;
+  &lt;li&gt;array&lt;/li&gt;
+  &lt;li&gt;string&lt;/li&gt;
+  &lt;li&gt;struct&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div&gt;
+    &lt;iframe src=&quot;https://play.golang.org/p/sUiGkLDt8vJ&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
+    &lt;/iframe&gt;
+&lt;/div&gt;
+
+&lt;!--more--&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;updateMapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;   map =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;slice&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;updateSliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; slice =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;updateArrayObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; array =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;updateStringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;string =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;999&lt;/span&gt;
+
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;struct&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;updateStructObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;struct =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateMapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateArrayObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateSliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateStringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateStructObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">kind Different kinds use a pointer to change the value in Func. map slice array string struct</summary></entry><entry><title type="html">【Golang】Diff - slice &amp;amp; array</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-diff-slice&array/" rel="alternate" type="text/html" title="【Golang】Diff - slice &amp; array" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/%5BGo%5Ddiff-slice&amp;array</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-diff-slice&amp;array/">&lt;h1 id=&quot;slice--array-差別&quot;&gt;slice &amp;amp; array 差別&lt;/h1&gt;
 &lt;blockquote&gt;
   &lt;p&gt;https://blog.golang.org/go-slices-usage-and-internals&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -687,86 +984,7 @@ A slice can be created with the built-in function called make, which has the sig
 &lt;ul&gt;
   &lt;li&gt;array : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(len(arrayObject))&lt;/code&gt;, 顯示 4&lt;/li&gt;
   &lt;li&gt;slice : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(len(sliceObject))&lt;/code&gt; 顯示 0&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">slice &amp;amp; array 差別 https://blog.golang.org/go-slices-usage-and-internals Array Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value. - An array's size is fixed; - Arrays do not need to be initialized Slice The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length. A slice can be created with the built-in function called make, which has the signature, `func make([]T, len, cap) []T` Glance : Difference between both 兩者在宣告方式不同 兩者 type 不同 兩者 kind 不同 兩者在宣告後, 不設定 content, 印出內容 兩者在新增/修改值上不同 兩者 func 中，使用原理方式不同</summary></entry><entry><title type="html">【Golang】func &amp;amp; pointer</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&pointer/" rel="alternate" type="text/html" title="【Golang】func &amp; pointer" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/%5BGo%5Dfunc&amp;pointer</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&amp;pointer/">&lt;h1 id=&quot;kind&quot;&gt;kind&lt;/h1&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;Different kinds use a pointer to change the value in Func.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;map&lt;/li&gt;
-  &lt;li&gt;slice&lt;/li&gt;
-  &lt;li&gt;array&lt;/li&gt;
-  &lt;li&gt;string&lt;/li&gt;
-  &lt;li&gt;struct&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div&gt;
-    &lt;iframe src=&quot;https://play.golang.org/p/sUiGkLDt8vJ&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
-    &lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;!--more--&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{}&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateMapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;   map =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;slice&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateSliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; slice =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;array&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateArrayObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot; array =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateStringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;string =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;999&lt;/span&gt;
-
-	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;struct&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;max&quot;&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;updateStructObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;struct =&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sunny&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateMapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;mapObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateArrayObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;arrayObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateSliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;sliceObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateStringObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stringObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;updateStructObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;StructObject&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;srtuctObj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;sunny&quot;&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">kind Different kinds use a pointer to change the value in Func. map slice array string struct</summary></entry><entry><title type="html">【Golang】Go module</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/08/31/gomod/" rel="alternate" type="text/html" title="【Golang】Go module" /><published>2019-08-31T20:14:00+08:00</published><updated>2019-08-31T20:14:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/08/31/gomod</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/08/31/gomod/">&lt;h1 id=&quot;環境&quot;&gt;環境&lt;/h1&gt;
+&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">slice &amp;amp; array 差別 https://blog.golang.org/go-slices-usage-and-internals Array Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value. - An array's size is fixed; - Arrays do not need to be initialized Slice The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length. A slice can be created with the built-in function called make, which has the signature, `func make([]T, len, cap) []T` Glance : Difference between both 兩者在宣告方式不同 兩者 type 不同 兩者 kind 不同 兩者在宣告後, 不設定 content, 印出內容 兩者在新增/修改值上不同 兩者 func 中，使用原理方式不同</summary></entry><entry><title type="html">【Golang】Go module</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/08/31/gomod/" rel="alternate" type="text/html" title="【Golang】Go module" /><published>2019-08-31T20:14:00+08:00</published><updated>2019-08-31T20:14:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/08/31/gomod</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/08/31/gomod/">&lt;h1 id=&quot;環境&quot;&gt;環境&lt;/h1&gt;
 &lt;ul&gt;
   &lt;li&gt;go version go1.12.9 darwin/amd64&lt;/li&gt;
   &lt;li&gt;官方教學 : https://github.com/golang/go/wiki/Modules#quick-start&lt;/li&gt;
@@ -982,51 +1200,4 @@ go 1.12
             fi
     endscript
 }
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Max Hu</name></author><category term="Ubuntu" /><category term="Log" /><summary type="html">env &amp;amp; 注意 ubuntu 必須確認有 cron 服務 doc : https://linux.die.net/man/8/logrotate 必須確定已經有 log, 若無 log file, 系統會報錯 error: stat of /root/xxxx.log failed: No such file or directory 說明 apt-get install -y logrotate 配置文件 : /etc/logrotate.conf 設定檔為至 : /etc/logrotate.d/ 若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 /etc/logrotate.d/ 中, 建立相關的設定 檢查設定 sudo logrotate /etc/logrotate.conf --debug logrotate 歷史紀錄 cat /var/lib/logrotate/status 強迫 logrotate 立即執行 : logrotate -f /etc/logrotate.conf 透過 [logrotate 歷史紀錄] 可查看執行時間 主要設定 compress –&amp;gt; 壓縮日誌文件的所有非當前版本 daily,weekly,monthly –&amp;gt; 按指定計劃輪換日誌文件 delaycompress –&amp;gt; 壓縮所有版本，除了當前和下一個最近的 errors “emailid” –&amp;gt; 給指定郵箱發送錯誤通知 missingok –&amp;gt; 如果日誌文件丟失，不要顯示錯誤 notifempty –&amp;gt; 如果日誌文件為空，則不輪換日誌文件 olddir “dir” –&amp;gt; 指定日誌文件的舊版本放在 「dir」 中 postrotate –&amp;gt; 引入一個在日誌被輪換後執行的腳本 prerotate –&amp;gt; 引入一個在日誌被輪換前執行的腳本 endscript –&amp;gt; 標記 prerotate 或 postrotate 腳本的結束 rotate ‘n’ –&amp;gt; 在輪換方案中包含日誌的 n 個版本 sharedscripts –&amp;gt; 對於整個日誌組只運行一次腳本 size=’logsize’ –&amp;gt; 在日誌大小大於 logsize（例如 100K，4M）時輪換 ex : /tmp/sample_output.log { size 1k create 700 root root rotate 4 compress } ex : nginx /var/log/nginx/*.log { daily missingok rotate 52 compress delaycompress notifempty create 640 nginx adm sharedscripts postrotate if [ -f /var/run/nginx.pid ]; then kill -USR1 `cat /var/run/nginx.pid` fi endscript }</summary></entry><entry><title type="html">【AWS-Redis】How to Access to AWS-ElastiCache</title><link href="https://jhaoheng.github.io/blogpost/blogpost/aws/redis/2018/07/06/AWS-ElastiCache-Access/" rel="alternate" type="text/html" title="【AWS-Redis】How to Access to AWS-ElastiCache" /><published>2018-07-06T07:30:00+08:00</published><updated>2018-07-06T07:30:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/aws/redis/2018/07/06/AWS-ElastiCache-Access</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/aws/redis/2018/07/06/AWS-ElastiCache-Access/">&lt;h1 id=&quot;透過-redis-cli-連線-elasticache&quot;&gt;透過 redis-cli 連線 elasticache&lt;/h1&gt;
-
-&lt;h2 id=&quot;限制&quot;&gt;限制&lt;/h2&gt;
-&lt;ol&gt;
-  &lt;li&gt;必須透過 aws ec2 進行連線 :
-    &lt;ul&gt;
-      &lt;li&gt;From AWS FAQ: (http://aws.amazon.com/elasticache/faqs/)
-Please note that IP-range based access control is currently not enabled for Cache Clusters. All clients to a Cache Cluster must be within the EC2 network, and authorized via security groups as described above.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;確定 elasticache 建立時的
-    &lt;ul&gt;
-      &lt;li&gt;endpoint&lt;/li&gt;
-      &lt;li&gt;Subnet Group&lt;/li&gt;
-      &lt;li&gt;Security Group&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;確定 aws ec2
-    &lt;ul&gt;
-      &lt;li&gt;確保 instance 的 vpc 與 elasticache 的 Subnet Group 相同&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;!--more--&gt;
-
-&lt;h2 id=&quot;安裝-redis-cli-連線&quot;&gt;安裝 redis-cli, 連線&lt;/h2&gt;
-&lt;ol&gt;
-  &lt;li&gt;先 access 進 ec2 instance&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apt-get update &amp;amp;&amp;amp; apt-get install gcc make -y&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;wget http://download.redis.io/redis-stable.tar.gz &amp;amp;&amp;amp; tar xvzf redis-stable.tar.gz &amp;amp;&amp;amp; cd redis-stable &amp;amp;&amp;amp; make distclean &amp;amp;&amp;amp; make&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;(optional) &lt;code class=&quot;highlighter-rouge&quot;&gt;ln -s $(pwd)/src/redis-cli /bin/redis-cli&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;connect :
-    &lt;ul&gt;
-      &lt;li&gt;if (3) &lt;code class=&quot;highlighter-rouge&quot;&gt;redis-cli -c -h {endpoint} -p 6379&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;./src/redis-cli -c -h {endpoint} -p 6379&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;透過-gui-訪問&quot;&gt;透過 GUI 訪問&lt;/h2&gt;
-&lt;ol&gt;
-  &lt;li&gt;先 access 進 ec2 instance&lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apt-get update &amp;amp;&amp;amp; apt-get install nodejs npm -y &amp;amp;&amp;amp; ln -s $(which nodejs) /usr/bin/node &amp;amp;&amp;amp; npm install -g redis-commander&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;執行服務 : &lt;code class=&quot;highlighter-rouge&quot;&gt;redis-commander --redis-host &amp;lt;elasticache endpoint&amp;gt;&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;確定 ec2 security 8081 port 可讓你目前的 ip 進行連線&lt;/li&gt;
-  &lt;li&gt;瀏覽器輸入 : &lt;ec2-instance-ip&gt;:8081&lt;/ec2-instance-ip&gt;&lt;/li&gt;
-&lt;/ol&gt;</content><author><name>Max Hu</name></author><category term="AWS" /><category term="Redis" /><summary type="html">透過 redis-cli 連線 elasticache 限制 必須透過 aws ec2 進行連線 : From AWS FAQ: (http://aws.amazon.com/elasticache/faqs/) Please note that IP-range based access control is currently not enabled for Cache Clusters. All clients to a Cache Cluster must be within the EC2 network, and authorized via security groups as described above. 確定 elasticache 建立時的 endpoint Subnet Group Security Group 確定 aws ec2 確保 instance 的 vpc 與 elasticache 的 Subnet Group 相同</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Max Hu</name></author><category term="Ubuntu" /><category term="Log" /><summary type="html">env &amp;amp; 注意 ubuntu 必須確認有 cron 服務 doc : https://linux.die.net/man/8/logrotate 必須確定已經有 log, 若無 log file, 系統會報錯 error: stat of /root/xxxx.log failed: No such file or directory 說明 apt-get install -y logrotate 配置文件 : /etc/logrotate.conf 設定檔為至 : /etc/logrotate.d/ 若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 /etc/logrotate.d/ 中, 建立相關的設定 檢查設定 sudo logrotate /etc/logrotate.conf --debug logrotate 歷史紀錄 cat /var/lib/logrotate/status 強迫 logrotate 立即執行 : logrotate -f /etc/logrotate.conf 透過 [logrotate 歷史紀錄] 可查看執行時間 主要設定 compress –&amp;gt; 壓縮日誌文件的所有非當前版本 daily,weekly,monthly –&amp;gt; 按指定計劃輪換日誌文件 delaycompress –&amp;gt; 壓縮所有版本，除了當前和下一個最近的 errors “emailid” –&amp;gt; 給指定郵箱發送錯誤通知 missingok –&amp;gt; 如果日誌文件丟失，不要顯示錯誤 notifempty –&amp;gt; 如果日誌文件為空，則不輪換日誌文件 olddir “dir” –&amp;gt; 指定日誌文件的舊版本放在 「dir」 中 postrotate –&amp;gt; 引入一個在日誌被輪換後執行的腳本 prerotate –&amp;gt; 引入一個在日誌被輪換前執行的腳本 endscript –&amp;gt; 標記 prerotate 或 postrotate 腳本的結束 rotate ‘n’ –&amp;gt; 在輪換方案中包含日誌的 n 個版本 sharedscripts –&amp;gt; 對於整個日誌組只運行一次腳本 size=’logsize’ –&amp;gt; 在日誌大小大於 logsize（例如 100K，4M）時輪換 ex : /tmp/sample_output.log { size 1k create 700 root root rotate 4 compress } ex : nginx /var/log/nginx/*.log { daily missingok rotate 52 compress delaycompress notifempty create 640 nginx adm sharedscripts postrotate if [ -f /var/run/nginx.pid ]; then kill -USR1 `cat /var/run/nginx.pid` fi endscript }</summary></entry></feed>

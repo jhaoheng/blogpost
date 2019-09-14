@@ -281,6 +281,194 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/rtmp/2017/06/24/RTMP-Youtube/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/rtmp/2017/06/24/RTMP-Youtube/" itemprop="url">
+                【RTMP】youtube to rtmp
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-24T12:55:00+08:00">
+                2017-06-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/RTMP" itemprop="url" rel="index">
+                    <span itemprop="name">RTMP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="目的">目的</h1>
+<p>將 youtube 的影片傳給 rtmp server 進行串流</p>
+
+<h1 id="how">how</h1>
+<ol>
+  <li>找到 youtube 的影片</li>
+  <li>進行轉檔為 mp4 : https://www.onlinevideoconverter.com/zh/success?id=b1d3e4d3e4d3g6b1
+    <ul>
+      <li>或者利用各種轉檔方式</li>
+      <li>可下載為 file 也可直接抓取 url (但注意 url 會過期)</li>
+      <li>或者把影片存成 mp4 後，放到 server 上</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">docker run --rm jrottenberg/ffmpeg:ubuntu -re -i http://... -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp:...</code>
+    <ul>
+      <li><code class="highlighter-rouge">-re</code> : Read input at native frame rate. Mainly used to simulate a grab device.  or live input stream (e.g. when reading from a file). Should not be used with actual grab devices or live input streams (where it can cause packet loss).  By default ffmpeg attempts to read the input(s) as fast as possible.  This option will slow down the reading of the input(s) to the native frame rate of the input(s). It is useful for real-time output (e.g. live streaming).</li>
+      <li><code class="highlighter-rouge">http://...</code> : 輸入的 mp4 影片位置，也可用 file 來替代</li>
+      <li><code class="highlighter-rouge">rmpt://...</code> : 要串流的 rtmp server 位置</li>
+    </ul>
+  </li>
+</ol>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/rtmp/2017/06/24/RTMP-Youtube/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/06/21/playerhls-rtmp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2253,180 +2441,6 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/05/11/mongo-php7-drivecentos7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2017/05/11/mongo-php7-drivecentos7/" itemprop="url">
-                【MongoDB-php7-drive】centos7
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-11T14:40:00+08:00">
-                2017-05-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h2 id="環境">環境</h2>
-<p>php7
-centos7
-MongoDB.so , 非 mongo.so</p>
-
-<h2 id="安裝-mongodb">安裝 mongodb</h2>
-<ol>
-  <li>yum install openssl-devel -y</li>
-  <li>wget http://pear.php.net/go-pear.phar</li>
-  <li>php go-pear.phar</li>
-  <li>vi <code class="highlighter-rouge">which pecl</code> =&gt; 拿掉 -n , 原因 https://serverfault.com/questions/589877/pecl-command-produces-long-list-of-errors</li>
-  <li>pecl install mongodb</li>
-  <li>echo “extension=mongodb.so” » /etc/php.d/20-mongodb.ini</li>
-  <li>
-    <table>
-      <tbody>
-        <tr>
-          <td>驗證 php -m</td>
-          <td>grep mongodb</td>
-        </tr>
-      </tbody>
-    </table>
-  </li>
-</ol>
-
-<h2 id="docker">docker</h2>
-<ul>
-  <li>https://hub.docker.com/r/jhaoheng/php_env/</li>
-  <li><code class="highlighter-rouge">docker pull jhaoheng/php_env:1.1</code></li>
-</ul>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2017/05/11/mongo-php7-drivecentos7/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2488,7 +2502,7 @@ MongoDB.so , 非 mongo.so</p>
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">104</span>
+                <span class="site-state-item-count">105</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
