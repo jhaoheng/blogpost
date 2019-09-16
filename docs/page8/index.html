@@ -281,6 +281,259 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/ios/ipa/2016/09/20/iOS-ipa/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/ios/ipa/2016/09/20/iOS-ipa/" itemprop="url">
+                【ipa】check Provision
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-20T14:38:00+08:00">
+                2016-09-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/iOS" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/ipa" itemprop="url" rel="index">
+                    <span itemprop="name">ipa</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="手動檢查">手動檢查</h2>
+
+<ol>
+  <li>將輸出的 .ipa，改為 .zip，解壓縮。</li>
+  <li>開啟 Terminal 並移動到該 解壓縮後的 Payload 中，會看到 embedded.mobileprovision</li>
+  <li><code class="highlighter-rouge">security cms -D -i embedded.mobileprovision</code></li>
+  <li>解析結構就可發現不同點</li>
+</ol>
+
+<h2 id="code">code</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35</pre></td><td class="code"><pre class="highlight"><code>NSData *provisioningProfile = nil;
+NSData *raw = [NSData dataWithContentsOfURL:[NSBundle.mainBundle URLForResource:@"embedded" withExtension:@"mobileprovision"]];
+char *start = memmem(raw.bytes,
+                     raw.length,
+                     "&lt;!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0",
+                     47);
+if (start) {
+    char *end = memmem(start,
+                       (uintptr_t)start - raw.length,
+                       "&lt;/plist&gt;",
+                       8);
+    if (end) {
+        provisioningProfile = [NSData dataWithBytes:start length:8 + end - start];
+    }
+}
+
+if (provisioningProfile) {
+    NSDictionary* plist = [NSPropertyListSerialization propertyListWithData:provisioningProfile
+                                                                    options:NSPropertyListImmutable
+                                                                     format:0
+                                                                      error:0];
+    NSLog(@"\n\n\nTeam name: %@", plist[@"TeamName"]);
+
+    if ([plist[@"ProvisionsAllDevices"] boolValue]) {
+        NSLog(@"Enterprise");
+    } else if ([plist[@"ProvisionedDevices"] count] &gt; 0) {
+        if ([plist[@"Entitlements"][@"get-task-allow"] boolValue]) {
+            NSLog(@"Development");
+        } else {
+            NSLog(@"Ad Hoc");
+        }
+    } else {
+        NSLog(@"App Store");
+    }
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="分析結構">分析結構</h2>
+
+<h3 id="dev">Dev</h3>
+
+<p>若是 <code class="highlighter-rouge">Dev</code> build app，會看到</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>&lt;key&gt;get-task-allow&lt;/key&gt;
+&lt;true/&gt;
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="ad-hoc">Ad-Hoc</h3>
+
+<p>若是 <code class="highlighter-rouge">Ad-Hoc</code></p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>&lt;key&gt;get-task-allow&lt;/key&gt;
+&lt;false/&gt;
+</code></pre></td></tr></tbody></table></div></div>
+<p>且</p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code>&lt;key&gt;ProvisionedDevices&lt;/key&gt;
+&lt;array&gt;
+    &lt;string&gt;abcdef01234567890abcdef01234567890abacde&lt;/string&gt;
+    &lt;string&gt;1abcdef01234567890abcdef01234567890abacd&lt;/string&gt;
+    &lt;string&gt;2abcdef01234567890abcdef01234567890abacd&lt;/string&gt;
+&lt;/array&gt;
+</code></pre></td></tr></tbody></table></div></div>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/ios/ipa/2016/09/20/iOS-ipa/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/09/07/mqttlogin-mqtt8883-ssl-tls-with-certificate-authority-ca/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1974,169 +2227,6 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/19/phalconmigration/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/07/19/phalconmigration/" itemprop="url">
-                【phalcon】migration
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-19T02:08:00+08:00">
-                2016-07-19
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="migration">migration</h1>
-
-<ul>
-  <li>phalcon 2.0.13 : https://github.com/phalcon/cphalcon</li>
-  <li>Phalcon DevTools (2.0.13) : https://github.com/phalcon/phalcon-devtools</li>
-</ul>
-
-<h2 id="main-cmd">main cmd</h2>
-
-<ul>
-  <li><code class="highlighter-rouge">phalcon migration --help</code></li>
-  <li><code class="highlighter-rouge">phalcon migration generate</code> : 產生 migration file
-    <ul>
-      <li><code class="highlighter-rouge">migration generate 1.0.1</code> : 1.0.1 為產生的版本號，預設為 1.0.0</li>
-      <li>預設路徑為 <code class="highlighter-rouge">app/migrations/</code></li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">phalcon migration run</code> : 執行產生的 migration</li>
-</ul>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/07/19/phalconmigration/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2198,7 +2288,7 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">105</span>
+                <span class="site-state-item-count">106</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

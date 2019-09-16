@@ -281,6 +281,208 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/docker/sublime/2017/07/05/Docker-Sublime/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/docker/sublime/2017/07/05/Docker-Sublime/" itemprop="url">
+                【Docker】use sublime to edit file in docker
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-07-05T03:56:00+08:00">
+                2017-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Docker" itemprop="url" rel="index">
+                    <span itemprop="name">Docker</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Sublime" itemprop="url" rel="index">
+                    <span itemprop="name">Sublime</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="sublime-編輯-docker-中的檔案">sublime 編輯 docker 中的檔案</h1>
+
+<p>docker 是個好物的原因在於，環境的穩定，無論遷移到哪個環境中，都可以保持穩定性，debug 也方便許多</p>
+
+<p>但如何直接編輯 docker 建立後的 file？
+透過 docker 中的 volume 設定好 application 與 docker 中的位置，就可以直接動態變更 docker 中的檔案資訊</p>
+
+<h1 id="ex--php--phalcon--docker">ex : php / phalcon / docker</h1>
+
+<p><strong>Docker Engine &gt;= 1.10.0 * Docker Compose &gt;= 1.6.2</strong></p>
+
+<ol>
+  <li><code class="highlighter-rouge">git clone git@github.com:phalcon/phalcon-compose.git</code></li>
+  <li><code class="highlighter-rouge">cp variables.env.example variables.env</code></li>
+  <li><code class="highlighter-rouge">docker-compose up -d</code></li>
+  <li>開啟網頁 localhost:80</li>
+  <li>建立檔案 <code class="highlighter-rouge">./phalcon-compose/application/public/hello.php</code>
+    <ul>
+      <li><code class="highlighter-rouge">&lt;?php echo "world"; ?&gt;</code></li>
+    </ul>
+  </li>
+  <li>開啟網頁 localhost/hello.php</li>
+</ol>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/docker/sublime/2017/07/05/Docker-Sublime/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/rtmp/2017/06/24/RTMP-Youtube/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2280,167 +2482,6 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/05/17/ossrscompile-ffmpeg/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2017/05/17/ossrscompile-ffmpeg/" itemprop="url">
-                【ossrs】compile ffmpeg
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-17T02:14:00+08:00">
-                2017-05-17
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="env">env</h1>
-
-<ul>
-  <li>osx : 10.11.6</li>
-</ul>
-
-<h1 id="question">question</h1>
-
-<ol>
-  <li><code class="highlighter-rouge">./configure --osx --full --with-ffmpeg</code></li>
-</ol>
-
-<p>error : Libtool library uesd but ‘LIBTOOL’ is undefined</p>
-
-<ol>
-  <li>fixed <code class="highlighter-rouge">brew install libtool</code></li>
-</ol>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2017/05/17/ossrscompile-ffmpeg/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2502,7 +2543,7 @@ AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultSer
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">105</span>
+                <span class="site-state-item-count">106</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -281,6 +281,211 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/16/Go-callback-design/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/golang/2019/09/16/Go-callback-design/" itemprop="url">
+                【Go】callback, func as a type
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-16T14:52:00+08:00">
+                2019-09-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="宣告">宣告</h1>
+<ol>
+  <li>func as a type : <code class="highlighter-rouge">type callbackHandler func(name string)</code></li>
+  <li>在宣告 func 時, 將 func 放到參數位置 : <code class="highlighter-rouge">func DoSomething(callback callbackHandler) {...}</code></li>
+</ol>
+
+<h1 id="用途設計">用途設計</h1>
+<ul>
+  <li>在 objective-c 中的 complete, 通常做的都是異步的處理, ex: 等待 api 的回應過程中, 處理其他事情, 像 closure</li>
+  <li>所以用途設計應該可以用在
+    <ol>
+      <li>有 N 個 func, funcN 依賴 funcMain 的處理結果, 並且 funcN 可能還有其他事情需要處理</li>
+      <li>callbackHandler 的設計, 可以將多個 func 合併在一起, 個別制定 callbackHandler 內容, 並且回傳固定的返回值. Ex: error</li>
+    </ol>
+  </li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19</pre></td><td class="code"><pre class="highlight"><code>[原本]
+sum := funcMain(args []int)
+temp := funcN(sum)
+
+[整合]
+type N funcN(sum int)
+funcMain(args []int, n N) {
+	sum := 0
+	for _, v := range args {
+		sum = v + sum
+	}
+	n(sum)
+}
+---
+var temp int
+funcMain(args []int, funcN(sum int) {
+	fmt.Println(sum)
+	temp = sum
+})
+</code></pre></td></tr></tbody></table></div></div>
+
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/golang/2019/09/16/Go-callback-design/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/14/Go-time(1)-timer/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1980,254 +2185,6 @@ A slice can be created with the built-in function called make, which has the sig
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/ubuntu/log/2018/10/25/logrotate/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/ubuntu/log/2018/10/25/logrotate/" itemprop="url">
-                【Log】Use Logrotate at ubuntu16.04
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-25T07:30:00+08:00">
-                2018-10-25
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/ubuntu" itemprop="url" rel="index">
-                    <span itemprop="name">ubuntu</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/log" itemprop="url" rel="index">
-                    <span itemprop="name">log</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="env--注意">env &amp; 注意</h1>
-<ul>
-  <li>ubuntu</li>
-  <li>必須確認有 cron 服務</li>
-  <li>doc : <code class="highlighter-rouge">https://linux.die.net/man/8/logrotate</code></li>
-  <li>必須確定已經有 log, 若無 log file, 系統會報錯 <code class="highlighter-rouge">error: stat of /root/xxxx.log failed: No such file or directory</code></li>
-</ul>
-
-<h1 id="說明">說明</h1>
-<ul>
-  <li><code class="highlighter-rouge">apt-get install -y logrotate</code></li>
-  <li>配置文件 : <code class="highlighter-rouge">/etc/logrotate.conf</code></li>
-  <li>設定檔為至 : <code class="highlighter-rouge">/etc/logrotate.d/</code>
-    <ul>
-      <li>若系統有安裝某些已有日誌的工具, ex:nginx, 會自動在 <code class="highlighter-rouge">/etc/logrotate.d/</code> 中, 建立相關的設定</li>
-    </ul>
-  </li>
-  <li>檢查設定 <code class="highlighter-rouge">sudo logrotate /etc/logrotate.conf --debug</code></li>
-  <li>logrotate 歷史紀錄 <code class="highlighter-rouge">cat /var/lib/logrotate/status</code></li>
-  <li>強迫 logrotate 立即執行 : <code class="highlighter-rouge">logrotate -f /etc/logrotate.conf</code>
-    <ul>
-      <li>透過 [logrotate 歷史紀錄] 可查看執行時間</li>
-    </ul>
-  </li>
-</ul>
-
-<h1 id="主要設定">主要設定</h1>
-<ul>
-  <li>compress             –&gt; 壓縮日誌文件的所有非當前版本</li>
-  <li>daily,weekly,monthly –&gt; 按指定計劃輪換日誌文件</li>
-  <li>delaycompress        –&gt; 壓縮所有版本，除了當前和下一個最近的</li>
-  <li>errors “emailid”     –&gt; 給指定郵箱發送錯誤通知</li>
-  <li>missingok            –&gt; 如果日誌文件丟失，不要顯示錯誤</li>
-  <li>notifempty           –&gt; 如果日誌文件為空，則不輪換日誌文件</li>
-  <li>olddir “dir”         –&gt; 指定日誌文件的舊版本放在 「dir」 中</li>
-  <li>postrotate           –&gt; 引入一個在日誌被輪換後執行的腳本</li>
-  <li>prerotate            –&gt; 引入一個在日誌被輪換前執行的腳本</li>
-  <li>endscript            –&gt; 標記 prerotate 或 postrotate 腳本的結束</li>
-  <li>rotate ‘n’           –&gt; 在輪換方案中包含日誌的 n 個版本</li>
-  <li>sharedscripts        –&gt; 對於整個日誌組只運行一次腳本</li>
-  <li>size=’logsize’       –&gt; 在日誌大小大於 logsize（例如 100K，4M）時輪換</li>
-</ul>
-
-<h2 id="ex-">ex :</h2>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code>/tmp/sample_output.log {
-	size 1k
-	create 700 root root
-	rotate 4
-	compress
-}
-</code></pre></td></tr></tbody></table></div></div>
-
-<h2 id="ex--nginx">ex : nginx</h2>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15</pre></td><td class="code"><pre class="highlight"><code>/var/log/nginx/*.log {
-    daily
-    missingok
-    rotate 52
-    compress
-    delaycompress
-    notifempty
-    create 640 nginx adm
-    sharedscripts
-    postrotate
-            if [ -f /var/run/nginx.pid ]; then
-                    kill -USR1 `cat /var/run/nginx.pid`
-            fi
-    endscript
-}
-</code></pre></td></tr></tbody></table></div></div>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/ubuntu/log/2018/10/25/logrotate/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2289,7 +2246,7 @@ A slice can be created with the built-in function called make, which has the sig
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">105</span>
+                <span class="site-state-item-count">106</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
