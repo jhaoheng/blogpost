@@ -2,6 +2,23 @@
 <search>
   
     <entry>
+      <title><![CDATA[【Go】gRPC(一)]]></title>
+      <url>/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/</url>
+      <content type="text"><![CDATA[gRPC  gRPC is a modern, open source remote procedure call (RPC) framework  簡單來講就是，server 端跟 client 端都是固定的兩方，然後透過資料格式解析          雙方都特定處理某件事情，簡單來講就是類似 socket server，但並非是      有點類似透過 protocol buffer 在本地端直接調用 func 並得到回傳值        基於 HTTP/2 協議標準設計, 所以也是有 Request 與 Response          HTTP/2 是一個二進位協議, 意味著可讀性是 0        基於 ProtoBuf(Protocol Buffers) 序列化協議開發  四種模式          unary      client streaming      server streaming      bidirectional streaming      為了解決?  低延遲, 高擴充性, 分散式系統  可開發移動端的 clients, 與 cloud server 進行溝通  準確、高校且獨立的 protocol  分層設計以實現擴展，例如。 身份驗證，負載平衡，日誌記錄和監視等如何使用與開發  說明書 : https://grpc.io/docs/quickstart/  Github org page : https://github.com/grpc  Document : https://grpc.io/docs/  中文 : https://doc.oschina.net/grpc?t=58008  Example : https://github.com/smallnest/grpc-examples支援語言C++, Java (incl. support for Android), Objective-C (for iOS), Python, Ruby, Go, C#, Node.js可以應用在 web 端的服務嗎？  透過 gRPC-Web : https://github.com/grpc/grpc-web  gRPC-Web 提供 Javascript library 讓瀏覽器端可以存取使用 gRPC 的服務可以跟 JSON, Protobuf, Thrift, XML 一起應用嗎？Yes, 最初就支援 Protobuf, 並且可以延伸支援其他內容格式在移動端的開發的優勢？  節省頻寬, 使用更少的 TCP 連線  節省 CPU 使用  省電gRPC 為何比其他也是建立在 HTTP/2 架構上的 binary blob 來得好?  gRPC 在跨平台上比起一般 http lib 的表現來的優秀, 例如          interaction with flow-control at the application layer      cascading call-cancellation      load balancing &amp; failover      gRPC 與 REST 的比較  允許 full-duplex(全雙工) streaming.  基於效能，使用靜態路徑，解析路徑中調用的參數。REST 中 query parameters 與 payload body 會增加延遲跟複雜性  定義了一系列的 errors, 相信比 HTTP status codes 更直觀適用於 API 使用情境。]]></content>
+      <categories>
+        
+          <category> Golang </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> Golang </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
       <title><![CDATA[【Go】callback, func as a type]]></title>
       <url>/blogpost/golang/2019/09/16/Go-callback-design/</url>
       <content type="text"><![CDATA[宣告  func as a type : type callbackHandler func(name string)  在宣告 func 時, 將 func 放到參數位置 : func DoSomething(callback callbackHandler) {...}用途設計  在 objective-c 中的 complete, 通常做的都是異步的處理, ex: 等待 api 的回應過程中, 處理其他事情, 像 closure  所以用途設計應該可以用在          有 N 個 func, funcN 依賴 funcMain 的處理結果, 並且 funcN 可能還有其他事情需要處理      callbackHandler 的設計, 可以將多個 func 合併在一起, 個別制定 callbackHandler 內容, 並且回傳固定的返回值. Ex: error      [原本]sum := funcMain(args []int)temp := funcN(sum)[整合]type N funcN(sum int)funcMain(args []int, n N) {	sum := 0	for _, v := range args {		sum = v + sum	}	n(sum)}---var temp intfuncMain(args []int, funcN(sum int) {	fmt.Println(sum)	temp = sum})範例設計  進行 sigin, 查詢資料庫  查詢完畢, 回傳package pkgimport (	"errors"	"fmt"	"time")type Person struct{}type completeCallbackHandler func(err error)func (p *Person) Signin(account, password string, c chan string, complete completeCallbackHandler) {	fmt.Printf("Verify account = %s, password = %s, from database\n", account, password)	var err error	if false {		err = errors.New("Something wrong")	}	complete(err)	go func() {		time.Sleep(time.Second * 2)		c &lt;- "cmd : send notification to firebase"	}()}package mainimport (	"callback/pkg"	"fmt"	"time")type ResponseObjs struct {	statusCode int	err        string}var channelOfRobot chan string = make(chan string)func main() {	go worker()	p := pkg.Person{}	//	r := ResponseObjs{}	p.Signin("xxx@gmail.com", "1234", channelOfRobot, func(err error) {		if err != nil {			r.statusCode = 500			r.err = err.Error()		} else {			r.statusCode = 200			r.err = ""		}	})	fmt.Printf("return : %+v\n", r)	//	fmt.Println("system handle other process....")	// 按下任意鍵停止	var pause string	fmt.Scanln(&amp;pause)}func worker() {	for {		select {		case cmd := &lt;-channelOfRobot:			fmt.Printf("Exec =&gt; %+v\n", cmd)		default:			time.Sleep(time.Second)		}	}}]]></content>

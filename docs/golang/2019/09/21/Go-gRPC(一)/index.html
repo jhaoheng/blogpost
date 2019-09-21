@@ -83,7 +83,7 @@
 <link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="" />
+  <meta name="keywords" content="Golang," />
 
 
 
@@ -109,20 +109,17 @@
 
 
 
-<meta name="description" content="SYNOPSIS 透過本地端，練習 kubenetes client 在 mac 上，建立本地端的 kubernetes server &amp;amp; client 透過本地部署測試來降低雲端部署的錯誤 安裝 kubernetes server 實踐日期 20180301, 未來或許會有更好的方法進行測試 docker for mac 這個應用程式本身就包含 kubernetes server 的建立 關於 minikube，須先安裝 vm 服務 (virtualbox) 才能使用 [參考另一篇關於 kubenetes &amp;amp; minikube) 安裝 kubenetes client 則透過官網安裝即可 Environment osx docker community edition version 18.03.0-ce, channel:edge. 此版本在 20180301 支援 kubernetes 的整合. kubectl version Client Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.1”, GitCommit:”3a1c9449a956b6026f075fa3134ff92f7d55f812”, GitTreeState:”clean”, BuildDate:”2018-01-04T11:52:23Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”darwin/amd64”} Server Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.2”, GitCommit:”5fa2db2bd46ac79e5e00a4e6ed24191080aa463b”, GitTreeState:”clean”, BuildDate:”2018-01-18T09:42:01Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”linux/amd64”}">
-<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta name="description" content="gRPC gRPC is a modern, open source remote procedure call (RPC) framework 簡單來講就是，server 端跟 client 端都是固定的兩方，然後透過資料格式解析 雙方都特定處理某件事情，簡單來講就是類似 socket server，但並非是 有點類似透過 protocol buffer 在本地端直接調用 func 並得到回傳值 基於 HTTP/2 協議標準設計, 所以也是有 Request 與 Response HTTP/2 是一個二進位協議, 意味著可讀性是 0 基於 ProtoBuf(Protocol Buffers) 序列化協議開發 四種模式 unary client streaming server streaming bidirectional streaming 為了解決? 低延遲, 高擴充性, 分散式系統 可開發移動端的 clients, 與 cloud server 進行溝通 準確、高校且獨立的 protocol 分層設計以實現擴展，例如。 身份驗證，負載平衡，日誌記錄和監視等">
+<meta name="keywords" content="Golang">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【Deploy Test】Use Kubernetes &amp; Docker(local)">
-<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/docker/2018/03/01/Kubernetes&Docker/">
+<meta property="og:title" content="【Go】gRPC(一)">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/">
 <meta property="og:site_name" content="MAX 呼~">
-<meta property="og:description" content="SYNOPSIS 透過本地端，練習 kubenetes client 在 mac 上，建立本地端的 kubernetes server &amp;amp; client 透過本地部署測試來降低雲端部署的錯誤 安裝 kubernetes server 實踐日期 20180301, 未來或許會有更好的方法進行測試 docker for mac 這個應用程式本身就包含 kubernetes server 的建立 關於 minikube，須先安裝 vm 服務 (virtualbox) 才能使用 [參考另一篇關於 kubenetes &amp;amp; minikube) 安裝 kubenetes client 則透過官網安裝即可 Environment osx docker community edition version 18.03.0-ce, channel:edge. 此版本在 20180301 支援 kubernetes 的整合. kubectl version Client Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.1”, GitCommit:”3a1c9449a956b6026f075fa3134ff92f7d55f812”, GitTreeState:”clean”, BuildDate:”2018-01-04T11:52:23Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”darwin/amd64”} Server Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.2”, GitCommit:”5fa2db2bd46ac79e5e00a4e6ed24191080aa463b”, GitTreeState:”clean”, BuildDate:”2018-01-18T09:42:01Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”linux/amd64”}">
+<meta property="og:description" content="gRPC gRPC is a modern, open source remote procedure call (RPC) framework 簡單來講就是，server 端跟 client 端都是固定的兩方，然後透過資料格式解析 雙方都特定處理某件事情，簡單來講就是類似 socket server，但並非是 有點類似透過 protocol buffer 在本地端直接調用 func 並得到回傳值 基於 HTTP/2 協議標準設計, 所以也是有 Request 與 Response HTTP/2 是一個二進位協議, 意味著可讀性是 0 基於 ProtoBuf(Protocol Buffers) 序列化協議開發 四種模式 unary client streaming server streaming bidirectional streaming 為了解決? 低延遲, 高擴充性, 分散式系統 可開發移動端的 clients, 與 cloud server 進行溝通 準確、高校且獨立的 protocol 分層設計以實現擴展，例如。 身份驗證，負載平衡，日誌記錄和監視等">
 <meta property="og:locale" content="en">
-<meta property="og:image" content="https://raw.githubusercontent.com/jhaoheng/assets/master/blog/docker/docker-kubectl-1.png">
-<meta property="og:image" content="https://raw.githubusercontent.com/jhaoheng/assets/master/blog/docker/docker-kubectl-2.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【Deploy Test】Use Kubernetes &amp; Docker(local)">
-<meta name="twitter:description" content="SYNOPSIS 透過本地端，練習 kubenetes client 在 mac 上，建立本地端的 kubernetes server &amp;amp; client 透過本地部署測試來降低雲端部署的錯誤 安裝 kubernetes server 實踐日期 20180301, 未來或許會有更好的方法進行測試 docker for mac 這個應用程式本身就包含 kubernetes server 的建立 關於 minikube，須先安裝 vm 服務 (virtualbox) 才能使用 [參考另一篇關於 kubenetes &amp;amp; minikube) 安裝 kubenetes client 則透過官網安裝即可 Environment osx docker community edition version 18.03.0-ce, channel:edge. 此版本在 20180301 支援 kubernetes 的整合. kubectl version Client Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.1”, GitCommit:”3a1c9449a956b6026f075fa3134ff92f7d55f812”, GitTreeState:”clean”, BuildDate:”2018-01-04T11:52:23Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”darwin/amd64”} Server Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.2”, GitCommit:”5fa2db2bd46ac79e5e00a4e6ed24191080aa463b”, GitTreeState:”clean”, BuildDate:”2018-01-18T09:42:01Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”linux/amd64”}">
-<meta name="twitter:image" content="https://raw.githubusercontent.com/jhaoheng/assets/master/blog/docker/docker-kubectl-1.png">
+<meta name="twitter:title" content="【Go】gRPC(一)">
+<meta name="twitter:description" content="gRPC gRPC is a modern, open source remote procedure call (RPC) framework 簡單來講就是，server 端跟 client 端都是固定的兩方，然後透過資料格式解析 雙方都特定處理某件事情，簡單來講就是類似 socket server，但並非是 有點類似透過 protocol buffer 在本地端直接調用 func 並得到回傳值 基於 HTTP/2 協議標準設計, 所以也是有 Request 與 Response HTTP/2 是一個二進位協議, 意味著可讀性是 0 基於 ProtoBuf(Protocol Buffers) 序列化協議開發 四種模式 unary client streaming server streaming bidirectional streaming 為了解決? 低延遲, 高擴充性, 分散式系統 可開發移動端的 clients, 與 cloud server 進行溝通 準確、高校且獨立的 protocol 分層設計以實現擴展，例如。 身份驗證，負載平衡，日誌記錄和監視等">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -155,7 +152,7 @@
 
 
 
-  <title>【Deploy Test】Use Kubernetes & Docker(local) | MAX 呼~</title>
+  <title>【Go】gRPC(一) | MAX 呼~</title>
   
 
 
@@ -281,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/docker/2018/03/01/Kubernetes&Docker/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -301,7 +298,7 @@
           <h1 class="post-title" itemprop="name headline">
           
           
-            【Deploy Test】Use Kubernetes & Docker(local)
+            【Go】gRPC(一)
           
         </h1>
         
@@ -315,8 +312,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-01T07:30:00+08:00">
-                2018-03-01
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-21T12:15:00+08:00">
+                2019-09-21
               </time>
             
 
@@ -339,20 +336,8 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/kubenetes" itemprop="url" rel="index">
-                    <span itemprop="name">kubenetes</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/docker" itemprop="url" rel="index">
-                    <span itemprop="name">docker</span>
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
                   </a>
                 </span>
 
@@ -406,89 +391,89 @@
 
 
 
-  <h2 id="synopsis">SYNOPSIS</h2>
+  <h1 id="grpc">gRPC</h1>
+<blockquote>
+  <p>gRPC is a modern, open source remote procedure call (RPC) framework</p>
+</blockquote>
+
 <ul>
-  <li>透過本地端，練習 kubenetes client
+  <li>簡單來講就是，server 端跟 client 端都是固定的兩方，然後透過資料格式解析
     <ul>
-      <li>在 mac 上，建立本地端的 kubernetes server &amp; client</li>
-      <li>透過本地部署測試來降低雲端部署的錯誤</li>
+      <li>雙方都特定處理某件事情，簡單來講就是類似 socket server，但並非是</li>
+      <li>有點類似透過 protocol buffer 在本地端直接調用 func 並得到回傳值</li>
     </ul>
   </li>
-  <li>安裝 kubernetes server
+  <li>基於 HTTP/2 協議標準設計, 所以也是有 Request 與 Response
     <ul>
-      <li>實踐日期 20180301, 未來或許會有更好的方法進行測試</li>
-      <li>docker for mac 這個應用程式本身就包含 kubernetes server 的建立</li>
-      <li>關於 minikube，須先安裝 vm 服務 (virtualbox) 才能使用 [參考另一篇關於 kubenetes &amp; minikube)</li>
+      <li>HTTP/2 是一個二進位協議, 意味著可讀性是 0</li>
     </ul>
   </li>
-  <li>安裝 kubenetes client 則透過<a href="https://kubernetes.io/docs/imported/release/notes/">官網安裝</a>即可</li>
+  <li>基於 ProtoBuf(Protocol Buffers) 序列化協議開發</li>
+  <li>四種模式
+    <ul>
+      <li>unary</li>
+      <li>client streaming</li>
+      <li>server streaming</li>
+      <li>bidirectional streaming</li>
+    </ul>
+  </li>
 </ul>
 
-<h2 id="environment">Environment</h2>
+<h2 id="為了解決">為了解決?</h2>
 <ul>
-  <li>osx</li>
-  <li>docker community edition version 18.03.0-ce, channel:edge. 此版本在 20180301 支援 kubernetes 的整合.</li>
-  <li>kubectl version
-    <ul>
-      <li>Client Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.1”, GitCommit:”3a1c9449a956b6026f075fa3134ff92f7d55f812”, GitTreeState:”clean”, BuildDate:”2018-01-04T11:52:23Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”darwin/amd64”}</li>
-      <li>Server Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.2”, GitCommit:”5fa2db2bd46ac79e5e00a4e6ed24191080aa463b”, GitTreeState:”clean”, BuildDate:”2018-01-18T09:42:01Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”linux/amd64”}</li>
-    </ul>
-  </li>
+  <li>低延遲, 高擴充性, 分散式系統</li>
+  <li>可開發移動端的 clients, 與 cloud server 進行溝通</li>
+  <li>準確、高校且獨立的 protocol</li>
+  <li>分層設計以實現擴展，例如。 身份驗證，負載平衡，日誌記錄和監視等</li>
 </ul>
 
 <!--more-->
 
-<h2 id="install">install</h2>
-
+<h2 id="如何使用與開發">如何使用與開發</h2>
 <ul>
-  <li>安裝 docker edge
-    <ul>
-      <li>說明 : <a href="https://docs.docker.com/docker-for-mac/#kubernetes">kubernetes in docker</a></li>
-      <li><a href="https://docs.docker.com/docker-for-mac/install/#download-docker-for-mac">下載</a></li>
-      <li>注意，如果原本使用 stable 版本，既有的 image 全部都會被清空</li>
-    </ul>
-  </li>
-  <li>安裝 kubernetes client <a href="https://kubernetes.io/docs/imported/release/notes/">官網安裝</a>即可</li>
+  <li>說明書 : https://grpc.io/docs/quickstart/</li>
+  <li>Github org page : https://github.com/grpc</li>
+  <li>Document : https://grpc.io/docs/</li>
+  <li>中文 : https://doc.oschina.net/grpc?t=58008</li>
+  <li>Example : https://github.com/smallnest/grpc-examples</li>
 </ul>
 
-<h2 id="設定-kubenetes-server">設定 kubenetes server</h2>
+<h2 id="支援語言">支援語言</h2>
+<p>C++, Java (incl. support for Android), Objective-C (for iOS), Python, Ruby, Go, C#, Node.js</p>
 
-<ol>
-  <li>安裝好 docker for mac edge</li>
-  <li>進入 Perference</li>
-  <li>選擇 Kubernetes</li>
-  <li>勾選
-    <ul class="task-list">
-      <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />: Enable Kubennetes</li>
-      <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" checked="checked" />: Show system containers(advanced)</li>
+<h2 id="可以應用在-web-端的服務嗎">可以應用在 web 端的服務嗎？</h2>
+<ul>
+  <li>透過 gRPC-Web : https://github.com/grpc/grpc-web</li>
+  <li>gRPC-Web 提供 Javascript library 讓瀏覽器端可以存取使用 gRPC 的服務</li>
+</ul>
+
+<h2 id="可以跟-json-protobuf-thrift-xml-一起應用嗎">可以跟 JSON, Protobuf, Thrift, XML 一起應用嗎？</h2>
+<p>Yes, 最初就支援 Protobuf, 並且可以延伸支援其他內容格式</p>
+
+<h2 id="在移動端的開發的優勢">在移動端的開發的優勢？</h2>
+<ul>
+  <li>節省頻寬, 使用更少的 TCP 連線</li>
+  <li>節省 CPU 使用</li>
+  <li>省電</li>
+</ul>
+
+<h2 id="grpc-為何比其他也是建立在-http2-架構上的-binary-blob-來得好">gRPC 為何比其他也是建立在 HTTP/2 架構上的 binary blob 來得好?</h2>
+<ul>
+  <li>gRPC 在跨平台上比起一般 http lib 的表現來的優秀, 例如
+    <ul>
+      <li>interaction with flow-control at the application layer</li>
+      <li>cascading call-cancellation</li>
+      <li>load balancing &amp; failover</li>
     </ul>
   </li>
-  <li>apply 後，如下圖</li>
-</ol>
+</ul>
 
-<p><img src="https://raw.githubusercontent.com/jhaoheng/assets/master/blog/docker/docker-kubectl-1.png" alt="img1" /></p>
-
-<h2 id="設定-kubenetes-client">設定 kubenetes client</h2>
-
-<ol>
-  <li>安裝好 client 後，執行 <code class="highlighter-rouge">kubectl version</code>，會出現 server 並沒有指定的錯誤</li>
-  <li>執行 <code class="highlighter-rouge">kubectl config get-contexts</code></li>
-  <li>設定 <code class="highlighter-rouge">kubectl config use-context docker-for-desktop</code></li>
-  <li>再執行一次 <code class="highlighter-rouge">kubectl version</code></li>
-</ol>
-
-<h2 id="檢查-docker">檢查 docker</h2>
-
-<ol>
-  <li>此時透過 docker ps，會看到以下資訊，這些都是掛載的 kube server
-<img src="https://raw.githubusercontent.com/jhaoheng/assets/master/blog/docker/docker-kubectl-2.png" alt="img2" /></li>
-  <li>回到 docker kube perference 下，將以下取消勾選
-    <ul class="task-list">
-      <li class="task-list-item"><input type="checkbox" class="task-list-item-checkbox" disabled="disabled" />: Show system containers(advanced)</li>
-    </ul>
-  </li>
-  <li>在執行一次，就會發現相關服務被隱藏起來</li>
-</ol>
+<h2 id="grpc-與-rest-的比較">gRPC 與 REST 的比較</h2>
+<ul>
+  <li>允許 full-duplex(全雙工) streaming.</li>
+  <li>基於效能，使用靜態路徑，解析路徑中調用的參數。REST 中 query parameters 與 payload body 會增加延遲跟複雜性</li>
+  <li>定義了一系列的 errors, 相信比 HTTP status codes 更直觀適用於 API 使用情境。</li>
+</ul>
 
 
       
@@ -517,6 +502,13 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            
+            <a href="/blogpost/tag/#/Golang" rel="tag"># Golang</a>
+          
+        </div>
+      
 
       
       
@@ -529,18 +521,14 @@
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blogpost/kubenetes/minikube/2018/03/02/Kubernetes&Minikube/" rel="next" title="【Deploy Test】Use Kubernetes & Minikube(local)">
-                <i class="fa fa-chevron-left"></i> 【Deploy Test】Use Kubernetes & Minikube(local)
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blogpost/drone/2018/02/04/Drone/" rel="prev" title="【CI&CD】Use DRONE">
-                【CI&CD】Use DRONE <i class="fa fa-chevron-right"></i>
+              <a href="/blogpost/golang/2019/09/16/Go-callback-design/" rel="prev" title="【Go】callback, func as a type">
+                【Go】callback, func as a type <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -691,7 +679,7 @@
             
               <div class="post-toc-content">
     <ol class=nav>
-      <li class="nav-item nav-level-2"> <a class="nav-link" href="#synopsis"> <span class="nav-text">SYNOPSIS</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#environment"> <span class="nav-text">Environment</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#install"> <span class="nav-text">install</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#設定-kubenetes-server"> <span class="nav-text">設定 kubenetes server</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#設定-kubenetes-client"> <span class="nav-text">設定 kubenetes client</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#檢查-docker"> <span class="nav-text">檢查 docker</span> </a> </li>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#grpc"> <span class="nav-text">gRPC</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#為了解決"> <span class="nav-text">為了解決?</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#如何使用與開發"> <span class="nav-text">如何使用與開發</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#支援語言"> <span class="nav-text">支援語言</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#可以應用在-web-端的服務嗎"> <span class="nav-text">可以應用在 web 端的服務嗎？</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#可以跟-json-protobuf-thrift-xml-一起應用嗎"> <span class="nav-text">可以跟 JSON, Protobuf, Thrift, XML 一起應用嗎？</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#在移動端的開發的優勢"> <span class="nav-text">在移動端的開發的優勢？</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#grpc-為何比其他也是建立在-http2-架構上的-binary-blob-來得好"> <span class="nav-text">gRPC 為何比其他也是建立在 HTTP/2 架構上的 binary blob 來得好?</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#grpc-與-rest-的比較"> <span class="nav-text">gRPC 與 REST 的比較</span> </a> </li> </ol> </li>
     </ol>
   </div>
             
