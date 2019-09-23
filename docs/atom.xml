@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-09-21T12:16:04+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】gRPC(一)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/" rel="alternate" type="text/html" title="【Go】gRPC(一)" /><published>2019-09-21T12:15:00+08:00</published><updated>2019-09-21T12:15:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/%5BGo%5DgRPC(%E4%B8%80)</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/">&lt;h1 id=&quot;grpc&quot;&gt;gRPC&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-09-23T10:51:14+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】gRPC(一)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/" rel="alternate" type="text/html" title="【Go】gRPC(一)" /><published>2019-09-21T12:15:00+08:00</published><updated>2019-09-21T12:15:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/%5BGo%5DgRPC(%E4%B8%80)</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/">&lt;h1 id=&quot;grpc&quot;&gt;gRPC&lt;/h1&gt;
 &lt;blockquote&gt;
   &lt;p&gt;gRPC is a modern, open source remote procedure call (RPC) framework&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -16,12 +16,12 @@
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;基於 ProtoBuf(Protocol Buffers) 序列化協議開發&lt;/li&gt;
-  &lt;li&gt;四種模式
+  &lt;li&gt;實踐方法有&lt;a href=&quot;https://grpc.io/docs/tutorials/basic/go/&quot;&gt;四種模式&lt;/a&gt;
     &lt;ul&gt;
-      &lt;li&gt;unary&lt;/li&gt;
-      &lt;li&gt;client streaming&lt;/li&gt;
-      &lt;li&gt;server streaming&lt;/li&gt;
-      &lt;li&gt;bidirectional streaming&lt;/li&gt;
+      &lt;li&gt;simple RPC&lt;/li&gt;
+      &lt;li&gt;Client-side streaming RPC&lt;/li&gt;
+      &lt;li&gt;Server-side streaming RPC&lt;/li&gt;
+      &lt;li&gt;Bidirectional streaming RPC&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -80,7 +80,7 @@
   &lt;li&gt;允許 full-duplex(全雙工) streaming.&lt;/li&gt;
   &lt;li&gt;基於效能，使用靜態路徑，解析路徑中調用的參數。REST 中 query parameters 與 payload body 會增加延遲跟複雜性&lt;/li&gt;
   &lt;li&gt;定義了一系列的 errors, 相信比 HTTP status codes 更直觀適用於 API 使用情境。&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">gRPC gRPC is a modern, open source remote procedure call (RPC) framework 簡單來講就是，server 端跟 client 端都是固定的兩方，然後透過資料格式解析 雙方都特定處理某件事情，簡單來講就是類似 socket server，但並非是 有點類似透過 protocol buffer 在本地端直接調用 func 並得到回傳值 基於 HTTP/2 協議標準設計, 所以也是有 Request 與 Response HTTP/2 是一個二進位協議, 意味著可讀性是 0 基於 ProtoBuf(Protocol Buffers) 序列化協議開發 四種模式 unary client streaming server streaming bidirectional streaming 為了解決? 低延遲, 高擴充性, 分散式系統 可開發移動端的 clients, 與 cloud server 進行溝通 準確、高校且獨立的 protocol 分層設計以實現擴展，例如。 身份驗證，負載平衡，日誌記錄和監視等</summary></entry><entry><title type="html">【Go】callback, func as a type</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/16/Go-callback-design/" rel="alternate" type="text/html" title="【Go】callback, func as a type" /><published>2019-09-16T14:52:00+08:00</published><updated>2019-09-16T14:52:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/16/%5BGo%5Dcallback-design</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/16/Go-callback-design/">&lt;h1 id=&quot;宣告&quot;&gt;宣告&lt;/h1&gt;
+&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">gRPC gRPC is a modern, open source remote procedure call (RPC) framework 簡單來講就是，server 端跟 client 端都是固定的兩方，然後透過資料格式解析 雙方都特定處理某件事情，簡單來講就是類似 socket server，但並非是 有點類似透過 protocol buffer 在本地端直接調用 func 並得到回傳值 基於 HTTP/2 協議標準設計, 所以也是有 Request 與 Response HTTP/2 是一個二進位協議, 意味著可讀性是 0 基於 ProtoBuf(Protocol Buffers) 序列化協議開發 實踐方法有四種模式 simple RPC Client-side streaming RPC Server-side streaming RPC Bidirectional streaming RPC 為了解決? 低延遲, 高擴充性, 分散式系統 可開發移動端的 clients, 與 cloud server 進行溝通 準確、高校且獨立的 protocol 分層設計以實現擴展，例如。 身份驗證，負載平衡，日誌記錄和監視等</summary></entry><entry><title type="html">【Go】callback, func as a type</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/16/Go-callback-design/" rel="alternate" type="text/html" title="【Go】callback, func as a type" /><published>2019-09-16T14:52:00+08:00</published><updated>2019-09-16T14:52:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/16/%5BGo%5Dcallback-design</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/16/Go-callback-design/">&lt;h1 id=&quot;宣告&quot;&gt;宣告&lt;/h1&gt;
 &lt;ol&gt;
   &lt;li&gt;func as a type : &lt;code class=&quot;highlighter-rouge&quot;&gt;type callbackHandler func(name string)&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;在宣告 func 時, 將 func 放到參數位置 : &lt;code class=&quot;highlighter-rouge&quot;&gt;func DoSomething(callback callbackHandler) {...}&lt;/code&gt;&lt;/li&gt;
