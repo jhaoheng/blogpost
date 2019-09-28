@@ -1,4 +1,109 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-09-23T10:51:14+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】gRPC(一)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/" rel="alternate" type="text/html" title="【Go】gRPC(一)" /><published>2019-09-21T12:15:00+08:00</published><updated>2019-09-21T12:15:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/%5BGo%5DgRPC(%E4%B8%80)</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/">&lt;h1 id=&quot;grpc&quot;&gt;gRPC&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-09-28T22:34:17+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】Const use Method</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/28/Go-const_method/" rel="alternate" type="text/html" title="【Go】Const use Method" /><published>2019-09-28T21:17:00+08:00</published><updated>2019-09-28T21:17:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/28/%5BGo%5Dconst_method</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/28/Go-const_method/">&lt;h1 id=&quot;thinking&quot;&gt;Thinking&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;通常比較常看到的是，命名一個 struct 類型，然後為這個 struct 實踐方法。&lt;/li&gt;
+  &lt;li&gt;今天看別人的 code 發現有這種做法，一開始還在想，為何要特別這樣做，才覺得這是 clean code 的一種方式。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;glance-code&quot;&gt;Glance code&lt;/h2&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+	&lt;span class=&quot;s2&quot;&gt;&quot;errors&quot;&lt;/span&gt;
+	&lt;span class=&quot;s2&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
+	&lt;span class=&quot;s2&quot;&gt;&quot;time&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;type&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Country&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;const&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;Germany&lt;/span&gt;      &lt;span class=&quot;n&quot;&gt;Country&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Germany&quot;&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;UnitedStates&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Country&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;United States&quot;&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;NewZealand&lt;/span&gt;   &lt;span class=&quot;n&quot;&gt;Country&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;New Zealand&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeZoneID&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;is&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;of&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Country&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;its&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IANA&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;standard&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timezone&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;identifier&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeZoneID&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Country&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;Germany&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;      &lt;span class=&quot;s2&quot;&gt;&quot;Europe/Berlin&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;UnitedStates&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;America/Los_Angeles&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;NewZealand&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;   &lt;span class=&quot;s2&quot;&gt;&quot;Pacific/Auckland&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TimeZoneID&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;returns&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;IANA&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;identifier&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;given&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Country&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Country&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TimeZoneID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ok&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timeZoneID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ok&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;id&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;nil&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;errors&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;New&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;timezone id not found for country&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TimeIn&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;returns&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timezone&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tz&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TimeIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;https&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;golang&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;org&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pkg&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;/#&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LoadLocation&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;loads&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;location&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;on&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;basis&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;of&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;loc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LoadLocation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;tz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;!= nil {
+&lt;/span&gt;		&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;convert&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;current&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;to&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;specific&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;location&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;g&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Germany&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;in&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;given&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;format&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;In&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Format&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Get&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;the&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;timezone&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;tz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;UnitedStates&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;TimeZoneID&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+	&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;!= nil {
+&lt;/span&gt;		&lt;span class=&quot;p&quot;&gt;//&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;handle&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;error&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+	&lt;span class=&quot;n&quot;&gt;usTime&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TimeIn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tz&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;time&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;RFC3339&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Time in %s: %s&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;UnitedStates&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;usTime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+	&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;在這邊設定一個新的型態 Country, 目的是設定 只接收該型態的 method.
+    &lt;ul&gt;
+      &lt;li&gt;若直接使用 string, 則無法直接使用 以 string 為形態的 method.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;從 main() 來看，可以清楚的知道，物件 &lt;code class=&quot;highlighter-rouge&quot;&gt;UnitedStates&lt;/code&gt; 的 TimeZoneID
+    &lt;ul&gt;
+      &lt;li&gt;不直接命名的方式，也可以幫助後續無論是 Test or Debug，一種延續系統開發的作法&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;至於 RFC3339 是一種時間的顯示格式, 通常選擇格式, 能幫助我們在寫入資料庫選擇 &lt;code class=&quot;highlighter-rouge&quot;&gt;DATETIME&lt;/code&gt; or &lt;code class=&quot;highlighter-rouge&quot;&gt;TIMESTAMP&lt;/code&gt; 的格式選擇 ‘YYYY-MM-DD hh:mm:ss’&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;const (
+    ANSIC       = &quot;Mon Jan _2 15:04:05 2006&quot;
+    UnixDate    = &quot;Mon Jan _2 15:04:05 MST 2006&quot;
+    RubyDate    = &quot;Mon Jan 02 15:04:05 -0700 2006&quot;
+    RFC822      = &quot;02 Jan 06 15:04 MST&quot;
+    RFC822Z     = &quot;02 Jan 06 15:04 -0700&quot; // RFC822 with numeric zone
+    RFC850      = &quot;Monday, 02-Jan-06 15:04:05 MST&quot;
+    RFC1123     = &quot;Mon, 02 Jan 2006 15:04:05 MST&quot;
+    RFC1123Z    = &quot;Mon, 02 Jan 2006 15:04:05 -0700&quot; // RFC1123 with numeric zone
+    RFC3339     = &quot;2006-01-02T15:04:05Z07:00&quot;
+    RFC3339Nano = &quot;2006-01-02T15:04:05.999999999Z07:00&quot;
+    Kitchen     = &quot;3:04PM&quot;
+    // Handy time stamps.
+    Stamp      = &quot;Jan _2 15:04:05&quot;
+    StampMilli = &quot;Jan _2 15:04:05.000&quot;
+    StampMicro = &quot;Jan _2 15:04:05.000000&quot;
+    StampNano  = &quot;Jan _2 15:04:05.000000000&quot;
+)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">Thinking 通常比較常看到的是，命名一個 struct 類型，然後為這個 struct 實踐方法。 今天看別人的 code 發現有這種做法，一開始還在想，為何要特別這樣做，才覺得這是 clean code 的一種方式。 Glance code package main import ( &quot;errors&quot; &quot;fmt&quot; &quot;time&quot; ) type Country string const ( Germany Country = &quot;Germany&quot; UnitedStates Country = &quot;United States&quot; NewZealand Country = &quot;New Zealand&quot; ) // timeZoneID is a map of Country to its IANA standard timezone identifier var timeZoneID = map[Country]string{ Germany: &quot;Europe/Berlin&quot;, UnitedStates: &quot;America/Los_Angeles&quot;, NewZealand: &quot;Pacific/Auckland&quot;, } // TimeZoneID returns a IANA identifier for a given Country. func (c Country) TimeZoneID() (string, error) { if id, ok := timeZoneID[c]; ok { return id, nil } return &quot;&quot;, errors.New(&quot;timezone id not found for country&quot;) } // TimeIn returns time in timezone tz with fmt format func TimeIn(t time.Time, tz, fmt string) string { // https:/golang.org/pkg/time/#LoadLocation loads location on // the basis of loc, err := time.LoadLocation(tz) if err != nil { //handle error } // convert current time to specific location, e.g Germany in given format return t.In(loc).Format(fmt) } func main() { // Get the timezone tz, err := UnitedStates.TimeZoneID() if err != nil { //handle error } usTime := TimeIn(time.Now(), tz, time.RFC3339) fmt.Printf(&quot;Time in %s: %s&quot;, UnitedStates, usTime, ) } 在這邊設定一個新的型態 Country, 目的是設定 只接收該型態的 method. 若直接使用 string, 則無法直接使用 以 string 為形態的 method. 從 main() 來看，可以清楚的知道，物件 UnitedStates 的 TimeZoneID 不直接命名的方式，也可以幫助後續無論是 Test or Debug，一種延續系統開發的作法 至於 RFC3339 是一種時間的顯示格式, 通常選擇格式, 能幫助我們在寫入資料庫選擇 DATETIME or TIMESTAMP 的格式選擇 ‘YYYY-MM-DD hh:mm:ss’ const ( ANSIC = &quot;Mon Jan _2 15:04:05 2006&quot; UnixDate = &quot;Mon Jan _2 15:04:05 MST 2006&quot; RubyDate = &quot;Mon Jan 02 15:04:05 -0700 2006&quot; RFC822 = &quot;02 Jan 06 15:04 MST&quot; RFC822Z = &quot;02 Jan 06 15:04 -0700&quot; // RFC822 with numeric zone RFC850 = &quot;Monday, 02-Jan-06 15:04:05 MST&quot; RFC1123 = &quot;Mon, 02 Jan 2006 15:04:05 MST&quot; RFC1123Z = &quot;Mon, 02 Jan 2006 15:04:05 -0700&quot; // RFC1123 with numeric zone RFC3339 = &quot;2006-01-02T15:04:05Z07:00&quot; RFC3339Nano = &quot;2006-01-02T15:04:05.999999999Z07:00&quot; Kitchen = &quot;3:04PM&quot; // Handy time stamps. Stamp = &quot;Jan _2 15:04:05&quot; StampMilli = &quot;Jan _2 15:04:05.000&quot; StampMicro = &quot;Jan _2 15:04:05.000000&quot; StampNano = &quot;Jan _2 15:04:05.000000000&quot; )</summary></entry><entry><title type="html">【Go】gRPC(一)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/" rel="alternate" type="text/html" title="【Go】gRPC(一)" /><published>2019-09-21T12:15:00+08:00</published><updated>2019-09-21T12:15:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/%5BGo%5DgRPC(%E4%B8%80)</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/">&lt;h1 id=&quot;grpc&quot;&gt;gRPC&lt;/h1&gt;
 &lt;blockquote&gt;
   &lt;p&gt;gRPC is a modern, open source remote procedure call (RPC) framework&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -984,136 +1089,7 @@ ProxyPreserveHost On&lt;/p&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;apache2ctl restart&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:80&lt;/code&gt;, will show ‘proxy’&lt;/li&gt;
   &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;http://localhost:8080&lt;/code&gt;, be restricted to access&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Apache" /><summary type="html">Goal 80 port proxy to 8080 port. If work, will show ‘proxy’ http://localhost:8080 can’t access, must return 404. Use &amp;lt;If &quot;%{SERVER_PORT} != '80'&quot;&amp;gt; Redirect 404 / &amp;lt;/If&amp;gt; Repo &amp;amp; Env Set source code : https://github.com/jhaoheng/apacheProxy&amp;amp;UseExpressions docker-compose up -d &amp;amp;&amp;amp; docker exec -it ubuntu /bin/bash apt-get update apt-get install -y libapache2-mod-proxy-html libxml2-dev apache2 build-essential Proxy Modules a2enmod proxy proxy_http proxy_ajp rewrite proxy_balancer proxy_connect proxy_html xml2enc</summary></entry><entry><title type="html">【Golang】Diff - slice &amp;amp; array</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-diff-slice&array/" rel="alternate" type="text/html" title="【Golang】Diff - slice &amp; array" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/%5BGo%5Ddiff-slice&amp;array</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-diff-slice&amp;array/">&lt;h1 id=&quot;slice--array-差別&quot;&gt;slice &amp;amp; array 差別&lt;/h1&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;https://blog.golang.org/go-slices-usage-and-internals&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h1 id=&quot;array&quot;&gt;Array&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value.
-- An array's size is fixed;
-- Arrays do not need to be initialized
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;slice&quot;&gt;Slice&lt;/h1&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length.
-A slice can be created with the built-in function called make, which has the signature,
-`func make([]T, len, cap) []T`
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;glance--difference-between-both&quot;&gt;Glance : Difference between both&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;兩者在宣告方式不同&lt;/li&gt;
-  &lt;li&gt;兩者 type 不同&lt;/li&gt;
-  &lt;li&gt;兩者 kind 不同&lt;/li&gt;
-  &lt;li&gt;兩者在宣告後, 不設定 content, 印出內容&lt;/li&gt;
-  &lt;li&gt;兩者在新增/修改值上不同&lt;/li&gt;
-  &lt;li&gt;兩者 func 中，使用原理方式不同&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;!--more--&gt;
-
-&lt;h2 id=&quot;兩者在宣告方式不同-&quot;&gt;兩者在宣告方式不同 :&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;array : Go’s arrays are values.
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;var arrObject [4]int&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;arrObject := [4]int{0, 1, 2, 3}&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;arrObject := [...]int{0, 1, 2, 3}&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;slice : 用 make 建立
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;var sliceObject []int&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sliceObject := []int{}&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;sliceObject := []int{1,2,3,4}&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;兩者-type-不同&quot;&gt;兩者 type 不同&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;array : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(reflect.TypeOf(arrObject))&lt;/code&gt;, 顯示 [4]int&lt;/li&gt;
-  &lt;li&gt;slice : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(reflect.TypeOf(sliceObject))&lt;/code&gt;, 顯示 []int&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div&gt;
-    &lt;iframe src=&quot;https://play.golang.org/p/WLS7doOuphz&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
-    &lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;兩者-kind-不同-&quot;&gt;兩者 kind 不同 :&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;array : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(reflect.TypeOf(arrObject).Kind())&lt;/code&gt;, 顯示 array&lt;/li&gt;
-  &lt;li&gt;slice : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(reflect.TypeOf(sliceObject).Kind())&lt;/code&gt;, 顯示 slice&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div&gt;
-    &lt;iframe src=&quot;https://play.golang.org/p/6BD2qUVm00l&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
-    &lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;兩者在宣告後-不設定-content-印出內容&quot;&gt;兩者在宣告後, 不設定 content, 印出內容&lt;/h2&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;array : An array’s size is fixed&lt;/li&gt;
-  &lt;li&gt;slice : A slice type has no specified length.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div&gt;
-    &lt;iframe src=&quot;https://play.golang.org/p/xXnbKIC5WhV&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
-    &lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;兩者在新增修改值上不同&quot;&gt;兩者在新增/修改值上不同&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;array
-    &lt;ul&gt;
-      &lt;li&gt;arr 長度固定, 無法新增&lt;/li&gt;
-      &lt;li&gt;新增、修改 : &lt;code class=&quot;highlighter-rouge&quot;&gt;arrObject[0] = 999&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;slice
-    &lt;ul&gt;
-      &lt;li&gt;新增 : &lt;code class=&quot;highlighter-rouge&quot;&gt;sliceObject = append(sliceObject, 1,2,3,4)&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;修改 : &lt;code class=&quot;highlighter-rouge&quot;&gt;sliceObject[0] = 999&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div&gt;
-    &lt;iframe src=&quot;https://play.golang.org/p/HY7kVBdV-KZ&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
-    &lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h2 id=&quot;兩者-func-中使用原理方式不同&quot;&gt;兩者 func 中，使用原理方式不同&lt;/h2&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;範例中用到的 func, 需要注意 pointer&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;array 在 func 中, 是用 copy 的方式. 故最好用 pointer 的方式在傳遞 array&lt;/li&gt;
-  &lt;li&gt;slice 本身就是一個 pointer, 故可以在 func 中, 看到 address 相同&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div&gt;
-    &lt;iframe src=&quot;https://play.golang.org/p/Tt8rJNMjDAm&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
-    &lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;h1 id=&quot;the-same&quot;&gt;The same&lt;/h1&gt;
-
-&lt;h2 id=&quot;兩者在切割方式上相同-&quot;&gt;兩者在切割方式上&lt;strong&gt;相同&lt;/strong&gt; :&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;arr[:2]&lt;/code&gt; = &lt;code class=&quot;highlighter-rouge&quot;&gt;sliceObject[:2]&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;顯示長度上&quot;&gt;顯示長度上&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;array : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(len(arrayObject))&lt;/code&gt;, 顯示 4&lt;/li&gt;
-  &lt;li&gt;slice : &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Println(len(sliceObject))&lt;/code&gt; 顯示 0&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">slice &amp;amp; array 差別 https://blog.golang.org/go-slices-usage-and-internals Array Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value. - An array's size is fixed; - Arrays do not need to be initialized Slice The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length. A slice can be created with the built-in function called make, which has the signature, `func make([]T, len, cap) []T` Glance : Difference between both 兩者在宣告方式不同 兩者 type 不同 兩者 kind 不同 兩者在宣告後, 不設定 content, 印出內容 兩者在新增/修改值上不同 兩者 func 中，使用原理方式不同</summary></entry><entry><title type="html">【Golang】func &amp;amp; pointer</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&pointer/" rel="alternate" type="text/html" title="【Golang】func &amp; pointer" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/%5BGo%5Dfunc&amp;pointer</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&amp;pointer/">&lt;h1 id=&quot;kind&quot;&gt;kind&lt;/h1&gt;
+&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Apache" /><summary type="html">Goal 80 port proxy to 8080 port. If work, will show ‘proxy’ http://localhost:8080 can’t access, must return 404. Use &amp;lt;If &quot;%{SERVER_PORT} != '80'&quot;&amp;gt; Redirect 404 / &amp;lt;/If&amp;gt; Repo &amp;amp; Env Set source code : https://github.com/jhaoheng/apacheProxy&amp;amp;UseExpressions docker-compose up -d &amp;amp;&amp;amp; docker exec -it ubuntu /bin/bash apt-get update apt-get install -y libapache2-mod-proxy-html libxml2-dev apache2 build-essential Proxy Modules a2enmod proxy proxy_http proxy_ajp rewrite proxy_balancer proxy_connect proxy_html xml2enc</summary></entry><entry><title type="html">【Golang】func &amp;amp; pointer</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&pointer/" rel="alternate" type="text/html" title="【Golang】func &amp; pointer" /><published>2019-09-06T14:31:00+08:00</published><updated>2019-09-06T14:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/%5BGo%5Dfunc&amp;pointer</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&amp;pointer/">&lt;h1 id=&quot;kind&quot;&gt;kind&lt;/h1&gt;
 &lt;blockquote&gt;
   &lt;p&gt;Different kinds use a pointer to change the value in Func.&lt;/p&gt;
 &lt;/blockquote&gt;

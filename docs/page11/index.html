@@ -281,6 +281,204 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/05/10/ioshls/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/05/10/ioshls/" itemprop="url">
+                【iOS】HLS & m3u8
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-10T13:27:00+08:00">
+                2016-05-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="播放-線上串流-hls">播放 線上串流 HLS</h1>
+
+<ul>
+  <li>格式 : m3u8
+    <ul>
+      <li>測試檔案 : https://mega.nz/#F!ugxGEBaZ!z7OI0twEpBYdgGxUH7G5zw</li>
+    </ul>
+  </li>
+  <li>
+    <p>github : <a href="https://github.com/jhaoheng/HLS_sample">https://github.com/jhaoheng/HLS_sample</a></p>
+  </li>
+  <li><a href="https://developer.apple.com/streaming/">apple HTTP Live Streaming</a></li>
+</ul>
+
+<h2 id="apple-支援">apple 支援</h2>
+<ul>
+  <li>
+    <p>https://developer.apple.com/streaming/#streaming</p>
+  </li>
+  <li>
+    <p>使用 framework</p>
+    <ul>
+      <li>&lt;AVKit/AVKit.h&gt; : ios9 only</li>
+      <li>&lt;AVFoundation/AVFoundation.h&gt;</li>
+      <li>&lt;MediaPlayer/MediaPlayer.h&gt; : ios8 以下</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="mp4---m3u8轉換工具--ffmpeg">mp4 -&gt; m3u8轉換工具 : ffmpeg</h2>
+
+<p>因已安裝 homebrew 故</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>brew install ffmpeg
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="格式轉換">格式轉換</h2>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>ffmpeg -i &lt;filename&gt;.mp4 -c:v libx264 -c:a copy -f hls &lt;outputNmae&gt;.m3u8
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="透過-safari-播放測試-m3u8">透過 safari 播放測試 m3u8</h2>
+
+<ol>
+  <li>開啟 safari</li>
+  <li>將 url 放入即可</li>
+</ol>
+
+<h2 id="hls-server">HLS Server</h2>
+
+<ul>
+  <li>Web Server：提供 m3u8 播放清單。</li>
+  <li>Transcoder：若檔案內容並非 H.264 + AAC，那麼便需要進行轉檔。</li>
+  <li>Media Stream Segmenter：將欲播放的檔案切成 segment。</li>
+</ul>
+
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/05/10/ioshls/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/05/07/online-teaching-preparation-udemy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1870,7 +2068,7 @@ sub   rsa4096/&lt;subordinate private keys&gt; 2016-04-09 [E]
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-count">108</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

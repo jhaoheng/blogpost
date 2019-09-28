@@ -281,6 +281,340 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/aws/cognito/ios/2017/05/20/AWS-Cognito-iOS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/aws/cognito/ios/2017/05/20/AWS-Cognito-iOS/" itemprop="url">
+                【IOS】AWS Cognito sample test
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-20T16:31:00+08:00">
+                2017-05-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/AWS" itemprop="url" rel="index">
+                    <span itemprop="name">AWS</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Cognito" itemprop="url" rel="index">
+                    <span itemprop="name">Cognito</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/iOS" itemprop="url" rel="index">
+                    <span itemprop="name">iOS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="aws-cognito-with-ios">aws cognito with ios</h1>
+
+<ul>
+  <li>設定 ios aws sdk : http://docs.aws.amazon.com/zh_cn/mobile/sdkforios/developerguide/setup-aws-sdk-for-ios.html
+    <ul>
+      <li>在側邊欄也有基礎的 cognito 設定/使用方法</li>
+    </ul>
+  </li>
+  <li>Cognito 說明與介紹 : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/what-is-amazon-cognito.html</li>
+  <li>sdk 下載 : https://github.com/aws/aws-sdk-ios</li>
+  <li>sample 下載 : https://github.com/awslabs/aws-sdk-ios-samples
+    <ul>
+      <li>CognitoSync-Sample 需禁用 bitcode 才可以正常使用
+        <ul>
+          <li>環境
+            <ul>
+              <li>xcode : 8.3.2</li>
+              <li>ios 10.3.2</li>
+              <li>objective c</li>
+              <li>use cocoapod</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>使用授權的 flow : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/authentication-flow.html</li>
+  <li>關於 STS : Security token service 的文章簡介 : https://blog.clifflu.net/2014/05/iam-role-%E8%88%87-sts/</li>
+  <li>比較 STS API : http://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/id_credentials_temp_request.html#stsapi_comparison</li>
+</ul>
+
+<h2 id="1-設定-aws-cognito-user-pool">1: 設定 aws cognito user pool</h2>
+
+<ol>
+  <li>設定 user pool
+    <ul>
+      <li>要建立 app client =&gt; 提供 identity pool 設定用</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="2-cognito-user-pool-login-step">2: Cognito User pool login, step</h2>
+
+<p><strong>參考 step 1~6 : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/tutorial-integrating-user-pools-ios.html#tutorial-integrating-user-pools-get-aws-resource-cred-for-app-user</strong></p>
+
+<ol>
+  <li>參考 sample 中的 CognitoYourUserPools-Sample</li>
+  <li>在 Constants.m 中設定相關參數</li>
+  <li>實機測試時，進行註冊，可在 aws cognito console 中，看到相關註冊資訊</li>
+  <li>註冊完畢後，在使用 Federated Identities 進行暫行憑證的取得</li>
+</ol>
+
+<h2 id="3-設定-aws-congito-federated-identity-console">3: 設定 AWS Congito Federated Identity Console</h2>
+<ol>
+  <li>設定 identity pool
+    <ul>
+      <li>提供多種授權方法 : Cognito, Amazon, Facebook, Google+, Twitter, Custom
+  	- http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/external-identity-providers.html</li>
+      <li>完成後，會有各個平台的 sample code 可參考</li>
+    </ul>
+  </li>
+  <li>在 (1:) 中取得設定好的 user pool id , app client id 填入 Authentication providers 中的 cognito</li>
+</ol>
+
+<h2 id="4-cognito-federated-identities-login--step">4: Cognito Federated Identities login , step</h2>
+
+<h3 id="取得-cognito-授權登入需先註冊完-cognito-user-pool">取得 Cognito 授權登入，需先註冊完 cognito user pool</h3>
+<ul>
+  <li>參考 :
+    <ul>
+      <li>http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/tutorial-integrating-user-pools-ios.html#tutorial-integrating-user-pools-get-aws-resource-cred-for-app-user</li>
+      <li>http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/amazon-cognito-integrating-user-pools-with-identity-pools.html</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12</pre></td><td class="code"><pre class="highlight"><code>// 設定 1
+AWSServiceConfiguration *serviceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1 credentialsProvider:nil];
+// 設定 2
+AWSCognitoIdentityUserPoolConfiguration *userPoolConfiguration = [[AWSCognitoIdentityUserPoolConfiguration alloc] initWithClientId:@"YOUR_CLIENT_ID"  clientSecret:@"YOUR_CLIENT_SECRET" poolId:@"YOUR_USER_POOL_ID"];
+// 設定 3
+[AWSCognitoIdentityUserPool registerCognitoIdentityUserPoolWithConfiguration:serviceConfiguration userPoolConfiguration:userPoolConfiguration forKey:@"UserPool"];
+
+// 取得 user pool, 從 '設定 3' 中
+AWSCognitoIdentityUserPool *pool = [AWSCognitoIdentityUserPool CognitoIdentityUserPoolForKey:@"UserPool"];
+
+// 取得 credentailsProvider
+AWSCognitoCredentialsProvider *credentialsProvider = [[AWSCognitoCredentialsProvider alloc] initWithRegionType:AWSRegionUSEast1 identityPoolId:@"YOUR_IDENTITY_POOL_ID" identityProviderManager:pool];
+</code></pre></td></tr></tbody></table></div></div>
+
+<p>將憑證放入 serviceManager 中</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>AWSServiceConfiguration *defaultServiceConfiguration = [[AWSServiceConfiguration alloc] initWithRegion:AWSRegionUSEast1
+        credentialsProvider:credentialsProvider];
+AWSServiceManager.defaultServiceManager.defaultServiceConfiguration = defaultServiceConfiguration;
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="ex-facebook-授權登入此為-sample-既有的範例">ex: facebook 授權登入，此為 sample 既有的範例</h3>
+
+<ul>
+  <li>參考 sample 中的 CognitoSync-Sample</li>
+  <li>sample 中，記得關閉 bitcode (預設是開啟)，否則實機測試會失敗(測試時間 20170520)
+    <ul>
+      <li>compile error : <code class="highlighter-rouge">linker command failed with exit code 1</code></li>
+    </ul>
+  </li>
+</ul>
+
+<ol>
+  <li>在 app 中，設定好 facebook 的參數。在 cognito federated identities console 中開啟 facebook 的授權驗證。</li>
+  <li>安裝 app 後就可以登入，並拿到 臨時的憑證(預設一小時)，可操作包含
+    <ul>
+      <li>synchronize data with Amazon Cognito Sync</li>
+      <li>Amazon DynamoDB</li>
+      <li>Amazon S3, and Amazon API Gateway</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="4-using-tokens-with-user-pools">4: Using Tokens with User Pools</h2>
+
+<ul>
+  <li>成功取得授權後，會得到三把 token : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/amazon-cognito-user-pools-using-tokens-with-identity-providers.html
+    <ul>
+      <li>ID token</li>
+      <li>Access token</li>
+      <li>Refresh token</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="5-cognito-federated-identities-其他操作">5: Cognito Federated Identities 其他操作</h2>
+<ul>
+  <li>
+    <dl>
+      <dt>Getting Credentials</dt>
+      <dd>http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/getting-credentials.html</dd>
+    </dl>
+  </li>
+  <li>Accessing AWS Services : http://docs.aws.amazon.com/zh_cn/cognito/latest/developerguide/accessing-aws-services.html</li>
+</ul>
+
+<h2 id="6-amazon-cognito-sync">6: Amazon Cognito Sync</h2>
+<p>透過 user pool 來同步手機資料，將用戶的某些資料放到 aws console 中，避免遺失，也可用於跨多裝置的使用</p>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/aws/cognito/ios/2017/05/20/AWS-Cognito-iOS/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/hls/aws/2017/05/18/HLS-AWS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2285,174 +2619,6 @@ if( $mem-&gt;add("key","value",3600)){
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/01/04/line-flash-back-fix-201701/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2017/01/04/line-flash-back-fix-201701/" itemprop="url">
-                【line】閃退，修復
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-04T13:54:00+08:00">
-                2017-01-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <ul>
-  <li>嘗試網路上的許多操作方法包含
-    <ul>
-      <li>關閉 app 後，重新開啟 (失敗)</li>
-      <li>開啟飛航模式，開啟 app 後，任意傳訊息給任一人，關閉飛航模式 (失敗)</li>
-      <li>重新安裝 app (失敗)</li>
-      <li>透過另一支手機撥 line 電話給該 app (失敗)</li>
-    </ul>
-  </li>
-  <li>猜測是 資料庫問題，可能為轉移資料時，產生的問題
-    <ul>
-      <li>飛航模式可開啟，代表 app 沒問題，可能是網路問題</li>
-      <li>此手機的 line 登入另一個帳號，正常可使用，故非此 app or ios 版本的問題</li>
-      <li>猜測是資料庫中的帳號，認為此手機為非該用戶，故故意不讓使用</li>
-    </ul>
-  </li>
-  <li>解決方法
-    <ol>
-      <li>找出另一支手機，登入該帳號，目的在於重新設定此帳號對於 mobile 的認證</li>
-      <li>進入 line 中，開啟轉移</li>
-      <li>拿出原本的手機，登入帳號，即可正常使用</li>
-    </ol>
-  </li>
-</ul>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2017/01/04/line-flash-back-fix-201701/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2514,7 +2680,7 @@ if( $mem-&gt;add("key","value",3600)){
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-count">108</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

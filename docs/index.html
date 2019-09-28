@@ -281,6 +281,279 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/28/Go-const_method/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/golang/2019/09/28/Go-const_method/" itemprop="url">
+                【Go】Const use Method
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-28T21:17:00+08:00">
+                2019-09-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="thinking">Thinking</h1>
+
+<ul>
+  <li>通常比較常看到的是，命名一個 struct 類型，然後為這個 struct 實踐方法。</li>
+  <li>今天看別人的 code 發現有這種做法，一開始還在想，為何要特別這樣做，才覺得這是 clean code 的一種方式。</li>
+</ul>
+
+<h2 id="glance-code">Glance code</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48<br/>49<br/>50<br/>51<br/>52<br/>53<br/>54<br/>55<br/>56<br/>57<br/>58<br/>59</pre></td><td class="code"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="n">import</span> <span class="p">(</span>
+	<span class="s2">"errors"</span>
+	<span class="s2">"fmt"</span>
+	<span class="s2">"time"</span>
+<span class="p">)</span>
+
+<span class="n">type</span> <span class="n">Country</span> <span class="k">string</span>
+
+<span class="n">const</span> <span class="p">(</span>
+	<span class="n">Germany</span>      <span class="n">Country</span> <span class="p">=</span> <span class="s2">"Germany"</span>
+	<span class="n">UnitedStates</span> <span class="n">Country</span> <span class="p">=</span> <span class="s2">"United States"</span>
+	<span class="n">NewZealand</span>   <span class="n">Country</span> <span class="p">=</span> <span class="s2">"New Zealand"</span>
+<span class="p">)</span>
+
+<span class="p">//</span> <span class="n">timeZoneID</span> <span class="n">is</span> <span class="n">a</span> <span class="n">map</span> <span class="k">of</span> <span class="n">Country</span> <span class="k">to</span> <span class="n">its</span> <span class="n">IANA</span> <span class="n">standard</span> <span class="n">timezone</span> <span class="n">identifier</span>
+<span class="n">var</span> <span class="n">timeZoneID</span> <span class="p">=</span> <span class="n">map</span><span class="p">[</span><span class="n">Country</span><span class="p">]</span><span class="k">string</span><span class="p">{</span>
+	<span class="n">Germany</span><span class="p">:</span>      <span class="s2">"Europe/Berlin"</span><span class="p">,</span>
+	<span class="n">UnitedStates</span><span class="p">:</span> <span class="s2">"America/Los_Angeles"</span><span class="p">,</span>
+	<span class="n">NewZealand</span><span class="p">:</span>   <span class="s2">"Pacific/Auckland"</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="p">//</span> <span class="n">TimeZoneID</span> <span class="n">returns</span> <span class="n">a</span> <span class="n">IANA</span> <span class="n">identifier</span> <span class="n">for</span> <span class="n">a</span> <span class="n">given</span> <span class="n">Country</span><span class="p">.</span>
+<span class="n">func</span> <span class="p">(</span><span class="n">c</span> <span class="n">Country</span><span class="p">)</span> <span class="n">TimeZoneID</span><span class="p">()</span> <span class="p">(</span><span class="k">string</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">id</span><span class="p">,</span> <span class="n">ok</span> <span class="p">:=</span> <span class="n">timeZoneID</span><span class="p">[</span><span class="n">c</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+		<span class="n">return</span> <span class="n">id</span><span class="p">,</span> <span class="n">nil</span>
+	<span class="p">}</span>
+	<span class="n">return</span> <span class="s2">""</span><span class="p">,</span> <span class="n">errors</span><span class="p">.</span><span class="n">New</span><span class="p">(</span><span class="s2">"timezone id not found for country"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="p">//</span> <span class="n">TimeIn</span> <span class="n">returns</span> <span class="n">time</span> <span class="k">in</span> <span class="n">timezone</span> <span class="n">tz</span> <span class="k">with</span> <span class="n">fmt</span> <span class="n">format</span>
+<span class="n">func</span> <span class="n">TimeIn</span><span class="p">(</span><span class="n">t</span> <span class="n">time</span><span class="p">.</span><span class="n">Time</span><span class="p">,</span> <span class="n">tz</span><span class="p">,</span> <span class="n">fmt</span> <span class="k">string</span><span class="p">)</span> <span class="k">string</span> <span class="p">{</span>
+
+	<span class="p">//</span> <span class="n">https</span><span class="p">:/</span><span class="n">golang</span><span class="p">.</span><span class="n">org</span><span class="p">/</span><span class="n">pkg</span><span class="p">/</span><span class="n">time</span><span class="p">/#</span><span class="n">LoadLocation</span> <span class="n">loads</span> <span class="n">location</span> <span class="n">on</span>
+	<span class="p">//</span> <span class="n">the</span> <span class="n">basis</span> <span class="k">of</span>
+	<span class="n">loc</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">time</span><span class="p">.</span><span class="n">LoadLocation</span><span class="p">(</span><span class="n">tz</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="c1">!= nil {
+</span>		<span class="p">//</span><span class="n">handle</span> <span class="n">error</span>
+	<span class="p">}</span>
+
+	<span class="p">//</span> <span class="n">convert</span> <span class="n">current</span> <span class="n">time</span> <span class="k">to</span> <span class="n">specific</span> <span class="n">location</span><span class="p">,</span> <span class="n">e</span><span class="p">.</span><span class="n">g</span> <span class="n">Germany</span> <span class="k">in</span> <span class="n">given</span> <span class="n">format</span>
+	<span class="n">return</span> <span class="n">t</span><span class="p">.</span><span class="k">In</span><span class="p">(</span><span class="n">loc</span><span class="p">).</span><span class="n">Format</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="p">//</span> <span class="n">Get</span> <span class="n">the</span> <span class="n">timezone</span>
+	<span class="n">tz</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">UnitedStates</span><span class="p">.</span><span class="n">TimeZoneID</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="c1">!= nil {
+</span>		<span class="p">//</span><span class="n">handle</span> <span class="n">error</span>
+	<span class="p">}</span>
+
+	<span class="n">usTime</span> <span class="p">:=</span> <span class="n">TimeIn</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">Now</span><span class="p">(),</span> <span class="n">tz</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="n">RFC3339</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">"Time in %s: %s"</span><span class="p">,</span>
+		<span class="n">UnitedStates</span><span class="p">,</span>
+		<span class="n">usTime</span><span class="p">,</span>
+	<span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>在這邊設定一個新的型態 Country, 目的是設定 只接收該型態的 method.
+    <ul>
+      <li>若直接使用 string, 則無法直接使用 以 string 為形態的 method.</li>
+    </ul>
+  </li>
+  <li>從 main() 來看，可以清楚的知道，物件 <code class="highlighter-rouge">UnitedStates</code> 的 TimeZoneID
+    <ul>
+      <li>不直接命名的方式，也可以幫助後續無論是 Test or Debug，一種延續系統開發的作法</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>至於 RFC3339 是一種時間的顯示格式, 通常選擇格式, 能幫助我們在寫入資料庫選擇 <code class="highlighter-rouge">DATETIME</code> or <code class="highlighter-rouge">TIMESTAMP</code> 的格式選擇 ‘YYYY-MM-DD hh:mm:ss’</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18</pre></td><td class="code"><pre class="highlight"><code>const (
+    ANSIC       = "Mon Jan _2 15:04:05 2006"
+    UnixDate    = "Mon Jan _2 15:04:05 MST 2006"
+    RubyDate    = "Mon Jan 02 15:04:05 -0700 2006"
+    RFC822      = "02 Jan 06 15:04 MST"
+    RFC822Z     = "02 Jan 06 15:04 -0700" // RFC822 with numeric zone
+    RFC850      = "Monday, 02-Jan-06 15:04:05 MST"
+    RFC1123     = "Mon, 02 Jan 2006 15:04:05 MST"
+    RFC1123Z    = "Mon, 02 Jan 2006 15:04:05 -0700" // RFC1123 with numeric zone
+    RFC3339     = "2006-01-02T15:04:05Z07:00"
+    RFC3339Nano = "2006-01-02T15:04:05.999999999Z07:00"
+    Kitchen     = "3:04PM"
+    // Handy time stamps.
+    Stamp      = "Jan _2 15:04:05"
+    StampMilli = "Jan _2 15:04:05.000"
+    StampMicro = "Jan _2 15:04:05.000000"
+    StampNano  = "Jan _2 15:04:05.000000000"
+)
+</code></pre></td></tr></tbody></table></div></div>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/golang/2019/09/28/Go-const_method/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2020,201 +2293,6 @@ funcMain(args []int, funcN(sum int) {
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-diff-slice&array/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/golang/2019/09/06/Go-diff-slice&array/" itemprop="url">
-                【Golang】Diff - slice & array
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-06T14:31:00+08:00">
-                2019-09-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
-                    <span itemprop="name">Golang</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="slice--array-差別">slice &amp; array 差別</h1>
-<blockquote>
-  <p>https://blog.golang.org/go-slices-usage-and-internals</p>
-</blockquote>
-
-<h1 id="array">Array</h1>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>Go's arrays are values. An array variable denotes the entire array; it is not a pointer to the first array element (as would be the case in C). This means that when you assign or pass around an array value you will make a copy of its contents. (To avoid the copy you could pass a pointer to the array, but then that's a pointer to an array, not an array.) One way to think about arrays is as a sort of struct but with indexed rather than named fields: a fixed-size composite value.
-- An array's size is fixed;
-- Arrays do not need to be initialized
-</code></pre></td></tr></tbody></table></div></div>
-
-<h1 id="slice">Slice</h1>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>The type specification for a slice is []T, where T is the type of the elements of the slice. Unlike an array type, a slice type has no specified length.
-A slice can be created with the built-in function called make, which has the signature,
-`func make([]T, len, cap) []T`
-</code></pre></td></tr></tbody></table></div></div>
-
-<h1 id="glance--difference-between-both">Glance : Difference between both</h1>
-
-<ul>
-  <li>兩者在宣告方式不同</li>
-  <li>兩者 type 不同</li>
-  <li>兩者 kind 不同</li>
-  <li>兩者在宣告後, 不設定 content, 印出內容</li>
-  <li>兩者在新增/修改值上不同</li>
-  <li>兩者 func 中，使用原理方式不同</li>
-</ul>
-
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/golang/2019/09/06/Go-diff-slice&array/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2276,7 +2354,7 @@ A slice can be created with the built-in function called make, which has the sig
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-count">108</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

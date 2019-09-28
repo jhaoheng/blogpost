@@ -281,6 +281,185 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/09/30/phalcon-modelsqlstatehy000-2002/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/09/30/phalcon-modelsqlstatehy000-2002/" itemprop="url">
+                【phalcon model】SQLSTATE[HY000] [2002]
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-09-30T03:06:00+08:00">
+                2016-09-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="env">env</h2>
+
+<ul>
+  <li>phalcon DevTools (3.0.1)</li>
+  <li>MAMP 3.5.2
+    <ul>
+      <li>php 7.0.8</li>
+      <li>mysql</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="trouble">Trouble</h2>
+
+<ul>
+  <li>cmd : <code class="highlighter-rouge">phalcon model --name [table_name]</code></li>
+  <li>error : <code class="highlighter-rouge">ERROR: SQLSTATE[HY000] [2002] No such file or directory</code></li>
+</ul>
+
+<h2 id="fix">Fix</h2>
+
+<p>Because the phalcon-DevTools [php version] does not set MAMP mysql source</p>
+
+<p>use</p>
+
+<ul>
+  <li><code class="highlighter-rouge">php -ini</code></li>
+  <li><code class="highlighter-rouge">vim php.ini</code></li>
+  <li>search <code class="highlighter-rouge">mysql.default_socket</code> 填入 <code class="highlighter-rouge">/Applications/MAMP/tmp/mysql/mysql.sock</code>
+    <ul>
+      <li><code class="highlighter-rouge">pdo_mysql.default_socket = /Applications/MAMP/tmp/mysql/mysql.sock</code></li>
+    </ul>
+  </li>
+  <li>restart MAMP</li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/09/30/phalcon-modelsqlstatehy000-2002/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/09/20/projectnotification-package/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2090,155 +2269,6 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/29/phalconphpstorm-ide/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/07/29/phalconphpstorm-ide/" itemprop="url">
-                【Phalcon】phpstorm ide
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-29T16:52:00+08:00">
-                2016-07-29
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <p>讓 ide 支援 phalcon-devtools 的語法
-<code class="highlighter-rouge">/phalcon-devtools/ide/phpstorm/phalcon.sh</code></p>
-
-<p>讓 ide 支援 phalcon 的語法
-<code class="highlighter-rouge">/phalcon-devtools/ide/stubs/Phalcon</code></p>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/07/29/phalconphpstorm-ide/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2300,7 +2330,7 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">107</span>
+                <span class="site-state-item-count">108</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

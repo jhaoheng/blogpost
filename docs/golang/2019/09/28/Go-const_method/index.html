@@ -1,0 +1,916 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Golang," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Thinking 通常比較常看到的是，命名一個 struct 類型，然後為這個 struct 實踐方法。 今天看別人的 code 發現有這種做法，一開始還在想，為何要特別這樣做，才覺得這是 clean code 的一種方式。 Glance code package main import ( &quot;errors&quot; &quot;fmt&quot; &quot;time&quot; ) type Country string const ( Germany Country = &quot;Germany&quot; UnitedStates Country = &quot;United States&quot; NewZealand Country = &quot;New Zealand&quot; ) // timeZoneID is a map of Country to its IANA standard timezone identifier var timeZoneID = map[Country]string{ Germany: &quot;Europe/Berlin&quot;, UnitedStates: &quot;America/Los_Angeles&quot;, NewZealand: &quot;Pacific/Auckland&quot;, } // TimeZoneID returns a IANA identifier for a given Country. func (c Country) TimeZoneID() (string, error) { if id, ok := timeZoneID[c]; ok { return id, nil } return &quot;&quot;, errors.New(&quot;timezone id not found for country&quot;) } // TimeIn returns time in timezone tz with fmt format func TimeIn(t time.Time, tz, fmt string) string { // https:/golang.org/pkg/time/#LoadLocation loads location on // the basis of loc, err := time.LoadLocation(tz) if err != nil { //handle error } // convert current time to specific location, e.g Germany in given format return t.In(loc).Format(fmt) } func main() { // Get the timezone tz, err := UnitedStates.TimeZoneID() if err != nil { //handle error } usTime := TimeIn(time.Now(), tz, time.RFC3339) fmt.Printf(&quot;Time in %s: %s&quot;, UnitedStates, usTime, ) } 在這邊設定一個新的型態 Country, 目的是設定 只接收該型態的 method. 若直接使用 string, 則無法直接使用 以 string 為形態的 method. 從 main() 來看，可以清楚的知道，物件 UnitedStates 的 TimeZoneID 不直接命名的方式，也可以幫助後續無論是 Test or Debug，一種延續系統開發的作法 至於 RFC3339 是一種時間的顯示格式, 通常選擇格式, 能幫助我們在寫入資料庫選擇 DATETIME or TIMESTAMP 的格式選擇 ‘YYYY-MM-DD hh:mm:ss’ const ( ANSIC = &quot;Mon Jan _2 15:04:05 2006&quot; UnixDate = &quot;Mon Jan _2 15:04:05 MST 2006&quot; RubyDate = &quot;Mon Jan 02 15:04:05 -0700 2006&quot; RFC822 = &quot;02 Jan 06 15:04 MST&quot; RFC822Z = &quot;02 Jan 06 15:04 -0700&quot; // RFC822 with numeric zone RFC850 = &quot;Monday, 02-Jan-06 15:04:05 MST&quot; RFC1123 = &quot;Mon, 02 Jan 2006 15:04:05 MST&quot; RFC1123Z = &quot;Mon, 02 Jan 2006 15:04:05 -0700&quot; // RFC1123 with numeric zone RFC3339 = &quot;2006-01-02T15:04:05Z07:00&quot; RFC3339Nano = &quot;2006-01-02T15:04:05.999999999Z07:00&quot; Kitchen = &quot;3:04PM&quot; // Handy time stamps. Stamp = &quot;Jan _2 15:04:05&quot; StampMilli = &quot;Jan _2 15:04:05.000&quot; StampMicro = &quot;Jan _2 15:04:05.000000&quot; StampNano = &quot;Jan _2 15:04:05.000000000&quot; )">
+<meta name="keywords" content="Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Go】Const use Method">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/28/Go-const_method/">
+<meta property="og:site_name" content="MAX 呼~">
+<meta property="og:description" content="Thinking 通常比較常看到的是，命名一個 struct 類型，然後為這個 struct 實踐方法。 今天看別人的 code 發現有這種做法，一開始還在想，為何要特別這樣做，才覺得這是 clean code 的一種方式。 Glance code package main import ( &quot;errors&quot; &quot;fmt&quot; &quot;time&quot; ) type Country string const ( Germany Country = &quot;Germany&quot; UnitedStates Country = &quot;United States&quot; NewZealand Country = &quot;New Zealand&quot; ) // timeZoneID is a map of Country to its IANA standard timezone identifier var timeZoneID = map[Country]string{ Germany: &quot;Europe/Berlin&quot;, UnitedStates: &quot;America/Los_Angeles&quot;, NewZealand: &quot;Pacific/Auckland&quot;, } // TimeZoneID returns a IANA identifier for a given Country. func (c Country) TimeZoneID() (string, error) { if id, ok := timeZoneID[c]; ok { return id, nil } return &quot;&quot;, errors.New(&quot;timezone id not found for country&quot;) } // TimeIn returns time in timezone tz with fmt format func TimeIn(t time.Time, tz, fmt string) string { // https:/golang.org/pkg/time/#LoadLocation loads location on // the basis of loc, err := time.LoadLocation(tz) if err != nil { //handle error } // convert current time to specific location, e.g Germany in given format return t.In(loc).Format(fmt) } func main() { // Get the timezone tz, err := UnitedStates.TimeZoneID() if err != nil { //handle error } usTime := TimeIn(time.Now(), tz, time.RFC3339) fmt.Printf(&quot;Time in %s: %s&quot;, UnitedStates, usTime, ) } 在這邊設定一個新的型態 Country, 目的是設定 只接收該型態的 method. 若直接使用 string, 則無法直接使用 以 string 為形態的 method. 從 main() 來看，可以清楚的知道，物件 UnitedStates 的 TimeZoneID 不直接命名的方式，也可以幫助後續無論是 Test or Debug，一種延續系統開發的作法 至於 RFC3339 是一種時間的顯示格式, 通常選擇格式, 能幫助我們在寫入資料庫選擇 DATETIME or TIMESTAMP 的格式選擇 ‘YYYY-MM-DD hh:mm:ss’ const ( ANSIC = &quot;Mon Jan _2 15:04:05 2006&quot; UnixDate = &quot;Mon Jan _2 15:04:05 MST 2006&quot; RubyDate = &quot;Mon Jan 02 15:04:05 -0700 2006&quot; RFC822 = &quot;02 Jan 06 15:04 MST&quot; RFC822Z = &quot;02 Jan 06 15:04 -0700&quot; // RFC822 with numeric zone RFC850 = &quot;Monday, 02-Jan-06 15:04:05 MST&quot; RFC1123 = &quot;Mon, 02 Jan 2006 15:04:05 MST&quot; RFC1123Z = &quot;Mon, 02 Jan 2006 15:04:05 -0700&quot; // RFC1123 with numeric zone RFC3339 = &quot;2006-01-02T15:04:05Z07:00&quot; RFC3339Nano = &quot;2006-01-02T15:04:05.999999999Z07:00&quot; Kitchen = &quot;3:04PM&quot; // Handy time stamps. Stamp = &quot;Jan _2 15:04:05&quot; StampMilli = &quot;Jan _2 15:04:05.000&quot; StampMicro = &quot;Jan _2 15:04:05.000000&quot; StampNano = &quot;Jan _2 15:04:05.000000000&quot; )">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Go】Const use Method">
+<meta name="twitter:description" content="Thinking 通常比較常看到的是，命名一個 struct 類型，然後為這個 struct 實踐方法。 今天看別人的 code 發現有這種做法，一開始還在想，為何要特別這樣做，才覺得這是 clean code 的一種方式。 Glance code package main import ( &quot;errors&quot; &quot;fmt&quot; &quot;time&quot; ) type Country string const ( Germany Country = &quot;Germany&quot; UnitedStates Country = &quot;United States&quot; NewZealand Country = &quot;New Zealand&quot; ) // timeZoneID is a map of Country to its IANA standard timezone identifier var timeZoneID = map[Country]string{ Germany: &quot;Europe/Berlin&quot;, UnitedStates: &quot;America/Los_Angeles&quot;, NewZealand: &quot;Pacific/Auckland&quot;, } // TimeZoneID returns a IANA identifier for a given Country. func (c Country) TimeZoneID() (string, error) { if id, ok := timeZoneID[c]; ok { return id, nil } return &quot;&quot;, errors.New(&quot;timezone id not found for country&quot;) } // TimeIn returns time in timezone tz with fmt format func TimeIn(t time.Time, tz, fmt string) string { // https:/golang.org/pkg/time/#LoadLocation loads location on // the basis of loc, err := time.LoadLocation(tz) if err != nil { //handle error } // convert current time to specific location, e.g Germany in given format return t.In(loc).Format(fmt) } func main() { // Get the timezone tz, err := UnitedStates.TimeZoneID() if err != nil { //handle error } usTime := TimeIn(time.Now(), tz, time.RFC3339) fmt.Printf(&quot;Time in %s: %s&quot;, UnitedStates, usTime, ) } 在這邊設定一個新的型態 Country, 目的是設定 只接收該型態的 method. 若直接使用 string, 則無法直接使用 以 string 為形態的 method. 從 main() 來看，可以清楚的知道，物件 UnitedStates 的 TimeZoneID 不直接命名的方式，也可以幫助後續無論是 Test or Debug，一種延續系統開發的作法 至於 RFC3339 是一種時間的顯示格式, 通常選擇格式, 能幫助我們在寫入資料庫選擇 DATETIME or TIMESTAMP 的格式選擇 ‘YYYY-MM-DD hh:mm:ss’ const ( ANSIC = &quot;Mon Jan _2 15:04:05 2006&quot; UnixDate = &quot;Mon Jan _2 15:04:05 MST 2006&quot; RubyDate = &quot;Mon Jan 02 15:04:05 -0700 2006&quot; RFC822 = &quot;02 Jan 06 15:04 MST&quot; RFC822Z = &quot;02 Jan 06 15:04 -0700&quot; // RFC822 with numeric zone RFC850 = &quot;Monday, 02-Jan-06 15:04:05 MST&quot; RFC1123 = &quot;Mon, 02 Jan 2006 15:04:05 MST&quot; RFC1123Z = &quot;Mon, 02 Jan 2006 15:04:05 -0700&quot; // RFC1123 with numeric zone RFC3339 = &quot;2006-01-02T15:04:05Z07:00&quot; RFC3339Nano = &quot;2006-01-02T15:04:05.999999999Z07:00&quot; Kitchen = &quot;3:04PM&quot; // Handy time stamps. Stamp = &quot;Jan _2 15:04:05&quot; StampMilli = &quot;Jan _2 15:04:05.000&quot; StampMicro = &quot;Jan _2 15:04:05.000000&quot; StampNano = &quot;Jan _2 15:04:05.000000000&quot; )">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blogpost',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
+
+
+
+
+
+  <title>【Go】Const use Method | MAX 呼~</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blogpost/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX 呼~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blogpost/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blogpost/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/blogpost/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/28/Go-const_method/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【Go】Const use Method
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-28T21:17:00+08:00">
+                2019-09-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="thinking">Thinking</h1>
+
+<ul>
+  <li>通常比較常看到的是，命名一個 struct 類型，然後為這個 struct 實踐方法。</li>
+  <li>今天看別人的 code 發現有這種做法，一開始還在想，為何要特別這樣做，才覺得這是 clean code 的一種方式。</li>
+</ul>
+
+<h2 id="glance-code">Glance code</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48<br/>49<br/>50<br/>51<br/>52<br/>53<br/>54<br/>55<br/>56<br/>57<br/>58<br/>59</pre></td><td class="code"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="n">import</span> <span class="p">(</span>
+	<span class="s2">"errors"</span>
+	<span class="s2">"fmt"</span>
+	<span class="s2">"time"</span>
+<span class="p">)</span>
+
+<span class="n">type</span> <span class="n">Country</span> <span class="k">string</span>
+
+<span class="n">const</span> <span class="p">(</span>
+	<span class="n">Germany</span>      <span class="n">Country</span> <span class="p">=</span> <span class="s2">"Germany"</span>
+	<span class="n">UnitedStates</span> <span class="n">Country</span> <span class="p">=</span> <span class="s2">"United States"</span>
+	<span class="n">NewZealand</span>   <span class="n">Country</span> <span class="p">=</span> <span class="s2">"New Zealand"</span>
+<span class="p">)</span>
+
+<span class="p">//</span> <span class="n">timeZoneID</span> <span class="n">is</span> <span class="n">a</span> <span class="n">map</span> <span class="k">of</span> <span class="n">Country</span> <span class="k">to</span> <span class="n">its</span> <span class="n">IANA</span> <span class="n">standard</span> <span class="n">timezone</span> <span class="n">identifier</span>
+<span class="n">var</span> <span class="n">timeZoneID</span> <span class="p">=</span> <span class="n">map</span><span class="p">[</span><span class="n">Country</span><span class="p">]</span><span class="k">string</span><span class="p">{</span>
+	<span class="n">Germany</span><span class="p">:</span>      <span class="s2">"Europe/Berlin"</span><span class="p">,</span>
+	<span class="n">UnitedStates</span><span class="p">:</span> <span class="s2">"America/Los_Angeles"</span><span class="p">,</span>
+	<span class="n">NewZealand</span><span class="p">:</span>   <span class="s2">"Pacific/Auckland"</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="p">//</span> <span class="n">TimeZoneID</span> <span class="n">returns</span> <span class="n">a</span> <span class="n">IANA</span> <span class="n">identifier</span> <span class="n">for</span> <span class="n">a</span> <span class="n">given</span> <span class="n">Country</span><span class="p">.</span>
+<span class="n">func</span> <span class="p">(</span><span class="n">c</span> <span class="n">Country</span><span class="p">)</span> <span class="n">TimeZoneID</span><span class="p">()</span> <span class="p">(</span><span class="k">string</span><span class="p">,</span> <span class="n">error</span><span class="p">)</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">id</span><span class="p">,</span> <span class="n">ok</span> <span class="p">:=</span> <span class="n">timeZoneID</span><span class="p">[</span><span class="n">c</span><span class="p">];</span> <span class="n">ok</span> <span class="p">{</span>
+		<span class="n">return</span> <span class="n">id</span><span class="p">,</span> <span class="n">nil</span>
+	<span class="p">}</span>
+	<span class="n">return</span> <span class="s2">""</span><span class="p">,</span> <span class="n">errors</span><span class="p">.</span><span class="n">New</span><span class="p">(</span><span class="s2">"timezone id not found for country"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="p">//</span> <span class="n">TimeIn</span> <span class="n">returns</span> <span class="n">time</span> <span class="k">in</span> <span class="n">timezone</span> <span class="n">tz</span> <span class="k">with</span> <span class="n">fmt</span> <span class="n">format</span>
+<span class="n">func</span> <span class="n">TimeIn</span><span class="p">(</span><span class="n">t</span> <span class="n">time</span><span class="p">.</span><span class="n">Time</span><span class="p">,</span> <span class="n">tz</span><span class="p">,</span> <span class="n">fmt</span> <span class="k">string</span><span class="p">)</span> <span class="k">string</span> <span class="p">{</span>
+
+	<span class="p">//</span> <span class="n">https</span><span class="p">:/</span><span class="n">golang</span><span class="p">.</span><span class="n">org</span><span class="p">/</span><span class="n">pkg</span><span class="p">/</span><span class="n">time</span><span class="p">/#</span><span class="n">LoadLocation</span> <span class="n">loads</span> <span class="n">location</span> <span class="n">on</span>
+	<span class="p">//</span> <span class="n">the</span> <span class="n">basis</span> <span class="k">of</span>
+	<span class="n">loc</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">time</span><span class="p">.</span><span class="n">LoadLocation</span><span class="p">(</span><span class="n">tz</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="c1">!= nil {
+</span>		<span class="p">//</span><span class="n">handle</span> <span class="n">error</span>
+	<span class="p">}</span>
+
+	<span class="p">//</span> <span class="n">convert</span> <span class="n">current</span> <span class="n">time</span> <span class="k">to</span> <span class="n">specific</span> <span class="n">location</span><span class="p">,</span> <span class="n">e</span><span class="p">.</span><span class="n">g</span> <span class="n">Germany</span> <span class="k">in</span> <span class="n">given</span> <span class="n">format</span>
+	<span class="n">return</span> <span class="n">t</span><span class="p">.</span><span class="k">In</span><span class="p">(</span><span class="n">loc</span><span class="p">).</span><span class="n">Format</span><span class="p">(</span><span class="n">fmt</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="p">//</span> <span class="n">Get</span> <span class="n">the</span> <span class="n">timezone</span>
+	<span class="n">tz</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">UnitedStates</span><span class="p">.</span><span class="n">TimeZoneID</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="c1">!= nil {
+</span>		<span class="p">//</span><span class="n">handle</span> <span class="n">error</span>
+	<span class="p">}</span>
+
+	<span class="n">usTime</span> <span class="p">:=</span> <span class="n">TimeIn</span><span class="p">(</span><span class="n">time</span><span class="p">.</span><span class="n">Now</span><span class="p">(),</span> <span class="n">tz</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="n">RFC3339</span><span class="p">)</span>
+
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">"Time in %s: %s"</span><span class="p">,</span>
+		<span class="n">UnitedStates</span><span class="p">,</span>
+		<span class="n">usTime</span><span class="p">,</span>
+	<span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>在這邊設定一個新的型態 Country, 目的是設定 只接收該型態的 method.
+    <ul>
+      <li>若直接使用 string, 則無法直接使用 以 string 為形態的 method.</li>
+    </ul>
+  </li>
+  <li>從 main() 來看，可以清楚的知道，物件 <code class="highlighter-rouge">UnitedStates</code> 的 TimeZoneID
+    <ul>
+      <li>不直接命名的方式，也可以幫助後續無論是 Test or Debug，一種延續系統開發的作法</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>至於 RFC3339 是一種時間的顯示格式, 通常選擇格式, 能幫助我們在寫入資料庫選擇 <code class="highlighter-rouge">DATETIME</code> or <code class="highlighter-rouge">TIMESTAMP</code> 的格式選擇 ‘YYYY-MM-DD hh:mm:ss’</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18</pre></td><td class="code"><pre class="highlight"><code>const (
+    ANSIC       = "Mon Jan _2 15:04:05 2006"
+    UnixDate    = "Mon Jan _2 15:04:05 MST 2006"
+    RubyDate    = "Mon Jan 02 15:04:05 -0700 2006"
+    RFC822      = "02 Jan 06 15:04 MST"
+    RFC822Z     = "02 Jan 06 15:04 -0700" // RFC822 with numeric zone
+    RFC850      = "Monday, 02-Jan-06 15:04:05 MST"
+    RFC1123     = "Mon, 02 Jan 2006 15:04:05 MST"
+    RFC1123Z    = "Mon, 02 Jan 2006 15:04:05 -0700" // RFC1123 with numeric zone
+    RFC3339     = "2006-01-02T15:04:05Z07:00"
+    RFC3339Nano = "2006-01-02T15:04:05.999999999Z07:00"
+    Kitchen     = "3:04PM"
+    // Handy time stamps.
+    Stamp      = "Jan _2 15:04:05"
+    StampMilli = "Jan _2 15:04:05.000"
+    StampMicro = "Jan _2 15:04:05.000000"
+    StampNano  = "Jan _2 15:04:05.000000000"
+)
+</code></pre></td></tr></tbody></table></div></div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/blogpost/tag/#/Golang" rel="tag"># Golang</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/" rel="prev" title="【Go】gRPC(一)">
+                【Go】gRPC(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/blogpost/assets/images/avatar3.png"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/blogpost/archives/">
+                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/blogpost/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/blogpost/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#thinking"> <span class="nav-text">Thinking</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#glance-code"> <span class="nav-text">Glance code</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+
