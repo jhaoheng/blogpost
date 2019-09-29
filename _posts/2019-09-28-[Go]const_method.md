@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 【Go】Const use Method
+title: 【Go】Type with string, and Method
 date: 2019-09-28 21:17
 categories: Golang
 tags: Golang
