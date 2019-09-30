@@ -33,7 +33,7 @@ func main() {
 
 # panic(), defer, and recover()
 
-- 在之前 {{ site.url }}{% link _posts/2019-09-10-[Go]DeferPanicRecover.md %} ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行
+- 在之前的文章中  [Defer,Panic,Recover]({{ site.url }}{% link _posts/2019-09-10-[Go]DeferPanicRecover.md %}) ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行
 - 如何應用在此範例中？
 
 <!--more-->

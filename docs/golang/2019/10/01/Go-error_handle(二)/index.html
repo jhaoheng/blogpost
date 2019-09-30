@@ -109,17 +109,17 @@
 
 
 
-<meta name="description" content="Synopsis 隨便舉個例子，如何使用 error handle in golang package main import ( &quot;log&quot; &quot;os&quot; ) func main() { file, err := os.Open(&quot;file.txt&quot;) if err != nil { log.Fatal(err) } // Do something on file object. } 在此程式碼中，會直接在 log.Fatal 直接中斷，這是一個無法繼續下去的範例 Q : How to keep working? with error handle. panic(), defer, and recover() 在之前 https://jhaoheng.github.io/blogpost/golang/2019/09/11/Go-DeferPanicRecover/ ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行 如何應用在此範例中？">
+<meta name="description" content="Synopsis 隨便舉個例子，如何使用 error handle in golang package main import ( &quot;log&quot; &quot;os&quot; ) func main() { file, err := os.Open(&quot;file.txt&quot;) if err != nil { log.Fatal(err) } // Do something on file object. } 在此程式碼中，會直接在 log.Fatal 直接中斷，這是一個無法繼續下去的範例 Q : How to keep working? with error handle. panic(), defer, and recover() 在之前的文章中 Defer,Panic,Recover ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行 如何應用在此範例中？">
 <meta name="keywords" content="Golang">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Go】panic(), defer, and recover()【二】">
 <meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/Go-error_handle(%E4%BA%8C)/">
 <meta property="og:site_name" content="MAX 呼~">
-<meta property="og:description" content="Synopsis 隨便舉個例子，如何使用 error handle in golang package main import ( &quot;log&quot; &quot;os&quot; ) func main() { file, err := os.Open(&quot;file.txt&quot;) if err != nil { log.Fatal(err) } // Do something on file object. } 在此程式碼中，會直接在 log.Fatal 直接中斷，這是一個無法繼續下去的範例 Q : How to keep working? with error handle. panic(), defer, and recover() 在之前 https://jhaoheng.github.io/blogpost/golang/2019/09/11/Go-DeferPanicRecover/ ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行 如何應用在此範例中？">
+<meta property="og:description" content="Synopsis 隨便舉個例子，如何使用 error handle in golang package main import ( &quot;log&quot; &quot;os&quot; ) func main() { file, err := os.Open(&quot;file.txt&quot;) if err != nil { log.Fatal(err) } // Do something on file object. } 在此程式碼中，會直接在 log.Fatal 直接中斷，這是一個無法繼續下去的範例 Q : How to keep working? with error handle. panic(), defer, and recover() 在之前的文章中 Defer,Panic,Recover ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行 如何應用在此範例中？">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Go】panic(), defer, and recover()【二】">
-<meta name="twitter:description" content="Synopsis 隨便舉個例子，如何使用 error handle in golang package main import ( &quot;log&quot; &quot;os&quot; ) func main() { file, err := os.Open(&quot;file.txt&quot;) if err != nil { log.Fatal(err) } // Do something on file object. } 在此程式碼中，會直接在 log.Fatal 直接中斷，這是一個無法繼續下去的範例 Q : How to keep working? with error handle. panic(), defer, and recover() 在之前 https://jhaoheng.github.io/blogpost/golang/2019/09/11/Go-DeferPanicRecover/ ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行 如何應用在此範例中？">
+<meta name="twitter:description" content="Synopsis 隨便舉個例子，如何使用 error handle in golang package main import ( &quot;log&quot; &quot;os&quot; ) func main() { file, err := os.Open(&quot;file.txt&quot;) if err != nil { log.Fatal(err) } // Do something on file object. } 在此程式碼中，會直接在 log.Fatal 直接中斷，這是一個無法繼續下去的範例 Q : How to keep working? with error handle. panic(), defer, and recover() 在之前的文章中 Defer,Panic,Recover ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行 如何應用在此範例中？">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -422,7 +422,7 @@
 <h1 id="panic-defer-and-recover">panic(), defer, and recover()</h1>
 
 <ul>
-  <li>在之前 https://jhaoheng.github.io/blogpost/golang/2019/09/11/Go-DeferPanicRecover/ ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行</li>
+  <li>在之前的文章中  <a href="https://jhaoheng.github.io/blogpost/golang/2019/09/11/Go-DeferPanicRecover/">Defer,Panic,Recover</a> ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行</li>
   <li>如何應用在此範例中？</li>
 </ul>
 
