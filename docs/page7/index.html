@@ -281,6 +281,249 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/php/mqtt/2017/01/12/PHP-MQTT/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/php/mqtt/2017/01/12/PHP-MQTT/" itemprop="url">
+                【php+mqtt】basic
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-12T09:34:00+08:00">
+                2017-01-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/PHP" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/MQTT" itemprop="url" rel="index">
+                    <span itemprop="name">MQTT</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="php-透過-mqtt-進行發送與監聽">php 透過 mqtt 進行發送與監聽</h1>
+<h2 id="install">install</h2>
+
+<ol>
+  <li>env : mac osx, php 7.0.8</li>
+  <li>確定已安裝 mosquitto 在 mac 中 : brew install mosquitto
+    <ul>
+      <li>取得 path : /usr/local/Cellar/mosquitto/1.4.9/lib/libmosquitto</li>
+    </ul>
+  </li>
+  <li>下載 github : https://github.com/mgdm/Mosquitto-PHP</li>
+  <li>產生 mosquitto.so
+    <ol>
+      <li><code class="highlighter-rouge">cd Mosquitto-PHP</code></li>
+      <li><code class="highlighter-rouge">phpize</code></li>
+      <li><code class="highlighter-rouge">./configure --with-mosquitto=/usr/local/Cellar/mosquitto/1.4.9/lib/libmosquitto</code></li>
+      <li>make</li>
+      <li>sudo make install</li>
+      <li>得到 mosquitto.so 安裝的位置</li>
+    </ol>
+  </li>
+  <li>開啟 php.ini，設定 extension=mosquitto.so 與驗證
+    <ul>
+      <li>MAMP，請用套件管理 php.ini
+        <ul>
+          <li>用 <code class="highlighter-rouge">phpinfo();</code></li>
+        </ul>
+      </li>
+      <li>手動
+        <ol>
+          <li><code class="highlighter-rouge">php --ini</code></li>
+          <li><code class="highlighter-rouge">cat {path}/php.ini | grep extension_dir</code></li>
+          <li>將 mosquitto.so 放入此路徑</li>
+          <li>在 php.ini 中設定 extension=mosquitto.so</li>
+          <li>驗證 <code class="highlighter-rouge">php -i | grep mosquitto</code></li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="測試">測試</h2>
+
+<ul>
+  <li>https://github.com/mqtt/mqtt.github.io/wiki/mosquitto-php</li>
+</ul>
+
+<h2 id="問題">問題</h2>
+
+<ol>
+  <li>訂閱問題
+    <ol>
+      <li>若針對所有的 topic 進行訂閱，則開兩台 instance，就會收到兩次，無法做 loading balance….所以還是分段訂閱會比較清楚</li>
+      <li>當有新的必須訂閱的事件進來…就產生一個新的監聽 client(php sub.php topic)，訂閱的 topic 寫到 json 中。(or mongodb)</li>
+      <li>若取消該訂閱，則從 json 中移除該 topic</li>
+      <li>判斷 process 的狀態，bash file + crontab，定時檢查掛載上去的 sub topic process 與 json file 是否一致</li>
+    </ol>
+  </li>
+  <li>用 php or cmd:mosquitto?
+    <ul>
+      <li>優點在 今天 sub 進來，直接處理，不用在 bash 這邊取得監聽內容後，丟給 php 處理</li>
+    </ul>
+  </li>
+</ol>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/php/mqtt/2017/01/12/PHP-MQTT/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/01/04/line-flash-back-fix-201701/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2408,170 +2651,6 @@ IdentityFile ~/.ssh/user_B/id_rsa
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/10/01/docgenerate-program-converting-comments-help-file/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/10/01/docgenerate-program-converting-comments-help-file/" itemprop="url">
-                【docGenerate】程式註解轉換成說明檔
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-01T03:10:00+08:00">
-                2016-10-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h2 id="source">source</h2>
-
-<p>https://github.com/jhaoheng/docGenerate/tree/master</p>
-
-<h2 id="使用環境">使用環境</h2>
-
-<ul>
-  <li>v0.1-release : 單純支援bash script 的環境</li>
-  <li>v0.2-release : 支援 config.json (需安裝 jq)</li>
-</ul>
-
-<h2 id="目的">目的</h2>
-
-<p>不論是寫何種語言，都希望能把當下程式中的註解，直接轉譯為 .md，並且能最小化註解風格格式化
-方便性為，若為 restful-api 對外的文件，則可直接將要公開的文件內容輸出為 .md 檔案
-降低文件的重複編輯性，加速工程人員對於文件註解的習慣與完整性</p>
-
-<p>Hope this script could help accelerate development and persist in good comment habit.
-Do not need to maintain twice version between code and document.
-When developer write down comment in code context, it mean that you finish the document at the same time.</p>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/10/01/docgenerate-program-converting-comments-help-file/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2633,7 +2712,7 @@ When developer write down comment in code context, it mean that you finish the d
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-count">109</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

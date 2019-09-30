@@ -1,0 +1,1050 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Golang," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Synopsis 隨便舉個例子，如何使用 error handle in golang package main import ( &quot;log&quot; &quot;os&quot; ) func main() { file, err := os.Open(&quot;file.txt&quot;) if err != nil { log.Fatal(err) } // Do something on file object. } 在此程式碼中，會直接在 log.Fatal 直接中斷，這是一個無法繼續下去的範例 Q : How to keep working? with error handle. panic(), defer, and recover() 在之前 https://jhaoheng.github.io/blogpost/golang/2019/09/11/Go-DeferPanicRecover/ ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行 如何應用在此範例中？">
+<meta name="keywords" content="Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Go】panic(), defer, and recover()【二】">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/Go-error_handle(%E4%BA%8C)/">
+<meta property="og:site_name" content="MAX 呼~">
+<meta property="og:description" content="Synopsis 隨便舉個例子，如何使用 error handle in golang package main import ( &quot;log&quot; &quot;os&quot; ) func main() { file, err := os.Open(&quot;file.txt&quot;) if err != nil { log.Fatal(err) } // Do something on file object. } 在此程式碼中，會直接在 log.Fatal 直接中斷，這是一個無法繼續下去的範例 Q : How to keep working? with error handle. panic(), defer, and recover() 在之前 https://jhaoheng.github.io/blogpost/golang/2019/09/11/Go-DeferPanicRecover/ ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行 如何應用在此範例中？">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Go】panic(), defer, and recover()【二】">
+<meta name="twitter:description" content="Synopsis 隨便舉個例子，如何使用 error handle in golang package main import ( &quot;log&quot; &quot;os&quot; ) func main() { file, err := os.Open(&quot;file.txt&quot;) if err != nil { log.Fatal(err) } // Do something on file object. } 在此程式碼中，會直接在 log.Fatal 直接中斷，這是一個無法繼續下去的範例 Q : How to keep working? with error handle. panic(), defer, and recover() 在之前 https://jhaoheng.github.io/blogpost/golang/2019/09/11/Go-DeferPanicRecover/ ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行 如何應用在此範例中？">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blogpost',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
+
+
+
+
+
+  <title>【Go】panic(), defer, and recover()【二】 | MAX 呼~</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blogpost/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX 呼~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blogpost/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blogpost/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/blogpost/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/Go-error_handle(%E4%BA%8C)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【Go】panic(), defer, and recover()【二】
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-01T04:32:00+08:00">
+                2019-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="synopsis">Synopsis</h1>
+
+<blockquote>
+  <p>隨便舉個例子，如何使用 error handle in golang</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15</pre></td><td class="code"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+ 
+<span class="n">import</span> <span class="p">(</span>
+    <span class="s2">"log"</span>
+    <span class="s2">"os"</span>
+<span class="p">)</span>
+ 
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">file</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">os</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="s2">"file.txt"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="c1">!= nil {
+</span>        <span class="nb">log</span><span class="p">.</span><span class="n">Fatal</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+    <span class="p">}</span>
+ 
+    <span class="p">//</span> <span class="k">Do</span> <span class="n">something</span> <span class="n">on</span> <span class="n">file</span> <span class="n">object</span><span class="p">.</span>
+<span class="p">}</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>在此程式碼中，會直接在 <code class="highlighter-rouge">log.Fatal</code> 直接中斷，這是一個無法繼續下去的範例</li>
+  <li>Q : How to keep working? with error handle.</li>
+</ul>
+
+<h1 id="panic-defer-and-recover">panic(), defer, and recover()</h1>
+
+<ul>
+  <li>在之前 https://jhaoheng.github.io/blogpost/golang/2019/09/11/Go-DeferPanicRecover/ ，可以透過此機制，取得錯誤資訊，並透過 recover() 讓程式碼繼續執行</li>
+  <li>如何應用在此範例中？</li>
+</ul>
+
+<!--more-->
+
+<h2 id="利用-panic-defer-recover-重構步驟">利用 panic, defer, recover 重構步驟</h2>
+<ol>
+  <li>將 <code class="highlighter-rouge">file, err := os.Open("file.txt")</code>, 建立另一個 func(), 放入其中</li>
+  <li>建立 errorHandle(), 並在 (1) 中的 func(), 利用 defer 進行呼叫</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30</pre></td><td class="code"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="n">import</span> <span class="p">(</span>
+	<span class="s2">"fmt"</span>
+	<span class="s2">"log"</span>
+	<span class="s2">"os"</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">openFile</span><span class="p">(</span><span class="s2">"file.text"</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"keep working...."</span><span class="p">)</span>
+
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">errorHandle</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">recover</span><span class="p">();</span> <span class="n">err</span> <span class="c1">!= nil {
+</span>		<span class="nb">log</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="p">//</span> <span class="err">返回</span> <span class="n">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="err">的錯誤訊息</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">openFile</span><span class="p">(</span><span class="n">filename</span> <span class="k">string</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">defer</span> <span class="n">errorHandle</span><span class="p">()</span>
+	<span class="n">file</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">os</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+	<span class="n">defer</span> <span class="n">file</span><span class="p">.</span><span class="n">Close</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="c1">!= nil {
+</span>		<span class="n">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"success"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>Q : 如何在錯誤中，得知，這是哪一個 func 造成的錯誤?</li>
+</ul>
+
+<h2 id="q--如何在錯誤中得知這是哪一個-func-造成的錯誤">Q : 如何在錯誤中，得知，這是哪一個 func 造成的錯誤?</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26</pre></td><td class="code"><pre class="highlight"><code>func errorHandle() {
+	if err := recover(); err != nil {
+		log.Println(err, ". Work at:", printFuncName()) // 返回 panic(err) 的錯誤訊息
+	}
+}
+
+/*
+Print func name
+*/
+func printFuncName() string {
+	fpcs := make([]uintptr, 1)
+
+	// Skip 4 levels to get the caller
+	n := runtime.Callers(4, fpcs)
+	if n == 0 {
+		fmt.Println("MSG: NO CALLER")
+	}
+
+	caller := runtime.FuncForPC(fpcs[0] - 1)
+	if caller == nil {
+		fmt.Println("MSG CALLER WAS NIL")
+	}
+
+	// Print the name of the function
+	return caller.Name()
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>Q : 如何讓程式碼看起來像是 try{}catch{} 般使用?</li>
+</ul>
+
+<h2 id="q--如何讓程式碼看起來像是-trycatch-般使用">Q : 如何讓程式碼看起來像是 try{}catch{} 般使用?</h2>
+<blockquote>
+  <p>利用 <code class="highlighter-rouge">type errorHandle func()</code>
+以下是片段程式碼, 可以改成 <code class="highlighter-rouge">func try(action, catch)</code> 的方式, 可能更適合某些人</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28</pre></td><td class="code"><pre class="highlight"><code>func main() {
+	try("file.text", catch)
+	fmt.Println("keep working....")
+
+}
+
+type errorHandle func()
+
+func try(filename string, e errorHandle) {
+
+	defer e()
+	file, err := os.Open(filename)
+	defer file.Close()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("success")
+}
+
+/*
+Show error
+*/
+func catch() {
+	if err := recover(); err != nil {
+		log.Println(err, ". Work at:", printFuncName()) // 返回 panic(err) 的錯誤訊息
+	}
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>Q : 上述範例是利用 open 後產生的錯誤訊息，但如何自訂義錯誤?</li>
+</ul>
+
+<h2 id="q--上述範例是利用-open-後產生的錯誤訊息但如何自訂義錯誤">Q : 上述範例是利用 open 後產生的錯誤訊息，但如何自訂義錯誤?</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>func otherFunc() {
+	defer catch()
+
+	// define customized error
+	err := errors.New("Some error")
+	if err != nil {
+		panic(err)
+	}
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="final-example-code">final example code</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48<br/>49<br/>50<br/>51<br/>52<br/>53<br/>54<br/>55<br/>56<br/>57<br/>58<br/>59<br/>60<br/>61<br/>62<br/>63<br/>64<br/>65<br/>66<br/>67<br/>68<br/>69<br/>70<br/>71</pre></td><td class="code"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="n">import</span> <span class="p">(</span>
+	<span class="s2">"errors"</span>
+	<span class="s2">"fmt"</span>
+	<span class="s2">"log"</span>
+	<span class="s2">"os"</span>
+	<span class="s2">"runtime"</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">try</span><span class="p">(</span><span class="s2">"file.txt"</span><span class="p">,</span> <span class="n">catch</span><span class="p">)</span> 
+
+	<span class="n">otherFunc</span><span class="p">()</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"keep working...."</span><span class="p">)</span>
+
+<span class="p">}</span>
+
+<span class="n">type</span> <span class="n">errorHandle</span> <span class="n">func</span><span class="p">()</span>
+
+<span class="n">func</span> <span class="n">try</span><span class="p">(</span><span class="n">filename</span> <span class="k">string</span><span class="p">,</span> <span class="n">e</span> <span class="n">errorHandle</span><span class="p">)</span> <span class="p">{</span>
+
+	<span class="n">defer</span> <span class="n">e</span><span class="p">()</span>
+	<span class="n">file</span><span class="p">,</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">os</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+	<span class="n">defer</span> <span class="n">file</span><span class="p">.</span><span class="n">Close</span><span class="p">()</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="c1">!= nil {
+</span>		<span class="n">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"success"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">otherFunc</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">defer</span> <span class="n">catch</span><span class="p">()</span>
+
+	<span class="p">//</span> <span class="n">define</span> <span class="n">customized</span> <span class="n">error</span>
+	<span class="n">err</span> <span class="p">:=</span> <span class="n">errors</span><span class="p">.</span><span class="n">New</span><span class="p">(</span><span class="s2">"Some error"</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="c1">!= nil {
+</span>		<span class="n">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="p">/*</span>
+<span class="n">Show</span> <span class="n">error</span>
+<span class="p">*/</span>
+<span class="n">func</span> <span class="n">catch</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">err</span> <span class="p">:=</span> <span class="n">recover</span><span class="p">();</span> <span class="n">err</span> <span class="c1">!= nil {
+</span>		<span class="nb">log</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="s2">". Work at:"</span><span class="p">,</span> <span class="n">printFuncName</span><span class="p">())</span> <span class="p">//</span> <span class="err">返回</span> <span class="n">panic</span><span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="err">的錯誤訊息</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+
+<span class="p">/*</span>
+<span class="n">Print</span> <span class="n">func</span> <span class="n">name</span>
+<span class="p">*/</span>
+<span class="n">func</span> <span class="n">printFuncName</span><span class="p">()</span> <span class="k">string</span> <span class="p">{</span>
+	<span class="n">fpcs</span> <span class="p">:=</span> <span class="n">make</span><span class="p">([]</span><span class="n">uintptr</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+
+	<span class="p">//</span> <span class="n">Skip</span> <span class="m">4</span> <span class="n">levels</span> <span class="k">to</span> <span class="n">get</span> <span class="n">the</span> <span class="n">caller</span>
+	<span class="n">n</span> <span class="p">:=</span> <span class="n">runtime</span><span class="p">.</span><span class="n">Callers</span><span class="p">(</span><span class="m">4</span><span class="p">,</span> <span class="n">fpcs</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">n</span> <span class="p">==</span> <span class="m">0</span> <span class="p">{</span>
+		<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"MSG: NO CALLER"</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="n">caller</span> <span class="p">:=</span> <span class="n">runtime</span><span class="p">.</span><span class="n">FuncForPC</span><span class="p">(</span><span class="n">fpcs</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">-</span> <span class="m">1</span><span class="p">)</span>
+	<span class="k">if</span> <span class="n">caller</span> <span class="p">==</span> <span class="n">nil</span> <span class="p">{</span>
+		<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"MSG CALLER WAS NIL"</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="p">//</span> <span class="n">Print</span> <span class="n">the</span> <span class="n">name</span> <span class="k">of</span> <span class="n">the</span> <span class="k">function</span>
+	<span class="n">return</span> <span class="n">caller</span><span class="p">.</span><span class="n">Name</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/blogpost/tag/#/Golang" rel="tag"># Golang</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blogpost/golang/2019/09/28/Go-const_method/" rel="prev" title="【Go】Type with string, and Method">
+                【Go】Type with string, and Method <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/blogpost/assets/images/avatar3.png"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/blogpost/archives/">
+                <span class="site-state-item-count">109</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/blogpost/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/blogpost/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#synopsis"> <span class="nav-text">Synopsis</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#panic-defer-and-recover"> <span class="nav-text">panic(), defer, and recover()</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#利用-panic-defer-recover-重構步驟"> <span class="nav-text">利用 panic, defer, recover 重構步驟</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#q--如何在錯誤中得知這是哪一個-func-造成的錯誤"> <span class="nav-text">Q : 如何在錯誤中，得知，這是哪一個 func 造成的錯誤?</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#q--如何讓程式碼看起來像是-trycatch-般使用"> <span class="nav-text">Q : 如何讓程式碼看起來像是 try{}catch{} 般使用?</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#q--上述範例是利用-open-後產生的錯誤訊息但如何自訂義錯誤"> <span class="nav-text">Q : 上述範例是利用 open 後產生的錯誤訊息，但如何自訂義錯誤?</span> </a> </li> </ol> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#final-example-code"> <span class="nav-text">final example code</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

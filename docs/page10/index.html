@@ -281,6 +281,290 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/03/restfulbasic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/07/03/restfulbasic/" itemprop="url">
+                【RESTFUL】basic
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-03T23:56:00+08:00">
+                2016-07-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="restful">restful</h1>
+
+<ul>
+  <li><a href="http://www.restapitutorial.com/lessons/httpmethods.html">source</a></li>
+</ul>
+
+<h2 id="six-constraints">Six constraints</h2>
+
+<ul>
+  <li>Uniform Interface</li>
+  <li>Stateless</li>
+  <li>Cacheable</li>
+  <li>Client-Server</li>
+  <li>Layered System</li>
+  <li>Code on Demand</li>
+</ul>
+
+<h2 id="http-verbs">HTTP Verbs</h2>
+
+<ul>
+  <li>Use HTTP Verbs to Mean Something
+    <ul>
+      <li>GET / POST / PUT / PATCH / DELETE</li>
+    </ul>
+  </li>
+  <li>Sensible Resource Names
+    <ul>
+      <li>Resource names should be nouns—avoid verbs as resource names. It makes things more clear. Use the HTTP methods to specify the verb portion of the request.</li>
+    </ul>
+  </li>
+</ul>
+
+<p>ps: 這些動詞，在 http 中，有某些特別的屬性，若不遵循這些規則，一樣可以使用，但只是與某些淺規則相悖</p>
+
+<h3 id="put">PUT</h3>
+
+<ul>
+  <li>Update/Replace : 新增一項資料，如果存在就覆蓋過去。（還是只有一筆資料，故與 <code class="highlighter-rouge">POST</code> 有所差別）</li>
+  <li>ex : <code class="highlighter-rouge">/customers</code> -&gt; 404 (Not Found)</li>
+  <li>ex : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK) or 204 (No Content). 404 (Not Found), if ID not found or invalid.</li>
+</ul>
+
+<h3 id="post">POST</h3>
+
+<ul>
+  <li>Create : 新增一項資料。（如果存在會新增一個新的）</li>
+  <li>ex : <code class="highlighter-rouge">/customers</code> -&gt; 404 (Not Found). 如果預計 POST 批次的話，或許可以考慮</li>
+  <li>ex : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 201 (Created).</li>
+</ul>
+
+<p>ps : 用 [GET] : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 取得用戶資訊</p>
+
+<h3 id="patch">PATCH</h3>
+
+<ul>
+  <li>Update/Modify : 附加新的資料在已經存在的資料後面。（資料必須已經存在，patch會擴充這項資料）</li>
+</ul>
+
+<h3 id="delete">DELETE</h3>
+
+<ul>
+  <li>Delete : 刪除資料。</li>
+  <li>ex : <code class="highlighter-rouge">/customers/</code> -&gt; 404 (Not Found).</li>
+  <li>ex : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK). 404 (Not Found), if ID not found or invalid.</li>
+</ul>
+
+<h3 id="get">GET</h3>
+
+<ul>
+  <li>Read : 讀取資料。</li>
+  <li>ex : <code class="highlighter-rouge">/customers</code> -&gt; 200 (OK), list of customers.</li>
+  <li>ex : <code class="highlighter-rouge">/customers/{id}</code> -&gt; 200 (OK), single customer. 404 (Not Found), if ID not found or invalid.</li>
+</ul>
+
+<h3 id="head">HEAD</h3>
+
+<ul>
+  <li>取得 get 的 http header 而不取得內容</li>
+</ul>
+
+<h2 id="關於-safe-與-idempotent">關於 safe 與 idempotent</h2>
+
+<ul>
+  <li>safe : 是否安全(可以快取)。在於『定義上』是否屬於會修改資料的 method，如果『會』代表就是不安全(POST/PUT/PATCH/DELETE 都不可以快取)。</li>
+  <li>idempotent : 頁面重新整理是否會影響 request，也就是該 method 在重新整理後，是否會重送（是否可以在不確定有沒有成功送出時重新發出請求），相同的 Request 再執行一次，結果還是一樣。
+    <ul>
+      <li>在不同的情況下運用</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center"> </th>
+      <th style="text-align: center">safe</th>
+      <th style="text-align: center">idempotent</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">PUT</td>
+      <td style="text-align: center">[ ]</td>
+      <td style="text-align: center">[x]</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">POST</td>
+      <td style="text-align: center">[ ]</td>
+      <td style="text-align: center">[ ]</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">PATCH</td>
+      <td style="text-align: center">[ ]</td>
+      <td style="text-align: center">[ ]</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">DELETE</td>
+      <td style="text-align: center">[ ]</td>
+      <td style="text-align: center">[x]</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">GET</td>
+      <td style="text-align: center">[x]</td>
+      <td style="text-align: center">[x]</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">HEAD</td>
+      <td style="text-align: center">[X]</td>
+      <td style="text-align: center">[x]</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="關於狀態回傳">關於狀態回傳</h2>
+
+<ul>
+  <li>http status code</li>
+  <li>status : success or failure</li>
+  <li>message : Json to describe some about response.</li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/07/03/restfulbasic/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/06/29/bash-package-file-build-executable/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1965,198 +2249,6 @@ distribution and decoupling of applications.</li>
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/05/16/sslsssls-with-synology-web/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/05/16/sslsssls-with-synology-web/" itemprop="url">
-                【SSLs】ssls with synology web
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-16T05:09:00+08:00">
-                2016-05-16
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <ol>
-  <li>
-    <p>進入 synology -&gt; 憑證</p>
-  </li>
-  <li>
-    <p>建立憑證 -&gt; 建立憑證簽署請求(CSR)</p>
-  </li>
-  <li>
-    <p>下載，取得server.csr , server.key</p>
-  </li>
-  <li>
-    <p>進入my ssl 輸入 server.csr 內容</p>
-  </li>
-  <li>
-    <p>會自動選取伺服器的架構 ex: apach+openssl</p>
-  </li>
-  <li>
-    <p>確認信件</p>
-  </li>
-  <li>下載 信件附件 ， 有四個檔案 ：
-    <ul>
-      <li>AddTrustExtenalCARoot.crt</li>
-      <li>COMODORSAAddTrustCA.crt</li>
-      <li>COMODORSADomainValidationSecureServerCA.crt</li>
-      <li>
-        <your domain="" name="">.crt
-
-</your>
-      </li>
-    </ul>
-  </li>
-  <li>合併 *.crt -&gt; bundle.crt
-    <ul>
-      <li><code class="highlighter-rouge">cat COMODORSADomainValidationSecureServerCA.crt COMODORSAAddTrustCA.crt AddTrustExternalCARoot.crt &gt;&gt; bundle.crt</code></li>
-    </ul>
-  </li>
-  <li>
-    <p>回到synology -&gt; 憑證</p>
-  </li>
-  <li>依序輸入
-    <ul>
-      <li>金鑰 : server.key</li>
-      <li>憑證：huder_link.crt</li>
-      <li>中繼：bundle.crt</li>
-    </ul>
-  </li>
-  <li>在 website 中，插入 security seal , copy snippet code 即可。</li>
-</ol>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/05/16/sslsssls-with-synology-web/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2218,7 +2310,7 @@ distribution and decoupling of applications.</li>
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-count">109</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -281,6 +281,198 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/05/16/sslsssls-with-synology-web/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/05/16/sslsssls-with-synology-web/" itemprop="url">
+                【SSLs】ssls with synology web
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-16T05:09:00+08:00">
+                2016-05-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <ol>
+  <li>
+    <p>進入 synology -&gt; 憑證</p>
+  </li>
+  <li>
+    <p>建立憑證 -&gt; 建立憑證簽署請求(CSR)</p>
+  </li>
+  <li>
+    <p>下載，取得server.csr , server.key</p>
+  </li>
+  <li>
+    <p>進入my ssl 輸入 server.csr 內容</p>
+  </li>
+  <li>
+    <p>會自動選取伺服器的架構 ex: apach+openssl</p>
+  </li>
+  <li>
+    <p>確認信件</p>
+  </li>
+  <li>下載 信件附件 ， 有四個檔案 ：
+    <ul>
+      <li>AddTrustExtenalCARoot.crt</li>
+      <li>COMODORSAAddTrustCA.crt</li>
+      <li>COMODORSADomainValidationSecureServerCA.crt</li>
+      <li>
+        <your domain="" name="">.crt
+
+</your>
+      </li>
+    </ul>
+  </li>
+  <li>合併 *.crt -&gt; bundle.crt
+    <ul>
+      <li><code class="highlighter-rouge">cat COMODORSADomainValidationSecureServerCA.crt COMODORSAAddTrustCA.crt AddTrustExternalCARoot.crt &gt;&gt; bundle.crt</code></li>
+    </ul>
+  </li>
+  <li>
+    <p>回到synology -&gt; 憑證</p>
+  </li>
+  <li>依序輸入
+    <ul>
+      <li>金鑰 : server.key</li>
+      <li>憑證：huder_link.crt</li>
+      <li>中繼：bundle.crt</li>
+    </ul>
+  </li>
+  <li>在 website 中，插入 security seal , copy snippet code 即可。</li>
+</ol>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/05/16/sslsssls-with-synology-web/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/05/10/ioshls/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2068,7 +2260,7 @@ sub   rsa4096/&lt;subordinate private keys&gt; 2016-04-09 [E]
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">108</span>
+                <span class="site-state-item-count">109</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
