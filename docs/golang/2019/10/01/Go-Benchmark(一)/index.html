@@ -109,17 +109,17 @@
 
 
 
-<meta name="description" content="kind Different kinds use a pointer to change the value in Func. map slice array string struct">
+<meta name="description" content="Synopsis 說明 benchmark 測試方式 測試 reflect.TypeOf 與 fmt.Sprintf(“%T”) 誰的效能比較好些 go test -bench func BenchmarkSliceNoPointers(b *testing.B) { b.ReportAllocs() for i := 0; i &amp;lt; b.N; i++ { slice := make([]MyStruct, 0, 100) for j := 0; j &amp;lt; 100; j++ { slice = append(slice, MyStruct{A: j, B: j + 1}) } } } go test -bench . -count 10 &amp;gt; run.txt -count : 執行的次數, 每個 bench func() &amp;gt; run.txt : 存入檔案 得到 BenchmarkSlicePointers-4 573025 2026 ns/op 1600 B/op 100 allocs/op">
 <meta name="keywords" content="Golang">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【Golang】func &amp; pointer">
-<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&pointer/">
+<meta property="og:title" content="【Go】Benchmark(一)">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/Go-Benchmark(%E4%B8%80)/">
 <meta property="og:site_name" content="MAX 呼~">
-<meta property="og:description" content="kind Different kinds use a pointer to change the value in Func. map slice array string struct">
+<meta property="og:description" content="Synopsis 說明 benchmark 測試方式 測試 reflect.TypeOf 與 fmt.Sprintf(“%T”) 誰的效能比較好些 go test -bench func BenchmarkSliceNoPointers(b *testing.B) { b.ReportAllocs() for i := 0; i &amp;lt; b.N; i++ { slice := make([]MyStruct, 0, 100) for j := 0; j &amp;lt; 100; j++ { slice = append(slice, MyStruct{A: j, B: j + 1}) } } } go test -bench . -count 10 &amp;gt; run.txt -count : 執行的次數, 每個 bench func() &amp;gt; run.txt : 存入檔案 得到 BenchmarkSlicePointers-4 573025 2026 ns/op 1600 B/op 100 allocs/op">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【Golang】func &amp; pointer">
-<meta name="twitter:description" content="kind Different kinds use a pointer to change the value in Func. map slice array string struct">
+<meta name="twitter:title" content="【Go】Benchmark(一)">
+<meta name="twitter:description" content="Synopsis 說明 benchmark 測試方式 測試 reflect.TypeOf 與 fmt.Sprintf(“%T”) 誰的效能比較好些 go test -bench func BenchmarkSliceNoPointers(b *testing.B) { b.ReportAllocs() for i := 0; i &amp;lt; b.N; i++ { slice := make([]MyStruct, 0, 100) for j := 0; j &amp;lt; 100; j++ { slice = append(slice, MyStruct{A: j, B: j + 1}) } } } go test -bench . -count 10 &amp;gt; run.txt -count : 執行的次數, 每個 bench func() &amp;gt; run.txt : 存入檔案 得到 BenchmarkSlicePointers-4 573025 2026 ns/op 1600 B/op 100 allocs/op">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【Golang】func & pointer | MAX 呼~</title>
+  <title>【Go】Benchmark(一) | MAX 呼~</title>
   
 
 
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/06/Go-func&pointer/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/Go-Benchmark(%E4%B8%80)/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -298,7 +298,7 @@
           <h1 class="post-title" itemprop="name headline">
           
           
-            【Golang】func & pointer
+            【Go】Benchmark(一)
           
         </h1>
         
@@ -312,8 +312,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-06T14:31:00+08:00">
-                2019-09-06
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-01T16:31:00+08:00">
+                2019-10-01
               </time>
             
 
@@ -391,86 +391,110 @@
 
 
 
-  <h1 id="kind">kind</h1>
-<blockquote>
-  <p>Different kinds use a pointer to change the value in Func.</p>
-</blockquote>
-
+  <h1 id="synopsis">Synopsis</h1>
 <ul>
-  <li>map</li>
-  <li>slice</li>
-  <li>array</li>
-  <li>string</li>
-  <li>struct</li>
+  <li>說明 benchmark 測試方式</li>
+  <li>測試 reflect.TypeOf 與 fmt.Sprintf(“%T”) 誰的效能比較好些</li>
 </ul>
 
-<div>
-    <iframe src="https://play.golang.org/p/sUiGkLDt8vJ" height="315" width="560" allowfullscreen="" frameborder="1">
-    </iframe>
-</div>
+<h1 id="go-test--bench">go test -bench</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>func BenchmarkSliceNoPointers(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i &lt; b.N; i++ {
+		slice := make([]MyStruct, 0, 100)
+		for j := 0; j &lt; 100; j++ {
+			slice = append(slice, MyStruct{A: j, B: j + 1})
+		}
+	}
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">go test -bench . -count 10 &gt; run.txt</code>
+    <ul>
+      <li><code class="highlighter-rouge">-count</code> : 執行的次數, 每個 bench func()</li>
+      <li><code class="highlighter-rouge">&gt; run.txt</code> : 存入檔案</li>
+    </ul>
+  </li>
+</ul>
+
+<p>得到</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>BenchmarkSlicePointers-4   	  573025  2026 ns/op  1600 B/op  100 allocs/op
+</code></pre></td></tr></tbody></table></div></div>
 
 <!--more-->
 
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48<br/>49<br/>50<br/>51<br/>52<br/>53<br/>54<br/>55<br/>56<br/>57<br/>58<br/>59</pre></td><td class="code"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+<ul>
+  <li><code class="highlighter-rouge">-4</code> : 表示 CPU 核心數</li>
+  <li><code class="highlighter-rouge">573025</code> : 每一秒可跑幾次</li>
+  <li><code class="highlighter-rouge">2026</code> : 每一次處理耗費的時間</li>
+  <li><code class="highlighter-rouge">1600</code> : 每一次處理使用的 Bytes</li>
+  <li><code class="highlighter-rouge">100</code> : 每一次處理需要分配的記憶體 allocations</li>
+</ul>
 
-<span class="n">import</span> <span class="s2">"fmt"</span>
+<h2 id="example--main_testgo">example : main_test.go</h2>
 
-<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
-	<span class="p">//</span> <span class="n">map</span>
-	<span class="n">var</span> <span class="n">mapObj</span> <span class="p">=</span> <span class="n">map</span><span class="p">[</span><span class="n">int</span><span class="p">]</span><span class="k">string</span><span class="p">{}</span>
-	<span class="n">mapObj</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="s2">"max"</span>
-	<span class="n">updateMapObj</span><span class="p">(</span><span class="n">mapObj</span><span class="p">)</span>
-	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"   map =&gt;"</span><span class="p">,</span> <span class="n">mapObj</span><span class="p">)</span>
+<blockquote>
+  <ul>
+    <li>因提到 reflect 的效能很差，故在這邊做個測試</li>
+    <li>測試 reflect.TypeOf() &amp; fmt.Sprintf(“%T”) 哪個耗費的效能比較高</li>
+    <li>順便附上他人的測試 : https://gist.github.com/crast/61779d00db7bfaa894c70d7693cee505</li>
+  </ul>
+</blockquote>
 
-	<span class="p">//</span> <span class="n">slice</span>
-	<span class="n">sliceObj</span> <span class="p">:=</span> <span class="p">[]</span><span class="k">string</span><span class="p">{</span>
-		<span class="m">0</span><span class="p">:</span> <span class="s2">"max"</span><span class="p">,</span>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33</pre></td><td class="code"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="n">import</span> <span class="p">(</span>
+	<span class="s2">"fmt"</span>
+	<span class="s2">"reflect"</span>
+	<span class="s2">"testing"</span>
+<span class="p">)</span>
+
+<span class="n">type</span> <span class="n">MyStack</span> <span class="n">struct</span> <span class="p">{</span>
+	<span class="n">T</span> <span class="k">string</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">BenchmarkReflect</span><span class="p">(</span><span class="n">b</span> <span class="p">*</span><span class="n">testing</span><span class="p">.</span><span class="n">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">b</span><span class="p">.</span><span class="n">ReportAllocs</span><span class="p">()</span>
+	<span class="n">for</span> <span class="n">index</span> <span class="p">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">index</span> <span class="p">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">N</span><span class="p">;</span> <span class="n">index</span><span class="p">++</span> <span class="p">{</span>
+		<span class="n">slice</span> <span class="p">:=</span> <span class="n">make</span><span class="p">([]</span><span class="n">MyStack</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">100</span><span class="p">)</span>
+		<span class="n">for</span> <span class="n">j</span> <span class="p">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="m">100</span><span class="p">;</span> <span class="n">j</span><span class="p">++</span> <span class="p">{</span>
+			<span class="n">obj</span> <span class="p">:=</span> <span class="n">reflect</span><span class="p">.</span><span class="n">TypeOf</span><span class="p">(</span><span class="n">j</span><span class="p">).</span><span class="k">String</span><span class="p">()</span>
+			<span class="n">slice</span> <span class="p">=</span> <span class="n">append</span><span class="p">(</span><span class="n">slice</span><span class="p">,</span> <span class="n">MyStack</span><span class="p">{</span><span class="n">T</span><span class="p">:</span> <span class="n">obj</span><span class="p">})</span>
+		<span class="p">}</span>
 	<span class="p">}</span>
-	<span class="n">updateSliceObj</span><span class="p">(</span><span class="n">sliceObj</span><span class="p">)</span>
-	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">" slice =&gt;"</span><span class="p">,</span> <span class="n">sliceObj</span><span class="p">)</span> <span class="p">//</span> <span class="p">[</span><span class="n">sunny</span><span class="p">]</span>
-
-	<span class="p">//</span> <span class="k">array</span>
-	<span class="n">arrayObject</span> <span class="p">:=</span> <span class="p">[</span><span class="m">1</span><span class="p">]</span><span class="k">string</span><span class="p">{</span><span class="s2">"max"</span><span class="p">}</span>
-	<span class="n">updateArrayObj</span><span class="p">(&amp;</span><span class="n">arrayObject</span><span class="p">)</span>
-	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">" array =&gt;"</span><span class="p">,</span> <span class="n">arrayObject</span><span class="p">)</span> <span class="p">//</span> <span class="p">[</span><span class="n">sunny</span><span class="p">]</span>
-
-	<span class="p">//</span> <span class="k">string</span>
-	<span class="n">var</span> <span class="n">stringObj</span> <span class="k">string</span>
-	<span class="n">stringObj</span> <span class="p">=</span> <span class="s2">"max"</span>
-	<span class="n">updateStringObj</span><span class="p">(&amp;</span><span class="n">stringObj</span><span class="p">)</span>
-	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"string =&gt;"</span><span class="p">,</span> <span class="n">stringObj</span><span class="p">)</span> <span class="p">//</span> <span class="m">999</span>
-
-	<span class="p">//</span> <span class="n">struct</span>
-	<span class="n">var</span> <span class="n">srtuctObj</span> <span class="n">StructObject</span>
-	<span class="n">srtuctObj</span><span class="p">.</span><span class="n">name</span> <span class="p">=</span> <span class="s2">"max"</span>
-	<span class="n">updateStructObj</span><span class="p">(&amp;</span><span class="n">srtuctObj</span><span class="p">)</span>
-	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"struct =&gt;"</span><span class="p">,</span> <span class="n">srtuctObj</span><span class="p">)</span> <span class="p">//</span> <span class="p">{</span><span class="n">sunny</span><span class="p">}</span>
 <span class="p">}</span>
 
-<span class="n">func</span> <span class="n">updateMapObj</span><span class="p">(</span><span class="n">mapObj</span> <span class="n">map</span><span class="p">[</span><span class="n">int</span><span class="p">]</span><span class="k">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="n">mapObj</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="s2">"sunny"</span>
-<span class="p">}</span>
-
-<span class="n">func</span> <span class="n">updateArrayObj</span><span class="p">(</span><span class="n">arrayObject</span> <span class="p">*[</span><span class="m">1</span><span class="p">]</span><span class="k">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="n">arrayObject</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="s2">"sunny"</span>
-<span class="p">}</span>
-
-<span class="n">func</span> <span class="n">updateSliceObj</span><span class="p">(</span><span class="n">sliceObj</span> <span class="p">[]</span><span class="k">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="n">sliceObj</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">=</span> <span class="s2">"sunny"</span>
-<span class="p">}</span>
-
-<span class="n">func</span> <span class="n">updateStringObj</span><span class="p">(</span><span class="n">stringObj</span> <span class="p">*</span><span class="k">string</span><span class="p">)</span> <span class="p">{</span>
-	<span class="p">*</span><span class="n">stringObj</span> <span class="p">=</span> <span class="s2">"sunny"</span>
-<span class="p">}</span>
-
-<span class="n">type</span> <span class="n">StructObject</span> <span class="n">struct</span> <span class="p">{</span>
-	<span class="n">name</span> <span class="k">string</span>
-<span class="p">}</span>
-
-<span class="n">func</span> <span class="n">updateStructObj</span><span class="p">(</span><span class="n">srtuctObj</span> <span class="p">*</span><span class="n">StructObject</span><span class="p">)</span> <span class="p">{</span>
-	<span class="n">srtuctObj</span><span class="p">.</span><span class="n">name</span> <span class="p">=</span> <span class="s2">"sunny"</span>
+<span class="n">func</span> <span class="n">BenchmarkSprintf</span><span class="p">(</span><span class="n">b</span> <span class="p">*</span><span class="n">testing</span><span class="p">.</span><span class="n">B</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">b</span><span class="p">.</span><span class="n">ReportAllocs</span><span class="p">()</span>
+	<span class="n">for</span> <span class="n">index</span> <span class="p">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">index</span> <span class="p">&lt;</span> <span class="n">b</span><span class="p">.</span><span class="n">N</span><span class="p">;</span> <span class="n">index</span><span class="p">++</span> <span class="p">{</span>
+		<span class="n">slice</span> <span class="p">:=</span> <span class="n">make</span><span class="p">([]</span><span class="n">MyStack</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="m">100</span><span class="p">)</span>
+		<span class="n">for</span> <span class="n">j</span> <span class="p">:=</span> <span class="m">0</span><span class="p">;</span> <span class="n">j</span> <span class="p">&lt;</span> <span class="m">100</span><span class="p">;</span> <span class="n">j</span><span class="p">++</span> <span class="p">{</span>
+			<span class="n">obj</span> <span class="p">:=</span> <span class="n">fmt</span><span class="p">.</span><span class="n">Sprintf</span><span class="p">(</span><span class="s2">"%T"</span><span class="p">,</span> <span class="n">j</span><span class="p">)</span>
+			<span class="n">slice</span> <span class="p">=</span> <span class="n">append</span><span class="p">(</span><span class="n">slice</span><span class="p">,</span> <span class="n">MyStack</span><span class="p">{</span><span class="n">T</span><span class="p">:</span> <span class="n">obj</span><span class="p">})</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
 <span class="p">}</span>
 </code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>執行 <code class="highlighter-rouge">go test -bench .</code></li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>goos: darwin
+goarch: amd64
+pkg: cycle
+BenchmarkReflect-4        465621              2323 ns/op             792 B/op         99 allocs/op
+BenchmarkSprintf-4        119300              9962 ns/op            1584 B/op        199 allocs/op
+PASS
+ok      cycle   2.405s
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="從執行結果分析">從執行結果分析</h2>
+<ol>
+  <li>Reflect.TypeOf() 的效能比 fmt.Sprintf(“%T”) 來得好</li>
+</ol>
 
 
       
@@ -518,18 +542,14 @@
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blogpost/kubenetes/minikube/2019/09/06/Apache-Proxy&UseExpressions/" rel="next" title="【Apache】Proxy & Use Expressions To Restricted Access">
-                <i class="fa fa-chevron-left"></i> 【Apache】Proxy & Use Expressions To Restricted Access
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blogpost/golang/2019/09/06/Go-diff-slice&array/" rel="prev" title="【Golang】Diff - slice & array">
-                【Golang】Diff - slice & array <i class="fa fa-chevron-right"></i>
+              <a href="/blogpost/golang/2019/10/01/Go-error_and_nil/" rel="prev" title="【Go】type=nil, and value=nil">
+                【Go】type=nil, and value=nil <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -680,7 +700,7 @@
             
               <div class="post-toc-content">
     <ol class=nav>
-      <li class="nav-item nav-level-1"> <a class="nav-link" href="#kind"> <span class="nav-text">kind</span> </a> </li>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#synopsis"> <span class="nav-text">Synopsis</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#go-test--bench"> <span class="nav-text">go test -bench</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#example--main_testgo"> <span class="nav-text">example : main_test.go</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#從執行結果分析"> <span class="nav-text">從執行結果分析</span> </a> </li> </ol> </li>
     </ol>
   </div>
             

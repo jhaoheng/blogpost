@@ -2,6 +2,23 @@
 <search>
   
     <entry>
+      <title><![CDATA[【Go】Benchmark(一)]]></title>
+      <url>/blogpost/golang/2019/10/01/Go-Benchmark(%E4%B8%80)/</url>
+      <content type="text"><![CDATA[Synopsis  說明 benchmark 測試方式  測試 reflect.TypeOf 與 fmt.Sprintf(“%T”) 誰的效能比較好些go test -benchfunc BenchmarkSliceNoPointers(b *testing.B) {	b.ReportAllocs()	for i := 0; i &lt; b.N; i++ {		slice := make([]MyStruct, 0, 100)		for j := 0; j &lt; 100; j++ {			slice = append(slice, MyStruct{A: j, B: j + 1})		}	}}  go test -bench . -count 10 &gt; run.txt          -count : 執行的次數, 每個 bench func()      &gt; run.txt : 存入檔案      得到BenchmarkSlicePointers-4   	  573025  2026 ns/op  1600 B/op  100 allocs/op  -4 : 表示 CPU 核心數  573025 : 每一秒可跑幾次  2026 : 每一次處理耗費的時間  1600 : 每一次處理使用的 Bytes  100 : 每一次處理需要分配的記憶體 allocationsexample : main_test.go      因提到 reflect 的效能很差，故在這邊做個測試    測試 reflect.TypeOf() &amp; fmt.Sprintf(“%T”) 哪個耗費的效能比較高    順便附上他人的測試 : https://gist.github.com/crast/61779d00db7bfaa894c70d7693cee505  package mainimport (	"fmt"	"reflect"	"testing")type MyStack struct {	T string}func BenchmarkReflect(b *testing.B) {	b.ReportAllocs()	for index := 0; index &lt; b.N; index++ {		slice := make([]MyStack, 0, 100)		for j := 0; j &lt; 100; j++ {			obj := reflect.TypeOf(j).String()			slice = append(slice, MyStack{T: obj})		}	}}func BenchmarkSprintf(b *testing.B) {	b.ReportAllocs()	for index := 0; index &lt; b.N; index++ {		slice := make([]MyStack, 0, 100)		for j := 0; j &lt; 100; j++ {			obj := fmt.Sprintf("%T", j)			slice = append(slice, MyStack{T: obj})		}	}}  執行 go test -bench .goos: darwingoarch: amd64pkg: cycleBenchmarkReflect-4        465621              2323 ns/op             792 B/op         99 allocs/opBenchmarkSprintf-4        119300              9962 ns/op            1584 B/op        199 allocs/opPASSok      cycle   2.405s從執行結果分析  Reflect.TypeOf() 的效能比 fmt.Sprintf(“%T”) 來得好]]></content>
+      <categories>
+        
+          <category> Golang </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> Golang </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
       <title><![CDATA[【Go】type=nil, and value=nil]]></title>
       <url>/blogpost/golang/2019/10/01/Go-error_and_nil/</url>
       <content type="text"><![CDATA[Synopsis  https://golang.org/doc/faq?fbclid=IwAR3iipOV2A1q6dOmqke545tNWouuReN1VY0A-3RGr2cdxwS_2SLNNKlO0ls#nil_error  有人問到 Why is my nil error value not equal to nil?  原因在於, 在指定類別時, nil 在 type = nil 跟 value = nil 代表不同的意義          T=nil, V is not set      T=*int, V=nil        而必須在 type = nil 的情況下，才使用 if type == nil {}Examplepackage mainimport (	"errors"	"fmt"	"reflect")/*type error interface {    Error() string}*/func main() {	/*		type  : nil		value :	*/	var a error = nil	show(a)	/*		type  : *error		value : nil	*/	var aa *error = nil	show(aa)	/*		type  : *errors.errorString		value : y	*/	b := errors.New("y")	show(b)	/*		type  : nil		value :	*/	c := errors.New("z")	c = nil	show(c)	/*		type  : int		value : 0	*/	var d int	show(d)	/*		type  : *int		value : nil	*/	var dd *int	show(dd)	/*		type  : string		value : ""	*/	var e string	show(e)	/*		type  : *string		value : nil	*/	var ee *string	show(ee)}func show(object interface{}) {	fmt.Printf("%#v\n", object)	fmt.Println("value", reflect.ValueOf(object))	fmt.Println("type:", reflect.TypeOf(object))	if reflect.TypeOf(object) == nil {		fmt.Println("Its type is nil")	} else {		// if nil, nil pointer dereference		fmt.Println("The Kind is ", reflect.TypeOf(object).Kind())	}	fmt.Println()}]]></content>

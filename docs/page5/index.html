@@ -281,6 +281,225 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/papertrial/logspout/2017/08/18/Papertrial-logspout/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/papertrial/logspout/2017/08/18/Papertrial-logspout/" itemprop="url">
+                【log tool】papertrial+logspout
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-18T07:51:00+08:00">
+                2017-08-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Papertrial" itemprop="url" rel="index">
+                    <span itemprop="name">Papertrial</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Logspout" itemprop="url" rel="index">
+                    <span itemprop="name">Logspout</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="papertrail">papertrail</h2>
+
+<ul>
+  <li>申請一個 papertrail 帳號</li>
+  <li>建立一個 Log Destinations : 會得到 <code class="highlighter-rouge">logsx.papertrailapp.com:46888</code></li>
+</ul>
+
+<h2 id="logspout">logspout</h2>
+
+<ul>
+  <li>建立 docker container
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code>docker run --name="logspout" \
+-d \
+-e SYSLOG_HOSTNAME=test_name \
+--volume=/var/run/docker.sock:/var/run/docker.sock \
+gliderlabs/logspout \
+{your_papertrail_log_destination}
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>測試
+    <ul>
+      <li>以下兩種方法可以在 papertrial 的 log 中看到
+        <ol>
+          <li>docker run -p 80:80 centos /bin/echo hello =&gt; 在 papertrial 印出 hello</li>
+          <li>docker run -p 81:81 centos /bin/date =&gt; 在 papertrial 印出 日期</li>
+          <li>docker run -i -d -p 80:80 centos /bin/bash
+            <ul>
+              <li><code class="highlighter-rouge">docker exec -it [container_id] /bin/bash</code></li>
+            </ul>
+            <ul>
+              <li>echo hello » /proc/1/fd/1 =&gt; 在 papertrial 印出 hello</li>
+            </ul>
+          </li>
+        </ol>
+      </li>
+      <li>注意 : docker run 用 -t 啟用的話，就不會被 logspout 給監聽到</li>
+      <li>注意 : logging driver 只支援 <code class="highlighter-rouge">journald</code>, <code class="highlighter-rouge">json-file</code></li>
+    </ul>
+  </li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/papertrial/logspout/2017/08/18/Papertrial-logspout/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/ejabberd/2017/08/17/Ejabberd-docker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2081,245 +2300,6 @@ docker exec [container_id] php /home/index.php
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/srs/docker/2017/05/31/SRS-docker/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/srs/docker/2017/05/31/SRS-docker/" itemprop="url">
-                【SRS-release2.0】docker with centos7.3
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-31T03:50:00+08:00">
-                2017-05-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/SRS" itemprop="url" rel="index">
-                    <span itemprop="name">SRS</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/Docker" itemprop="url" rel="index">
-                    <span itemprop="name">Docker</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="環境">環境</h1>
-<ul>
-  <li>srs 2.0</li>
-  <li>centos7.3</li>
-</ul>
-
-<h1 id="完成品">完成品</h1>
-<ul>
-  <li>https://hub.docker.com/r/jhaoheng/srs-release2.0/</li>
-  <li><code class="highlighter-rouge">docker run -d -t -p 1935:1935 {image}</code></li>
-  <li>位置 : <code class="highlighter-rouge">/opt/srs/trunk</code>，執行 srs 即可</li>
-</ul>
-
-<h1 id="base">base</h1>
-<ul>
-  <li><code class="highlighter-rouge">docker pull centos:latest</code></li>
-  <li><code class="highlighter-rouge">docker run -d -t -p 1935:1935 [centos:latest]</code></li>
-  <li><code class="highlighter-rouge">docker exec -it [container] /bin/bash</code></li>
-</ul>
-
-<h1 id="安裝">安裝</h1>
-<ul>
-  <li><code class="highlighter-rouge">yum update</code></li>
-  <li>required
-    <ul>
-      <li><code class="highlighter-rouge">yum install -y gcc</code></li>
-      <li><code class="highlighter-rouge">yum install -y gcc-c++</code></li>
-      <li><code class="highlighter-rouge">yum install -y make</code></li>
-      <li><code class="highlighter-rouge">yum install -y patch</code></li>
-      <li><code class="highlighter-rouge">yum install -y unzip</code></li>
-      <li><code class="highlighter-rouge">yum install -y pcre-devel</code></li>
-      <li><code class="highlighter-rouge">yum install -y automake</code></li>
-      <li><code class="highlighter-rouge">yum install -y libtool</code></li>
-      <li><code class="highlighter-rouge">yum install -y zlib-devel</code></li>
-    </ul>
-  </li>
-  <li>git clone [source]</li>
-  <li>安裝 <code class="highlighter-rouge">./trunk/3rdparty/CherryPy-3.2.4</code>
-    <ul>
-      <li><code class="highlighter-rouge">unzip ./trunk/3rdparty/CherryPy-3.2.4.zip &amp;&amp; mv CherryPy-3.2.4 ../objs/</code></li>
-    </ul>
-  </li>
-  <li>compile srs : <code class="highlighter-rouge">./configure --full --with-ffmpeg --with-research &amp;&amp; make</code>
-    <ul>
-      <li><code class="highlighter-rouge">./configure -h</code> : 可查看所有安裝選項</li>
-    </ul>
-  </li>
-  <li>start srs : <code class="highlighter-rouge">./objs/srs -c conf/srs.conf</code></li>
-</ul>
-
-<h1 id="測試">測試</h1>
-<ul>
-  <li><code class="highlighter-rouge">tail -f ./trunk/srs.log</code></li>
-  <li>將桌面的畫面推送給 docker:srs
-    <ul>
-      <li><code class="highlighter-rouge">ffmpeg -f avfoundation -i "1" -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp://localhost:1935/live/desktop</code></li>
-    </ul>
-  </li>
-  <li>透過 VLC 播放 <code class="highlighter-rouge">rtmp://localhost:1935/live/desktop</code></li>
-</ul>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/srs/docker/2017/05/31/SRS-docker/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2335,7 +2315,7 @@ docker exec [container_id] php /home/index.php
 
 
 
-    <a class="extend prev" rel="prev" href="/blogpost/page4"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page4">4</a> <span class="page-number current">5</span> <a class="page-number" href="/blogpost/page6">6</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page11">11</a> <a class="extend prev" rel="next" href="/blogpost/page6"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/blogpost/page4"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page4">4</a> <span class="page-number current">5</span> <a class="page-number" href="/blogpost/page6">6</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page12">12</a> <a class="extend prev" rel="next" href="/blogpost/page6"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2381,7 +2361,7 @@ docker exec [container_id] php /home/index.php
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">110</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -281,6 +281,381 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/" itemprop="url">
+                【AWS-centos7-php7.x】phalcon / memcached / mosquitto
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-08T09:55:00+08:00">
+                2017-02-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Phalcon" itemprop="url" rel="index">
+                    <span itemprop="name">Phalcon</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Memcached" itemprop="url" rel="index">
+                    <span itemprop="name">Memcached</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Mosquitto" itemprop="url" rel="index">
+                    <span itemprop="name">Mosquitto</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/MQTT" itemprop="url" rel="index">
+                    <span itemprop="name">MQTT</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="完整的-bash-script">完整的 bash script</h1>
+<p><strong>base on AWS centos7</strong> : git@github.com:jhaoheng/centos-nginx-php7.x-extension.git
+執行 sh env.sh 即可，整體安裝約 20 分鐘</p>
+
+<h1 id="start">start</h1>
+<ol>
+  <li>至 aws</li>
+  <li>launch new instance</li>
+  <li>market search centos</li>
+  <li>choose centos7</li>
+</ol>
+
+<h1 id="centos7-安裝-nginx">centos7 安裝 nginx</h1>
+
+<ol>
+  <li>yum -y install epel-release</li>
+  <li>yum install nginx</li>
+  <li>驗證在瀏覽器開啟 ip, 注意 port 80 是否有開啟</li>
+</ol>
+
+<h2 id="操作">操作</h2>
+<p>/bin/systemctl restart nginx</p>
+
+<h1 id="centos7-安裝-php7x">centos7 安裝 php7.x</h1>
+
+<ol>
+  <li>yum -y install epel-release</li>
+  <li>yum install wget</li>
+  <li>wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm</li>
+  <li>rpm -ivh ./remi-release-7.rpm</li>
+  <li>yum install –enablerepo=remi,remi-php70 php-fpm php-devel php-mbstring php-pdo php-gd php-xml php-curl php-mysqlnd php-pdo_mysql php-mysqli php-json php-soap php-zip php-sockets php-session php-mcrypt php-date php-openssl php-yaml</li>
+</ol>
+
+<h2 id="source">source</h2>
+<ol>
+  <li>下載位置 http://php.net/downloads.php</li>
+  <li>可參考目前的 ext</li>
+  <li>手動新增 ext, ex:
+    <ol>
+      <li>cd xml</li>
+      <li>phpize</li>
+      <li>./configure</li>
+      <li>make &amp;&amp; make install</li>
+    </ol>
+  </li>
+  <li>查看 module 是否有此套件</li>
+</ol>
+
+<h2 id="操作-1">操作</h2>
+<p>/bin/systemctl restart php-fpm</p>
+
+<h2 id="測試">測試</h2>
+
+<ol>
+  <li>找出 nginx.conf : nginx -h</li>
+  <li>vi {$path}/nginx.conf</li>
+  <li>server 設定參數可參考 <code class="highlighter-rouge">https://docs.phalconphp.com/zh/latest/reference/nginx.html</code>
+    <ul>
+      <li>請將 fastcgi 設定為 127.0.0.1:9000 &lt;— 必須符合 php-fpm 的 listen 位置</li>
+    </ul>
+  </li>
+  <li>在適當位置建立 <?php phpinfo()?> 的 index.php</li>
+  <li>在 browser 輸入 ip 與 index.php</li>
+</ol>
+
+<h1 id="centos7-安裝-phalcon-with-php7x">centos7 安裝 phalcon with php7.x</h1>
+
+<ol>
+  <li>yun install git</li>
+  <li>yum install php-devel pcre-devel gcc make re2c</li>
+  <li>安裝編譯工具 : git clone https://github.com/phalcon/zephir</li>
+  <li>cd zephir/</li>
+  <li>./install-nosudo</li>
+  <li>下載 phalcon source : git clone git://github.com/phalcon/cphalcon.git</li>
+  <li>cd cphalcon/</li>
+  <li>git checkout 適當的版本</li>
+  <li>{$Path}/zephir build</li>
+  <li>將 extension=phalcon.so 放入 php.ini</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>php -i</td>
+          <td>grep phalcon</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+<h2 id="trouble">trouble</h2>
+<ul>
+  <li>undefined symbol: php_json_decode_ex in Unknown on line 0
+    <ul>
+      <li>原因在於此 extension=phalcon.so 不能直接放在 php.ini 中，請放置 /etc/php.d/</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="centos7-安裝-libmemcached-編譯-memcachedso">centos7 安裝 libmemcached 編譯 memcached.so</h1>
+
+<h2 id="安裝-libmemcached">安裝 libmemcached</h2>
+
+<ol>
+  <li>至官網下載 https://launchpad.net/libmemcached</li>
+  <li>wget ….</li>
+  <li>cd /libmemcached-1.x.x</li>
+  <li>yum groupinstall “Development Tools”</li>
+  <li>yum install zlib-static</li>
+  <li>./configure –disable-memcached-sasl</li>
+  <li>make &amp;&amp; make install</li>
+</ol>
+
+<h2 id="編譯-memcachedso">編譯 memcached.so</h2>
+<ol>
+  <li>git clone https://github.com/php-memcached-dev/php-memcached.git</li>
+  <li>git checkout php7</li>
+  <li>phpize</li>
+  <li>./configure</li>
+  <li>make &amp;&amp; make install</li>
+  <li>確定是否將 .so 放入 module 中 :
+    <ol>
+      <li><code class="highlighter-rouge">php -i | grep extension_dir</code></li>
+      <li>cd {dir}</li>
+      <li>檢查是否有 memcached.so</li>
+    </ol>
+  </li>
+  <li>確定 extension 是否有加入到 php.ini</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>驗證 php -i</td>
+          <td>grep memcached</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+<h1 id="centos7-安裝-libmosquitto-編譯-mosquittoso">centos7 安裝 libmosquitto 編譯 mosquitto.so</h1>
+
+<h2 id="安裝-libmosquitto">安裝 libmosquitto</h2>
+<ol>
+  <li>進入官網 : https://mosquitto.org/download/</li>
+  <li>找到 centos7 的 re 的 conf</li>
+  <li>將檔案 mosquitto.repo 放入 /etc/yum.repos.d 即可
+<code class="highlighter-rouge">The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto.</code></li>
+  <li>安裝 : yum install libmosquitto-devel</li>
+  <li>安裝後的 lib 路徑, 系統安裝後會提示, 無意外是 /usr/lib64/libmosquitto.so…..</li>
+</ol>
+
+<h2 id="編譯-mosquittoso">編譯 mosquitto.so</h2>
+<ol>
+  <li>下載 git source 後 : https://github.com/mgdm/Mosquitto-PHP</li>
+  <li>cd Mosquitto-PHP</li>
+  <li>phpize</li>
+  <li><code class="highlighter-rouge">./configure --with-mosquitto=/usr/lib64/libmosquitto.so</code></li>
+  <li>make &amp;&amp; make install</li>
+  <li>驗證 module 是否有 mosquitto.so</li>
+  <li>在 php.ini 中設定 extension=mosquitto.so</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>驗證 : php -i</td>
+          <td>grep mosquitto</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/php/2017/01/15/PHP-Memcached/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2431,240 +2806,6 @@ for ($i = 0; $i &lt; $totSends; $i++) {
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/ssh/2016/10/14/SSH-Remote-Access/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/ssh/2016/10/14/SSH-Remote-Access/" itemprop="url">
-                【SSH】設定簡易遠端登入
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-14T08:01:00+08:00">
-                2016-10-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/SSH" itemprop="url" rel="index">
-                    <span itemprop="name">SSH</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="readme">readme</h1>
-
-<ul>
-  <li>env : osx 10.11</li>
-  <li>使用 ssh 配置，便易登入遠端 server</li>
-</ul>
-
-<h1 id="sshconfig">.ssh/config</h1>
-
-<blockquote>
-  <p>所有的參數列表 https://linux.die.net/man/5/ssh_config，see PATTERNS</p>
-</blockquote>
-
-<ul>
-  <li>Host  {本機辨識的名稱}</li>
-  <li>HostName</li>
-  <li>Port</li>
-  <li>User</li>
-</ul>
-
-<h2 id="相關參數">相關參數</h2>
-
-<ul>
-  <li>Host</li>
-  <li>HostNmae</li>
-  <li>User</li>
-  <li>Port : 連線端口</li>
-  <li>DynamicForward : 本地端口</li>
-</ul>
-
-<h2 id="範例">範例</h2>
-
-<blockquote>
-  <p>登入遠端主機</p>
-</blockquote>
-
-<ol>
-  <li>設定檔
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code># server
-Host dev
-HostName dev.max.com
-Port 8888
-User root
-</code></pre></td></tr></tbody></table></div>    </div>
-  </li>
-  <li><code class="highlighter-rouge">ssh dev</code></li>
-</ol>
-
-<h2 id="金鑰">金鑰</h2>
-
-<blockquote>
-  <p>若需設定伺服器金鑰，進行遠端登入</p>
-</blockquote>
-
-<ol>
-  <li>在本機端生成金鑰 <code class="highlighter-rouge">$ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"</code></li>
-  <li>上傳 pub_key 到伺服器端</li>
-  <li>將 key 匯入 <code class="highlighter-rouge">~/.ssh/authorized_keys</code></li>
-  <li><code class="highlighter-rouge">chmod 600 ~/.ssh/authorized_keys</code></li>
-  <li>設定伺服器端配置，<code class="highlighter-rouge">/etc/ssh/sshd_config</code>
-    <ul>
-      <li>PubkeyAuthentication yes
-      - PasswordAuthentication no</li>
-    </ul>
-  </li>
-  <li>重啟 sshd 服務</li>
-</ol>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/ssh/2016/10/14/SSH-Remote-Access/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2680,7 +2821,7 @@ User root
 
 
 
-    <a class="extend prev" rel="prev" href="/blogpost/page6"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page6">6</a> <span class="page-number current">7</span> <a class="page-number" href="/blogpost/page8">8</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page11">11</a> <a class="extend prev" rel="next" href="/blogpost/page8"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/blogpost/page6"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page6">6</a> <span class="page-number current">7</span> <a class="page-number" href="/blogpost/page8">8</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page12">12</a> <a class="extend prev" rel="next" href="/blogpost/page8"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2726,7 +2867,7 @@ User root
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">110</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

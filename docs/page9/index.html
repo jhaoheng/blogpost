@@ -281,6 +281,203 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/08/04/phalconinstall-cphalcon-phalcon-tool-by-brew/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/08/04/phalconinstall-cphalcon-phalcon-tool-by-brew/" itemprop="url">
+                【phalcon】install 'cphalcon', 'phalcon-tool' by brew &amp; mamp
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-04T10:07:00+08:00">
+                2016-08-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="brew-install">brew install</h2>
+
+<ul>
+  <li>env
+    <ul>
+      <li>homebrew 0.9.9</li>
+      <li>php 7.0.9</li>
+      <li>phalcon 3.0.0</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2</pre></td>
+<td class="code"><pre class="highlight"><code>brew install php70
+brew install php70-phalcon
+</code></pre></td>
+</tr></tbody></table></div></div>
+<h2 id="check">check</h2>
+
+<ul>
+  <li>
+<code class="highlighter-rouge">php -m | grep -i phalcon</code> -&gt; should output <code class="highlighter-rouge">phalcon</code>
+</li>
+  <li>cmd <code class="highlighter-rouge">phalcon</code> -&gt; should output phalcon cmd info, include phalcon version</li>
+</ul>
+
+<h2 id="php_info">php_info()</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3</pre></td>
+<td class="code"><pre class="highlight"><code>&lt;?
+php\_info();
+?&gt;
+</code></pre></td>
+</tr></tbody></table></div></div>
+<h2 id="mamp-install-phalcon">mamp install phalcon</h2>
+
+<ul>
+  <li>env
+    <ul>
+      <li>mamp : 3.5.2</li>
+      <li>php 7.0.8</li>
+      <li>phalcon 3.0.0</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>use brew’s <code class="highlighter-rouge">php70-phalcon/phalcon.so</code>
+move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/php/extensions/no-debug-non-zts-xxxxxxxxxxx/</code></p>
+</blockquote>
+
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/08/04/phalconinstall-cphalcon-phalcon-tool-by-brew/#more" rel="contents">
+              Read more »
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/08/04/path/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2267,174 +2464,6 @@ $session = Di::getDefault()-&gt;getSession();
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/05/iosapns-with-http-2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/07/05/iosapns-with-http-2/" itemprop="url">
-                【iOS】APNS with HTTP/2
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-05T06:29:00+08:00">
-                2016-07-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h2 id="insatll-mac">insatll (mac)</h2>
-
-<ul>
-  <li><code class="highlighter-rouge">brew install curl --with-nghttp2</code></li>
-  <li><code class="highlighter-rouge">brew link curl --force</code></li>
-</ul>
-
-<h2 id="use">use</h2>
-<ul>
-  <li><code class="highlighter-rouge">./curl --version</code></li>
-</ul>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
-<td class="gutter"><pre>1<br>2<br>3</pre></td>
-<td class="code"><pre class="highlight"><code>curl 7.48.0 (x86_64-apple-darwin15.5.0) libcurl/7.48.0 OpenSSL/1.0.2g zlib/1.2.5 nghttp2/1.9.1
-Protocols: dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp smb smbs smtp smtps telnet tftp 
-Features: IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP HTTP2 UnixSockets 
-</code></pre></td>
-</tr></tbody></table></div></div>
-
-<ul>
-  <li>exec : <code class="highlighter-rouge">./curl -v -d '{"aps":{"alert":"Test Push","sound":"default"}}' --cert [xxx.pem] -H "apns-topic: [bundle_id]" --http2 https://api.development.push.apple.com/3/device/[token]</code>
-</li>
-</ul>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/07/05/iosapns-with-http-2/#more" rel="contents">
-              Read more »
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2450,7 +2479,7 @@ Features: IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP HTTP2 UnixSockets
 
 
 
-    <a class="extend prev" rel="prev" href="/blogpost/page8"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">…</span> <a class="page-number" href="/blogpost/page8">8</a> <span class="page-number current">9</span> <a class="page-number" href="/blogpost/page10">10</a> <a class="page-number" href="/blogpost/page11">11</a> <a class="extend prev" rel="next" href="/blogpost/page10"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/blogpost/page8"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">…</span> <a class="page-number" href="/blogpost/page8">8</a> <span class="page-number current">9</span> <a class="page-number" href="/blogpost/page10">10</a> <span class="space">…</span> <a class="page-number" href="/blogpost/page12">12</a> <a class="extend prev" rel="next" href="/blogpost/page10"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2494,7 +2523,7 @@ Features: IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP HTTP2 UnixSockets
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">110</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -281,6 +281,205 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/Go-Benchmark(%E4%B8%80)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/golang/2019/10/01/Go-Benchmark(%E4%B8%80)/" itemprop="url">
+                【Go】Benchmark(一)
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-01T16:31:00+08:00">
+                2019-10-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="synopsis">Synopsis</h1>
+<ul>
+  <li>說明 benchmark 測試方式</li>
+  <li>測試 reflect.TypeOf 與 fmt.Sprintf(“%T”) 誰的效能比較好些</li>
+</ul>
+
+<h1 id="go-test--bench">go test -bench</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>func BenchmarkSliceNoPointers(b *testing.B) {
+	b.ReportAllocs()
+	for i := 0; i &lt; b.N; i++ {
+		slice := make([]MyStruct, 0, 100)
+		for j := 0; j &lt; 100; j++ {
+			slice = append(slice, MyStruct{A: j, B: j + 1})
+		}
+	}
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li><code class="highlighter-rouge">go test -bench . -count 10 &gt; run.txt</code>
+    <ul>
+      <li><code class="highlighter-rouge">-count</code> : 執行的次數, 每個 bench func()</li>
+      <li><code class="highlighter-rouge">&gt; run.txt</code> : 存入檔案</li>
+    </ul>
+  </li>
+</ul>
+
+<p>得到</p>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>BenchmarkSlicePointers-4   	  573025  2026 ns/op  1600 B/op  100 allocs/op
+</code></pre></td></tr></tbody></table></div></div>
+
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/golang/2019/10/01/Go-Benchmark(%E4%B8%80)/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/Go-error_and_nil/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2099,198 +2298,6 @@ funcMain(args []int, funcN(sum int) {
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/07/Go-drill-interface/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/golang/2019/09/07/Go-drill-interface/" itemprop="url">
-                【Go】Drill interface{}
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-07T16:17:00+08:00">
-                2019-09-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
-                    <span itemprop="name">Golang</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="interface">interface{}</h1>
-
-<h2 id="explore">Explore</h2>
-<blockquote>
-  <p>When set object is an interface{}</p>
-</blockquote>
-
-<ol>
-  <li>Set object is an interface{}</li>
-  <li>Use pointer to set object value is int / string / struct / slice</li>
-  <li>Print kind / address / type / value</li>
-</ol>
-
-<h2 id="conclusion">conclusion</h2>
-<ul>
-  <li>The <code class="highlighter-rouge">interface{}</code> is changed by each time setting, but the address is not changed.</li>
-</ul>
-
-<h2 id="for-example">for example</h2>
-
-<div>
-    <iframe src="https://play.golang.org/p/7p1DnXwQ9EL" height="315" width="600" allowfullscreen="" frameborder="1">
-    </iframe>
-</div>
-
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/golang/2019/09/07/Go-drill-interface/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2306,7 +2313,7 @@ funcMain(args []int, funcN(sum int) {
 
 
 
-    <span class="page-number current">1</span> <a class="page-number" href="/blogpost/page2">2</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page11">11</a> <a class="extend prev" rel="next" href="/blogpost/page2"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span> <a class="page-number" href="/blogpost/page2">2</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page12">12</a> <a class="extend prev" rel="next" href="/blogpost/page2"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2352,7 +2359,7 @@ funcMain(args []int, funcN(sum int) {
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">110</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

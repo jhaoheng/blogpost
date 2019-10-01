@@ -281,6 +281,170 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/05/iosapns-with-http-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/07/05/iosapns-with-http-2/" itemprop="url">
+                【iOS】APNS with HTTP/2
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-05T06:29:00+08:00">
+                2016-07-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="insatll-mac">insatll (mac)</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">brew install curl --with-nghttp2</code></li>
+  <li><code class="highlighter-rouge">brew link curl --force</code></li>
+</ul>
+
+<h2 id="use">use</h2>
+<ul>
+  <li><code class="highlighter-rouge">./curl --version</code></li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>curl 7.48.0 (x86_64-apple-darwin15.5.0) libcurl/7.48.0 OpenSSL/1.0.2g zlib/1.2.5 nghttp2/1.9.1
+Protocols: dict file ftp ftps gopher http https imap imaps ldap ldaps pop3 pop3s rtsp smb smbs smtp smtps telnet tftp 
+Features: IPv6 Largefile NTLM NTLM_WB SSL libz TLS-SRP HTTP2 UnixSockets 
+</code></pre></td></tr></tbody></table></div></div>
+
+<ul>
+  <li>exec : <code class="highlighter-rouge">./curl -v -d '{"aps":{"alert":"Test Push","sound":"default"}}' --cert [xxx.pem] -H "apns-topic: [bundle_id]" --http2 https://api.development.push.apple.com/3/device/[token]</code></li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/07/05/iosapns-with-http-2/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/04/mampinstall-phalcon/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2084,187 +2248,6 @@ CFRelease(foo);
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/05/20/iotmqtt/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/05/20/iotmqtt/" itemprop="url">
-                【IoT】MQTT
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-20T11:58:00+08:00">
-                2016-05-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <p>今天是 AWS 高峰會，聽了很多 IoT 上的各種應用，與 AWS IoT 的互動…對於一些 protocol 使用範例概念上，還是不甚瞭解</p>
-
-<p><strong>MQTT : Message Queue Telemetry Transport</strong>
-<a href="https://github.com/mqtt/mqtt.github.io/wiki">wiki of MQTT</a></p>
-
-<p><a href="http://www.slideshare.net/paolopat/mqtt-iot-protocols-comparison">MQTT &amp; IoT protocols comparison</a></p>
-<ul>
-  <li>MQTT
-    <ul>
-      <li><a href="https://www.facebook.com/notes/facebook-engineering/building-facebook-messenger/10150259350998920">FB Msg 也用</a></li>
-    </ul>
-  </li>
-  <li>HTTP</li>
-  <li><a href="http://coap.technology/">CoAP</a></li>
-  <li>AMQP</li>
-</ul>
-
-<p>在不同的物聯網方案下，選用不同的 protocol
-<img src="http://goo.gl/Zr1EVB" alt="img" /></p>
-
-<h2 id="abstract">Abstract</h2>
-<p>MQTT 是一個 client server 發布/訂閱 訊息交換的 protocol。特性有 輕量、開放、簡單 容易使用。
-在許多受限制的環境下，適合使用(M2M / IoT)。運行 TCP/IP 協議。特色有：</p>
-<ul>
-  <li>Use of the publish/subscribe message pattern which provides one-to-many message
-distribution and decoupling of applications.</li>
-  <li>A messaging transport that is agnostic to the content of the payload.</li>
-  <li>Three qualities of service for message delivery:
-    <ul>
-      <li>“At most once”</li>
-      <li>“At least once”</li>
-      <li>“Exactly once”</li>
-    </ul>
-  </li>
-  <li>A small transport overhead and protocol exchanges minimized to reduce network traffic.</li>
-  <li>A mechanism to notify interested parties when an abnormal disconnection occurs.</li>
-</ul>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/05/20/iotmqtt/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2280,7 +2263,7 @@ distribution and decoupling of applications.</li>
 
 
 
-    <a class="extend prev" rel="prev" href="/blogpost/page9"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page9">9</a> <span class="page-number current">10</span> <a class="page-number" href="/blogpost/page11">11</a> <a class="extend prev" rel="next" href="/blogpost/page11"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/blogpost/page9"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page9">9</a> <span class="page-number current">10</span> <a class="page-number" href="/blogpost/page11">11</a> <a class="page-number" href="/blogpost/page12">12</a> <a class="extend prev" rel="next" href="/blogpost/page11"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2326,7 +2309,7 @@ distribution and decoupling of applications.</li>
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">110</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

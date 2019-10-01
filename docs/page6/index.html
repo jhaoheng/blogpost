@@ -281,6 +281,245 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/srs/docker/2017/05/31/SRS-docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/srs/docker/2017/05/31/SRS-docker/" itemprop="url">
+                【SRS-release2.0】docker with centos7.3
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-31T03:50:00+08:00">
+                2017-05-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/SRS" itemprop="url" rel="index">
+                    <span itemprop="name">SRS</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Docker" itemprop="url" rel="index">
+                    <span itemprop="name">Docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="環境">環境</h1>
+<ul>
+  <li>srs 2.0</li>
+  <li>centos7.3</li>
+</ul>
+
+<h1 id="完成品">完成品</h1>
+<ul>
+  <li>https://hub.docker.com/r/jhaoheng/srs-release2.0/</li>
+  <li><code class="highlighter-rouge">docker run -d -t -p 1935:1935 {image}</code></li>
+  <li>位置 : <code class="highlighter-rouge">/opt/srs/trunk</code>，執行 srs 即可</li>
+</ul>
+
+<h1 id="base">base</h1>
+<ul>
+  <li><code class="highlighter-rouge">docker pull centos:latest</code></li>
+  <li><code class="highlighter-rouge">docker run -d -t -p 1935:1935 [centos:latest]</code></li>
+  <li><code class="highlighter-rouge">docker exec -it [container] /bin/bash</code></li>
+</ul>
+
+<h1 id="安裝">安裝</h1>
+<ul>
+  <li><code class="highlighter-rouge">yum update</code></li>
+  <li>required
+    <ul>
+      <li><code class="highlighter-rouge">yum install -y gcc</code></li>
+      <li><code class="highlighter-rouge">yum install -y gcc-c++</code></li>
+      <li><code class="highlighter-rouge">yum install -y make</code></li>
+      <li><code class="highlighter-rouge">yum install -y patch</code></li>
+      <li><code class="highlighter-rouge">yum install -y unzip</code></li>
+      <li><code class="highlighter-rouge">yum install -y pcre-devel</code></li>
+      <li><code class="highlighter-rouge">yum install -y automake</code></li>
+      <li><code class="highlighter-rouge">yum install -y libtool</code></li>
+      <li><code class="highlighter-rouge">yum install -y zlib-devel</code></li>
+    </ul>
+  </li>
+  <li>git clone [source]</li>
+  <li>安裝 <code class="highlighter-rouge">./trunk/3rdparty/CherryPy-3.2.4</code>
+    <ul>
+      <li><code class="highlighter-rouge">unzip ./trunk/3rdparty/CherryPy-3.2.4.zip &amp;&amp; mv CherryPy-3.2.4 ../objs/</code></li>
+    </ul>
+  </li>
+  <li>compile srs : <code class="highlighter-rouge">./configure --full --with-ffmpeg --with-research &amp;&amp; make</code>
+    <ul>
+      <li><code class="highlighter-rouge">./configure -h</code> : 可查看所有安裝選項</li>
+    </ul>
+  </li>
+  <li>start srs : <code class="highlighter-rouge">./objs/srs -c conf/srs.conf</code></li>
+</ul>
+
+<h1 id="測試">測試</h1>
+<ul>
+  <li><code class="highlighter-rouge">tail -f ./trunk/srs.log</code></li>
+  <li>將桌面的畫面推送給 docker:srs
+    <ul>
+      <li><code class="highlighter-rouge">ffmpeg -f avfoundation -i "1" -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmp://localhost:1935/live/desktop</code></li>
+    </ul>
+  </li>
+  <li>透過 VLC 播放 <code class="highlighter-rouge">rtmp://localhost:1935/live/desktop</code></li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/srs/docker/2017/05/31/SRS-docker/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/hls/2017/05/28/HLS-m3u8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2185,381 +2424,6 @@ dyld: Symbol not found: _clock_gettime
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/" itemprop="url">
-                【AWS-centos7-php7.x】phalcon / memcached / mosquitto
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-02-08T09:55:00+08:00">
-                2017-02-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/Phalcon" itemprop="url" rel="index">
-                    <span itemprop="name">Phalcon</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/Memcached" itemprop="url" rel="index">
-                    <span itemprop="name">Memcached</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/Mosquitto" itemprop="url" rel="index">
-                    <span itemprop="name">Mosquitto</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/MQTT" itemprop="url" rel="index">
-                    <span itemprop="name">MQTT</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="完整的-bash-script">完整的 bash script</h1>
-<p><strong>base on AWS centos7</strong> : git@github.com:jhaoheng/centos-nginx-php7.x-extension.git
-執行 sh env.sh 即可，整體安裝約 20 分鐘</p>
-
-<h1 id="start">start</h1>
-<ol>
-  <li>至 aws</li>
-  <li>launch new instance</li>
-  <li>market search centos</li>
-  <li>choose centos7</li>
-</ol>
-
-<h1 id="centos7-安裝-nginx">centos7 安裝 nginx</h1>
-
-<ol>
-  <li>yum -y install epel-release</li>
-  <li>yum install nginx</li>
-  <li>驗證在瀏覽器開啟 ip, 注意 port 80 是否有開啟</li>
-</ol>
-
-<h2 id="操作">操作</h2>
-<p>/bin/systemctl restart nginx</p>
-
-<h1 id="centos7-安裝-php7x">centos7 安裝 php7.x</h1>
-
-<ol>
-  <li>yum -y install epel-release</li>
-  <li>yum install wget</li>
-  <li>wget http://rpms.famillecollet.com/enterprise/remi-release-7.rpm</li>
-  <li>rpm -ivh ./remi-release-7.rpm</li>
-  <li>yum install –enablerepo=remi,remi-php70 php-fpm php-devel php-mbstring php-pdo php-gd php-xml php-curl php-mysqlnd php-pdo_mysql php-mysqli php-json php-soap php-zip php-sockets php-session php-mcrypt php-date php-openssl php-yaml</li>
-</ol>
-
-<h2 id="source">source</h2>
-<ol>
-  <li>下載位置 http://php.net/downloads.php</li>
-  <li>可參考目前的 ext</li>
-  <li>手動新增 ext, ex:
-    <ol>
-      <li>cd xml</li>
-      <li>phpize</li>
-      <li>./configure</li>
-      <li>make &amp;&amp; make install</li>
-    </ol>
-  </li>
-  <li>查看 module 是否有此套件</li>
-</ol>
-
-<h2 id="操作-1">操作</h2>
-<p>/bin/systemctl restart php-fpm</p>
-
-<h2 id="測試">測試</h2>
-
-<ol>
-  <li>找出 nginx.conf : nginx -h</li>
-  <li>vi {$path}/nginx.conf</li>
-  <li>server 設定參數可參考 <code class="highlighter-rouge">https://docs.phalconphp.com/zh/latest/reference/nginx.html</code>
-    <ul>
-      <li>請將 fastcgi 設定為 127.0.0.1:9000 &lt;— 必須符合 php-fpm 的 listen 位置</li>
-    </ul>
-  </li>
-  <li>在適當位置建立 <?php phpinfo()?> 的 index.php</li>
-  <li>在 browser 輸入 ip 與 index.php</li>
-</ol>
-
-<h1 id="centos7-安裝-phalcon-with-php7x">centos7 安裝 phalcon with php7.x</h1>
-
-<ol>
-  <li>yun install git</li>
-  <li>yum install php-devel pcre-devel gcc make re2c</li>
-  <li>安裝編譯工具 : git clone https://github.com/phalcon/zephir</li>
-  <li>cd zephir/</li>
-  <li>./install-nosudo</li>
-  <li>下載 phalcon source : git clone git://github.com/phalcon/cphalcon.git</li>
-  <li>cd cphalcon/</li>
-  <li>git checkout 適當的版本</li>
-  <li>{$Path}/zephir build</li>
-  <li>將 extension=phalcon.so 放入 php.ini</li>
-  <li>
-    <table>
-      <tbody>
-        <tr>
-          <td>php -i</td>
-          <td>grep phalcon</td>
-        </tr>
-      </tbody>
-    </table>
-  </li>
-</ol>
-
-<h2 id="trouble">trouble</h2>
-<ul>
-  <li>undefined symbol: php_json_decode_ex in Unknown on line 0
-    <ul>
-      <li>原因在於此 extension=phalcon.so 不能直接放在 php.ini 中，請放置 /etc/php.d/</li>
-    </ul>
-  </li>
-</ul>
-
-<h1 id="centos7-安裝-libmemcached-編譯-memcachedso">centos7 安裝 libmemcached 編譯 memcached.so</h1>
-
-<h2 id="安裝-libmemcached">安裝 libmemcached</h2>
-
-<ol>
-  <li>至官網下載 https://launchpad.net/libmemcached</li>
-  <li>wget ….</li>
-  <li>cd /libmemcached-1.x.x</li>
-  <li>yum groupinstall “Development Tools”</li>
-  <li>yum install zlib-static</li>
-  <li>./configure –disable-memcached-sasl</li>
-  <li>make &amp;&amp; make install</li>
-</ol>
-
-<h2 id="編譯-memcachedso">編譯 memcached.so</h2>
-<ol>
-  <li>git clone https://github.com/php-memcached-dev/php-memcached.git</li>
-  <li>git checkout php7</li>
-  <li>phpize</li>
-  <li>./configure</li>
-  <li>make &amp;&amp; make install</li>
-  <li>確定是否將 .so 放入 module 中 :
-    <ol>
-      <li><code class="highlighter-rouge">php -i | grep extension_dir</code></li>
-      <li>cd {dir}</li>
-      <li>檢查是否有 memcached.so</li>
-    </ol>
-  </li>
-  <li>確定 extension 是否有加入到 php.ini</li>
-  <li>
-    <table>
-      <tbody>
-        <tr>
-          <td>驗證 php -i</td>
-          <td>grep memcached</td>
-        </tr>
-      </tbody>
-    </table>
-  </li>
-</ol>
-
-<h1 id="centos7-安裝-libmosquitto-編譯-mosquittoso">centos7 安裝 libmosquitto 編譯 mosquitto.so</h1>
-
-<h2 id="安裝-libmosquitto">安裝 libmosquitto</h2>
-<ol>
-  <li>進入官網 : https://mosquitto.org/download/</li>
-  <li>找到 centos7 的 re 的 conf</li>
-  <li>將檔案 mosquitto.repo 放入 /etc/yum.repos.d 即可
-<code class="highlighter-rouge">The available packages are: mosquitto, mosquitto-clients, libmosquitto1, libmosquitto-devel, libmosquittopp1, libmosquittopp-devel, python-mosquitto.</code></li>
-  <li>安裝 : yum install libmosquitto-devel</li>
-  <li>安裝後的 lib 路徑, 系統安裝後會提示, 無意外是 /usr/lib64/libmosquitto.so…..</li>
-</ol>
-
-<h2 id="編譯-mosquittoso">編譯 mosquitto.so</h2>
-<ol>
-  <li>下載 git source 後 : https://github.com/mgdm/Mosquitto-PHP</li>
-  <li>cd Mosquitto-PHP</li>
-  <li>phpize</li>
-  <li><code class="highlighter-rouge">./configure --with-mosquitto=/usr/lib64/libmosquitto.so</code></li>
-  <li>make &amp;&amp; make install</li>
-  <li>驗證 module 是否有 mosquitto.so</li>
-  <li>在 php.ini 中設定 extension=mosquitto.so</li>
-  <li>
-    <table>
-      <tbody>
-        <tr>
-          <td>驗證 : php -i</td>
-          <td>grep mosquitto</td>
-        </tr>
-      </tbody>
-    </table>
-  </li>
-</ol>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2575,7 +2439,7 @@ dyld: Symbol not found: _clock_gettime
 
 
 
-    <a class="extend prev" rel="prev" href="/blogpost/page5"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page5">5</a> <span class="page-number current">6</span> <a class="page-number" href="/blogpost/page7">7</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page11">11</a> <a class="extend prev" rel="next" href="/blogpost/page7"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/blogpost/page5"><i class="fa fa-angle-left"></i></a> <a class="page-number" href="/blogpost/">1</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page5">5</a> <span class="page-number current">6</span> <a class="page-number" href="/blogpost/page7">7</a> <span class="space">&hellip;</span> <a class="page-number" href="/blogpost/page12">12</a> <a class="extend prev" rel="next" href="/blogpost/page7"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2621,7 +2485,7 @@ dyld: Symbol not found: _clock_gettime
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">110</span>
+                <span class="site-state-item-count">111</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
