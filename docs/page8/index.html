@@ -281,6 +281,261 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/ssh/github/2016/10/14/SSH-Github-Account/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/ssh/github/2016/10/14/SSH-Github-Account/" itemprop="url">
+                【SSH】多個 github 帳號下的 git clone
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-14T07:30:00+08:00">
+                2016-10-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/SSH" itemprop="url" rel="index">
+                    <span itemprop="name">SSH</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Github" itemprop="url" rel="index">
+                    <span itemprop="name">Github</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="readme">readme</h1>
+
+<ul>
+  <li>env : osx 10.11</li>
+  <li>使用 github 時，根據兩個不同的帳號進行切換 ssh-key</li>
+</ul>
+
+<h1 id="產生-ssh-key">產生 ssh-key</h1>
+
+<p><code class="highlighter-rouge">$ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"</code></p>
+
+<h1 id="sshconfig">.ssh/config</h1>
+
+<blockquote>
+  <p>所有的參數列表 <a href="https://linux.die.net/man/5/ssh_config">https://linux.die.net/man/5/ssh_config</a>，<strong>see PATTERNS</strong></p>
+</blockquote>
+
+<ul>
+  <li>Host {本機辨識的名稱}</li>
+  <li>HostName 主機位置</li>
+  <li>User 登入帳號</li>
+  <li>IdentityFile 憑證位置</li>
+</ul>
+
+<h2 id="參數">參數</h2>
+
+<ul>
+  <li>Host : 此為此組 ssh 的名稱，讓本機辨識專用，故可任意取名，當 <code class="highlighter-rouge">git clone git@{Host}:{your_group_name}/{project}.git</code> 則會依照 {Host} 取得相關 key</li>
+  <li>HostName : github.com</li>
+  <li>User : git</li>
+  <li>IdentityFile : 此為 ssh private key 存放位置</li>
+</ul>
+
+<h1 id="範例">範例</h1>
+
+<blockquote>
+  <p>有兩個不同帳號，user_A &amp; user_B</p>
+</blockquote>
+
+<ol>
+  <li>產生 key</li>
+  <li>設定 config
+    <ul>
+      <li>user_A
+        <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code># user_A@gmail.com
+Host gitlab.com-user_A
+HostName github.com
+User git
+IdentityFile ~/.ssh/user_A/id_rsa
+</code></pre></td></tr></tbody></table></div>        </div>
+      </li>
+      <li>user_B
+        <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code># user_B@gmail.com
+Host gitlab.com-user_B
+HostName github.com
+User git
+IdentityFile ~/.ssh/user_B/id_rsa
+</code></pre></td></tr></tbody></table></div>        </div>
+      </li>
+    </ul>
+  </li>
+  <li>使用，將原本的 <code class="highlighter-rouge">git@github.com:jhaoheng/APNS_cer_build.git</code> ，github 的部分，改為 Host 的參數名稱
+    <ul>
+      <li>ex : <code class="highlighter-rouge">git clone git@github.com-user_A:jhaoheng/APNS_cer_build.git</code></li>
+    </ul>
+  </li>
+  <li>注意上傳的 name 與 email
+    <ul>
+      <li>使用 <code class="highlighter-rouge">git config --local -l</code> : 查看目前該 git repo 的基本設定
+        <ul>
+          <li>可用 <code class="highlighter-rouge">git config --local user.name</code> 與 <code class="highlighter-rouge">git config --local user.email</code> 設定</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ol>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/ssh/github/2016/10/14/SSH-Github-Account/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/10/01/docgenerate-program-converting-comments-help-file/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2097,173 +2352,6 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/08/04/path/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/08/04/path/" itemprop="url">
-                【$PATH】
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-04T08:40:00+08:00">
-                2016-08-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h2 id="env">env</h2>
-<ul>
-  <li>mac osx 10.11.6</li>
-  <li>mac mini</li>
-</ul>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>echo $PATH
-</code></pre></td></tr></tbody></table></div></div>
-
-<p>可能存放的位置有</p>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>/etc/paths
-/etc/profile
-/etc/bashrc
-~/.bash\_profile
-~/.bash\_login
-~/.profile
-~/.bashrc
-</code></pre></td></tr></tbody></table></div></div>
-
-<p>或者</p>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>cat /etc/profile
-</code></pre></td></tr></tbody></table></div></div>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/08/04/path/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2325,7 +2413,7 @@ move to <code class="highlighter-rouge">/Applications/MAMP/bin/php/php7.0.8/lib/
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">109</span>
+                <span class="site-state-item-count">110</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

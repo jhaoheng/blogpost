@@ -281,6 +281,275 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/php/2017/01/15/PHP-Memcached/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/php/2017/01/15/PHP-Memcached/" itemprop="url">
+                【php】memcached
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-01-15T15:24:00+08:00">
+                2017-01-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/PHP" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="env">ENV</h1>
+<ul>
+  <li>php 7.x</li>
+  <li>mac osx</li>
+</ul>
+
+<h1 id="編譯好的-memcacheso">編譯好的 memcache.so</h1>
+<ul>
+  <li>github : https://github.com/majksner/php-memcached-mamp</li>
+</ul>
+
+<ol>
+  <li>下載 memcached.so</li>
+  <li>brew install memcached</li>
+  <li>brew install libmemcached</li>
+  <li>php –ini</li>
+  <li>vim php.ini</li>
+  <li>extension=memcached.so</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>php -i</td>
+          <td>grep memcached</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+</ol>
+
+<h1 id="自己-compile">自己 compile</h1>
+
+<ul>
+  <li>git clone https://github.com/php-memcached-dev/php-memcached.git</li>
+</ul>
+
+<ol>
+  <li>brew install memcached</li>
+  <li>brew install libmemcached</li>
+  <li>git checkout php7</li>
+  <li>phpize</li>
+  <li><code class="highlighter-rouge">./configure --with-memcached=/usr/local/Cellar/libmemcached/1.0.18_1/lib/libmemcached</code>
+    <ul>
+      <li>Notice : the <code class="highlighter-rouge">libmemcached</code> path is brew install path</li>
+    </ul>
+  </li>
+  <li>make</li>
+  <li>sudo make install</li>
+  <li>mv memcached.so to extension path, you could get path with <code class="highlighter-rouge">php -i | grep extension_dir</code></li>
+  <li>vim php.ini, add <code class="highlighter-rouge">extension=memcached.so</code></li>
+</ol>
+
+<h1 id="如何使用">如何使用</h1>
+
+<h2 id="前提">前提</h2>
+<ol>
+  <li>安裝好 memcached 在電腦中 : brew install memcached
+    <ul>
+      <li>至於 libmemcached 則為編譯成 .so 時使用</li>
+    </ul>
+  </li>
+  <li>執行 memcached 即可
+    <ul>
+      <li><code class="highlighter-rouge">man memcached</code>
+      - <code class="highlighter-rouge">memcached -l 127.0.0.1 -P 11211 -m 128 -d</code> : for deamon
+      - <code class="highlighter-rouge">memcached -l 127.0.0.1 -P 11211 -m 128 -vv</code> : for debug</li>
+    </ul>
+  </li>
+  <li>檢查 memcached 是否有執行 : <code class="highlighter-rouge">ps aux | grep memcached</code></li>
+</ol>
+
+<h2 id="判斷-php-是否安裝好支援的-memcachedso">判斷 php 是否安裝好支援的 memcached.so</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td>php -i</td>
+      <td>grep memcached</td>
+    </tr>
+    <tr>
+      <td>php -m</td>
+      <td>grep memcached</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="test">test</h2>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10</pre></td><td class="code"><pre class="highlight"><code>&lt;? php
+$mem  = new Memcached();
+
+$mem-&gt;addServer('localhost',11211);
+if( $mem-&gt;add("key","value",3600)){
+    echo  'cached!';
+}else{
+    echo 'cached data：'.$mem-&gt;get("key");
+}
+?&gt;
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="console-admin">console admin</h2>
+
+<p><code class="highlighter-rouge">git@github.com:jhaoheng/phpmemcacheadmin.git</code></p>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/php/2017/01/15/PHP-Memcached/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/php/mqtt/2017/01/12/PHP-MQTT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2396,261 +2665,6 @@ User root
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/ssh/github/2016/10/14/SSH-Github-Account/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/ssh/github/2016/10/14/SSH-Github-Account/" itemprop="url">
-                【SSH】多個 github 帳號下的 git clone
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-14T07:30:00+08:00">
-                2016-10-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/SSH" itemprop="url" rel="index">
-                    <span itemprop="name">SSH</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/Github" itemprop="url" rel="index">
-                    <span itemprop="name">Github</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="readme">readme</h1>
-
-<ul>
-  <li>env : osx 10.11</li>
-  <li>使用 github 時，根據兩個不同的帳號進行切換 ssh-key</li>
-</ul>
-
-<h1 id="產生-ssh-key">產生 ssh-key</h1>
-
-<p><code class="highlighter-rouge">$ ssh-keygen -t rsa -b 4096 -C "your_email@example.com"</code></p>
-
-<h1 id="sshconfig">.ssh/config</h1>
-
-<blockquote>
-  <p>所有的參數列表 <a href="https://linux.die.net/man/5/ssh_config">https://linux.die.net/man/5/ssh_config</a>，<strong>see PATTERNS</strong></p>
-</blockquote>
-
-<ul>
-  <li>Host {本機辨識的名稱}</li>
-  <li>HostName 主機位置</li>
-  <li>User 登入帳號</li>
-  <li>IdentityFile 憑證位置</li>
-</ul>
-
-<h2 id="參數">參數</h2>
-
-<ul>
-  <li>Host : 此為此組 ssh 的名稱，讓本機辨識專用，故可任意取名，當 <code class="highlighter-rouge">git clone git@{Host}:{your_group_name}/{project}.git</code> 則會依照 {Host} 取得相關 key</li>
-  <li>HostName : github.com</li>
-  <li>User : git</li>
-  <li>IdentityFile : 此為 ssh private key 存放位置</li>
-</ul>
-
-<h1 id="範例">範例</h1>
-
-<blockquote>
-  <p>有兩個不同帳號，user_A &amp; user_B</p>
-</blockquote>
-
-<ol>
-  <li>產生 key</li>
-  <li>設定 config
-    <ul>
-      <li>user_A
-        <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code># user_A@gmail.com
-Host gitlab.com-user_A
-HostName github.com
-User git
-IdentityFile ~/.ssh/user_A/id_rsa
-</code></pre></td></tr></tbody></table></div>        </div>
-      </li>
-      <li>user_B
-        <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code># user_B@gmail.com
-Host gitlab.com-user_B
-HostName github.com
-User git
-IdentityFile ~/.ssh/user_B/id_rsa
-</code></pre></td></tr></tbody></table></div>        </div>
-      </li>
-    </ul>
-  </li>
-  <li>使用，將原本的 <code class="highlighter-rouge">git@github.com:jhaoheng/APNS_cer_build.git</code> ，github 的部分，改為 Host 的參數名稱
-    <ul>
-      <li>ex : <code class="highlighter-rouge">git clone git@github.com-user_A:jhaoheng/APNS_cer_build.git</code></li>
-    </ul>
-  </li>
-  <li>注意上傳的 name 與 email
-    <ul>
-      <li>使用 <code class="highlighter-rouge">git config --local -l</code> : 查看目前該 git repo 的基本設定
-        <ul>
-          <li>可用 <code class="highlighter-rouge">git config --local user.name</code> 與 <code class="highlighter-rouge">git config --local user.email</code> 設定</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ol>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/ssh/github/2016/10/14/SSH-Github-Account/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2712,7 +2726,7 @@ IdentityFile ~/.ssh/user_B/id_rsa
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">109</span>
+                <span class="site-state-item-count">110</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
