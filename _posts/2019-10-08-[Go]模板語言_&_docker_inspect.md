@@ -84,36 +84,43 @@ networks:
 # filter format
 
 ## 變量 : 獲取 "Name"
-`docker network inspect -f '{{.Name}}' sample-net`
+
+{% raw %}
+`docker network inspect -f '{{ .Name }}' sample-net`
+{% endraw %}
 
 ## 變量 : 獲取 "IPAM"
+{% raw %}
 `docker network inspect -f '{{.IPAM}}' spider-net`
+{% endraw %}
 
 ## 變量 : 獲取 .IPAM.Driver
+{% raw %}
 `docker network inspect -f '{{.IPAM.Driver}}' sample-net`
+{% endraw %}
 
 ## 索引 : 獲取 .IPAM.Config [0] 的 Subnet
 - 索引 
 	- 如果返回結果是一個 map, slice, array 或 string，則可以使用 index 加索引序號（從零開始計數）來讀取屬性值。
-- `docker network inspect -f '{{(index .IPAM.Config 0).Subnet}}' sample-net`
+- {% raw %}`docker network inspect -f '{{(index .IPAM.Config 0).Subnet}}' sample-net`{% endraw %}
 
 ## 遍例 : 獲取 Containers 中的所有名稱
-- `{{range Object}}{{.}}{{end}}`, 支持的類型包括 array, slice, map 和 channel
+- {% raw %}`{{range Object}}{{.}}{{end}}`{% endraw %}, 支持的類型包括 array, slice, map 和 channel
 	-  對應的值長度為 0 時，range 不會執行。
 	-  結構內部如要使用外部的變量，需要在前面加 引用，比如 Var2。
 	-  range 也支持 else 操作。效果是：當返回值為空或長度為 0 時執行 else 內的內容。
 - ex:
-	- `docker network inspect -f '{{range .Containers}}{{.Name}}{{end}}' spider-net`
-	- `docker network inspect -f '{{range .Containers}}{{.Name}}{{println}}{{end}}' sample-net`
-	- `docker network inspect -f '{{range .Containers}}{{.Name}}{{println}}{{else}}With No Containers{{end}}' sample-net`
+	- {% raw %}`docker network inspect -f '{{range .Containers}}{{.Name}}{{end}}' spider-net`{% endraw %}
+	- {% raw %}`docker network inspect -f '{{range .Containers}}{{.Name}}{{println}}{{end}}' sample-net`{% endraw %}
+	- {% raw %}`docker network inspect -f '{{range .Containers}}{{.Name}}{{println}}{{else}}With No Containers{{end}}' sample-net`{% endraw %}
 
 ## if ... else ... end
 
-- General : `docker network inspect -f '{{if .Name}}hello world{{end}}' sample-net`
-- Not : `docker network inspect -f '{{if not .Name}}No Name{{else}}Name exist{{end}}' sample-net`
+- General : {% raw %}`docker network inspect -f '{{if .Name}}hello world{{end}}' sample-net`{% endraw %}
+- Not : {% raw %}`docker network inspect -f '{{if not .Name}}No Name{{else}}Name exist{{end}}' sample-net`{% endraw %}
 - Or :
-	-   {{or x y}}: 表示如果 x 為真返回 x，否則返回 y。
-	-   {{or x y z}}：後面跟多個參數時會逐一判斷每個參數，並返回第一個非空的參數。如果都為 false，則返回最後一個參數。
+	- {% raw %}{{or x y}}{% endraw %}: 表示如果 x 為真返回 x，否則返回 y。
+	- {% raw %}{{or x y z}}{% endraw %}：後面跟多個參數時會逐一判斷每個參數，並返回第一個非空的參數。如果都為 false，則返回最後一個參數。
 	-  除了 null（空）和 false 被識別為 false，其它值（字符串、數字、對象等）均被識別為 true。
 
 ## if 判斷式
@@ -126,9 +133,9 @@ networks:
 
 - ex : 
 	- 輸出所有已停止容器的名稱 : 
-		- `docker inspect --format '{{if ne 0.0 .State.ExitCode}}{{.Name}}{{end}}' $(docker ps -aq)`
-		- `docker inspect --format '{{if ne 0.0 .State.ExitCode}}{{.Name}}{{else}}容器還在運行{{end}}' $(docker ps -aq)`
-		- `docker inspect --format '{{if ne 0.0 .State.ExitCode}}{{.Name}}{{else if .}}容器還在運行{{end}}' $(docker ps -aq)`
+		- {% raw %}`docker inspect --format '{{if ne 0.0 .State.ExitCode}}{{.Name}}{{end}}' $(docker ps -aq)`{% endraw %}
+		- {% raw %}`docker inspect --format '{{if ne 0.0 .State.ExitCode}}{{.Name}}{{else}}容器還在運行{{end}}' $(docker ps -aq)`{% endraw %}
+		- {% raw %}`docker inspect --format '{{if ne 0.0 .State.ExitCode}}{{.Name}}{{else if .}}容器還在運行{{end}}' $(docker ps -aq)`{% endraw %}
 
 ## Print
 - print 	: 將傳入的對象轉換為字符串並寫入到標準輸出中。如果後跟多個參數，輸出結果之間會自動填充空格進行分隔。
@@ -136,23 +143,24 @@ networks:
 - printf 	: 與 shell 等環境一致，可配合佔位符用於格式化輸出。
 
 ## 取得長度
-- `docker inspect --format '{{len .Name}}' sample-net`
+- {% raw %}`docker inspect --format '{{len .Name}}' sample-net`{% endraw %}
 
 ## 輸出用 json 方式取代 text
-- `docker inspect --format '{{json .IPAM}}' sample-net`
+- {% raw %}`docker inspect --format '{{json .IPAM}}' sample-net`{% endraw %}
 
 ## join
-- `docker inspect -f '{{join .HostConfig.MaskedPaths ", "}}' s1`
+- {% raw %}`docker inspect -f '{{join .HostConfig.MaskedPaths ", "}}' s1`{% endraw %}
 
 ## title && lower && upper
 
 - lower : 全部轉為小寫
-	- `docker network inspect --format '{{range .Containers}}{{lower .Name}}{{end}}' sample-net`
+	- {% raw %}`docker network inspect --format '{{range .Containers}}{{lower .Name}}{{end}}' sample-net`{% endraw %}
 - upper : 全部轉為大寫
-	- `docker network inspect --format '{{range .Containers}}{{upper .Name}}{{end}}' sample-net`
+	- {% raw %}`docker network inspect --format '{{range .Containers}}{{upper .Name}}{{end}}' sample-net`{% endraw %}
 - title : 將返回的結果值，首字母轉為大寫
-	- `docker network inspect --format '{{range .Containers}}{{title .Name}}{{end}}' sample-net`
+	- {% raw %}`docker network inspect --format '{{range .Containers}}{{title .Name}}{{end}}' sample-net`{% endraw %}
 
 ## split
-- `docker network inspect --format '{{range .Containers}}{{split .Name "/"}}{{end}}' sample-net`
+- {% raw %}`docker network inspect --format '{{range .Containers}}{{split .Name "/"}}{{end}}' sample-net`{% endraw %}
 	- output : `[s1][s2][s3]`
+

@@ -478,13 +478,16 @@ networks:
 <h1 id="filter-format">filter format</h1>
 
 <h2 id="變量--獲取-name">變量 : 獲取 “Name”</h2>
-<p><code class="highlighter-rouge">docker network inspect -f '' sample-net</code></p>
+
+<p><code class="highlighter-rouge">docker network inspect -f '{{ .Name }}' sample-net</code></p>
 
 <h2 id="變量--獲取-ipam">變量 : 獲取 “IPAM”</h2>
-<p><code class="highlighter-rouge">docker network inspect -f '' spider-net</code></p>
+
+<p><code class="highlighter-rouge">docker network inspect -f '{{.IPAM}}' spider-net</code></p>
 
 <h2 id="變量--獲取-ipamdriver">變量 : 獲取 .IPAM.Driver</h2>
-<p><code class="highlighter-rouge">docker network inspect -f '' sample-net</code></p>
+
+<p><code class="highlighter-rouge">docker network inspect -f '{{.IPAM.Driver}}' sample-net</code></p>
 
 <h2 id="索引--獲取-ipamconfig-0-的-subnet">索引 : 獲取 .IPAM.Config [0] 的 Subnet</h2>
 <ul>
@@ -493,12 +496,12 @@ networks:
       <li>如果返回結果是一個 map, slice, array 或 string，則可以使用 index 加索引序號（從零開始計數）來讀取屬性值。</li>
     </ul>
   </li>
-  <li><code class="highlighter-rouge">docker network inspect -f '' sample-net</code></li>
+  <li><code class="highlighter-rouge">docker network inspect -f '{{(index .IPAM.Config 0).Subnet}}' sample-net</code></li>
 </ul>
 
 <h2 id="遍例--獲取-containers-中的所有名稱">遍例 : 獲取 Containers 中的所有名稱</h2>
 <ul>
-  <li>``, 支持的類型包括 array, slice, map 和 channel
+  <li><code class="highlighter-rouge">{{range Object}}{{.}}{{end}}</code>, 支持的類型包括 array, slice, map 和 channel
     <ul>
       <li>對應的值長度為 0 時，range 不會執行。</li>
       <li>結構內部如要使用外部的變量，需要在前面加 引用，比如 Var2。</li>
@@ -507,9 +510,9 @@ networks:
   </li>
   <li>ex:
     <ul>
-      <li><code class="highlighter-rouge">docker network inspect -f '' spider-net</code></li>
-      <li><code class="highlighter-rouge">docker network inspect -f '' sample-net</code></li>
-      <li><code class="highlighter-rouge">docker network inspect -f 'With No Containers' sample-net</code></li>
+      <li><code class="highlighter-rouge">docker network inspect -f '{{range .Containers}}{{.Name}}{{end}}' spider-net</code></li>
+      <li><code class="highlighter-rouge">docker network inspect -f '{{range .Containers}}{{.Name}}{{println}}{{end}}' sample-net</code></li>
+      <li><code class="highlighter-rouge">docker network inspect -f '{{range .Containers}}{{.Name}}{{println}}{{else}}With No Containers{{end}}' sample-net</code></li>
     </ul>
   </li>
 </ul>
@@ -517,12 +520,12 @@ networks:
 <h2 id="if--else--end">if … else … end</h2>
 
 <ul>
-  <li>General : <code class="highlighter-rouge">docker network inspect -f 'hello world' sample-net</code></li>
-  <li>Not : <code class="highlighter-rouge">docker network inspect -f 'No NameName exist' sample-net</code></li>
+  <li>General : <code class="highlighter-rouge">docker network inspect -f '{{if .Name}}hello world{{end}}' sample-net</code></li>
+  <li>Not : <code class="highlighter-rouge">docker network inspect -f '{{if not .Name}}No Name{{else}}Name exist{{end}}' sample-net</code></li>
   <li>Or :
     <ul>
-      <li>: 表示如果 x 為真返回 x，否則返回 y。</li>
-      <li>：後面跟多個參數時會逐一判斷每個參數，並返回第一個非空的參數。如果都為 false，則返回最後一個參數。</li>
+      <li>{{or x y}}: 表示如果 x 為真返回 x，否則返回 y。</li>
+      <li>{{or x y z}}：後面跟多個參數時會逐一判斷每個參數，並返回第一個非空的參數。如果都為 false，則返回最後一個參數。</li>
       <li>除了 null（空）和 false 被識別為 false，其它值（字符串、數字、對象等）均被識別為 true。</li>
     </ul>
   </li>
@@ -542,9 +545,9 @@ networks:
     <ul>
       <li>輸出所有已停止容器的名稱 :
         <ul>
-          <li><code class="highlighter-rouge">docker inspect --format '' $(docker ps -aq)</code></li>
-          <li><code class="highlighter-rouge">docker inspect --format '容器還在運行' $(docker ps -aq)</code></li>
-          <li><code class="highlighter-rouge">docker inspect --format '容器還在運行' $(docker ps -aq)</code></li>
+          <li><code class="highlighter-rouge">docker inspect --format '{{if ne 0.0 .State.ExitCode}}{{.Name}}{{end}}' $(docker ps -aq)</code></li>
+          <li><code class="highlighter-rouge">docker inspect --format '{{if ne 0.0 .State.ExitCode}}{{.Name}}{{else}}容器還在運行{{end}}' $(docker ps -aq)</code></li>
+          <li><code class="highlighter-rouge">docker inspect --format '{{if ne 0.0 .State.ExitCode}}{{.Name}}{{else if .}}容器還在運行{{end}}' $(docker ps -aq)</code></li>
         </ul>
       </li>
     </ul>
@@ -560,17 +563,17 @@ networks:
 
 <h2 id="取得長度">取得長度</h2>
 <ul>
-  <li><code class="highlighter-rouge">docker inspect --format '' sample-net</code></li>
+  <li><code class="highlighter-rouge">docker inspect --format '{{len .Name}}' sample-net</code></li>
 </ul>
 
 <h2 id="輸出用-json-方式取代-text">輸出用 json 方式取代 text</h2>
 <ul>
-  <li><code class="highlighter-rouge">docker inspect --format '' sample-net</code></li>
+  <li><code class="highlighter-rouge">docker inspect --format '{{json .IPAM}}' sample-net</code></li>
 </ul>
 
 <h2 id="join">join</h2>
 <ul>
-  <li><code class="highlighter-rouge">docker inspect -f '' s1</code></li>
+  <li><code class="highlighter-rouge">docker inspect -f '{{join .HostConfig.MaskedPaths ", "}}' s1</code></li>
 </ul>
 
 <h2 id="title--lower--upper">title &amp;&amp; lower &amp;&amp; upper</h2>
@@ -578,29 +581,30 @@ networks:
 <ul>
   <li>lower : 全部轉為小寫
     <ul>
-      <li><code class="highlighter-rouge">docker network inspect --format '' sample-net</code></li>
+      <li><code class="highlighter-rouge">docker network inspect --format '{{range .Containers}}{{lower .Name}}{{end}}' sample-net</code></li>
     </ul>
   </li>
   <li>upper : 全部轉為大寫
     <ul>
-      <li><code class="highlighter-rouge">docker network inspect --format '' sample-net</code></li>
+      <li><code class="highlighter-rouge">docker network inspect --format '{{range .Containers}}{{upper .Name}}{{end}}' sample-net</code></li>
     </ul>
   </li>
   <li>title : 將返回的結果值，首字母轉為大寫
     <ul>
-      <li><code class="highlighter-rouge">docker network inspect --format '' sample-net</code></li>
+      <li><code class="highlighter-rouge">docker network inspect --format '{{range .Containers}}{{title .Name}}{{end}}' sample-net</code></li>
     </ul>
   </li>
 </ul>
 
 <h2 id="split">split</h2>
 <ul>
-  <li><code class="highlighter-rouge">docker network inspect --format '' sample-net</code>
+  <li><code class="highlighter-rouge">docker network inspect --format '{{range .Containers}}{{split .Name "/"}}{{end}}' sample-net</code>
     <ul>
       <li>output : <code class="highlighter-rouge">[s1][s2][s3]</code></li>
     </ul>
   </li>
 </ul>
+
 
 
       

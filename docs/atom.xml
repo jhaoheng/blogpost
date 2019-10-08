@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-10-08T17:13:58+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】模板語言 &amp;amp; docker inspect</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/08/Go-%E6%A8%A1%E6%9D%BF%E8%AA%9E%E8%A8%80_&_docker_inspect/" rel="alternate" type="text/html" title="【Go】模板語言 &amp; docker inspect" /><published>2019-10-08T17:06:00+08:00</published><updated>2019-10-08T17:06:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/08/%5BGo%5D%E6%A8%A1%E6%9D%BF%E8%AA%9E%E8%A8%80_&amp;_docker_inspect</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/08/Go-%E6%A8%A1%E6%9D%BF%E8%AA%9E%E8%A8%80_&amp;_docker_inspect/">&lt;h1 id=&quot;golang-模板語言&quot;&gt;golang 模板語言&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-10-09T00:01:34+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】模板語言 &amp;amp; docker inspect</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/08/Go-%E6%A8%A1%E6%9D%BF%E8%AA%9E%E8%A8%80_&_docker_inspect/" rel="alternate" type="text/html" title="【Go】模板語言 &amp; docker inspect" /><published>2019-10-08T17:06:00+08:00</published><updated>2019-10-08T17:06:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/08/%5BGo%5D%E6%A8%A1%E6%9D%BF%E8%AA%9E%E8%A8%80_&amp;_docker_inspect</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/08/Go-%E6%A8%A1%E6%9D%BF%E8%AA%9E%E8%A8%80_&amp;_docker_inspect/">&lt;h1 id=&quot;golang-模板語言&quot;&gt;golang 模板語言&lt;/h1&gt;
 &lt;ul&gt;
   &lt;li&gt;Resource : https://golang.org/pkg/text/template/&lt;/li&gt;
 &lt;/ul&gt;
@@ -85,13 +85,16 @@ networks:
 &lt;h1 id=&quot;filter-format&quot;&gt;filter format&lt;/h1&gt;
 
 &lt;h2 id=&quot;變量--獲取-name&quot;&gt;變量 : 獲取 “Name”&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '' sample-net&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '{{ .Name }}' sample-net&lt;/code&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;變量--獲取-ipam&quot;&gt;變量 : 獲取 “IPAM”&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '' spider-net&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '{{.IPAM}}' spider-net&lt;/code&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;變量--獲取-ipamdriver&quot;&gt;變量 : 獲取 .IPAM.Driver&lt;/h2&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '' sample-net&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '{{.IPAM.Driver}}' sample-net&lt;/code&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;索引--獲取-ipamconfig-0-的-subnet&quot;&gt;索引 : 獲取 .IPAM.Config [0] 的 Subnet&lt;/h2&gt;
 &lt;ul&gt;
@@ -100,12 +103,12 @@ networks:
       &lt;li&gt;如果返回結果是一個 map, slice, array 或 string，則可以使用 index 加索引序號（從零開始計數）來讀取屬性值。&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '' sample-net&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '{{(index .IPAM.Config 0).Subnet}}' sample-net&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;遍例--獲取-containers-中的所有名稱&quot;&gt;遍例 : 獲取 Containers 中的所有名稱&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;``, 支持的類型包括 array, slice, map 和 channel
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;{{range Object}}{{.}}{{end}}&lt;/code&gt;, 支持的類型包括 array, slice, map 和 channel
     &lt;ul&gt;
       &lt;li&gt;對應的值長度為 0 時，range 不會執行。&lt;/li&gt;
       &lt;li&gt;結構內部如要使用外部的變量，需要在前面加 引用，比如 Var2。&lt;/li&gt;
@@ -114,9 +117,9 @@ networks:
   &lt;/li&gt;
   &lt;li&gt;ex:
     &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '' spider-net&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '' sample-net&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f 'With No Containers' sample-net&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '{{range .Containers}}{{.Name}}{{end}}' spider-net&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '{{range .Containers}}{{.Name}}{{println}}{{end}}' sample-net&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '{{range .Containers}}{{.Name}}{{println}}{{else}}With No Containers{{end}}' sample-net&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
@@ -124,12 +127,12 @@ networks:
 &lt;h2 id=&quot;if--else--end&quot;&gt;if … else … end&lt;/h2&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;General : &lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f 'hello world' sample-net&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;Not : &lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f 'No NameName exist' sample-net&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;General : &lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '{{if .Name}}hello world{{end}}' sample-net&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Not : &lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '{{if not .Name}}No Name{{else}}Name exist{{end}}' sample-net&lt;/code&gt;&lt;/li&gt;
   &lt;li&gt;Or :
     &lt;ul&gt;
-      &lt;li&gt;: 表示如果 x 為真返回 x，否則返回 y。&lt;/li&gt;
-      &lt;li&gt;：後面跟多個參數時會逐一判斷每個參數，並返回第一個非空的參數。如果都為 false，則返回最後一個參數。&lt;/li&gt;
+      &lt;li&gt;{{or x y}}: 表示如果 x 為真返回 x，否則返回 y。&lt;/li&gt;
+      &lt;li&gt;{{or x y z}}：後面跟多個參數時會逐一判斷每個參數，並返回第一個非空的參數。如果都為 false，則返回最後一個參數。&lt;/li&gt;
       &lt;li&gt;除了 null（空）和 false 被識別為 false，其它值（字符串、數字、對象等）均被識別為 true。&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
@@ -149,9 +152,9 @@ networks:
     &lt;ul&gt;
       &lt;li&gt;輸出所有已停止容器的名稱 :
         &lt;ul&gt;
-          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '' $(docker ps -aq)&lt;/code&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '容器還在運行' $(docker ps -aq)&lt;/code&gt;&lt;/li&gt;
-          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '容器還在運行' $(docker ps -aq)&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '{{if ne 0.0 .State.ExitCode}}{{.Name}}{{end}}' $(docker ps -aq)&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '{{if ne 0.0 .State.ExitCode}}{{.Name}}{{else}}容器還在運行{{end}}' $(docker ps -aq)&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '{{if ne 0.0 .State.ExitCode}}{{.Name}}{{else if .}}容器還在運行{{end}}' $(docker ps -aq)&lt;/code&gt;&lt;/li&gt;
         &lt;/ul&gt;
       &lt;/li&gt;
     &lt;/ul&gt;
@@ -167,17 +170,17 @@ networks:
 
 &lt;h2 id=&quot;取得長度&quot;&gt;取得長度&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '' sample-net&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '{{len .Name}}' sample-net&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;輸出用-json-方式取代-text&quot;&gt;輸出用 json 方式取代 text&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '' sample-net&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '{{json .IPAM}}' sample-net&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;join&quot;&gt;join&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect -f '' s1&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect -f '{{join .HostConfig.MaskedPaths &quot;, &quot;}}' s1&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;title--lower--upper&quot;&gt;title &amp;amp;&amp;amp; lower &amp;amp;&amp;amp; upper&lt;/h2&gt;
@@ -185,24 +188,24 @@ networks:
 &lt;ul&gt;
   &lt;li&gt;lower : 全部轉為小寫
     &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect --format '' sample-net&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect --format '{{range .Containers}}{{lower .Name}}{{end}}' sample-net&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;upper : 全部轉為大寫
     &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect --format '' sample-net&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect --format '{{range .Containers}}{{upper .Name}}{{end}}' sample-net&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
   &lt;li&gt;title : 將返回的結果值，首字母轉為大寫
     &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect --format '' sample-net&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect --format '{{range .Containers}}{{title .Name}}{{end}}' sample-net&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;
   &lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&quot;split&quot;&gt;split&lt;/h2&gt;
 &lt;ul&gt;
-  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect --format '' sample-net&lt;/code&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect --format '{{range .Containers}}{{split .Name &quot;/&quot;}}{{end}}' sample-net&lt;/code&gt;
     &lt;ul&gt;
       &lt;li&gt;output : &lt;code class=&quot;highlighter-rouge&quot;&gt;[s1][s2][s3]&lt;/code&gt;&lt;/li&gt;
     &lt;/ul&gt;

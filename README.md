@@ -29,6 +29,12 @@ tags: Golang
 - `{{ site.url }}{% link _posts/xxxxx.md %}` : 連接 markdown 文章
 - `{{ site.url }}{% link /assets/xxx.pdf %}` : 連接 pdf
 
+## 如何在 markdown 中使用 `{{  }}`
+> 加入 raw
+
+{% raw %}
+`docker network inspect -f '{{ .Name }}' sample-net`
+{% endraw %}
 
 # localhost test
 - localhost : `bundle exec jekyll server -b ''`
