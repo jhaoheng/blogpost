@@ -281,6 +281,300 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/aws/2017/08/25/AWS-CLI-configure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/aws/2017/08/25/AWS-CLI-configure/" itemprop="url">
+                【AWS CLI】profile : configure
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-25T03:59:00+08:00">
+                2017-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/AWS" itemprop="url" rel="index">
+                    <span itemprop="name">AWS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="purpose">PURPOSE</h1>
+<ol>
+  <li>了解 aws cli profile 運作方式</li>
+  <li>了解 aws cli configure 操作方法</li>
+</ol>
+
+<h1 id="aws-cli">aws cli</h1>
+
+<ul>
+  <li>github : https://github.com/aws/aws-cli/releases</li>
+  <li>安裝 &amp; 更新 &amp; 反安裝 : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/installing.html</code></li>
+  <li>cli 中指令的參考 : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/index.html</code>
+    <ul>
+      <li><code class="highlighter-rouge">aws help</code> : 可看到所有指令</li>
+    </ul>
+  </li>
+  <li>查詢各類指令說明 :
+    <ul>
+      <li><code class="highlighter-rouge">aws help</code></li>
+      <li><code class="highlighter-rouge">aws {command} help</code></li>
+      <li><code class="highlighter-rouge">aws {command} {sub-cmd} help</code></li>
+    </ul>
+  </li>
+  <li>aws Command Completion : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/cli-command-completion.html</code>
+    <ul>
+      <li>透過 tab 搜尋 aws 相關指令, install :
+        <ol>
+          <li><code class="highlighter-rouge">echo $SHELL</code></li>
+          <li>find path : <code class="highlighter-rouge">which aws_completer</code></li>
+          <li>enable : <code class="highlighter-rouge">complete -C '/usr/local/bin/aws_completer' aws</code></li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="設定-profile">設定 profile</h2>
+<ul>
+  <li>resource : <code class="highlighter-rouge">http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html</code></li>
+  <li>請到 iam 取得以下
+    <ul>
+      <li>AWS Access Key ID</li>
+      <li>AWS Secret Access Key</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">aws configure help</code> : 查詢在 configure 中的指令有哪些可用</li>
+  <li>設定 profile
+    <ul>
+      <li><code class="highlighter-rouge">aws configure</code></li>
+      <li><code class="highlighter-rouge">aws configure --profile user2</code></li>
+    </ul>
+  </li>
+  <li>列出 profile
+    <ul>
+      <li><code class="highlighter-rouge">aws configure list</code> : 預設</li>
+      <li><code class="highlighter-rouge">aws configure list --profile default</code> : 指定身份</li>
+    </ul>
+  </li>
+  <li>使用 profile
+    <ul>
+      <li><code class="highlighter-rouge">aws ec2 describe-instance</code></li>
+      <li><code class="highlighter-rouge">aws ec2 describe-instance --profile user2</code></li>
+    </ul>
+  </li>
+  <li>指定使用哪一個 profile
+    <ul>
+      <li><code class="highlighter-rouge">export AWS_PROFILE=user2</code> : AWS_PROFILE 為 Environment Variables</li>
+      <li><code class="highlighter-rouge">unset AWS_PROFILE</code> : 回到預設值</li>
+      <li>Profile Environment Variables
+        <ul>
+          <li>AWS_ACCESS_KEY_ID</li>
+          <li>AWS_SECRET_ACCESS_KEY</li>
+          <li>AWS_SESSION_TOKEN</li>
+          <li>AWS_DEFAULT_REGION</li>
+          <li>AWS_DEFAULT_OUTPUT</li>
+          <li>AWS_PROFILE</li>
+          <li>AWS_CA_BUNDLE</li>
+          <li>AWS_SHARED_CREDENTIALS_FILE</li>
+          <li>AWS_CONFIG_FILE</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Options
+    <ul>
+      <li><code class="highlighter-rouge">--profile</code>		: 指定使用 profile</li>
+      <li><code class="highlighter-rouge">--region</code> 		: 指定地區
+        <ul>
+          <li>顯示地區列表 : <code class="highlighter-rouge">aws ec2 describe-regions --output table</code></li>
+        </ul>
+      </li>
+      <li>
+        <table>
+          <tbody>
+            <tr>
+              <td><code class="highlighter-rouge">--output</code> 		: json</td>
+              <td>text</td>
+              <td>table</td>
+            </tr>
+          </tbody>
+        </table>
+      </li>
+      <li><code class="highlighter-rouge">--endpoint-url</code> : 指定</li>
+      <li>ex : <code class="highlighter-rouge">aws ec2 describe-instances --output table --region ap-northeast-2</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="example">example</h1>
+
+<ol>
+  <li>想要列出目前預設使用的 profile 使哪一張
+    <ul>
+      <li><code class="highlighter-rouge">aws configure list</code></li>
+    </ul>
+  </li>
+  <li>想指定預設的 profile
+    <ul>
+      <li><code class="highlighter-rouge">export AWS_PROFILE=xxx</code></li>
+    </ul>
+  </li>
+  <li>想取消指定 profile，回到 default
+    <ul>
+      <li><code class="highlighter-rouge">unset AWS_PROFILE</code></li>
+    </ul>
+  </li>
+</ol>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/aws/2017/08/25/AWS-CLI-configure/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/papertrial/logspout/2017/08/18/Papertrial-logspout/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2125,181 +2419,6 @@ try {
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/06/07/dockerenv/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2017/06/07/dockerenv/" itemprop="url">
-                【Docker】ENV
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-07T02:10:00+08:00">
-                2017-06-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="env-環境變數">env 環境變數</h1>
-
-<p>當用 docker 設定環境變數
-docker 會將變數透過 bash 建立變數，並將 變數 export
-故在設定 docker env 後，運行 docker，可以透過 <code class="highlighter-rouge">export -p</code> 查看所有環境變數</p>
-
-<h1 id="indexphp">index.php</h1>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>&lt;?php  
-echo getenv("helloEnv").PHP_EOL;
-echo getenv("go").PHP_EOL;
-</code></pre></td></tr></tbody></table></div></div>
-
-<h1 id="step">step</h1>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>docker pull jhaoheng/php_env:v1.2
-// 建立 container, 設定 env
-docker run -dt -e "helloEnv=sure" -e "go=ok" [image_id]
-// 查看 container 中的環境變數
-docker exec d11d88d32 bash -c export -p
-// 放入 index.php
-docker cp index.php [container_id]:/home
-// 透過 php 取得環境變數
-docker exec [container_id] php /home/index.php
-</code></pre></td></tr></tbody></table></div></div>
-
-<h1 id="設計模式">設計模式</h1>
-<ol>
-  <li>設定好環境變數</li>
-  <li>設定好取得環境變數的模板</li>
-  <li>在運行 docker container 時，自動依據環境變數，建立起 config</li>
-</ol>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2017/06/07/dockerenv/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2361,7 +2480,7 @@ docker exec [container_id] php /home/index.php
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">111</span>
+                <span class="site-state-item-count">112</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

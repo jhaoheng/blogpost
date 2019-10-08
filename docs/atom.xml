@@ -1,4 +1,213 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-10-01T16:34:56+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】Benchmark(一)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/Go-Benchmark(%E4%B8%80)/" rel="alternate" type="text/html" title="【Go】Benchmark(一)" /><published>2019-10-01T16:31:00+08:00</published><updated>2019-10-01T16:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/%5BGo%5DBenchmark(%E4%B8%80)</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/Go-Benchmark(%E4%B8%80)/">&lt;h1 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-10-08T17:13:58+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】模板語言 &amp;amp; docker inspect</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/08/Go-%E6%A8%A1%E6%9D%BF%E8%AA%9E%E8%A8%80_&_docker_inspect/" rel="alternate" type="text/html" title="【Go】模板語言 &amp; docker inspect" /><published>2019-10-08T17:06:00+08:00</published><updated>2019-10-08T17:06:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/08/%5BGo%5D%E6%A8%A1%E6%9D%BF%E8%AA%9E%E8%A8%80_&amp;_docker_inspect</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/08/Go-%E6%A8%A1%E6%9D%BF%E8%AA%9E%E8%A8%80_&amp;_docker_inspect/">&lt;h1 id=&quot;golang-模板語言&quot;&gt;golang 模板語言&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;Resource : https://golang.org/pkg/text/template/&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;在-docker-inspect-中的應用&quot;&gt;在 docker inspect 中的應用&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;https://docs.docker.com/engine/reference/commandline/inspect/&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;通常會使用
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect -f '{...}' {container_id}&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '{...}' {network_name}&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;兩者在 inspect 的使用上都相同&lt;/li&gt;
+  &lt;li&gt;其中 {…} 就是使用模板語言進行互動&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;example--docker-composeyml&quot;&gt;example : docker-compose.yml&lt;/h1&gt;
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;version: &quot;3.7&quot;
+services: 
+  s1:
+    image: nginx:1.15
+    container_name: s1
+    ports:
+      - 81:80
+    networks:
+      - sample
+  s2:
+    image: nginx:1.15
+    container_name: s2
+    ports:
+      - 82:80
+    networks:
+      - sample
+  s3:
+    image: nginx:1.15
+    container_name: s3
+    ports:
+      - 83:80
+    networks:
+      - sample
+
+networks:
+  sample:
+    name: sample-net
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;!--more--&gt;
+
+&lt;h1 id=&quot;範例資料&quot;&gt;範例資料&lt;/h1&gt;
+&lt;blockquote&gt;
+  &lt;p&gt;以下是 network 的部分資訊, name = sample-net&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[
+    {
+        &quot;Name&quot;: &quot;sample-net&quot;,
+        &quot;IPAM&quot;: {
+            &quot;Driver&quot;: &quot;default&quot;,
+            &quot;Options&quot;: null,
+            &quot;Config&quot;: [
+                {
+                    &quot;Subnet&quot;: &quot;192.168.96.0/20&quot;,
+                    &quot;Gateway&quot;: &quot;192.168.96.1&quot;
+                }
+            ]
+        },
+        &quot;Containers&quot;: {
+            &quot;02031a4daf350456c039b6cf42b41407757a662c8c25def11b9feed8f3b9b973&quot;: {
+                &quot;Name&quot;: &quot;s1&quot;,
+                &quot;EndpointID&quot;: &quot;2db733478ebf138e3f770be27a2195256ed63204784476e64d05ad3a400b97fe&quot;,
+                &quot;MacAddress&quot;: &quot;02:42:c0:a8:60:02&quot;,
+                &quot;IPv4Address&quot;: &quot;192.168.96.2/20&quot;,
+                &quot;IPv6Address&quot;: &quot;&quot;
+            }
+        },
+    }
+]
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;filter-format&quot;&gt;filter format&lt;/h1&gt;
+
+&lt;h2 id=&quot;變量--獲取-name&quot;&gt;變量 : 獲取 “Name”&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '' sample-net&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;變量--獲取-ipam&quot;&gt;變量 : 獲取 “IPAM”&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '' spider-net&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;變量--獲取-ipamdriver&quot;&gt;變量 : 獲取 .IPAM.Driver&lt;/h2&gt;
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '' sample-net&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;索引--獲取-ipamconfig-0-的-subnet&quot;&gt;索引 : 獲取 .IPAM.Config [0] 的 Subnet&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;索引
+    &lt;ul&gt;
+      &lt;li&gt;如果返回結果是一個 map, slice, array 或 string，則可以使用 index 加索引序號（從零開始計數）來讀取屬性值。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '' sample-net&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;遍例--獲取-containers-中的所有名稱&quot;&gt;遍例 : 獲取 Containers 中的所有名稱&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;``, 支持的類型包括 array, slice, map 和 channel
+    &lt;ul&gt;
+      &lt;li&gt;對應的值長度為 0 時，range 不會執行。&lt;/li&gt;
+      &lt;li&gt;結構內部如要使用外部的變量，需要在前面加 引用，比如 Var2。&lt;/li&gt;
+      &lt;li&gt;range 也支持 else 操作。效果是：當返回值為空或長度為 0 時執行 else 內的內容。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;ex:
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '' spider-net&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f '' sample-net&lt;/code&gt;&lt;/li&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f 'With No Containers' sample-net&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;if--else--end&quot;&gt;if … else … end&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;General : &lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f 'hello world' sample-net&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Not : &lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect -f 'No NameName exist' sample-net&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Or :
+    &lt;ul&gt;
+      &lt;li&gt;: 表示如果 x 為真返回 x，否則返回 y。&lt;/li&gt;
+      &lt;li&gt;：後面跟多個參數時會逐一判斷每個參數，並返回第一個非空的參數。如果都為 false，則返回最後一個參數。&lt;/li&gt;
+      &lt;li&gt;除了 null（空）和 false 被識別為 false，其它值（字符串、數字、對象等）均被識別為 true。&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;if-判斷式&quot;&gt;if 判斷式&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;eq : Returns the boolean truth of arg1 == arg2&lt;/li&gt;
+  &lt;li&gt;ne : Returns the boolean truth of arg1 != arg2&lt;/li&gt;
+  &lt;li&gt;lt : Returns the boolean truth of arg1 &amp;lt; arg2&lt;/li&gt;
+  &lt;li&gt;le : Returns the boolean truth of arg1 &amp;lt;= arg2&lt;/li&gt;
+  &lt;li&gt;gt : Returns the boolean truth of arg1 &amp;gt; arg2&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;ge : Returns the boolean truth of arg1 &amp;gt;= arg2&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;ex :
+    &lt;ul&gt;
+      &lt;li&gt;輸出所有已停止容器的名稱 :
+        &lt;ul&gt;
+          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '' $(docker ps -aq)&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '容器還在運行' $(docker ps -aq)&lt;/code&gt;&lt;/li&gt;
+          &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '容器還在運行' $(docker ps -aq)&lt;/code&gt;&lt;/li&gt;
+        &lt;/ul&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;print&quot;&gt;Print&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;print 	: 將傳入的對象轉換為字符串並寫入到標準輸出中。如果後跟多個參數，輸出結果之間會自動填充空格進行分隔。&lt;/li&gt;
+  &lt;li&gt;println 	: 功能和 print 類似，但會在結尾添加一個換行符。也可以直接使用  來換行。&lt;/li&gt;
+  &lt;li&gt;printf 	: 與 shell 等環境一致，可配合佔位符用於格式化輸出。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;取得長度&quot;&gt;取得長度&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '' sample-net&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;輸出用-json-方式取代-text&quot;&gt;輸出用 json 方式取代 text&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect --format '' sample-net&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;join&quot;&gt;join&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker inspect -f '' s1&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;title--lower--upper&quot;&gt;title &amp;amp;&amp;amp; lower &amp;amp;&amp;amp; upper&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;lower : 全部轉為小寫
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect --format '' sample-net&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;upper : 全部轉為大寫
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect --format '' sample-net&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+  &lt;li&gt;title : 將返回的結果值，首字母轉為大寫
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect --format '' sample-net&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;split&quot;&gt;split&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker network inspect --format '' sample-net&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;output : &lt;code class=&quot;highlighter-rouge&quot;&gt;[s1][s2][s3]&lt;/code&gt;&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">golang 模板語言 Resource : https://golang.org/pkg/text/template/ 在 docker inspect 中的應用 https://docs.docker.com/engine/reference/commandline/inspect/ 通常會使用 docker inspect -f '{...}' {container_id} docker network inspect -f '{...}' {network_name} 兩者在 inspect 的使用上都相同 其中 {…} 就是使用模板語言進行互動 example : docker-compose.yml version: &quot;3.7&quot; services: s1: image: nginx:1.15 container_name: s1 ports: - 81:80 networks: - sample s2: image: nginx:1.15 container_name: s2 ports: - 82:80 networks: - sample s3: image: nginx:1.15 container_name: s3 ports: - 83:80 networks: - sample networks: sample: name: sample-net</summary></entry><entry><title type="html">【Go】Benchmark(一)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/Go-Benchmark(%E4%B8%80)/" rel="alternate" type="text/html" title="【Go】Benchmark(一)" /><published>2019-10-01T16:31:00+08:00</published><updated>2019-10-01T16:31:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/%5BGo%5DBenchmark(%E4%B8%80)</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/01/Go-Benchmark(%E4%B8%80)/">&lt;h1 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h1&gt;
 &lt;ul&gt;
   &lt;li&gt;說明 benchmark 測試方式&lt;/li&gt;
   &lt;li&gt;測試 reflect.TypeOf 與 fmt.Sprintf(“%T”) 誰的效能比較好些&lt;/li&gt;
@@ -1177,195 +1386,4 @@ func main() {
 
 &lt;ul&gt;
   &lt;li&gt;如何添加周長?&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">Sypnosis 【Go】利用 struct 優化（一）後，可以得知 使用 struct 讓物件統一，更容易理解 使用 pointer 來提高 memory 的使用效率 使用 func as method 讓程式碼更容易被閱讀 以下為相關程式碼 接下來的問題是 兩邊都有相同的 method, read(), 如何建立一個統一的接口, 再執行某 func, for ex: db read : 不同的 db 都會有 read 的 method sign in : 不同的登入方法, 但可能是 jwt, facebook, email 等 notification : 不同的 notification 進行設計 (ios,android,aws,極光…) 接續 1, 在實踐上, 再把 func 變成 method, 讓可讀性變高</summary></entry><entry><title type="html">【Go】利用 struct 優化（一）</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96/" rel="alternate" type="text/html" title="【Go】利用 struct 優化（一）" /><published>2019-09-10T13:51:00+08:00</published><updated>2019-09-10T13:51:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/10/%5BGo%5Dstruct%20%E5%84%AA%E5%8C%96</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96/">&lt;h2 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h2&gt;
-&lt;ol&gt;
-  &lt;li&gt;透過 struct 方式，容易看懂程式&lt;/li&gt;
-  &lt;li&gt;透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)&lt;/li&gt;
-  &lt;li&gt;使用 func as method 方式，讓程式碼在 func 使用上更容易被理解&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&quot;example&quot;&gt;Example&lt;/h1&gt;
-&lt;p&gt;一般來說，如果要用程式碼計算『圓形面積』、『長方形面積』，可以用一些簡單的方式攥寫&lt;/p&gt;
-
-&lt;div&gt;
-    &lt;iframe src=&quot;https://play.golang.org/p/fzSt0Hz56WP&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
-    &lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;p&gt;但回頭看這個程式碼，會發現&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;如果要追蹤『rx1, ry1, rx2, ry2』或者『cx, cy, cr』當程式碼一長 or 複雜，就很難理解這個參數的意義&lt;/li&gt;
-  &lt;li&gt;儘管有寫註解，在 function 中，一樣很難快速理解&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;解決方案 : 使用 struct 來幫助理解&lt;/p&gt;
-
-&lt;!--more--&gt;
-
-&lt;h1 id=&quot;use-struct&quot;&gt;use struct&lt;/h1&gt;
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;struct&lt;/code&gt; 是一種 &lt;code class=&quot;highlighter-rouge&quot;&gt;type&lt;/code&gt;, 它包含了名稱的欄位, 例如：可以把 Rectangle 寫成如下方式&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;type Coordinate struct {
-	x float64
-	y float64
-}
-
-type Rectangle struct {
-	start Coordinate
-	end   Coordinate
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;新增一個 Coordinate 的物件, 類型(type)是 struct, 裡面夾帶 (x,y) 欄位&lt;/li&gt;
-  &lt;li&gt;新增一個 Rectangle, 類型(type)是 struct 的物件, 裡面夾帶 ‘起始座標’ 與 ‘結束座標’&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;宣告方法可以有以下幾種&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;以下都相同，跟 (2) 不同的是，返回是一個指標
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;r := new(Rectangle)&lt;/code&gt;, 而 new 的主要作用是為 type 申請 memory，並&lt;code class=&quot;highlighter-rouge&quot;&gt;返回指向 memory 的指標&lt;/code&gt;。&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;r := &amp;amp;Rectangle{}&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;以下也都相同
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;var r Rectangle&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;r := Rectangle{}&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;r := Rectangle{Coordinate{}, Coordinate{}}&lt;/code&gt;&lt;/li&gt;
-      &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;r := Rectangle{ start: Coordinate{}, end:   Coordinate{},}&lt;/code&gt;&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&quot;優化開始&quot;&gt;優化開始&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;steps
-    &lt;ol&gt;
-      &lt;li&gt;將 func() 參數物件改為傳遞 struct&lt;/li&gt;
-      &lt;li&gt;將 func() 中 strct 設定為指標&lt;/li&gt;
-      &lt;li&gt;function as a method&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;1-將-func-參數物件改為傳遞-struct&quot;&gt;1. 將 func() 參數物件改為傳遞 struct&lt;/h2&gt;
-
-&lt;p&gt;從上面的基本操作，建立了 Rectangle 物件, type 是 struct
-所以將 rectangleArea() 與 distance() 變更為&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;func rectangleArea(r Rectangle) float64 {
-	l := r.end.x - r.start.x
-	w := r.end.y - r.start.y
-	return l * w
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;在 main 中, 可以改為, 如此可以輕鬆地理解 r 來自於 Rectangle 這個結構中的欄位&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;r := Rectangle{
-	start: Coordinate{
-		x: 1,
-		y: 1,
-	},
-	end: Coordinate{
-		x: 10,
-		y: 10,
-	},
-}
-fmt.Println(rectangleArea(r))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;2-將-func-中-strct-設定為指標&quot;&gt;2. 將 func() 中 strct 設定為指標&lt;/h2&gt;
-&lt;p&gt;以上 func 中, 重新宣告了一個 Rectangle 的物件
-可以使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;fmt.Printf(&quot;%p\n&quot;, ThePointer)&lt;/code&gt; 查看記憶體位置的變化&lt;/p&gt;
-
-&lt;p&gt;for example&lt;/p&gt;
-
-&lt;pre&gt;
-0xc00009c000 &amp;lt;= main 中的 Rectangle
-0xc00009c020 &amp;lt;= func 中的 Rectangle
-&lt;/pre&gt;
-
-&lt;p&gt;但可以用 pointer, 避免重複宣告並佔用 memory, 浪費資源&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;func rectangleArea(r *Rectangle) float64 {
-    fmt.Printf(&quot;%p&quot;, r) // 因為這邊的 r 已經是 pointer
-	l := r.end.x - r.start.x
-	w := r.end.y - r.start.y
-	return l * w
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;在 main 中&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;r := Rectangle{
-	start: Coordinate{
-		x: 1,
-		y: 1,
-	},
-	end: Coordinate{
-		x: 10,
-		y: 10,
-	},
-}
-fmt.Printf(&quot;%p\n&quot;, &amp;amp;r)
-fmt.Println(rectangleArea(&amp;amp;r))
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;3-function-as-a-method&quot;&gt;3. function as a method&lt;/h2&gt;
-&lt;p&gt;解決了以上的問題，會發現&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;rectangle 與 circle 都有 area, 雖然可以在命名上作區別, 但有更好的方法
-且可以透過 &lt;code class=&quot;highlighter-rouge&quot;&gt;.&lt;/code&gt; 的方式, 快速地在編輯器上引用此 method&lt;/li&gt;
-  &lt;li&gt;在 main 中，帶入的物件是 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;r&lt;/code&gt; 會有點難以理解&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;將 rectangleArea() 改為 rectangle 的 method&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;func (r *Rectangle) area() float64 {
-	fmt.Printf(&quot;%p\n&quot;, r)
-	l := r.end.x - r.start.x
-	w := r.end.y - r.start.y
-	return l * w
-}
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;在 main 中&lt;/p&gt;
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;fmt.Println(r.area())
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;優化結束&quot;&gt;優化結束&lt;/h2&gt;
-
-&lt;div&gt;
-    &lt;iframe src=&quot;https://play.golang.org/p/ZQ3xAB8o5R9&quot; height=&quot;315&quot; width=&quot;560&quot; allowfullscreen=&quot;&quot; frameborder=&quot;1&quot;&gt;
-    &lt;/iframe&gt;
-&lt;/div&gt;
-
-&lt;p&gt;這是一個簡短的例子，當我們將功能越寫越多時，程式碼會越複雜
-我們可以透過此方法達成以下三個目的&lt;/p&gt;
-&lt;ol&gt;
-  &lt;li&gt;透過 struct 方式，容易看懂程式&lt;/li&gt;
-  &lt;li&gt;透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory)&lt;/li&gt;
-  &lt;li&gt;使用 func as method 方式，讓程式碼在 func 使用上更容易被理解&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h2 id=&quot;結論&quot;&gt;結論&lt;/h2&gt;
-&lt;ol&gt;
-  &lt;li&gt;過於複雜的參數傳遞，雖然我們可以用命名方式來釐清，但名稱越長，也會使程式碼難以理解&lt;/li&gt;
-  &lt;li&gt;優化並非將程式碼縮短(但的確在大型架構下，可以縮短，並更容易理解)&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&quot;問題&quot;&gt;問題&lt;/h1&gt;
-&lt;p&gt;一個人裡有各種資訊物件，身分證、健保卡、護照，都用在不同的地方，也都有各自的 ID
-可以透過 struct 將 『身分證、健保卡、護照』 各自建立起來，用在不同的目的上
-但是否有方法整合這些物件？&lt;/p&gt;
-
-&lt;p&gt;參考下篇: &lt;a href=&quot;https://jhaoheng.github.io/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/&quot;&gt;struct優化（二）:interface&lt;/a&gt;&lt;/p&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">Synopsis 透過 struct 方式，容易看懂程式 透過 pointer 方式，降低 memory 的使用 (雖然在程式結束後，會自動回收用不到的 memory) 使用 func as method 方式，讓程式碼在 func 使用上更容易被理解 Example 一般來說，如果要用程式碼計算『圓形面積』、『長方形面積』，可以用一些簡單的方式攥寫 但回頭看這個程式碼，會發現 如果要追蹤『rx1, ry1, rx2, ry2』或者『cx, cy, cr』當程式碼一長 or 複雜，就很難理解這個參數的意義 儘管有寫註解，在 function 中，一樣很難快速理解 解決方案 : 使用 struct 來幫助理解</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">Sypnosis 【Go】利用 struct 優化（一）後，可以得知 使用 struct 讓物件統一，更容易理解 使用 pointer 來提高 memory 的使用效率 使用 func as method 讓程式碼更容易被閱讀 以下為相關程式碼 接下來的問題是 兩邊都有相同的 method, read(), 如何建立一個統一的接口, 再執行某 func, for ex: db read : 不同的 db 都會有 read 的 method sign in : 不同的登入方法, 但可能是 jwt, facebook, email 等 notification : 不同的 notification 進行設計 (ios,android,aws,極光…) 接續 1, 在實踐上, 再把 func 變成 method, 讓可讀性變高</summary></entry></feed>

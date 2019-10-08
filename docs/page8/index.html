@@ -281,6 +281,404 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/redis/2016/10/19/Redis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/redis/2016/10/19/Redis/" itemprop="url">
+                【redis】basic 心得
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-19T10:00:00+08:00">
+                2016-10-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Redis" itemprop="url" rel="index">
+                    <span itemprop="name">Redis</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="安裝-redis">安裝 redis</h2>
+
+<ul>
+  <li>http://redis.io/</li>
+  <li>下載後，執行網頁上安裝方法</li>
+</ul>
+
+<h3 id="將-redis-安裝到-usrlocalbin-的方法">將 redis 安裝到 /usr/local/bin 的方法</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">make install</code>
+    <ul>
+      <li>更改預設安裝位置 : <code class="highlighter-rouge">make PREFIX=/some/other/directory install</code></li>
+    </ul>
+  </li>
+  <li>此方法會安裝 binaries 到系統中，但相關的 script 與配置檔，並不會放到是到的位置，因為只是 play</li>
+  <li>若需要安裝到正式的系統中，請使用
+    <ul>
+      <li><code class="highlighter-rouge">cd utils</code></li>
+      <li><code class="highlighter-rouge">./install_server.sh</code></li>
+      <li>此種安裝方式會詢問幾個設定的問題，並且在 sys reboot 後會自動重新啟動</li>
+      <li>手動停止與啟動 : <code class="highlighter-rouge">/etc/init.d/redis_&lt;portnumber&gt;</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="use">use</h2>
+
+<ul>
+  <li>啟用伺服器
+    <ul>
+      <li>直接啟用 : <code class="highlighter-rouge">src/redis-server</code></li>
+      <li>制定設定檔 : <code class="highlighter-rouge">./src/redis-server /path/to/redis.conf</code></li>
+      <li>透過指令直接覆蓋設定檔 :
+        <ul>
+          <li><code class="highlighter-rouge">./redis-server --port 9999 --slaveof 127.0.0.1 6379</code></li>
+          <li><code class="highlighter-rouge">./redis-server /etc/redis/6379.conf --loglevel debug</code></li>
+          <li>在 redis.conf 中的參數名稱，全部都支援使用 command line 進行設定。</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>啟用 client
+    <ul>
+      <li><code class="highlighter-rouge">src/redis-cli</code>，進入互動介面</li>
+      <li>測試
+        <ul>
+          <li><code class="highlighter-rouge">ping</code></li>
+          <li><code class="highlighter-rouge">set foo bar</code></li>
+          <li><code class="highlighter-rouge">get foo</code></li>
+        </ul>
+      </li>
+      <li>可直接下指令 <code class="highlighter-rouge">./redis_cli get foo</code> 取得參數</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">./redis_cli --help</code> : 查看一般指令</li>
+  <li><code class="highlighter-rouge">./redis_cli help {cmd}</code> : 取得指令相關資訊</li>
+  <li><code class="highlighter-rouge">./redis_cli command</code> : 取得全部指令</li>
+</ul>
+
+<h2 id="特性">特性</h2>
+
+<ul>
+  <li>redis 是一個 key-value 的資料庫</li>
+  <li>資料結構儲存的特性
+    <ul>
+      <li>儲存於 disk 上，儘管修改是透過 server memory。代表 redis 是快速的，也代表儲存是持久性的。</li>
+      <li>在相同的高階編程語言下，redis 的效能結構儲存，相對優秀</li>
+      <li>Redis 提供很多 database 上習慣性的方法，如複製、tunable levels of durability、叢集、高度擴展</li>
+    </ul>
+  </li>
+  <li>Redis 提供更多複雜的使用方法，在 memcached 上。</li>
+  <li>more
+    <ul>
+      <li>Introduction to Redis data types. http://redis.io/topics/data-types-intro</li>
+      <li>Try Redis directly inside your browser. http://try.redis.io</li>
+      <li>The full list of Redis commands. http://redis.io/commands</li>
+      <li>There is much more inside the Redis official documentation. http://redis.io/documentation</li>
+    </ul>
+  </li>
+  <li>資料類型 : strings, arrays, integers, NULL, errors and so forth</li>
+</ul>
+
+<h2 id="測試">測試</h2>
+
+<ul>
+  <li>將 server 關閉後，依然取得到 key-value</li>
+</ul>
+
+<h2 id="redis-cli">redis-cli</h2>
+
+<h3 id="basic">basic</h3>
+
+<ul>
+  <li>計數 : <code class="highlighter-rouge">redis-cli incr {變數名稱}</code></li>
+  <li>寫入檔案 : <code class="highlighter-rouge">redis-cli incr {變數名稱} &gt; ./output.txt</code></li>
+  <li>取得 : <code class="highlighter-rouge">redis-cli get {變數名稱}</code>
+    <ul>
+      <li>指定輸出為 raw <code class="highlighter-rouge">redis-cli --raw get {變數名稱}</code></li>
+    </ul>
+  </li>
+  <li>刪除 :
+    <ul>
+      <li><code class="highlighter-rouge">./redis-cli del {變數名稱}</code></li>
+      <li><code class="highlighter-rouge">./redis-cli flushall</code> : 刪除全部 keys from all db</li>
+      <li><code class="highlighter-rouge">./redis-cli flushdb</code> : 從目前的 db 刪除掉所有的 keys</li>
+    </ul>
+  </li>
+  <li>設定 : <code class="highlighter-rouge">redis-cli set {變數名稱}</code></li>
+  <li>查看變數編碼屬性 : <code class="highlighter-rouge">OBJECT ENCODING {變數名稱}</code>
+    <ul>
+      <li>int</li>
+      <li>raw</li>
+      <li>embstr</li>
+      <li>more : <a href="http://redisbook.com/preview/object/string.html">http://redisbook.com/preview/object/string.html</a></li>
+    </ul>
+  </li>
+  <li>接續 : <code class="highlighter-rouge">redis-cli append {變數名稱} "{延伸內容}"</code></li>
+  <li>列出所有的 {變數名稱} : <code class="highlighter-rouge">KEYS *</code>
+    <ul>
+      <li>列出指定內容的 {變數名稱} : <code class="highlighter-rouge">KEYS *o*</code></li>
+    </ul>
+  </li>
+  <li>查看 {變數名稱} 是否存在 : <code class="highlighter-rouge">./redis-cli exists {變數名稱} ...</code></li>
+</ul>
+
+<h3 id="host-port-password-and-database">Host, port, password and database</h3>
+
+<ul>
+  <li>Host, port
+    <ul>
+      <li>預設的 ./redis-cli 設定為
+        <ul>
+          <li>server : 127.0.0.1</li>
+          <li>port : 6379</li>
+        </ul>
+      </li>
+      <li>specify <code class="highlighter-rouge">-h</code> &amp; <code class="highlighter-rouge">-p</code> : <code class="highlighter-rouge">./redis-cli -h redis15.localnet.org -p 6390 ping</code></li>
+    </ul>
+  </li>
+  <li>password
+    <ul>
+      <li><code class="highlighter-rouge">./redis-cli a {password} ping</code></li>
+    </ul>
+  </li>
+  <li>database
+    <ul>
+      <li>預設會有 16 個 db，db 的名稱是用數字表達</li>
+      <li>basic
+        <ul>
+          <li>查詢 db 數量 : <code class="highlighter-rouge">./redis-cli CONFIG GET databases</code></li>
+          <li>查詢每個 db 中的內存 : <code class="highlighter-rouge">./redis-cli INFO keyspace</code></li>
+          <li>指定 db 設定參數 : <code class="highlighter-rouge">./redis-cli -n 1 set {變數名稱} {內容}</code>
+            <ul>
+              <li>n 預設為 0</li>
+            </ul>
+          </li>
+          <li>顯示目前此 db 的 key 數量 : <code class="highlighter-rouge">./redis-cli dbsize</code></li>
+          <li>移動 key 到另一個 db : <code class="highlighter-rouge">./redis-cli move {db_number}</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="special-modes-of-operation--redis-cli---help">Special modes of operation : <code class="highlighter-rouge">./redis-cli --help</code></h3>
+
+<ul>
+  <li>即時查看系統狀態 : <code class="highlighter-rouge">./redis-cli --stat</code></li>
+  <li>分析 key : <code class="highlighter-rouge">redis-cli --bigkeys</code></li>
+  <li>Getting a list of keys :
+    <ul>
+      <li><code class="highlighter-rouge">./redis-cli --scan | head -10</code></li>
+      <li><code class="highlighter-rouge">./redis-cli --scan --pattern '*-11*'</code></li>
+      <li><code class="highlighter-rouge">redis-cli --scan --pattern 'user:*' | wc -l</code></li>
+    </ul>
+  </li>
+  <li>Pub/sub mode
+    <ul>
+      <li><code class="highlighter-rouge">publish {channel} {message}</code></li>
+      <li><code class="highlighter-rouge">subscribe {channel} ...</code></li>
+      <li><code class="highlighter-rouge">psubscribe {pattern}</code> : 設定 pattern 直接訂閱相關的頻道
+        <ul>
+          <li>pattern : <code class="highlighter-rouge">?, * , [ab]</code>
+            <ul>
+              <li><code class="highlighter-rouge">h?llo</code> 訂閱所有 <code class="highlighter-rouge">h?ll0</code> 相關頻道，只有一個字元</li>
+              <li><code class="highlighter-rouge">h*llo</code> 訂閱所有 <code class="highlighter-rouge">h*llo</code> 相關頻道，<code class="highlighter-rouge">*</code> 可以是多個字元</li>
+              <li><code class="highlighter-rouge">h[ae]llo</code> 訂閱 hallo 與 hello 頻道</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>即時監控目前 redis 所有的參數 : <code class="highlighter-rouge">./redis-cli monitor</code></li>
+  <li>測試＋模擬 redis 的延遲 (以毫秒計):
+    <ul>
+      <li>基本 : <code class="highlighter-rouge">./redis-cli --latency -h {host} -p {port}</code>，可跨伺服器測試，預設為 localhost:6390</li>
+      <li>每 15 秒 重新產生一次測試 : <code class="highlighter-rouge">./redis-cli --latency-history</code></li>
+      <li>圖像化顯示 : <code class="highlighter-rouge">./redis-cli --latency-dist</code></li>
+      <li>測試 redis 內部延遲，此依賴 cpu 效能
+        <ul>
+          <li><code class="highlighter-rouge">./redis-cli --intrinsic-latency {秒數}</code> : 在 {秒數} 內測試</li>
+        </ul>
+      </li>
+      <li>文章
+        <ul>
+          <li><a href="https://read01.com/yz68z4.html">淺談 Redis 超時</a></li>
+          <li><a href="https://read01.com/O3a48K.html">Redis性能調優：保存SNAPSHOT對性能的影響</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Remote backups of RDB files
+    <ul>
+      <li><code class="highlighter-rouge">./redis-cli --rdb /tmp/dump.rdb</code></li>
+    </ul>
+  </li>
+  <li>透過此指令，會複製 redis 上面載入的指令，到 slave，可清楚的看到下的指令順序是否正確
+    <ul>
+      <li><code class="highlighter-rouge">redis-cli --slave</code></li>
+    </ul>
+  </li>
+  <li>Performing an LRU simulation
+    <ul>
+      <li>使用 LRU 測試，模擬效能</li>
+      <li>透過設定 memory 與測試的 keys，來觀察效率 miss 的比例</li>
+      <li><a href="http://redis.io/topics/rediscli#performing-an-lru-simulation">http://redis.io/topics/rediscli#performing-an-lru-simulation</a> 此篇有測試的過程</li>
+    </ul>
+  </li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/redis/2016/10/19/Redis/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/ssh/2016/10/14/SSH-Remote-Access/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2238,165 +2636,6 @@ if (provisioningProfile) {
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/08/05/mampcant-connect-to-local-mysql-server-through-socket/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/08/05/mampcant-connect-to-local-mysql-server-through-socket/" itemprop="url">
-                【MAMP】Can't connect to local mySql server through socket
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-05T02:57:00+08:00">
-                2016-08-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="mamp">MAMP</h1>
-<ul>
-  <li>3.5.2</li>
-</ul>
-
-<h2 id="situation">Situation</h2>
-<p>Use third app to access MAMP mysql : [Querious]
-(In general, you can use phpMyAdmin…..)</p>
-
-<h1 id="troubleshoot">troubleshoot</h1>
-
-<h2 id="cant-connect-to-local-mysql-server-through-socket-tmpmysqlsock">Can’t connect to local mySql server through socket /tmp/mysql.sock</h2>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>ln -s /Application/MAMP/tmp/mysql/mysql.sock /tmp/mysql.sock
-</code></pre></td></tr></tbody></table></div></div>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/08/05/mampcant-connect-to-local-mysql-server-through-socket/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2458,7 +2697,7 @@ if (provisioningProfile) {
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">111</span>
+                <span class="site-state-item-count">112</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -281,6 +281,190 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/05/23/objc-c-toll-free-bridging-non-destructive-bridge/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/05/23/objc-c-toll-free-bridging-non-destructive-bridge/" itemprop="url">
+                【Objc-C】Toll-Free Bridging : 無損橋接 
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-23T03:55:00+08:00">
+                2016-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="toll-free-bridging--無損橋接">Toll-Free Bridging : 無損橋接</h2>
+
+<p>在 ARC 管理中，常會看到這個名詞</p>
+
+<p>簡單來說就是因為 OC 是 C 的執行庫，而為了讓 OC 可以與 C 進行資料交換，就得利用 Toll-Free Bridging 進行資料格式的交換
+如 NSArray 與 CFArray <a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Reference/CFArrayRef/index.html#//apple_ref/c/tdef/CFArrayRef">參考</a></p>
+
+<blockquote>
+  <p>CFArray is “toll-free bridged” with its Cocoa Foundation counterpart, NSArray. This means that the Core Foundation type is interchangeable in function or method calls with the bridged Foundation object. Therefore, in a method where you see an NSArray * parameter, you can pass in a CFArrayRef, and in a function where you see a CFArrayRef parameter, you can pass in an NSArray instance. This also applies to concrete subclasses of NSArray. See Toll-Free Bridged Types for more information on toll-free bridging.</p>
+</blockquote>
+
+<p><a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Conceptual/CFDesignConcepts/Articles/tollFreeBridgedTypes.html#//apple_ref/doc/uid/TP40010677">Toll-Free Bridged Types</a></p>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>NSArray *_array = [[NSArray alloc]init]; 
+NSString *values = {@"foo",@"bar"}; 
+CFArrayRef arrayRef = CFArrayCreate(kCFAllocatorDefault, (void *)values, (CFIndex)2,NULL); 
+NSArray *array = (__bridgeNSArray *)arrayRef;//注意這一行的__bridge 
+NSDa
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="nsstring---cfstring">NSString -&gt; CFString</h3>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>NSString *foo = @"bar"; 
+CFStringRef bar = (__bridge CFStringRef)(foo); 
+NSLog(@"%ld", CFStringGetLength(bar));
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="cfstring---nsstring">CFString -&gt; NSString</h3>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>CFStringRef foo = CFStringCreateWithCString(kCFAllocatorDefault, "foo", kCFStringEncodingUTF8); 
+NSString *bar = (__bridge NSString *)(foo);
+NSLog(@"%ld", bar.length); 
+CFRelease(foo);
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="__bridge">__bridge</h3>
+<p>目的在於處理 ARC &lt;-&gt; MRC 間的溝通</p>
+
+<p>而 <strong>『MRC 下的 Toll－Free Bridging 因為不涉及記憶體管理的轉移，相互之間可以直接交換使用。』</strong></p>
+
+<p><a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Conceptual/CFDesignConcepts/Articles/tollFreeBridgedTypes.html#//apple_ref/doc/uid/TP40010677">Toll-Free Bridged Types</a> 
+中，有支援 Toll-Free Bridging 的對照表</p>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/05/23/objc-c-toll-free-bridging-non-destructive-bridge/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/05/20/iotmqtt/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2042,279 +2226,6 @@ js 中有 token
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/line/2016/04/15/linedevelop/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/line/2016/04/15/linedevelop/" itemprop="url">
-                【LINE】develop intro
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-15T02:06:00+08:00">
-                2016-04-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/line" itemprop="url" rel="index">
-                    <span itemprop="name">line</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <p>https://developers.line.me/</p>
-
-<h1 id="申請與註冊開發">申請與註冊開發</h1>
-
-<ol>
-  <li>至 Channels，登入
-    <ul>
-      <li>若是第一次登入，會出現無 Channels 的頁面，請點選 『Business Center』
-        <ul>
-          <li>一個商用帳號，只能選擇一種開發</li>
-        </ul>
-      </li>
-      <li>建立商用帳號後，可選三種開發
-        <ul>
-          <li>LINE@
-            <ul>
-              <li>LINE@ 提供針對公司或經營者使用的LINE帳號，不但能讓商業運作及訊息傳達更加活躍， 還具備了能夠將企業、品牌以及商品魅力傳達給顧客的各種功能。</li>
-              <li>群發訊息</li>
-              <li>1 對 1 聊天 : 能夠直接透過LINE聊天室溝通，回覆來自顧客</li>
-              <li>發送動態消息 : 將資訊投稿至顧客或粉絲的動態消息上</li>
-              <li>免費方案 : 每月1,000則以內</li>
-              <li>推廣方案 : 無限制</li>
-            </ul>
-          </li>
-          <li>LINE Login
-            <ul>
-              <li>LINE Login是可與您的事業內容結合，讓用戶能夠以LINE帳號登入並使用的功能。</li>
-              <li>透過LINE SDK for iOS / Android，將能夠在Native Application使用LINE Login功能。</li>
-              <li>透過LINE所提供的OAuth2認證，將能夠在Web Application使用LINE Login功能。</li>
-            </ul>
-          </li>
-          <li>BOT API Trial Account
-            <ul>
-              <li>BOT API Trial Account是一項能夠讓用戶針對您所提供的事業內容進行雙向溝通的功能。</li>
-              <li>BOT API將透過LINE伺服器，在您的伺服器與LINE應用程式間互相收發資訊。將活用JSON形式的API進行通訊請求。</li>
-              <li>可傳送訊息給將您帳號加為好友的用戶。將透過API收發所有的訊息。</li>
-              <li>可傳送含有網站縮圖及連結的訊息，能夠有效地將用戶引導至網站中。</li>
-              <li>使用條件
-                <ul>
-                  <li>測試時，上限傳送人數 50 人</li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ol>
-
-<h1 id="develop">Develop</h1>
-<h2 id="line">LINE@</h2>
-
-<ul>
-  <li>透過 business center 進行申請</li>
-</ul>
-
-<h3 id="認證">認證</h3>
-<p><strong>若認證失敗，則會轉為一般帳號</strong></p>
-
-<ul>
-  <li><a href="http://at-blog.line.me/tw/archives/36225665.html">認證帳號與一般帳號</a></li>
-  <li>5~7 個審核工作天</li>
-</ul>
-
-<h2 id="line-login">Line Login</h2>
-
-<ul>
-  <li>透過 business center 進行申請</li>
-  <li>App icon : 在申請帳號服務時的 name 與 image 即為此 login app 的預設資料</li>
-  <li>建立好後，可設定以下參數跟下載開發 sdk (目前 iOS 版本 3.1.17)
-    <ul>
-      <li>NATIVE_APP
-        <ul>
-          <li>iOS Bundle ID</li>
-          <li>iOS Scheme</li>
-          <li>Android Package Name :</li>
-          <li>Android Package Signature</li>
-          <li>Android Scheme</li>
-        </ul>
-      </li>
-      <li>WEB
-        <ul>
-          <li>Authentication domain</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<p><strong>Note: The download link is displayed only after the Channel status becomes DEVELOPING.</strong></p>
-
-<h2 id="line-bot">Line bot</h2>
-
-<ul>
-  <li>透過 business center 進行申請</li>
-  <li>basic
-    <ul>
-      <li>Name</li>
-      <li>App icon</li>
-      <li>Callback URL</li>
-    </ul>
-  </li>
-  <li>Server IP WhiteList : 可針對單一的 ip 進行設定，也可以透過子網路遮罩，設定一整組的範圍</li>
-</ul>
-
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/line/2016/04/15/linedevelop/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2376,7 +2287,7 @@ js 中有 token
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">111</span>
+                <span class="site-state-item-count">112</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

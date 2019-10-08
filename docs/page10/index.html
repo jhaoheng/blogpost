@@ -281,6 +281,283 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/phalcon/2016/07/07/Phalcon-basic/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/phalcon/2016/07/07/Phalcon-basic/" itemprop="url">
+                【Phalcon】basic
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-07T09:35:00+08:00">
+                2016-07-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Phalcon" itemprop="url" rel="index">
+                    <span itemprop="name">Phalcon</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="ㄧinstall-phalcon">ㄧ、install phalcon</h1>
+
+<ol>
+  <li><a href="https://phalconphp.com/en/download">官方</a></li>
+  <li>github : https://github.com/phalcon/cphalcon</li>
+  <li>install from github
+    <ul>
+      <li><code class="highlighter-rouge">git clone</code></li>
+      <li><code class="highlighter-rouge">cd cphalcon/build</code></li>
+      <li><code class="highlighter-rouge">sudo ./install</code></li>
+    </ul>
+  </li>
+  <li>遇到問題，參考 troubleshoot</li>
+</ol>
+
+<h2 id="check">check</h2>
+
+<ol>
+  <li><code class="highlighter-rouge">phpinfo();</code>
+    <ul>
+      <li>找 phalcon extension，沒意外的話是 2.0.13</li>
+    </ul>
+  </li>
+  <li>安裝環境</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>環境
+- `php -m | grep -i phalcon`
+  - if output `phalcon` mean it is ok to use phalcon cmd
+- `apachectl -v`
+  - output : `apache/2.4.16`
+- `php -v`
+  - output : `php 5.6.23`
+- `mysql --version`
+  - output : `mysql ver 14.14`
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="troubleshoot">troubleshoot</h2>
+
+<ol>
+  <li>若 gcc 編譯失敗，<code class="highlighter-rouge">free -g</code>，查看 memory or swap 是否有 1g 可供 compile
+    <ul>
+      <li>1g memory <code class="highlighter-rouge">https://github.com/phalcon/cphalcon/issues/10478</code></li>
+    </ul>
+  </li>
+  <li>因為目前僅支援 5.4/5.5/5.6 版本，故如果用 7.x 版本編譯時，會產生名稱錯誤</li>
+  <li>設定 <code class="highlighter-rouge">extension=phalcon.so</code>，出現 <code class="highlighter-rouge">PHP Warning:  Module 'phalcon' already loaded in Unknown on line 0</code>
+    <ul>
+      <li><a href="http://www.somacon.com/p520.php">info</a></li>
+      <li>在 php.ini 中，將 <code class="highlighter-rouge">extension=phalcon.so</code> 前面加 <code class="highlighter-rouge">;</code> -&gt; <code class="highlighter-rouge">;extension=phalcon.so</code></li>
+      <li>執行 <code class="highlighter-rouge">php -m | grep -i phalcon</code>，正常</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="二安裝-phalcon-develop-tool">二、安裝 Phalcon develop-tool</h1>
+
+<ul>
+  <li><a href="https://docs.phalconphp.com/zh/latest/reference/tools.html">介紹</a>
+    <ul>
+      <li>總之就是透過指令可以快速建立模組，連大小寫都處理好，另外還會結合資料庫建立 mode : getter / setter</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/phalcon/phalcon-devtools">install</a>
+    <ul>
+      <li>installation via Git</li>
+      <li><code class="highlighter-rouge">sudo ln -s ~/path/phalcon.php /usr/local/bin/phalcon</code> mac 要放在 <code class="highlighter-rouge">/usr/local/bin</code> 下</li>
+    </ul>
+  </li>
+  <li>執行 <code class="highlighter-rouge">phalcon</code></li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15</pre></td><td class="code"><pre class="highlight"><code><span class="n">Phalcon</span> <span class="n">DevTools</span> <span class="p">(</span><span class="m">2.0.13</span><span class="p">)</span>
+
+<span class="n">Help</span><span class="p">:</span>
+  <span class="n">Lists</span> <span class="n">the</span> <span class="n">commands</span> <span class="n">available</span> <span class="k">in</span> <span class="n">Phalcon</span> <span class="n">devtools</span>
+
+<span class="n">Available</span> <span class="n">commands</span><span class="p">:</span>
+  <span class="n">commands</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="k">list</span><span class="p">,</span> <span class="n">enumerate</span><span class="p">)</span>
+  <span class="n">controller</span>       <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">controller</span><span class="p">)</span>
+  <span class="n">module</span>           <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">module</span><span class="p">)</span>
+  <span class="k">model</span>            <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="k">model</span><span class="p">)</span>
+  <span class="n">all</span><span class="p">-</span><span class="n">models</span>       <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">all</span><span class="p">-</span><span class="n">models</span><span class="p">)</span>
+  <span class="n">project</span>          <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">project</span><span class="p">)</span>
+  <span class="n">scaffold</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">scaffold</span><span class="p">)</span>
+  <span class="n">migration</span>        <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">migration</span><span class="p">)</span>
+  <span class="n">webtools</span>         <span class="p">(</span><span class="n">alias</span> <span class="k">of</span><span class="p">:</span> <span class="nb">create</span><span class="p">-</span><span class="n">webtools</span><span class="p">)</span>
+</code></pre></td></tr></tbody></table></div></div>
+<ul>
+  <li>查看語法，直接執行 <code class="highlighter-rouge">phalcon [command]</code> 即可
+    <ul>
+      <li><code class="highlighter-rouge">phalcon controller</code></li>
+      <li><code class="highlighter-rouge">phalcon webtools</code></li>
+    </ul>
+  </li>
+  <li>啟用 WebTools
+    <ul>
+      <li>在影片中，可以用 browser 的方式，進行設定，在網頁資料夾下，<code class="highlighter-rouge">phalcon webtools --action=enable</code>
+        <ul>
+          <li>有新舊版本的問題，查看 github readme</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>快速建立一個基本的 project : <code class="highlighter-rouge">phalcon create-project store</code>
+    <ul>
+      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code></li>
+    </ul>
+  </li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/phalcon/2016/07/07/Phalcon-basic/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/05/iosapns-with-http-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2064,190 +2341,6 @@ myhome/groundfloor/livingroom/brightness
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/05/23/objc-c-toll-free-bridging-non-destructive-bridge/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/05/23/objc-c-toll-free-bridging-non-destructive-bridge/" itemprop="url">
-                【Objc-C】Toll-Free Bridging : 無損橋接 
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-23T03:55:00+08:00">
-                2016-05-23
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h2 id="toll-free-bridging--無損橋接">Toll-Free Bridging : 無損橋接</h2>
-
-<p>在 ARC 管理中，常會看到這個名詞</p>
-
-<p>簡單來說就是因為 OC 是 C 的執行庫，而為了讓 OC 可以與 C 進行資料交換，就得利用 Toll-Free Bridging 進行資料格式的交換
-如 NSArray 與 CFArray <a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Reference/CFArrayRef/index.html#//apple_ref/c/tdef/CFArrayRef">參考</a></p>
-
-<blockquote>
-  <p>CFArray is “toll-free bridged” with its Cocoa Foundation counterpart, NSArray. This means that the Core Foundation type is interchangeable in function or method calls with the bridged Foundation object. Therefore, in a method where you see an NSArray * parameter, you can pass in a CFArrayRef, and in a function where you see a CFArrayRef parameter, you can pass in an NSArray instance. This also applies to concrete subclasses of NSArray. See Toll-Free Bridged Types for more information on toll-free bridging.</p>
-</blockquote>
-
-<p><a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Conceptual/CFDesignConcepts/Articles/tollFreeBridgedTypes.html#//apple_ref/doc/uid/TP40010677">Toll-Free Bridged Types</a></p>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>NSArray *_array = [[NSArray alloc]init]; 
-NSString *values = {@"foo",@"bar"}; 
-CFArrayRef arrayRef = CFArrayCreate(kCFAllocatorDefault, (void *)values, (CFIndex)2,NULL); 
-NSArray *array = (__bridgeNSArray *)arrayRef;//注意這一行的__bridge 
-NSDa
-</code></pre></td></tr></tbody></table></div></div>
-
-<h3 id="nsstring---cfstring">NSString -&gt; CFString</h3>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>NSString *foo = @"bar"; 
-CFStringRef bar = (__bridge CFStringRef)(foo); 
-NSLog(@"%ld", CFStringGetLength(bar));
-</code></pre></td></tr></tbody></table></div></div>
-
-<h3 id="cfstring---nsstring">CFString -&gt; NSString</h3>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>CFStringRef foo = CFStringCreateWithCString(kCFAllocatorDefault, "foo", kCFStringEncodingUTF8); 
-NSString *bar = (__bridge NSString *)(foo);
-NSLog(@"%ld", bar.length); 
-CFRelease(foo);
-</code></pre></td></tr></tbody></table></div></div>
-
-<h3 id="__bridge">__bridge</h3>
-<p>目的在於處理 ARC &lt;-&gt; MRC 間的溝通</p>
-
-<p>而 <strong>『MRC 下的 Toll－Free Bridging 因為不涉及記憶體管理的轉移，相互之間可以直接交換使用。』</strong></p>
-
-<p><a href="https://developer.apple.com/library/ios/documentation/CoreFoundation/Conceptual/CFDesignConcepts/Articles/tollFreeBridgedTypes.html#//apple_ref/doc/uid/TP40010677">Toll-Free Bridged Types</a> 
-中，有支援 Toll-Free Bridging 的對照表</p>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/05/23/objc-c-toll-free-bridging-non-destructive-bridge/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2309,7 +2402,7 @@ CFRelease(foo);
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">111</span>
+                <span class="site-state-item-count">112</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

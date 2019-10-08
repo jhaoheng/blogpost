@@ -1,0 +1,1020 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Golang," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="golang 模板語言 Resource : https://golang.org/pkg/text/template/ 在 docker inspect 中的應用 https://docs.docker.com/engine/reference/commandline/inspect/ 通常會使用 docker inspect -f &apos;{...}&apos; {container_id} docker network inspect -f &apos;{...}&apos; {network_name} 兩者在 inspect 的使用上都相同 其中 {…} 就是使用模板語言進行互動 example : docker-compose.yml version: &quot;3.7&quot; services: s1: image: nginx:1.15 container_name: s1 ports: - 81:80 networks: - sample s2: image: nginx:1.15 container_name: s2 ports: - 82:80 networks: - sample s3: image: nginx:1.15 container_name: s3 ports: - 83:80 networks: - sample networks: sample: name: sample-net">
+<meta name="keywords" content="Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Go】模板語言 &amp; docker inspect">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/08/Go-%E6%A8%A1%E6%9D%BF%E8%AA%9E%E8%A8%80_&_docker_inspect/">
+<meta property="og:site_name" content="MAX 呼~">
+<meta property="og:description" content="golang 模板語言 Resource : https://golang.org/pkg/text/template/ 在 docker inspect 中的應用 https://docs.docker.com/engine/reference/commandline/inspect/ 通常會使用 docker inspect -f &apos;{...}&apos; {container_id} docker network inspect -f &apos;{...}&apos; {network_name} 兩者在 inspect 的使用上都相同 其中 {…} 就是使用模板語言進行互動 example : docker-compose.yml version: &quot;3.7&quot; services: s1: image: nginx:1.15 container_name: s1 ports: - 81:80 networks: - sample s2: image: nginx:1.15 container_name: s2 ports: - 82:80 networks: - sample s3: image: nginx:1.15 container_name: s3 ports: - 83:80 networks: - sample networks: sample: name: sample-net">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Go】模板語言 &amp; docker inspect">
+<meta name="twitter:description" content="golang 模板語言 Resource : https://golang.org/pkg/text/template/ 在 docker inspect 中的應用 https://docs.docker.com/engine/reference/commandline/inspect/ 通常會使用 docker inspect -f &apos;{...}&apos; {container_id} docker network inspect -f &apos;{...}&apos; {network_name} 兩者在 inspect 的使用上都相同 其中 {…} 就是使用模板語言進行互動 example : docker-compose.yml version: &quot;3.7&quot; services: s1: image: nginx:1.15 container_name: s1 ports: - 81:80 networks: - sample s2: image: nginx:1.15 container_name: s2 ports: - 82:80 networks: - sample s3: image: nginx:1.15 container_name: s3 ports: - 83:80 networks: - sample networks: sample: name: sample-net">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blogpost',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
+
+
+
+
+
+  <title>【Go】模板語言 & docker inspect | MAX 呼~</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blogpost/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX 呼~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blogpost/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blogpost/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/blogpost/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/08/Go-%E6%A8%A1%E6%9D%BF%E8%AA%9E%E8%A8%80_&_docker_inspect/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【Go】模板語言 & docker inspect
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-08T17:06:00+08:00">
+                2019-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="golang-模板語言">golang 模板語言</h1>
+<ul>
+  <li>Resource : https://golang.org/pkg/text/template/</li>
+</ul>
+
+<h1 id="在-docker-inspect-中的應用">在 docker inspect 中的應用</h1>
+<blockquote>
+  <p>https://docs.docker.com/engine/reference/commandline/inspect/</p>
+</blockquote>
+
+<ul>
+  <li>通常會使用
+    <ul>
+      <li><code class="highlighter-rouge">docker inspect -f '{...}' {container_id}</code></li>
+      <li><code class="highlighter-rouge">docker network inspect -f '{...}' {network_name}</code></li>
+    </ul>
+  </li>
+  <li>兩者在 inspect 的使用上都相同</li>
+  <li>其中 {…} 就是使用模板語言進行互動</li>
+</ul>
+
+<h1 id="example--docker-composeyml">example : docker-compose.yml</h1>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27</pre></td><td class="code"><pre class="highlight"><code>version: "3.7"
+services: 
+  s1:
+    image: nginx:1.15
+    container_name: s1
+    ports:
+      - 81:80
+    networks:
+      - sample
+  s2:
+    image: nginx:1.15
+    container_name: s2
+    ports:
+      - 82:80
+    networks:
+      - sample
+  s3:
+    image: nginx:1.15
+    container_name: s3
+    ports:
+      - 83:80
+    networks:
+      - sample
+
+networks:
+  sample:
+    name: sample-net
+</code></pre></td></tr></tbody></table></div></div>
+
+<!--more-->
+
+<h1 id="範例資料">範例資料</h1>
+<blockquote>
+  <p>以下是 network 的部分資訊, name = sample-net</p>
+</blockquote>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24</pre></td><td class="code"><pre class="highlight"><code>[
+    {
+        "Name": "sample-net",
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "192.168.96.0/20",
+                    "Gateway": "192.168.96.1"
+                }
+            ]
+        },
+        "Containers": {
+            "02031a4daf350456c039b6cf42b41407757a662c8c25def11b9feed8f3b9b973": {
+                "Name": "s1",
+                "EndpointID": "2db733478ebf138e3f770be27a2195256ed63204784476e64d05ad3a400b97fe",
+                "MacAddress": "02:42:c0:a8:60:02",
+                "IPv4Address": "192.168.96.2/20",
+                "IPv6Address": ""
+            }
+        },
+    }
+]
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="filter-format">filter format</h1>
+
+<h2 id="變量--獲取-name">變量 : 獲取 “Name”</h2>
+<p><code class="highlighter-rouge">docker network inspect -f '' sample-net</code></p>
+
+<h2 id="變量--獲取-ipam">變量 : 獲取 “IPAM”</h2>
+<p><code class="highlighter-rouge">docker network inspect -f '' spider-net</code></p>
+
+<h2 id="變量--獲取-ipamdriver">變量 : 獲取 .IPAM.Driver</h2>
+<p><code class="highlighter-rouge">docker network inspect -f '' sample-net</code></p>
+
+<h2 id="索引--獲取-ipamconfig-0-的-subnet">索引 : 獲取 .IPAM.Config [0] 的 Subnet</h2>
+<ul>
+  <li>索引
+    <ul>
+      <li>如果返回結果是一個 map, slice, array 或 string，則可以使用 index 加索引序號（從零開始計數）來讀取屬性值。</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">docker network inspect -f '' sample-net</code></li>
+</ul>
+
+<h2 id="遍例--獲取-containers-中的所有名稱">遍例 : 獲取 Containers 中的所有名稱</h2>
+<ul>
+  <li>``, 支持的類型包括 array, slice, map 和 channel
+    <ul>
+      <li>對應的值長度為 0 時，range 不會執行。</li>
+      <li>結構內部如要使用外部的變量，需要在前面加 引用，比如 Var2。</li>
+      <li>range 也支持 else 操作。效果是：當返回值為空或長度為 0 時執行 else 內的內容。</li>
+    </ul>
+  </li>
+  <li>ex:
+    <ul>
+      <li><code class="highlighter-rouge">docker network inspect -f '' spider-net</code></li>
+      <li><code class="highlighter-rouge">docker network inspect -f '' sample-net</code></li>
+      <li><code class="highlighter-rouge">docker network inspect -f 'With No Containers' sample-net</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="if--else--end">if … else … end</h2>
+
+<ul>
+  <li>General : <code class="highlighter-rouge">docker network inspect -f 'hello world' sample-net</code></li>
+  <li>Not : <code class="highlighter-rouge">docker network inspect -f 'No NameName exist' sample-net</code></li>
+  <li>Or :
+    <ul>
+      <li>: 表示如果 x 為真返回 x，否則返回 y。</li>
+      <li>：後面跟多個參數時會逐一判斷每個參數，並返回第一個非空的參數。如果都為 false，則返回最後一個參數。</li>
+      <li>除了 null（空）和 false 被識別為 false，其它值（字符串、數字、對象等）均被識別為 true。</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="if-判斷式">if 判斷式</h2>
+<ul>
+  <li>eq : Returns the boolean truth of arg1 == arg2</li>
+  <li>ne : Returns the boolean truth of arg1 != arg2</li>
+  <li>lt : Returns the boolean truth of arg1 &lt; arg2</li>
+  <li>le : Returns the boolean truth of arg1 &lt;= arg2</li>
+  <li>gt : Returns the boolean truth of arg1 &gt; arg2</li>
+  <li>
+    <p>ge : Returns the boolean truth of arg1 &gt;= arg2</p>
+  </li>
+  <li>ex :
+    <ul>
+      <li>輸出所有已停止容器的名稱 :
+        <ul>
+          <li><code class="highlighter-rouge">docker inspect --format '' $(docker ps -aq)</code></li>
+          <li><code class="highlighter-rouge">docker inspect --format '容器還在運行' $(docker ps -aq)</code></li>
+          <li><code class="highlighter-rouge">docker inspect --format '容器還在運行' $(docker ps -aq)</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="print">Print</h2>
+<ul>
+  <li>print 	: 將傳入的對象轉換為字符串並寫入到標準輸出中。如果後跟多個參數，輸出結果之間會自動填充空格進行分隔。</li>
+  <li>println 	: 功能和 print 類似，但會在結尾添加一個換行符。也可以直接使用  來換行。</li>
+  <li>printf 	: 與 shell 等環境一致，可配合佔位符用於格式化輸出。</li>
+</ul>
+
+<h2 id="取得長度">取得長度</h2>
+<ul>
+  <li><code class="highlighter-rouge">docker inspect --format '' sample-net</code></li>
+</ul>
+
+<h2 id="輸出用-json-方式取代-text">輸出用 json 方式取代 text</h2>
+<ul>
+  <li><code class="highlighter-rouge">docker inspect --format '' sample-net</code></li>
+</ul>
+
+<h2 id="join">join</h2>
+<ul>
+  <li><code class="highlighter-rouge">docker inspect -f '' s1</code></li>
+</ul>
+
+<h2 id="title--lower--upper">title &amp;&amp; lower &amp;&amp; upper</h2>
+
+<ul>
+  <li>lower : 全部轉為小寫
+    <ul>
+      <li><code class="highlighter-rouge">docker network inspect --format '' sample-net</code></li>
+    </ul>
+  </li>
+  <li>upper : 全部轉為大寫
+    <ul>
+      <li><code class="highlighter-rouge">docker network inspect --format '' sample-net</code></li>
+    </ul>
+  </li>
+  <li>title : 將返回的結果值，首字母轉為大寫
+    <ul>
+      <li><code class="highlighter-rouge">docker network inspect --format '' sample-net</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="split">split</h2>
+<ul>
+  <li><code class="highlighter-rouge">docker network inspect --format '' sample-net</code>
+    <ul>
+      <li>output : <code class="highlighter-rouge">[s1][s2][s3]</code></li>
+    </ul>
+  </li>
+</ul>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/blogpost/tag/#/Golang" rel="tag"># Golang</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blogpost/golang/2019/10/01/Go-Benchmark(%E4%B8%80)/" rel="prev" title="【Go】Benchmark(一)">
+                【Go】Benchmark(一) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/blogpost/assets/images/avatar3.png"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/blogpost/archives/">
+                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/blogpost/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/blogpost/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#golang-模板語言"> <span class="nav-text">golang 模板語言</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#在-docker-inspect-中的應用"> <span class="nav-text">在 docker inspect 中的應用</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#example--docker-composeyml"> <span class="nav-text">example : docker-compose.yml</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#範例資料"> <span class="nav-text">範例資料</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#filter-format"> <span class="nav-text">filter format</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#變量--獲取-name"> <span class="nav-text">變量 : 獲取 “Name”</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#變量--獲取-ipam"> <span class="nav-text">變量 : 獲取 “IPAM”</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#變量--獲取-ipamdriver"> <span class="nav-text">變量 : 獲取 .IPAM.Driver</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#索引--獲取-ipamconfig-0-的-subnet"> <span class="nav-text">索引 : 獲取 .IPAM.Config [0] 的 Subnet</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#遍例--獲取-containers-中的所有名稱"> <span class="nav-text">遍例 : 獲取 Containers 中的所有名稱</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#if--else--end"> <span class="nav-text">if … else … end</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#if-判斷式"> <span class="nav-text">if 判斷式</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#print"> <span class="nav-text">Print</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#取得長度"> <span class="nav-text">取得長度</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#輸出用-json-方式取代-text"> <span class="nav-text">輸出用 json 方式取代 text</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#join"> <span class="nav-text">join</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#title--lower--upper"> <span class="nav-text">title &amp;&amp; lower &amp;&amp; upper</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#split"> <span class="nav-text">split</span> </a> </li> </ol> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+
