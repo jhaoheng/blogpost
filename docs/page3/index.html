@@ -281,6 +281,215 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/docker/2018/03/01/Kubernetes&Docker/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/kubenetes/docker/2018/03/01/Kubernetes&Docker/" itemprop="url">
+                【Deploy Test】Use Kubernetes & Docker(local)
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-01T07:30:00+08:00">
+                2018-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/kubenetes" itemprop="url" rel="index">
+                    <span itemprop="name">kubenetes</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/docker" itemprop="url" rel="index">
+                    <span itemprop="name">docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="synopsis">SYNOPSIS</h2>
+<ul>
+  <li>透過本地端，練習 kubenetes client
+    <ul>
+      <li>在 mac 上，建立本地端的 kubernetes server &amp; client</li>
+      <li>透過本地部署測試來降低雲端部署的錯誤</li>
+    </ul>
+  </li>
+  <li>安裝 kubernetes server
+    <ul>
+      <li>實踐日期 20180301, 未來或許會有更好的方法進行測試</li>
+      <li>docker for mac 這個應用程式本身就包含 kubernetes server 的建立</li>
+      <li>關於 minikube，須先安裝 vm 服務 (virtualbox) 才能使用 [參考另一篇關於 kubenetes &amp; minikube)</li>
+    </ul>
+  </li>
+  <li>安裝 kubenetes client 則透過<a href="https://kubernetes.io/docs/imported/release/notes/">官網安裝</a>即可</li>
+</ul>
+
+<h2 id="environment">Environment</h2>
+<ul>
+  <li>osx</li>
+  <li>docker community edition version 18.03.0-ce, channel:edge. 此版本在 20180301 支援 kubernetes 的整合.</li>
+  <li>kubectl version
+    <ul>
+      <li>Client Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.1”, GitCommit:”3a1c9449a956b6026f075fa3134ff92f7d55f812”, GitTreeState:”clean”, BuildDate:”2018-01-04T11:52:23Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”darwin/amd64”}</li>
+      <li>Server Version: version.Info{Major:”1”, Minor:”9”, GitVersion:”v1.9.2”, GitCommit:”5fa2db2bd46ac79e5e00a4e6ed24191080aa463b”, GitTreeState:”clean”, BuildDate:”2018-01-18T09:42:01Z”, GoVersion:”go1.9.2”, Compiler:”gc”, Platform:”linux/amd64”}</li>
+    </ul>
+  </li>
+</ul>
+
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/kubenetes/docker/2018/03/01/Kubernetes&Docker/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/drone/2018/02/04/Drone/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2067,198 +2276,6 @@
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/docker/mairadb/2017/11/03/docker&mariadb/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/docker/mairadb/2017/11/03/docker&mariadb/" itemprop="url">
-                【Docker:mariadb】set init when first running
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-03T12:01:00+08:00">
-                2017-11-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/docker" itemprop="url" rel="index">
-                    <span itemprop="name">docker</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/mairadb" itemprop="url" rel="index">
-                    <span itemprop="name">mairadb</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="目標">目標</h1>
-
-<ol>
-  <li>為了讓每次測試更加快速的建立 db 中的資料環境，分開 schema.sql &amp; init_value.sql 兩個檔案，方便修改</li>
-  <li>步驟
-    <ol>
-      <li>透過 docker-compose 建立 container:mariadb</li>
-      <li>透過 volume 的方式，掛載 base_schema.sql &amp; init_value.sql 檔案</li>
-      <li>建立的過程中，讓 container:mariadb 自行初始化 (2) 的檔案</li>
-    </ol>
-  </li>
-</ol>
-
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/docker/mairadb/2017/11/03/docker&mariadb/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2320,7 +2337,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-count">113</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

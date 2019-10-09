@@ -281,6 +281,261 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/bash/2016/08/24/bash-parse-json-by-jq/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/bash/2016/08/24/bash-parse-json-by-jq/" itemprop="url">
+                【bash】parse json by jq
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-24T17:10:00+08:00">
+                2016-08-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Bash" itemprop="url" rel="index">
+                    <span itemprop="name">Bash</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="parse-json-by-jq">parse json by jq</h1>
+
+<p><a href="http://xmodulo.com/how-to-parse-json-string-via-command-line-on-linux.html">source from</a></p>
+
+<h2 id="install-on-mac">install on mac</h2>
+
+<ul>
+  <li>mac : <code class="highlighter-rouge">brew install jq</code>
+</li>
+</ul>
+
+<h2 id="install-on-linux">install on linux</h2>
+
+<ul>
+  <li>linux(32bit) : <code class="highlighter-rouge">wget http://stedolan.github.io/jq/download/linux32/jq</code>
+</li>
+  <li>linux(64bit) : <code class="highlighter-rouge">wget http://stedolan.github.io/jq/download/linux64/jq</code>
+</li>
+  <li><code class="highlighter-rouge">chmod +x ./jq</code></li>
+  <li><code class="highlighter-rouge">sudo cp jq /usr/bin</code></li>
+</ul>
+
+<h2 id="example-file">example file</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br>17<br>18<br>19<br>20<br>21<br>22<br>23<br>24<br>25</pre></td>
+<td class="code"><pre class="highlight"><code>{
+        "name": "Google",
+        "location":
+                {
+                        "street": "1600 Amphitheatre Parkway",
+                        "city": "Mountain View",
+                        "state": "California",
+                        "country": "US"
+                },
+        "employees":
+                [
+                        {
+                                "name": "Michael",
+                                "division": "Engineering"
+                        },
+                        {
+                                "name": "Laura",
+                                "division": "HR"
+                        },
+                        {
+                                "name": "Elise",
+                                "division": "Marketing"
+                        }
+                ]
+}
+</code></pre></td>
+</tr></tbody></table></div></div>
+
+<h2 id="use">use</h2>
+
+<ul>
+  <li>To parse a JSON object: <code class="highlighter-rouge">cat json.txt | jq '.name'</code>
+    <ul>
+      <li>output : “Google”</li>
+    </ul>
+  </li>
+  <li>To parse a nested JSON object: <code class="highlighter-rouge">cat json.txt | jq '.location.city'</code>
+    <ul>
+      <li>output : “Mountain View”</li>
+    </ul>
+  </li>
+  <li>To parse a JSON array: <code class="highlighter-rouge">cat json.txt | jq '.employees[0].name'</code>
+    <ul>
+      <li>output : “Michael”</li>
+    </ul>
+  </li>
+  <li>To extract specific fields from a JSON object: <code class="highlighter-rouge">cat json.txt | jq '.location | {street, city}'</code>
+    <ul>
+      <li>output :
+        <div class="highlighter-rouge">
+<div class="highlight"><table style="margin: 0px"><tbody><tr>
+<td class="gutter"><pre>1<br>2<br>3<br>4</pre></td>
+<td class="code"><pre class="highlight"><code>{
+"city": "Mountain View",
+"street": "1600 Amphitheatre Parkway"
+}
+</code></pre></td>
+</tr></tbody></table></div>        </div>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/bash/2016/08/24/bash-parse-json-by-jq/#more" rel="contents">
+              Read more »
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/08/05/mampcant-connect-to-local-mysql-server-through-socket/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2078,263 +2333,6 @@ $session = Di::getDefault()-&gt;getSession();
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/11/phalcondevelop-tool/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/07/11/phalcondevelop-tool/" itemprop="url">
-                【Phalcon】develop tool
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-11T07:48:00+08:00">
-                2016-07-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="使用-phalcon-devtools">使用 Phalcon-devtools</h1>
-
-<ul>
-  <li>這是一種透過 cmd 的方式來自動建立某些模組</li>
-</ul>
-
-<h2 id="版本">版本</h2>
-
-<ul>
-  <li>執行 <code class="highlighter-rouge">phalcon</code> 確認版本 : <code class="highlighter-rouge">Phalcon DevTools (2.0.13)</code>
-</li>
-</ul>
-
-<h2 id="建立專案">建立專案</h2>
-
-<ul>
-  <li>快速建立一個基本的 project : <code class="highlighter-rouge">phalcon create-project store</code>
-    <ul>
-      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code>
-</li>
-    </ul>
-  </li>
-  <li>在非 phalcon direction，只能使用 <code class="highlighter-rouge">phalcon project</code> 的指令建立 project 的結構</li>
-  <li>在該 project 下，可以使用其他的指令
-    <ul>
-      <li>
-<code class="highlighter-rouge">phalcon webtools enable</code>
-        <ul>
-          <li>啟用 web 介面的 phalcon 編輯器</li>
-          <li><code class="highlighter-rouge">http://[localhost]/[project_name]/webtools.php</code></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="資料庫設定">資料庫設定</h2>
-
-<ul>
-  <li>PATH : <code class="highlighter-rouge">store/app/config</code> 中的 config.php
-    <ul>
-      <li>若在 create 專案時，有特別指定使用 <code class="highlighter-rouge">.ini</code> 為其擴展名，才會特別使用。(<code class="highlighter-rouge">--use-config-ini</code>)</li>
-      <li>使用 <code class="highlighter-rouge">phalcon project --help</code> 查詢指令</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="models">models</h2>
-
-<ul>
-  <li>建立模型，目的在於制式化處理某些事情，或者驗證，如每次呼叫模型的某個 method，都希望得到『用戶名稱』</li>
-  <li>建立 model 前，須先把 db 與 schema 建立完成
-    <ul>
-      <li>建立完成後，才可以建立 <code class="highlighter-rouge">phalcon model [model_name]</code>
-        <ul>
-          <li>如果沒有該 table name : [Error: Table “people” does not exist.]</li>
-        </ul>
-      </li>
-      <li>Troubleshoot : <code class="highlighter-rouge">ERROR: SQLSTATE[HY000] [2002] No such file or directory</code>
-        <ul>
-          <li><code class="highlighter-rouge">php --ini</code></li>
-          <li><code class="highlighter-rouge">vim php.ini</code></li>
-          <li>搜尋 <code class="highlighter-rouge">mysql.default_socket</code>
-            <ul>
-              <li>因我使用 mamp 所以填入 : <code class="highlighter-rouge">/Applications/MAMP/tmp/mysql/mysql.sock</code>
-</li>
-              <li>查詢 socket
-                <ul>
-                  <li><code class="highlighter-rouge">mysql -u root -p</code></li>
-                  <li>
-<code class="highlighter-rouge">show variables like '%socket%';</code> 填入該路徑即可</li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>在專案的根目錄下 : <code class="highlighter-rouge">phalcon model</code>，有基本的 Usage</li>
-</ul>
-
-<h2 id="scaffold-a-crud">Scaffold a CRUD</h2>
-
-<ul>
-  <li>Phalcon-devtool 可以快速生成整套的 CRUD 框架 : controller / model / view
-    <ul>
-      <li>Notice : 注意 model 產生時，必須要有對應的 table-name</li>
-    </ul>
-  </li>
-  <li>
-<code class="highlighter-rouge">phalcon scaffold --table-name products</code> 會產生
-    <ul>
-      <li>app/controllers/ProductsController.php</li>
-      <li>app/models/Products.php</li>
-      <li>app/views/layout/products.phtml</li>
-      <li>app/views/products/new.phtml</li>
-      <li>app/views/products/edit.phtml</li>
-      <li>app/views/products/search.phtml</li>
-    </ul>
-  </li>
-  <li>在輸入測試資料與其他應用時，可以再進行修改</li>
-</ul>
-
-<h2 id="啟用-webtools">啟用 WebTools</h2>
-
-<ul>
-  <li>透過 web 的介面，進行操作 model / controller</li>
-  <li>路徑 : <code class="highlighter-rouge">http://[localhost:port]/store/webtools.php</code>
-</li>
-  <li>啟用 : <code class="highlighter-rouge">phalcon webtools --action=enable</code>
-</li>
-</ul>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/07/11/phalcondevelop-tool/#more" rel="contents">
-              Read more »
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2394,7 +2392,7 @@ $session = Di::getDefault()-&gt;getSession();
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-count">113</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

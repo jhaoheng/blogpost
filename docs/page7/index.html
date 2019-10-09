@@ -281,6 +281,167 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/04/05/php-mamp-pcntl-installation/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2017/04/05/php-mamp-pcntl-installation/" itemprop="url">
+                【PHP-MAMP】pcntl 安裝
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-04-05T01:07:00+08:00">
+                2017-04-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="環境">環境</h1>
+<ul>
+  <li>osx</li>
+  <li>php7.0.8</li>
+  <li>MAMP 3.5.2</li>
+</ul>
+
+<h1 id="flow">flow</h1>
+<ol>
+  <li><code class="highlighter-rouge">brew search pcntl</code>，找尋要安裝的版本</li>
+  <li><code class="highlighter-rouge">brew install php70-pcntl</code>，得到 pcntl 的安裝位置 =&gt; pcntl__path</li>
+  <li>安裝完畢後，確認 php, <code class="highlighter-rouge">which php</code>，得到路徑 =&gt; php__path</li>
+  <li>ls -al 路徑(php__path)，確認 php 的 source 指到的是 MAMP 的 php 路徑</li>
+  <li>在 pcntl__path 中，取得 pcntl.so 的檔案，copy 到 MAMP 的 extension 中</li>
+  <li>編輯 localhost 的 php.ini 與 MAMP 的 php.ini，加入 <code class="highlighter-rouge">extension=pcntl.so</code></li>
+  <li>在 terminal 中，<code class="highlighter-rouge">php -i | grep pcntl</code>，可看到版本訊息</li>
+</ol>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2017/04/05/php-mamp-pcntl-installation/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/git/2017/03/15/Git-attribute/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2311,293 +2472,6 @@ checkPattern2(nomatch, Foo) -&gt;
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/php/2016/10/22/PHP-http2/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/php/2016/10/22/PHP-http2/" itemprop="url">
-                【PHP】push with http2
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-22T17:05:00+08:00">
-                2016-10-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/PHP" itemprop="url" rel="index">
-                    <span itemprop="name">PHP</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h2 id="env">env</h2>
-
-<p>mac, osx , 10.11</p>
-
-<h2 id="config">config</h2>
-
-<ul>
-  <li><code class="highlighter-rouge">php -i</code> , check config :
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>[curl]
-cURL support =&gt; enabled
-cURL Information =&gt; 7.47.1
-...
-HTTP2 =&gt; Yes
-...
-SSL Version =&gt; OpenSSL/1.0.2g
-</code></pre></td></tr></tbody></table></div>    </div>
-  </li>
-  <li>if php no include these config, reinstall : <code class="highlighter-rouge">brew install php70 --with-homebrew-curl</code></li>
-</ul>
-
-<h2 id="code">code</h2>
-
-<h3 id="send-method">send method</h3>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48</pre></td><td class="code"><pre class="highlight"><code>/**
- * @param $http2ch          the curl connection
- * @param $http2_server     the Apple server url
- * @param $apple_cert       the path to the certificate
- * @param $app_bundle_id    the app bundle id
- * @param $message          the payload to send (JSON)
- * @param $token            the token of the device
- * @return mixed            the status code
- */
-function sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token) {
-
-    // url (endpoint)
-    $url = "{$http2_server}/3/device/{$token}";
-
-    // certificate
-    $cert = realpath($apple_cert);
-
-    // headers
-    $headers = array(
-        "apns-topic: {$app_bundle_id}",
-        "User-Agent: My Sender"
-    );
-
-    // other curl options
-    curl_setopt_array($http2ch, array(
-        CURLOPT_URL =&gt; $url,
-        CURLOPT_PORT =&gt; 443,
-        CURLOPT_HTTPHEADER =&gt; $headers,
-        CURLOPT_POST =&gt; TRUE,
-        CURLOPT_POSTFIELDS =&gt; $message,
-        CURLOPT_RETURNTRANSFER =&gt; TRUE,
-        CURLOPT_TIMEOUT =&gt; 30,
-        CURLOPT_SSL_VERIFYPEER =&gt; false,
-        CURLOPT_SSLCERT =&gt; $cert,
-        CURLOPT_HEADER =&gt; 1
-    ));
-
-    // go...
-    $result = curl_exec($http2ch);
-    if ($result === FALSE) {
-      throw new Exception("Curl failed: " .  curl_error($http2ch));
-    }
-
-    // get response
-    $status = curl_getinfo($http2ch, CURLINFO_HTTP_CODE);
-
-    return $status;
-}
-</code></pre></td></tr></tbody></table></div></div>
-
-<h3 id="use">use</h3>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20</pre></td><td class="code"><pre class="highlight"><code>// this is only needed with php prior to 5.5.24
-if (!defined('CURL_HTTP_VERSION_2_0')) {
-  define('CURL_HTTP_VERSION_2_0', 3);
-}
-// open connection 
-$http2ch = curl_init();
-curl_setopt($http2ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
-
-// send push
-$apple_cert = '/certificates/samplepush/development.pem';
-$message = '{"aps":{"alert":"Hi!","sound":"default"}}';
-$token = 'dbdaeae86abcde56rtyww1859fb41b2cby053ec48987847';
-$http2_server = 'https://api.development.push.apple.com'; // or 'api.push.apple.com' if production
-$app_bundle_id = 'it.tabasoft.samplepush';
-
-$status = sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token);
-echo "Response from apple -&gt; {$status}\n";
-
-// close connection
-curl_close($http2ch);
-</code></pre></td></tr></tbody></table></div></div>
-
-<h3 id="response">response</h3>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>200 Success
-400 Bad request
-403 There was an error with the certificate.
-405 The request used a bad :method value. Only POST requests are supported.
-410 The device token is no longer active for the topic.
-413 The notification payload was too large.
-429 The server received too many requests for the same device token.
-500 Internal server error
-503 The server is shutting down and unavailable.
-</code></pre></td></tr></tbody></table></div></div>
-
-<h3 id="multi-token-send">multi token send</h3>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code>// open connection
-// send all the pushes
-for ($i = 0; $i &lt; $totSends; $i++) {
-   // send push
-}
-// close connection
-</code></pre></td></tr></tbody></table></div></div>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/php/2016/10/22/PHP-http2/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2659,7 +2533,7 @@ for ($i = 0; $i &lt; $totSends; $i++) {
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-count">113</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

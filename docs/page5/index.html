@@ -281,6 +281,225 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/aws/2017/08/25/AWS-CLI-ECR-S3-EB-Deploy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/aws/2017/08/25/AWS-CLI-ECR-S3-EB-Deploy/" itemprop="url">
+                【AWS CLI】ECR & S3 & EB deploy
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-08-25T17:11:00+08:00">
+                2017-08-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/AWS" itemprop="url" rel="index">
+                    <span itemprop="name">AWS</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="建立-aws-docker-image-repo">建立 aws docker image repo</h2>
+<ol>
+  <li>建立 ECR
+    <ol>
+      <li>開啟 AWS console -&gt; 選擇 Amazon ECS 的服務 -&gt; 選擇 Repositories</li>
+      <li>選擇 create repository</li>
+      <li>建立完成後，會看到上傳的方法</li>
+    </ol>
+  </li>
+  <li>按照 ecs 中，的說明 aws ecr get-login 後，會產生出 docker login … 的語法，透過這個進行 docker login
+    <ol>
+      <li><code class="highlighter-rouge">aws ecr get-login --no-include-email --region us-east-1</code> : 取得 <code class="highlighter-rouge">docker login -u AWS -p .... </code></li>
+      <li>依據 1 中取得的 login 指令，進行 docker login</li>
+    </ol>
+  </li>
+  <li>上傳 docker image 到 ECR 中
+    <ol>
+      <li><code class="highlighter-rouge">docker build -t xxx {image}</code></li>
+      <li><code class="highlighter-rouge">docker tag xxx your-ecr-position/your-repo-name:latest</code></li>
+      <li><code class="highlighter-rouge">docker push your-ecr-position/your-repo-name:latest</code></li>
+    </ol>
+  </li>
+</ol>
+
+<h2 id="透過-beanstalk-部署">透過 beanstalk 部署</h2>
+
+<ol>
+  <li>建立好一個 eb application</li>
+  <li>設定好 <code class="highlighter-rouge">Dockerrun.aws.json</code>
+    <ul>
+      <li><code class="highlighter-rouge">envsubst</code> 可善用此指令</li>
+    </ul>
+  </li>
+  <li>壓縮 含有設定檔的 folder，並上傳到 aws s3
+    <ul>
+      <li><code class="highlighter-rouge">cd folder &amp;&amp; zip -r $folder.zip ./ &amp;&amp; aws s3 cp $folder.zip s3://{bucket_name}/{folder.zip}</code></li>
+    </ul>
+  </li>
+  <li>建立 eb 新的版本
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>aws elasticbeanstalk create-application-version \
+--application-name {your-eb-application-name} \
+  --version-label {your-eb-version-label}\
+  --source-bundle S3Bucket={bucket_name},S3Key={folder.zip}
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>部署新版本
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>aws elasticbeanstalk update-environment \
+--environment-name {your-eb-application-name} \
+  --version-label {your-eb-version-label}
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+</ol>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/aws/2017/08/25/AWS-CLI-ECR-S3-EB-Deploy/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/aws/2017/08/25/AWS-CLI-configure/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2220,205 +2439,6 @@ aws_secret_access_key = MY-SECRET-KEY
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/06/07/aws-s3-multiple-file-upload/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2017/06/07/aws-s3-multiple-file-upload/" itemprop="url">
-                【AWS-S3】多檔案上傳
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-07T16:45:00+08:00">
-                2017-06-07
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="env">env</h1>
-<ul>
-  <li>aws sdk php v3</li>
-  <li>php 7.0x</li>
-</ul>
-
-<h1 id="ex">ex</h1>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46</pre></td><td class="code"><pre class="highlight"><code>require './vendor/autoload.php';
-use Aws\S3\S3Client;
-use Aws\Exception\AwsException;
-use Aws\CommandPool;
-
-$access_key = "";
-$secret_access_key = "";
-$bucket = "";
-
-$client = S3Client::factory([
-        "region" =&gt; "ap-northeast-1", // tokyo
-        "version" =&gt; "latest", 
-        'credentials' =&gt; [
-            'key'    =&gt; $access_key,
-            'secret' =&gt; $secret_access_key,
-        ],
-    ]
-);
-
-$commands = array();
-
-$binary = file_get_contents('./images/1.jpg');
-$commands[] = $client-&gt;getCommand('PutObject', [
-        'Bucket' =&gt; $bucket,
-        'Key'    =&gt; 'photos/photo01.jpg',
-        'Body'   =&gt; $binary
-    ]
-);
-
-$commands[] = $client-&gt;getCommand('PutObject', [
-        'Bucket' =&gt; $bucket,
-        'Key'    =&gt; 'photos/photo02.jpg',
-        'Body'   =&gt; $binary
-    ]
-);
-
-$pool = new CommandPool($client, $commands);
-// Initiate the pool transfers
-$promise = $pool-&gt;promise();
-
-// Force the pool to complete synchronously
-try {
-    $result = $promise-&gt;wait();
-} catch (AwsException $e) {
-    // handle the error.
-}
-</code></pre></td></tr></tbody></table></div></div>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2017/06/07/aws-s3-multiple-file-upload/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2480,7 +2500,7 @@ try {
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-count">113</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

@@ -281,6 +281,255 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/11/phalcondevelop-tool/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/07/11/phalcondevelop-tool/" itemprop="url">
+                【Phalcon】develop tool
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-11T07:48:00+08:00">
+                2016-07-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="使用-phalcon-devtools">使用 Phalcon-devtools</h1>
+
+<ul>
+  <li>這是一種透過 cmd 的方式來自動建立某些模組</li>
+</ul>
+
+<h2 id="版本">版本</h2>
+
+<ul>
+  <li>執行 <code class="highlighter-rouge">phalcon</code> 確認版本 : <code class="highlighter-rouge">Phalcon DevTools (2.0.13)</code></li>
+</ul>
+
+<h2 id="建立專案">建立專案</h2>
+
+<ul>
+  <li>快速建立一個基本的 project : <code class="highlighter-rouge">phalcon create-project store</code>
+    <ul>
+      <li>檢視網頁 : <code class="highlighter-rouge">localhost:[yourport]/store</code></li>
+    </ul>
+  </li>
+  <li>在非 phalcon direction，只能使用 <code class="highlighter-rouge">phalcon project</code> 的指令建立 project 的結構</li>
+  <li>在該 project 下，可以使用其他的指令
+    <ul>
+      <li><code class="highlighter-rouge">phalcon webtools enable</code>
+        <ul>
+          <li>啟用 web 介面的 phalcon 編輯器</li>
+          <li><code class="highlighter-rouge">http://[localhost]/[project_name]/webtools.php</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="資料庫設定">資料庫設定</h2>
+
+<ul>
+  <li>PATH : <code class="highlighter-rouge">store/app/config</code> 中的 config.php
+    <ul>
+      <li>若在 create 專案時，有特別指定使用 <code class="highlighter-rouge">.ini</code> 為其擴展名，才會特別使用。(<code class="highlighter-rouge">--use-config-ini</code>)</li>
+      <li>使用 <code class="highlighter-rouge">phalcon project --help</code> 查詢指令</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="models">models</h2>
+
+<ul>
+  <li>建立模型，目的在於制式化處理某些事情，或者驗證，如每次呼叫模型的某個 method，都希望得到『用戶名稱』</li>
+  <li>建立 model 前，須先把 db 與 schema 建立完成
+    <ul>
+      <li>建立完成後，才可以建立 <code class="highlighter-rouge">phalcon model [model_name]</code>
+        <ul>
+          <li>如果沒有該 table name : [Error: Table “people” does not exist.]</li>
+        </ul>
+      </li>
+      <li>Troubleshoot : <code class="highlighter-rouge">ERROR: SQLSTATE[HY000] [2002] No such file or directory</code>
+        <ul>
+          <li><code class="highlighter-rouge">php --ini</code></li>
+          <li><code class="highlighter-rouge">vim php.ini</code></li>
+          <li>搜尋 <code class="highlighter-rouge">mysql.default_socket</code>
+            <ul>
+              <li>因我使用 mamp 所以填入 : <code class="highlighter-rouge">/Applications/MAMP/tmp/mysql/mysql.sock</code></li>
+              <li>查詢 socket
+                <ul>
+                  <li><code class="highlighter-rouge">mysql -u root -p</code></li>
+                  <li><code class="highlighter-rouge">show variables like '%socket%';</code> 填入該路徑即可</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>在專案的根目錄下 : <code class="highlighter-rouge">phalcon model</code>，有基本的 Usage</li>
+</ul>
+
+<h2 id="scaffold-a-crud">Scaffold a CRUD</h2>
+
+<ul>
+  <li>Phalcon-devtool 可以快速生成整套的 CRUD 框架 : controller / model / view
+    <ul>
+      <li>Notice : 注意 model 產生時，必須要有對應的 table-name</li>
+    </ul>
+  </li>
+  <li><code class="highlighter-rouge">phalcon scaffold --table-name products</code> 會產生
+    <ul>
+      <li>app/controllers/ProductsController.php</li>
+      <li>app/models/Products.php</li>
+      <li>app/views/layout/products.phtml</li>
+      <li>app/views/products/new.phtml</li>
+      <li>app/views/products/edit.phtml</li>
+      <li>app/views/products/search.phtml</li>
+    </ul>
+  </li>
+  <li>在輸入測試資料與其他應用時，可以再進行修改</li>
+</ul>
+
+<h2 id="啟用-webtools">啟用 WebTools</h2>
+
+<ul>
+  <li>透過 web 的介面，進行操作 model / controller</li>
+  <li>路徑 : <code class="highlighter-rouge">http://[localhost:port]/store/webtools.php</code></li>
+  <li>啟用 : <code class="highlighter-rouge">phalcon webtools --action=enable</code></li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/07/11/phalcondevelop-tool/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/phalcon/2016/07/07/Phalcon-basic/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2179,168 +2428,6 @@ myhome/groundfloor/livingroom/brightness
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/05/31/dynamic-programming/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2016/05/31/dynamic-programming/" itemprop="url">
-                Dynamic Programming
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-31T16:18:00+08:00">
-                2016-05-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="動態規劃dynamic-programming">動態規劃(Dynamic Programming)</h1>
-
-<p><a href="http://wangyung.blogspot.tw/2016/05/blog-post.html?utm_content=bufferd71fd&amp;utm_medium=social&amp;utm_source=facebook.com&amp;utm_campaign=buffer">Line 面試</a>
-中有一題，提到『動態規劃』一詞與 Fibonacci 的設計方法</p>
-
-<p>稍微 review 一下，『為何 Fibonacci 中單純用遞迴，效率不高』
-透過『動態規劃』，把每一次計算出的結果 儲存起來，之後重複的運算，就取出之前暫存的(cached)結果即可</p>
-
-<p>感覺有點類似之前在做數據分析時，在 cached 相同，或者相似資料時，所做的處理
-避免重複性的計算，增加程式的效率</p>
-
-<p>Dynamic Programming Approaches:</p>
-<ul>
-  <li>Bottom-Up</li>
-  <li>Top-Down</li>
-</ul>
-
-<p><a href="http://algorithms.tutorialhorizon.com/introduction-to-dynamic-programming-fibonacci-series/">參考資料</a></p>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2016/05/31/dynamic-programming/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2402,7 +2489,7 @@ myhome/groundfloor/livingroom/brightness
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-count">113</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

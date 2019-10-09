@@ -281,6 +281,293 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/php/2016/10/22/PHP-http2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/php/2016/10/22/PHP-http2/" itemprop="url">
+                【PHP】push with http2
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-22T17:05:00+08:00">
+                2016-10-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/PHP" itemprop="url" rel="index">
+                    <span itemprop="name">PHP</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="env">env</h2>
+
+<p>mac, osx , 10.11</p>
+
+<h2 id="config">config</h2>
+
+<ul>
+  <li><code class="highlighter-rouge">php -i</code> , check config :
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>[curl]
+cURL support =&gt; enabled
+cURL Information =&gt; 7.47.1
+...
+HTTP2 =&gt; Yes
+...
+SSL Version =&gt; OpenSSL/1.0.2g
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>if php no include these config, reinstall : <code class="highlighter-rouge">brew install php70 --with-homebrew-curl</code></li>
+</ul>
+
+<h2 id="code">code</h2>
+
+<h3 id="send-method">send method</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48</pre></td><td class="code"><pre class="highlight"><code>/**
+ * @param $http2ch          the curl connection
+ * @param $http2_server     the Apple server url
+ * @param $apple_cert       the path to the certificate
+ * @param $app_bundle_id    the app bundle id
+ * @param $message          the payload to send (JSON)
+ * @param $token            the token of the device
+ * @return mixed            the status code
+ */
+function sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token) {
+
+    // url (endpoint)
+    $url = "{$http2_server}/3/device/{$token}";
+
+    // certificate
+    $cert = realpath($apple_cert);
+
+    // headers
+    $headers = array(
+        "apns-topic: {$app_bundle_id}",
+        "User-Agent: My Sender"
+    );
+
+    // other curl options
+    curl_setopt_array($http2ch, array(
+        CURLOPT_URL =&gt; $url,
+        CURLOPT_PORT =&gt; 443,
+        CURLOPT_HTTPHEADER =&gt; $headers,
+        CURLOPT_POST =&gt; TRUE,
+        CURLOPT_POSTFIELDS =&gt; $message,
+        CURLOPT_RETURNTRANSFER =&gt; TRUE,
+        CURLOPT_TIMEOUT =&gt; 30,
+        CURLOPT_SSL_VERIFYPEER =&gt; false,
+        CURLOPT_SSLCERT =&gt; $cert,
+        CURLOPT_HEADER =&gt; 1
+    ));
+
+    // go...
+    $result = curl_exec($http2ch);
+    if ($result === FALSE) {
+      throw new Exception("Curl failed: " .  curl_error($http2ch));
+    }
+
+    // get response
+    $status = curl_getinfo($http2ch, CURLINFO_HTTP_CODE);
+
+    return $status;
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="use">use</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20</pre></td><td class="code"><pre class="highlight"><code>// this is only needed with php prior to 5.5.24
+if (!defined('CURL_HTTP_VERSION_2_0')) {
+  define('CURL_HTTP_VERSION_2_0', 3);
+}
+// open connection 
+$http2ch = curl_init();
+curl_setopt($http2ch, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_2_0);
+
+// send push
+$apple_cert = '/certificates/samplepush/development.pem';
+$message = '{"aps":{"alert":"Hi!","sound":"default"}}';
+$token = 'dbdaeae86abcde56rtyww1859fb41b2cby053ec48987847';
+$http2_server = 'https://api.development.push.apple.com'; // or 'api.push.apple.com' if production
+$app_bundle_id = 'it.tabasoft.samplepush';
+
+$status = sendHTTP2Push($http2ch, $http2_server, $apple_cert, $app_bundle_id, $message, $token);
+echo "Response from apple -&gt; {$status}\n";
+
+// close connection
+curl_close($http2ch);
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="response">response</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>200 Success
+400 Bad request
+403 There was an error with the certificate.
+405 The request used a bad :method value. Only POST requests are supported.
+410 The device token is no longer active for the topic.
+413 The notification payload was too large.
+429 The server received too many requests for the same device token.
+500 Internal server error
+503 The server is shutting down and unavailable.
+</code></pre></td></tr></tbody></table></div></div>
+
+<h3 id="multi-token-send">multi token send</h3>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code>// open connection
+// send all the pushes
+for ($i = 0; $i &lt; $totSends; $i++) {
+   // send push
+}
+// close connection
+</code></pre></td></tr></tbody></table></div></div>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/php/2016/10/22/PHP-http2/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/redis/2016/10/19/Redis/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2391,251 +2678,6 @@ if (provisioningProfile) {
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/bash/2016/08/24/bash-parse-json-by-jq/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/bash/2016/08/24/bash-parse-json-by-jq/" itemprop="url">
-                【bash】parse json by jq
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-24T17:10:00+08:00">
-                2016-08-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/Bash" itemprop="url" rel="index">
-                    <span itemprop="name">Bash</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="parse-json-by-jq">parse json by jq</h1>
-
-<p><a href="http://xmodulo.com/how-to-parse-json-string-via-command-line-on-linux.html">source from</a></p>
-
-<h2 id="install-on-mac">install on mac</h2>
-
-<ul>
-  <li>mac : <code class="highlighter-rouge">brew install jq</code></li>
-</ul>
-
-<h2 id="install-on-linux">install on linux</h2>
-
-<ul>
-  <li>linux(32bit) : <code class="highlighter-rouge">wget http://stedolan.github.io/jq/download/linux32/jq</code></li>
-  <li>linux(64bit) : <code class="highlighter-rouge">wget http://stedolan.github.io/jq/download/linux64/jq</code></li>
-  <li><code class="highlighter-rouge">chmod +x ./jq</code></li>
-  <li><code class="highlighter-rouge">sudo cp jq /usr/bin</code></li>
-</ul>
-
-<h2 id="example-file">example file</h2>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25</pre></td><td class="code"><pre class="highlight"><code>{
-        "name": "Google",
-        "location":
-                {
-                        "street": "1600 Amphitheatre Parkway",
-                        "city": "Mountain View",
-                        "state": "California",
-                        "country": "US"
-                },
-        "employees":
-                [
-                        {
-                                "name": "Michael",
-                                "division": "Engineering"
-                        },
-                        {
-                                "name": "Laura",
-                                "division": "HR"
-                        },
-                        {
-                                "name": "Elise",
-                                "division": "Marketing"
-                        }
-                ]
-}
-</code></pre></td></tr></tbody></table></div></div>
-
-<h2 id="use">use</h2>
-
-<ul>
-  <li>To parse a JSON object: <code class="highlighter-rouge">cat json.txt | jq '.name'</code>
-    <ul>
-      <li>output : “Google”</li>
-    </ul>
-  </li>
-  <li>To parse a nested JSON object: <code class="highlighter-rouge">cat json.txt | jq '.location.city'</code>
-    <ul>
-      <li>output : “Mountain View”</li>
-    </ul>
-  </li>
-  <li>To parse a JSON array: <code class="highlighter-rouge">cat json.txt | jq '.employees[0].name'</code>
-    <ul>
-      <li>output : “Michael”</li>
-    </ul>
-  </li>
-  <li>To extract specific fields from a JSON object: <code class="highlighter-rouge">cat json.txt | jq '.location | {street, city}'</code>
-    <ul>
-      <li>output :
-        <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>{
-"city": "Mountain View",
-"street": "1600 Amphitheatre Parkway"
-}
-</code></pre></td></tr></tbody></table></div>        </div>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/bash/2016/08/24/bash-parse-json-by-jq/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2697,7 +2739,7 @@ if (provisioningProfile) {
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">112</span>
+                <span class="site-state-item-count">113</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
