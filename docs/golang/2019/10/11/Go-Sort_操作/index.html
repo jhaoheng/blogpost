@@ -109,17 +109,17 @@
 
 
 
-<meta name="description" content="Synopsis https://golang.org/pkg/sort/#Sort sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但差別是官方的 sort.Search() 似乎無法抓到 index=0 (–20191011, 已回報, 原因 uint(i+j), 應該從 0 開始計算才是)">
+<meta name="description" content="Synopsis https://golang.org/pkg/sort/ sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但差別是官方的 sort.Search() 似乎無法抓到 index=0 (–20191011, 已回報, 原因 uint(i+j), 應該從 0 開始計算才是)">
 <meta name="keywords" content="Golang">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Go】Sort 操作">
 <meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/11/Go-Sort_%E6%93%8D%E4%BD%9C/">
 <meta property="og:site_name" content="MAX 呼~">
-<meta property="og:description" content="Synopsis https://golang.org/pkg/sort/#Sort sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但差別是官方的 sort.Search() 似乎無法抓到 index=0 (–20191011, 已回報, 原因 uint(i+j), 應該從 0 開始計算才是)">
+<meta property="og:description" content="Synopsis https://golang.org/pkg/sort/ sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但差別是官方的 sort.Search() 似乎無法抓到 index=0 (–20191011, 已回報, 原因 uint(i+j), 應該從 0 開始計算才是)">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Go】Sort 操作">
-<meta name="twitter:description" content="Synopsis https://golang.org/pkg/sort/#Sort sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但差別是官方的 sort.Search() 似乎無法抓到 index=0 (–20191011, 已回報, 原因 uint(i+j), 應該從 0 開始計算才是)">
+<meta name="twitter:description" content="Synopsis https://golang.org/pkg/sort/ sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但差別是官方的 sort.Search() 似乎無法抓到 index=0 (–20191011, 已回報, 原因 uint(i+j), 應該從 0 開始計算才是)">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -393,7 +393,7 @@
 
   <h1 id="synopsis">Synopsis</h1>
 <blockquote>
-  <p>https://golang.org/pkg/sort/#Sort</p>
+  <p>https://golang.org/pkg/sort/</p>
 </blockquote>
 
 <ul>
