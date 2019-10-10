@@ -281,6 +281,360 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/12/phalcondi/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/07/12/phalcondi/" itemprop="url">
+                【phalcon】Di
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-12T13:24:00+08:00">
+                2016-07-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="dependency-injectionservice-location">Dependency Injection/Service Location</h1>
+
+<ul>
+  <li><code class="highlighter-rouge">Phalcon\Di</code> 是一個實現 <code class="highlighter-rouge">Dependency Injection/Service Location</code> 的組件，而且它本身就是一個裝載它們的容器。</li>
+  <li>透過 <code class="highlighter-rouge">Phalcon\Di</code> 可以註冊許多的服務，放在 Di 中，也可以透過 Di 進行傳遞參數的行為
+    <ul>
+      <li>可以很容易的使用自己建立的組件，或者第三方組件，還有進行替換的動作
+        <ul>
+          <li>ex : 替換掉 db 的 config 連線資訊</li>
+        </ul>
+      </li>
+      <li>支援『延遲加載』：主要就是等到需要用到的時候，才會進行加載的行為，使用方法可參考官方文件</li>
+    </ul>
+  </li>
+  <li>可在 Class <code class="highlighter-rouge">Phalcon\Di</code> 中查看 methods</li>
+  <li>FactoryDefault 是延伸 class <code class="highlighter-rouge">Phalcon\Di</code>，也可以從 Phalcon/Di 中自己建立自己的 Di
+    <ul>
+      <li>底下有介紹</li>
+    </ul>
+  </li>
+  <li>FactoryDefault 作為一個 Di 的延伸，並且預載了許多已經加入過的服務
+    <ul>
+      <li>若不想要預載過多服務，則直接使用 Di 把需要的服務手動加載進去</li>
+    </ul>
+  </li>
+  <li>要看很多範例關於 Di 的設定的話，可參考 https://github.com/phalcon?tab=repositories</li>
+</ul>
+
+<h2 id="初始化-di">初始化 Di</h2>
+
+<ul>
+  <li>初始化後，才可以使用 Di set 與 get
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Di
+$di = new Phalcon\Di();
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>初始化後，若要在 mvc 或者其他的控制器中使用該 Di
+    <ul>
+      <li>ex1 : MVC，可用 phalcon-devtools 建立一個 Project 與 Scaffold 可看到範例
+        <ul>
+          <li><code class="highlighter-rouge">$application = new \Phalcon\Mvc\Application($di);</code></li>
+        </ul>
+      </li>
+      <li>並 <code class="highlighter-rouge">echo $application-&gt;handle()-&gt;getContent();</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="註冊服務">註冊服務</h2>
+
+<ul>
+  <li>第一種
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>$di-&gt;set('request', 'Phalcon\Http\Request');
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>第二種
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Http\Request;  
+$di-&gt;set('request', new Request());
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>第三種：通過外部參數 <code class="highlighter-rouge">$config</code> 變更 di 中的設定。透過 use 協助
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Db\Adapter\Pdo\Mysql as PdoMysql;
+// 把當前域的$config變量傳遞給匿名函數使用
+$di-&gt;set("db", function () use ($config) {
+  return new PdoMysql(
+      array(
+          "host"     =&gt; $config-&gt;host,
+          "username" =&gt; $config-&gt;username,
+          "password" =&gt; $config-&gt;password,
+          "dbname"   =&gt; $config-&gt;name
+      )
+  );
+});
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>其他還有 : 範例至官方參考
+    <ul>
+      <li>如果要求不用實例化/解析服務，就可以改變定義服務的話，我們需要使用數組的方式去定義服務。</li>
+      <li>Constructor Injection</li>
+      <li>Setter Injection</li>
+      <li>Properties Injection</li>
+    </ul>
+  </li>
+  <li>所有的都是服務註冊，有比較簡易的註冊方式，也有複雜（詳細）的設定方法</li>
+</ul>
+
+<h2 id="從-di-中取回服務">從 di 中取回服務</h2>
+
+<ul>
+  <li>在 di 中設定好 request
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>$di = new Phalcon\Di();
+$di-&gt;set("request", 'Phalcon\Http\Request'); // 第一個參數是『類別名稱』，第二個是『definition』
+// use Phalcon\Http\Request; 使用這兩種方式建立服務也行
+// $di-&gt;set("request", new Request()); 
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li><code class="highlighter-rouge">&lt;?php $request = $di-&gt;get("request");</code> or <code class="highlighter-rouge">$request = $di-&gt;getRequest();</code></li>
+  <li>通過容器的方式傳遞參數
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1</pre></td><td class="code"><pre class="highlight"><code>$component = $di-&gt;get("MyComponent", array("some-parameter", "other"));
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+</ul>
+
+<h2 id="共享服務shared-services">共享服務（Shared services）</h2>
+<ul>
+  <li><code class="highlighter-rouge">setShared</code> : 意指可以被註冊成 共享，意味被解析後，此實例將被保存在系統中，每次請求都可以從系統中找回，無需從新註冊或者重新解析
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Session\Adapter\Files as SessionFiles;
+// 把session服務註冊成「shared」類型
+$di-&gt;setShared('session', function () {
+  $session = new SessionFiles();
+  $session-&gt;start();
+  return $session;
+});
+$session = $di-&gt;get('session'); // 第一次獲取session服務時，session服務將實例化
+$session = $di-&gt;getSession();   // 第二次獲取時，不再實例化，直接返回第一次實例化的對象
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>如果服務註冊時，並非註冊成 shared 時，又想從 Di 中獲取 shared 的 instance，可使用 <code class="highlighter-rouge">getShared</code>
+    <ul>
+      <li>意指，若以註冊成 shared 類型時，則使用 get 即可</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="manipulating-services-individually">Manipulating services individually</h2>
+<p>這邊的 <code class="highlighter-rouge">resolve()</code> 方法不知從哪邊定義，找了 di 沒發現到
+目前正在請教 gitter 的群組</p>
+
+<h2 id="將-未註冊的服務-從-di-中取出">將 未註冊的服務 從 Di 中取出</h2>
+
+<ul>
+  <li>當服務尚未被註冊時（Di 找不到相同名稱的服務），則可以在當下設定該服務
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>$di-&gt;set('IndexController', function () {
+  $component = new Component();
+  return $component;
+}, true);
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>通過此方法，可以隨意註冊一個沒有被定義過的服務，甚至有同樣的服務內容，卻用不同的服務名稱
+    <ul>
+      <li>A 有 abc 服務</li>
+      <li>B 有 abc 服務</li>
+      <li>但 A 與 B 裝的資訊內容可能不同，如 db config</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="在類別或組件-自動注入-di">在類別或組件 自動注入 Di</h2>
+<ul>
+  <li>當類別或組件，本身需要用到 Di 的服務時，可直接在該類別或者組件中，導入 Di 的服務，不用在外部引入該類別或組件</li>
+</ul>
+
+<h2 id="利用-di-來避免服務重複的解析">利用 Di 來避免服務重複的解析</h2>
+<ul>
+  <li>某些服務應用於每次的 request，如此可能會產生重複的解析，故放入 Di 前，先解析一次後，再放入 Di 中，可稍微提升效能
+    <ul>
+      <li>ex : <code class="highlighter-rouge">$router = new MyRouter();</code></li>
+    </ul>
+  </li>
+  <li>通過 Di 的服務設定，就不用重新再 new 一次（把已解析的對象設置到註冊服務中）
+    <ul>
+      <li>ex : <code class="highlighter-rouge">$di-&gt;set('router', $router);</code></li>
+      <li>ex : <code class="highlighter-rouge">$di-&gt;get('router');</code></li>
+    </ul>
+  </li>
+  <li>Q:不確定這種方式跟 <code class="highlighter-rouge">shared</code> 差別倒底在哪</li>
+</ul>
+
+<h2 id="使用文件方式定義服務organizing-services-in-files">使用文件方式定義服務(Organizing services in files)</h2>
+
+<ul>
+  <li>透過獨立的文件，設定服務內容
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>$di-&gt;set('router', function () {
+  return include "../app/config/routes.php";
+});
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>在 routes.php 中
+    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>$router = new MyRouter();
+$router-&gt;post('/login');
+return $router;
+</code></pre></td></tr></tbody></table></div>    </div>
+  </li>
+  <li>使用此方式，可以簡化需設定的服務內容</li>
+</ul>
+
+<h2 id="使用靜態方法存取-diaccessing-the-di-in-a-static-way">使用靜態方法存取 Di（Accessing the DI in a static way）</h2>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2</pre></td><td class="code"><pre class="highlight"><code>use Phalcon\Di;
+$session = Di::getDefault()-&gt;getSession();
+</code></pre></td></tr></tbody></table></div></div>
+
+<h2 id="factory-default-di">Factory Default DI</h2>
+
+<ul>
+  <li>這是一開始所提到的 FactoryDefault</li>
+  <li>這個服務器擴展了 <code class="highlighter-rouge">Phalcon\Di </code>，會自動註冊相應的服務</li>
+  <li>the developer does not need to register each service individually.</li>
+</ul>
+
+<h2 id="預設的服務名稱">預設的服務名稱</h2>
+
+<ul>
+  <li><a href="https://docs.phalconphp.com/zh/latest/reference/di.html#service-name-conventions">預設名稱</a></li>
+</ul>
+
+<h2 id="自定義自己的-di">自定義自己的 Di</h2>
+
+<ul>
+  <li>Phalcon\DiInterface 必須被實現</li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/07/12/phalcondi/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/07/11/phalcondevelop-tool/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2203,231 +2557,6 @@ myhome/groundfloor/livingroom/brightness
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/xcode%20ios/2016/06/13/xcodecreate-framework/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/xcode%20ios/2016/06/13/xcodecreate-framework/" itemprop="url">
-                【xcode】create framework
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-13T06:18:00+08:00">
-                2016-06-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/xcode%20ios" itemprop="url" rel="index">
-                    <span itemprop="name">xcode ios</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h2 id="why">Why</h2>
-
-<p>直接在 xcode 中，產生出適合 <code class="highlighter-rouge">armv7 -arch armv7s</code> 與 <code class="highlighter-rouge">x86_64</code> 的 framework
-若透過預設的方法產出，會有兩種版本，必須再使用 <code class="highlighter-rouge">lipo create</code> 進行合併
-此方法是透過 script 在 compile 時，直接進行 build 與 <code class="highlighter-rouge">lipo create</code> 的動作</p>
-
-<h3 id="基本設定">基本設定</h3>
-<ol>
-  <li>設置靜態庫，將 Mach-o type 從動態設定為 Static Library
-    <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>|-MyFirstFramework
- |-TARGETS
-  	|-Build Settings
- 	|-Linking
-   	|-Mach-o Type
-</code></pre></td></tr></tbody></table></div>    </div>
-  </li>
-</ol>
-
-<h2 id="how">How</h2>
-
-<ol>
-  <li>
-    <p>open xcode and select [Framework &amp; Library] -&gt; [Cocoa Touch Framework]</p>
-  </li>
-  <li>Build Phases
-    <ul>
-      <li>Target Dependencies</li>
-      <li><a href="http://stackoverflow.com/questions/17198185/what-is-the-purpose-of-compile-sources-in-xcode">Compile Sources</a></li>
-      <li><a href="https://developer.apple.com/library/ios/recipes/xcode_help-project_editor/Articles/AddingaLibrarytoaTarget.html">Link Binary With Library</a>
-        <ul>
-          <li>連接使用其他 framework</li>
-        </ul>
-      </li>
-      <li>Headers
-        <ul>
-          <li>讓 framework 中的檔案開放程度</li>
-        </ul>
-      </li>
-      <li>Copy Bundle Resources
-        <ul>
-          <li>要使用的 bundle 物件檔</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>產生 framework x2（真機運行與模擬機運行）
-    <ul>
-      <li>要注意的是 xxx-name.framework，只是一包資料夾，要進行合併的是底下的 [xxx-name] 
-      - 真機路徑(path_1) : Debug-iphoneos/[name].framework/[name]
-      - 模擬機路徑(path_2) : Debug-iphonesimulator/[name].framework/[name]
-      - <code class="highlighter-rouge">lipo -create path_1 path_2 -output [name]</code>
-      - 產生出的 name 為執行檔，copy <code class="highlighter-rouge">Debug-iphoneos/[name].framework</code> 到適當位置
-      - 將剛剛產生出的 [name]，取代掉上一行 framwork 中原本的 [name]
-      - <code class="highlighter-rouge">lipo -info [name]</code>
-      - 將整包調整過後的 framework 放入 xcode 測試</li>
-    </ul>
-  </li>
-</ol>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/xcode%20ios/2016/06/13/xcodecreate-framework/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2489,7 +2618,7 @@ myhome/groundfloor/livingroom/brightness
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">113</span>
+                <span class="site-state-item-count">114</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

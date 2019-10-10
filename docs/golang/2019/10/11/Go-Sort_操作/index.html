@@ -1,0 +1,977 @@
+
+<!doctype html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/blogpost/assets/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/blogpost/assets/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Golang," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/blogpost/assets/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Synopsis https://golang.org/pkg/sort/#Sort sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但差別是官方的 sort.Search() 似乎無法抓到 index=0 (–20191011, 已回報, 原因 uint(i+j), 應該從 0 開始計算才是) Int Sort package main import ( &quot;fmt&quot; &quot;sort&quot; ) func main() { ints := []int{9, 3, 7, 2, 1} fmt.Println(&quot;Origin :&quot;, ints, &quot;Is Ints sort? &quot;, sort.IntsAreSorted(ints)) sort.Ints(ints) fmt.Println(&quot;Sorted :&quot;, ints, &quot;Is Ints sort? &quot;, sort.IntsAreSorted(ints)) // search fmt.Println(&quot;Find arg=3 at index :&quot;, sort.SearchInts(ints, 3)) // reverse sort.Sort(sort.Reverse(sort.IntSlice(ints))) fmt.Println(&quot;Reverse =&amp;gt; &quot;, ints) } String Sort package main import ( &quot;fmt&quot; &quot;sort&quot; ) var names = []string{ &quot;max&quot;, &quot;LBJ&quot;, &quot;Kobe&quot;, } func main() { fmt.Println(&quot;Origin :&quot;, names, &quot;, isSorted:&quot;, sort.StringsAreSorted(names)) sort.Strings(names) fmt.Println(&quot;Sorted :&quot;, names, &quot;, isSorted:&quot;, sort.StringsAreSorted(names)) // search fmt.Println(&quot;Find &apos;max&apos; at index is :&quot;, sort.SearchStrings(names, &quot;max&quot;)) // reverse sort.Sort(sort.Reverse(sort.StringSlice(names))) fmt.Println(&quot;Reversed :&quot;, names) } Customized sort package main import ( &quot;fmt&quot; &quot;reflect&quot; &quot;sort&quot; ) type Person struct { Name string Age int } var people = []Person{ Person{ Name: &quot;zig&quot;, Age: 40, }, Person{ Name: &quot;max&quot;, Age: 19, }, Person{ Name: &quot;sunny&quot;, Age: 18, }, } // type ByAge []Person func (a ByAge) Len() int { return len(a) } func (a ByAge) Swap(i, j int) { a[i], a[j] = a[j], a[i] } func (a ByAge) Less(i, j int) bool { return a[i].Age &amp;lt; a[j].Age } // type ByName []Person func (a ByName) Len() int { return len(a) } func (a ByName) Swap(i, j int) { a[i], a[j] = a[j], a[i] } func (a ByName) Less(i, j int) bool { return a[i].Name &amp;lt; a[j].Name } func main() { fmt.Println(reflect.TypeOf(people)) fmt.Println(reflect.TypeOf(ByAge(people))) fmt.Println(reflect.TypeOf(ByName(people))) fmt.Println() // sort age fmt.Println(&quot;Origin :&quot;, people) a := ByAge(people) sort.Sort(a) fmt.Println(&quot;Sort AGE :&quot;, a, &quot;, isSorted?&quot;, sort.IsSorted(a)) // sort name b := ByName(people) sort.Sort(b) fmt.Println(&quot;Sort NAME :&quot;, b, &quot;, isSorted?&quot;, sort.IsSorted(b)) // search obj := &quot;sunny&quot; fmt.Printf(&quot;Search Nmae = %s, and &quot;, obj) i := Search(3, func(i int) bool { if b[i].Name == obj { return true } return false }) if i &amp;lt; len(b) &amp;amp;&amp;amp; b[i].Name == obj { fmt.Printf(&quot;found %v at %d &quot;, obj, i) } else { fmt.Printf(&quot;not found &quot;) } // reserve sort.Sort(sort.Reverse(b)) fmt.Println(&quot;Reserve =&amp;gt;&quot;, b) } func Search(n int, f func(int) bool) int { i, j := 0, n for i &amp;lt; j { if !f(i) { i = i + 1 } else { j = i } } return i }">
+<meta name="keywords" content="Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Go】Sort 操作">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/11/Go-Sort_%E6%93%8D%E4%BD%9C/">
+<meta property="og:site_name" content="MAX 呼~">
+<meta property="og:description" content="Synopsis https://golang.org/pkg/sort/#Sort sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但差別是官方的 sort.Search() 似乎無法抓到 index=0 (–20191011, 已回報, 原因 uint(i+j), 應該從 0 開始計算才是) Int Sort package main import ( &quot;fmt&quot; &quot;sort&quot; ) func main() { ints := []int{9, 3, 7, 2, 1} fmt.Println(&quot;Origin :&quot;, ints, &quot;Is Ints sort? &quot;, sort.IntsAreSorted(ints)) sort.Ints(ints) fmt.Println(&quot;Sorted :&quot;, ints, &quot;Is Ints sort? &quot;, sort.IntsAreSorted(ints)) // search fmt.Println(&quot;Find arg=3 at index :&quot;, sort.SearchInts(ints, 3)) // reverse sort.Sort(sort.Reverse(sort.IntSlice(ints))) fmt.Println(&quot;Reverse =&amp;gt; &quot;, ints) } String Sort package main import ( &quot;fmt&quot; &quot;sort&quot; ) var names = []string{ &quot;max&quot;, &quot;LBJ&quot;, &quot;Kobe&quot;, } func main() { fmt.Println(&quot;Origin :&quot;, names, &quot;, isSorted:&quot;, sort.StringsAreSorted(names)) sort.Strings(names) fmt.Println(&quot;Sorted :&quot;, names, &quot;, isSorted:&quot;, sort.StringsAreSorted(names)) // search fmt.Println(&quot;Find &apos;max&apos; at index is :&quot;, sort.SearchStrings(names, &quot;max&quot;)) // reverse sort.Sort(sort.Reverse(sort.StringSlice(names))) fmt.Println(&quot;Reversed :&quot;, names) } Customized sort package main import ( &quot;fmt&quot; &quot;reflect&quot; &quot;sort&quot; ) type Person struct { Name string Age int } var people = []Person{ Person{ Name: &quot;zig&quot;, Age: 40, }, Person{ Name: &quot;max&quot;, Age: 19, }, Person{ Name: &quot;sunny&quot;, Age: 18, }, } // type ByAge []Person func (a ByAge) Len() int { return len(a) } func (a ByAge) Swap(i, j int) { a[i], a[j] = a[j], a[i] } func (a ByAge) Less(i, j int) bool { return a[i].Age &amp;lt; a[j].Age } // type ByName []Person func (a ByName) Len() int { return len(a) } func (a ByName) Swap(i, j int) { a[i], a[j] = a[j], a[i] } func (a ByName) Less(i, j int) bool { return a[i].Name &amp;lt; a[j].Name } func main() { fmt.Println(reflect.TypeOf(people)) fmt.Println(reflect.TypeOf(ByAge(people))) fmt.Println(reflect.TypeOf(ByName(people))) fmt.Println() // sort age fmt.Println(&quot;Origin :&quot;, people) a := ByAge(people) sort.Sort(a) fmt.Println(&quot;Sort AGE :&quot;, a, &quot;, isSorted?&quot;, sort.IsSorted(a)) // sort name b := ByName(people) sort.Sort(b) fmt.Println(&quot;Sort NAME :&quot;, b, &quot;, isSorted?&quot;, sort.IsSorted(b)) // search obj := &quot;sunny&quot; fmt.Printf(&quot;Search Nmae = %s, and &quot;, obj) i := Search(3, func(i int) bool { if b[i].Name == obj { return true } return false }) if i &amp;lt; len(b) &amp;amp;&amp;amp; b[i].Name == obj { fmt.Printf(&quot;found %v at %d &quot;, obj, i) } else { fmt.Printf(&quot;not found &quot;) } // reserve sort.Sort(sort.Reverse(b)) fmt.Println(&quot;Reserve =&amp;gt;&quot;, b) } func Search(n int, f func(int) bool) int { i, j := 0, n for i &amp;lt; j { if !f(i) { i = i + 1 } else { j = i } } return i }">
+<meta property="og:locale" content="en">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【Go】Sort 操作">
+<meta name="twitter:description" content="Synopsis https://golang.org/pkg/sort/#Sort sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但差別是官方的 sort.Search() 似乎無法抓到 index=0 (–20191011, 已回報, 原因 uint(i+j), 應該從 0 開始計算才是) Int Sort package main import ( &quot;fmt&quot; &quot;sort&quot; ) func main() { ints := []int{9, 3, 7, 2, 1} fmt.Println(&quot;Origin :&quot;, ints, &quot;Is Ints sort? &quot;, sort.IntsAreSorted(ints)) sort.Ints(ints) fmt.Println(&quot;Sorted :&quot;, ints, &quot;Is Ints sort? &quot;, sort.IntsAreSorted(ints)) // search fmt.Println(&quot;Find arg=3 at index :&quot;, sort.SearchInts(ints, 3)) // reverse sort.Sort(sort.Reverse(sort.IntSlice(ints))) fmt.Println(&quot;Reverse =&amp;gt; &quot;, ints) } String Sort package main import ( &quot;fmt&quot; &quot;sort&quot; ) var names = []string{ &quot;max&quot;, &quot;LBJ&quot;, &quot;Kobe&quot;, } func main() { fmt.Println(&quot;Origin :&quot;, names, &quot;, isSorted:&quot;, sort.StringsAreSorted(names)) sort.Strings(names) fmt.Println(&quot;Sorted :&quot;, names, &quot;, isSorted:&quot;, sort.StringsAreSorted(names)) // search fmt.Println(&quot;Find &apos;max&apos; at index is :&quot;, sort.SearchStrings(names, &quot;max&quot;)) // reverse sort.Sort(sort.Reverse(sort.StringSlice(names))) fmt.Println(&quot;Reversed :&quot;, names) } Customized sort package main import ( &quot;fmt&quot; &quot;reflect&quot; &quot;sort&quot; ) type Person struct { Name string Age int } var people = []Person{ Person{ Name: &quot;zig&quot;, Age: 40, }, Person{ Name: &quot;max&quot;, Age: 19, }, Person{ Name: &quot;sunny&quot;, Age: 18, }, } // type ByAge []Person func (a ByAge) Len() int { return len(a) } func (a ByAge) Swap(i, j int) { a[i], a[j] = a[j], a[i] } func (a ByAge) Less(i, j int) bool { return a[i].Age &amp;lt; a[j].Age } // type ByName []Person func (a ByName) Len() int { return len(a) } func (a ByName) Swap(i, j int) { a[i], a[j] = a[j], a[i] } func (a ByName) Less(i, j int) bool { return a[i].Name &amp;lt; a[j].Name } func main() { fmt.Println(reflect.TypeOf(people)) fmt.Println(reflect.TypeOf(ByAge(people))) fmt.Println(reflect.TypeOf(ByName(people))) fmt.Println() // sort age fmt.Println(&quot;Origin :&quot;, people) a := ByAge(people) sort.Sort(a) fmt.Println(&quot;Sort AGE :&quot;, a, &quot;, isSorted?&quot;, sort.IsSorted(a)) // sort name b := ByName(people) sort.Sort(b) fmt.Println(&quot;Sort NAME :&quot;, b, &quot;, isSorted?&quot;, sort.IsSorted(b)) // search obj := &quot;sunny&quot; fmt.Printf(&quot;Search Nmae = %s, and &quot;, obj) i := Search(3, func(i int) bool { if b[i].Name == obj { return true } return false }) if i &amp;lt; len(b) &amp;amp;&amp;amp; b[i].Name == obj { fmt.Printf(&quot;found %v at %d &quot;, obj, i) } else { fmt.Printf(&quot;not found &quot;) } // reserve sort.Sort(sort.Reverse(b)) fmt.Println(&quot;Reserve =&amp;gt;&quot;, b) } func Search(n int, f func(int) bool) int { i, j := 0, n for i &amp;lt; j { if !f(i) { i = i + 1 } else { j = i } } return i }">
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/blogpost',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://jhaoheng.github.io/blogpost/blogpost"/>
+
+
+
+
+
+  <title>【Go】Sort 操作 | MAX 呼~</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"> <div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/blogpost/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">MAX 呼~</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Spare No Effort, Leave No Regret</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+        <li class="menu-item menu-item-home">
+          <a href="/blogpost/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/blogpost/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/blogpost/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+<div id="posts" class="posts-expand">
+  
+  
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/11/Go-Sort_%E6%93%8D%E4%BD%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            【Go】Sort 操作
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-11T01:17:00+08:00">
+                2019-10-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+            
+                <div class="post-description">
+                    
+                </div>
+            
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="synopsis">Synopsis</h1>
+<blockquote>
+  <p>https://golang.org/pkg/sort/#Sort</p>
+</blockquote>
+
+<ul>
+  <li>sort package 預設好 int, float, string 的 sort/reverse/search 等功能</li>
+  <li>若要客製化，則必須
+    <ul>
+      <li>自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序</li>
+      <li>建立 type, ex:
+        <ul>
+          <li><code class="highlighter-rouge">type Person struct{}</code></li>
+          <li><code class="highlighter-rouge">type ByAge []Person</code></li>
+        </ul>
+      </li>
+      <li>最下方有簡易範例，但差別是官方的 sort.Search() 似乎無法抓到 index=0 (–20191011, 已回報, 原因 <code class="highlighter-rouge">uint(i+j)</code>, 應該從 0 開始計算才是)</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="int-sort">Int Sort</h1>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20</pre></td><td class="code"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="n">import</span> <span class="p">(</span>
+	<span class="s2">"fmt"</span>
+	<span class="s2">"sort"</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">ints</span> <span class="p">:=</span> <span class="p">[]</span><span class="n">int</span><span class="p">{</span><span class="m">9</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">7</span><span class="p">,</span> <span class="m">2</span><span class="p">,</span> <span class="m">1</span><span class="p">}</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"Origin :"</span><span class="p">,</span> <span class="n">ints</span><span class="p">,</span> <span class="s2">"Is Ints sort? "</span><span class="p">,</span> <span class="n">sort</span><span class="p">.</span><span class="n">IntsAreSorted</span><span class="p">(</span><span class="n">ints</span><span class="p">))</span>
+	<span class="n">sort</span><span class="p">.</span><span class="n">Ints</span><span class="p">(</span><span class="n">ints</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"Sorted :"</span><span class="p">,</span> <span class="n">ints</span><span class="p">,</span> <span class="s2">"Is Ints sort? "</span><span class="p">,</span> <span class="n">sort</span><span class="p">.</span><span class="n">IntsAreSorted</span><span class="p">(</span><span class="n">ints</span><span class="p">))</span>
+
+	<span class="p">//</span> <span class="n">search</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"Find arg=3 at index :"</span><span class="p">,</span> <span class="n">sort</span><span class="p">.</span><span class="n">SearchInts</span><span class="p">(</span><span class="n">ints</span><span class="p">,</span> <span class="m">3</span><span class="p">))</span>
+
+	<span class="p">//</span> <span class="nb">reverse</span>
+	<span class="n">sort</span><span class="p">.</span><span class="n">Sort</span><span class="p">(</span><span class="n">sort</span><span class="p">.</span><span class="n">Reverse</span><span class="p">(</span><span class="n">sort</span><span class="p">.</span><span class="n">IntSlice</span><span class="p">(</span><span class="n">ints</span><span class="p">)))</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"Reverse =&gt; "</span><span class="p">,</span> <span class="n">ints</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="string-sort">String Sort</h1>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26</pre></td><td class="code"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="n">import</span> <span class="p">(</span>
+	<span class="s2">"fmt"</span>
+	<span class="s2">"sort"</span>
+<span class="p">)</span>
+
+<span class="n">var</span> <span class="n">names</span> <span class="p">=</span> <span class="p">[]</span><span class="k">string</span><span class="p">{</span>
+	<span class="s2">"max"</span><span class="p">,</span>
+	<span class="s2">"LBJ"</span><span class="p">,</span>
+	<span class="s2">"Kobe"</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"Origin :"</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="s2">", isSorted:"</span><span class="p">,</span> <span class="n">sort</span><span class="p">.</span><span class="n">StringsAreSorted</span><span class="p">(</span><span class="n">names</span><span class="p">))</span>
+	<span class="n">sort</span><span class="p">.</span><span class="n">Strings</span><span class="p">(</span><span class="n">names</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"Sorted :"</span><span class="p">,</span> <span class="n">names</span><span class="p">,</span> <span class="s2">", isSorted:"</span><span class="p">,</span> <span class="n">sort</span><span class="p">.</span><span class="n">StringsAreSorted</span><span class="p">(</span><span class="n">names</span><span class="p">))</span>
+
+	<span class="p">//</span> <span class="n">search</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"Find 'max' at index is :"</span><span class="p">,</span> <span class="n">sort</span><span class="p">.</span><span class="n">SearchStrings</span><span class="p">(</span><span class="n">names</span><span class="p">,</span> <span class="s2">"max"</span><span class="p">))</span>
+
+	<span class="p">//</span> <span class="nb">reverse</span>
+	<span class="n">sort</span><span class="p">.</span><span class="n">Sort</span><span class="p">(</span><span class="n">sort</span><span class="p">.</span><span class="n">Reverse</span><span class="p">(</span><span class="n">sort</span><span class="p">.</span><span class="n">StringSlice</span><span class="p">(</span><span class="n">names</span><span class="p">)))</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"Reversed :"</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span>
+
+<span class="p">}</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="customized-sort">Customized sort</h1>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48<br/>49<br/>50<br/>51<br/>52<br/>53<br/>54<br/>55<br/>56<br/>57<br/>58<br/>59<br/>60<br/>61<br/>62<br/>63<br/>64<br/>65<br/>66<br/>67<br/>68<br/>69<br/>70<br/>71<br/>72<br/>73<br/>74<br/>75<br/>76<br/>77<br/>78<br/>79<br/>80<br/>81<br/>82<br/>83<br/>84<br/>85<br/>86<br/>87<br/>88<br/>89<br/>90<br/>91</pre></td><td class="code"><pre class="highlight"><code><span class="k">package</span> <span class="n">main</span>
+
+<span class="n">import</span> <span class="p">(</span>
+	<span class="s2">"fmt"</span>
+	<span class="s2">"reflect"</span>
+	<span class="s2">"sort"</span>
+<span class="p">)</span>
+
+<span class="n">type</span> <span class="n">Person</span> <span class="n">struct</span> <span class="p">{</span>
+	<span class="n">Name</span> <span class="k">string</span>
+	<span class="n">Age</span>  <span class="n">int</span>
+<span class="p">}</span>
+
+<span class="n">var</span> <span class="n">people</span> <span class="p">=</span> <span class="p">[]</span><span class="n">Person</span><span class="p">{</span>
+	<span class="n">Person</span><span class="p">{</span>
+		<span class="n">Name</span><span class="p">:</span> <span class="s2">"zig"</span><span class="p">,</span>
+		<span class="n">Age</span><span class="p">:</span>  <span class="m">40</span><span class="p">,</span>
+	<span class="p">},</span>
+	<span class="n">Person</span><span class="p">{</span>
+		<span class="n">Name</span><span class="p">:</span> <span class="s2">"max"</span><span class="p">,</span>
+		<span class="n">Age</span><span class="p">:</span>  <span class="m">19</span><span class="p">,</span>
+	<span class="p">},</span>
+	<span class="n">Person</span><span class="p">{</span>
+		<span class="n">Name</span><span class="p">:</span> <span class="s2">"sunny"</span><span class="p">,</span>
+		<span class="n">Age</span><span class="p">:</span>  <span class="m">18</span><span class="p">,</span>
+	<span class="p">},</span>
+<span class="p">}</span>
+
+<span class="p">//</span>
+<span class="n">type</span> <span class="n">ByAge</span> <span class="p">[]</span><span class="n">Person</span>
+
+<span class="n">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">ByAge</span><span class="p">)</span> <span class="n">Len</span><span class="p">()</span> <span class="n">int</span>           <span class="p">{</span> <span class="n">return</span> <span class="n">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">}</span>
+<span class="n">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">ByAge</span><span class="p">)</span> <span class="n">Swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="n">int</span><span class="p">)</span>      <span class="p">{</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">}</span>
+<span class="n">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">ByAge</span><span class="p">)</span> <span class="n">Less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="n">int</span><span class="p">)</span> <span class="n">bool</span> <span class="p">{</span> <span class="n">return</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Age</span> <span class="p">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">Age</span> <span class="p">}</span>
+
+<span class="p">//</span>
+<span class="n">type</span> <span class="n">ByName</span> <span class="p">[]</span><span class="n">Person</span>
+
+<span class="n">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">ByName</span><span class="p">)</span> <span class="n">Len</span><span class="p">()</span> <span class="n">int</span>           <span class="p">{</span> <span class="n">return</span> <span class="n">len</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="p">}</span>
+<span class="n">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">ByName</span><span class="p">)</span> <span class="n">Swap</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="n">int</span><span class="p">)</span>      <span class="p">{</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="p">=</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">}</span>
+<span class="n">func</span> <span class="p">(</span><span class="n">a</span> <span class="n">ByName</span><span class="p">)</span> <span class="n">Less</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="n">int</span><span class="p">)</span> <span class="n">bool</span> <span class="p">{</span> <span class="n">return</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Name</span> <span class="p">&lt;</span> <span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">].</span><span class="n">Name</span> <span class="p">}</span>
+
+<span class="n">func</span> <span class="n">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="n">reflect</span><span class="p">.</span><span class="n">TypeOf</span><span class="p">(</span><span class="n">people</span><span class="p">))</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="n">reflect</span><span class="p">.</span><span class="n">TypeOf</span><span class="p">(</span><span class="n">ByAge</span><span class="p">(</span><span class="n">people</span><span class="p">)))</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="n">reflect</span><span class="p">.</span><span class="n">TypeOf</span><span class="p">(</span><span class="n">ByName</span><span class="p">(</span><span class="n">people</span><span class="p">)))</span>
+
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">()</span>
+
+	<span class="p">//</span> <span class="n">sort</span> <span class="n">age</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"Origin :"</span><span class="p">,</span> <span class="n">people</span><span class="p">)</span>
+	<span class="n">a</span> <span class="p">:=</span> <span class="n">ByAge</span><span class="p">(</span><span class="n">people</span><span class="p">)</span>
+	<span class="n">sort</span><span class="p">.</span><span class="n">Sort</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"Sort AGE :"</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="s2">", isSorted?"</span><span class="p">,</span> <span class="n">sort</span><span class="p">.</span><span class="n">IsSorted</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
+
+	<span class="p">//</span> <span class="n">sort</span> <span class="n">name</span>
+	<span class="n">b</span> <span class="p">:=</span> <span class="n">ByName</span><span class="p">(</span><span class="n">people</span><span class="p">)</span>
+	<span class="n">sort</span><span class="p">.</span><span class="n">Sort</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"Sort NAME :"</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="s2">", isSorted?"</span><span class="p">,</span> <span class="n">sort</span><span class="p">.</span><span class="n">IsSorted</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+
+	<span class="p">//</span> <span class="n">search</span>
+	<span class="n">obj</span> <span class="p">:=</span> <span class="s2">"sunny"</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">"Search Nmae = %s, and "</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+	<span class="n">i</span> <span class="p">:=</span> <span class="n">Search</span><span class="p">(</span><span class="m">3</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="n">i</span> <span class="n">int</span><span class="p">)</span> <span class="n">bool</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Name</span> <span class="p">==</span> <span class="n">obj</span> <span class="p">{</span>
+			<span class="n">return</span> <span class="nb">true</span>
+		<span class="p">}</span>
+		<span class="n">return</span> <span class="nb">false</span>
+	<span class="p">})</span>
+	<span class="k">if</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">len</span><span class="p">(</span><span class="n">b</span><span class="p">)</span> <span class="p">&amp;&amp;</span> <span class="n">b</span><span class="p">[</span><span class="n">i</span><span class="p">].</span><span class="n">Name</span> <span class="p">==</span> <span class="n">obj</span> <span class="p">{</span>
+		<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">"found %v at %d</span><span class="se">\n</span><span class="s2">"</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+	<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+		<span class="n">fmt</span><span class="p">.</span><span class="n">Printf</span><span class="p">(</span><span class="s2">"not found</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+	<span class="p">}</span>
+
+	<span class="p">//</span> <span class="n">reserve</span>
+	<span class="n">sort</span><span class="p">.</span><span class="n">Sort</span><span class="p">(</span><span class="n">sort</span><span class="p">.</span><span class="n">Reverse</span><span class="p">(</span><span class="n">b</span><span class="p">))</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"Reserve =&gt;"</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">Search</span><span class="p">(</span><span class="n">n</span> <span class="n">int</span><span class="p">,</span> <span class="n">f</span> <span class="n">func</span><span class="p">(</span><span class="n">int</span><span class="p">)</span> <span class="n">bool</span><span class="p">)</span> <span class="n">int</span> <span class="p">{</span>
+	<span class="n">i</span><span class="p">,</span> <span class="n">j</span> <span class="p">:=</span> <span class="m">0</span><span class="p">,</span> <span class="n">n</span>
+	<span class="n">for</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">j</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="c1">!f(i) {
+</span>			<span class="n">i</span> <span class="p">=</span> <span class="n">i</span> <span class="p">+</span> <span class="m">1</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">j</span> <span class="p">=</span> <span class="n">i</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="n">return</span> <span class="n">i</span>
+<span class="p">}</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            
+            <a href="/blogpost/tag/#/Golang" rel="tag"># Golang</a>
+          
+        </div>
+      
+
+      
+      
+      
+      
+      
+
+      
+      
+        <div class="post-nav" id="post-nav-id">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/blogpost/golang/2019/10/09/Go-%E6%A8%A1%E4%BB%BF_js_%E7%9A%84_foreach_find_filter_%E6%93%8D%E4%BD%9C/" rel="prev" title="【Go】模仿 js 的 find, forEach & filter">
+                【Go】模仿 js 的 find, forEach & filter <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+      
+
+      
+    </footer>
+  </article>
+
+  <div class="post-spread">
+    
+  </div>
+</div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+        
+        
+        
+
+
+
+
+
+
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/blogpost/assets/images/avatar3.png"
+               alt="Max Hu" />
+          <p class="site-author-name" itemprop="name">Max Hu</p>
+           
+              <p class="site-description motion-element" itemprop="description">Welcome!</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/blogpost/archives/">
+                <span class="site-state-item-count">114</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/blogpost/categories/">
+                <span class="site-state-item-count">71</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/blogpost/tags/">
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+        
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+
+
+
+
+
+
+
+            
+              <div class="post-toc-content">
+    <ol class=nav>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#synopsis"> <span class="nav-text">Synopsis</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#int-sort"> <span class="nav-text">Int Sort</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#string-sort"> <span class="nav-text">String Sort</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#customized-sort"> <span class="nav-text">Customized sort</span> </a> </li>
+    </ol>
+  </div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Max Hu</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+   
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  
+  
+  
+  
+  <script type="text/javascript" src="/blogpost/assets/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/blogpost/assets/js/src/post-details.js?v=5.1.1"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/blogpost/assets/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+
+    
+
+  
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+  
+
+  
+  
+
+
+  
+
+  
+
+  
+
+</body>
+</html>
+

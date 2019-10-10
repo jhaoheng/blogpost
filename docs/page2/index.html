@@ -281,6 +281,188 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/11/Go-DeferPanicRecover/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/golang/2019/09/11/Go-DeferPanicRecover/" itemprop="url">
+                【Go】Defer, Panic & Recover
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-11T13:18:00+08:00">
+                2019-09-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="synopsis">Synopsis</h1>
+
+<ul>
+  <li>defer {動作} : 當前 func 結束後，會執行的動作。</li>
+  <li>panic() : 當執行，會強迫中斷程式，並輸出錯誤訊息。</li>
+  <li>recover() : 當 panic 發生後，無論錯誤在多深層的結構中，都會透過 recover() 取回當前的 error (不用逐層 return)，並讓程序繼續執行。</li>
+</ul>
+
+<h1 id="測試">測試</h1>
+
+<ul>
+  <li>在網路上多數的範例都是在於開啟檔案、連線失敗的使用方式</li>
+  <li>這邊提供另一種使用範例</li>
+</ul>
+
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/golang/2019/09/11/Go-DeferPanicRecover/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/10/Go-struct-%E5%84%AA%E5%8C%96(%E4%BA%8C)-interface/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2051,203 +2233,6 @@ Please note that IP-range based access control is currently not enabled for Cach
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/kubenetes/minikube/2018/03/02/Kubernetes&Minikube/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/kubenetes/minikube/2018/03/02/Kubernetes&Minikube/" itemprop="url">
-                【Deploy Test】Use Kubernetes & Minikube(local)
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-03-02T07:30:00+08:00">
-                2018-03-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/kubenetes" itemprop="url" rel="index">
-                    <span itemprop="name">kubenetes</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/minikube" itemprop="url" rel="index">
-                    <span itemprop="name">minikube</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h2 id="synopsis">Synopsis</h2>
-<ul>
-  <li>透過本地端，練習 kubenetes client</li>
-  <li>使用 minikube&amp;virtual 當作 kube server</li>
-  <li>minikube 本身提供像 gcloud 一樣 GUI 介面，方便具有既視感
-    <ul>
-      <li>docker 本身提供的 kubernetes server 目前沒有 GUI 介面</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="environment">Environment</h2>
-<ul>
-  <li>osx</li>
-  <li>minikube &amp; virtualbox</li>
-  <li>kubernetes client</li>
-</ul>
-
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/kubenetes/minikube/2018/03/02/Kubernetes&Minikube/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2309,7 +2294,7 @@ Please note that IP-range based access control is currently not enabled for Cach
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">113</span>
+                <span class="site-state-item-count">114</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

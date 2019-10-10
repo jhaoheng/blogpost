@@ -281,6 +281,218 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/06/21/playerhls-rtmp/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2017/06/21/playerhls-rtmp/" itemprop="url">
+                【Player】HLS.js / video.js / jwplayer
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-21T06:59:00+08:00">
+                2017-06-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="rtmp-live">rtmp live</h1>
+
+<h2 id="使用-videojs-的-issue">使用 video.js 的 issue</h2>
+
+<p>播放後，影片會在左上角，與 player size 不符合</p>
+<ul>
+  <li>bug fixed : https://github.com/videojs/video-js-swf/issues/55
+    <ol>
+      <li>下載 https://github.com/digitalStyx/video-js-swf/blob/master/bin-debug/VideoJS.swf 到本地後</li>
+      <li>在 head 中加入
+        <div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code> &lt;script&gt;
+   videojs.options.flash.swf = "VideoJS.swf";
+ &lt;/script&gt;
+</code></pre></td></tr></tbody></table></div>        </div>
+      </li>
+      <li>使用參考 : https://coolestguidesontheplanet.com/videodrome/videojs/</li>
+    </ol>
+  </li>
+</ul>
+
+<h1 id="hls-playback">hls playback</h1>
+
+<h2 id="如何進行-offset">如何進行 offset</h2>
+
+<ul>
+  <li>document : https://tools.ietf.org/html/draft-pantos-http-live-streaming-18#section-4.3.5.2</li>
+</ul>
+
+<ol>
+  <li>version 6 以上</li>
+  <li>use like below : <strong>#EXT-X-START:TIME-OFFSET=2</strong></li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14</pre></td><td class="code"><pre class="highlight"><code>#EXTM3U
+#EXT-X-VERSION:7
+#EXT-X-ALLOW-CACHE:YES
+#EXT-X-TARGETDURATION:7
+#EXT-X-MEDIA-SEQUENCE:1
+#EXT-X-START:TIME-OFFSET=2
+
+#EXTINF:7, 
+1498008625670.ts
+#EXTINF:6, 
+1498008631711.ts
+#EXTINF:6, 
+1498008637927.ts
+
+</code></pre></td></tr></tbody></table></div></div>
+<ol>
+  <li>注意播放器要支援解析, EX: <code class="highlighter-rouge">https://github.com/jhaoheng/html5_hls_test/blob/master/hls.html</code></li>
+</ol>
+
+<h1 id="jwplayer-使用-flash-播放-hls--rtmp">jwplayer 使用 flash 播放 hls / rtmp</h1>
+
+<ul>
+  <li>jwplayer 提供 http / https 的網頁測試
+    <ul>
+      <li>http  : <code class="highlighter-rouge">http://demo.jwplayer.com/developer-tools/http-stream-tester/</code></li>
+      <li>https : <code class="highlighter-rouge">https://developer.jwplayer.com/tools/stream-tester/</code></li>
+    </ul>
+  </li>
+  <li>要讓 jwplayer 透過 flash 支援 hls 的播放，需要加入 crossdomain.xml 檔案
+    <ul>
+      <li>要注意的是，crossdomain.xml 的檔案內容，請勿一次全部 copy，盡量用輸入的，輸入完畢後，透過 browser 顯示，不然有可能會發生，檢查 cros 正確，但 jwplayer 會無法解析的問題，猜測應該是 copy 時，貼上帶入了奇怪的字元</li>
+    </ul>
+  </li>
+  <li>若用 jwplayer，不指定類型，則 jwplayer 會自動根據內容自動切換 flash / html5 的播放類型，如此一來就不用特別使用 crossdomain.xml，只需在 nginx.conf 中設定 crossdomain 即可</li>
+</ul>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2017/06/21/playerhls-rtmp/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/06/07/aws-s3-multiple-file-upload/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2215,238 +2427,6 @@ MongoDB.so , 非 mongo.so</p>
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2017/05/09/phpmongodb/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/2017/05/09/phpmongodb/" itemprop="url">
-                【PHP-OSX】mongodb / php-drive / client-lib
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-05-09T09:10:00+08:00">
-                2017-05-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="環境">環境</h1>
-<ul>
-  <li>osx</li>
-  <li>php7.0.8</li>
-  <li>mongod 3.3.4</li>
-  <li>mongodb : http://php.net/manual/en/set.mongodb.php
-    <ul>
-      <li>勿與 舊版的 Mongo drive 混淆，因為使用上會有極大差別</li>
-    </ul>
-  </li>
-  <li>php-mongodbClient 1.2.8</li>
-</ul>
-
-<h1 id="安裝-mongodb">安裝 mongodb</h1>
-
-<ol>
-  <li><code class="highlighter-rouge">$ brew install mongodb</code></li>
-  <li>可在 <code class="highlighter-rouge">$ cat /usr/local/etc/mongod.conf</code>，看到 mongodb 設定
-    <ul>
-      <li>注意位置 /data/db，確定是否存在，若不存在則建立一個，記得打開權限</li>
-    </ul>
-  </li>
-  <li><code class="highlighter-rouge">$ mongod</code> 啟動 mongodb</li>
-</ol>
-
-<h1 id="設定-php-drive">設定 php drive</h1>
-
-<blockquote>
-  <ul>
-    <li>有分 mongo.so 與 mongodb.so 版本</li>
-    <li>mongodb.so 支援 php7, 用 MongoDB\Driver\xxxxxx 來進行 new 的動作。http://stackoverflow.com/a/38007889</li>
-    <li>mongo.so 是用 MongoClient 來進行管理</li>
-  </ul>
-</blockquote>
-
-<ol>
-  <li><code class="highlighter-rouge">$ brew install php70-mongodb</code></li>
-  <li><code class="highlighter-rouge">$ cd /usr/local/Cellar/php70-mongodb</code> =&gt; 找到 mongodb.so</li>
-  <li><code class="highlighter-rouge">$ php -i | grep extension</code> =&gt; 找到 extension 的位置</li>
-  <li><code class="highlighter-rouge">$ mv mongodb.so {extension 位置}</code></li>
-  <li><code class="highlighter-rouge">$ php --ini</code> =&gt; 找到 php.ini</li>
-  <li><code class="highlighter-rouge">$ vim php.ini</code>
-    <ul>
-      <li>在 extension 中，加入 extension=mongodb.so</li>
-    </ul>
-  </li>
-  <li>驗證在 <code class="highlighter-rouge">$ php -i | grep mongo</code> 驗證版本應該跟下載的相同</li>
-</ol>
-
-<h2 id="當執行-mongo-提取資料時出現">當執行 mongo 提取資料時出現</h2>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>dyld: lazy symbol binding failed: Symbol not found: _clock_gettime
-  Referenced from: /usr/local/opt/php70-mongodb/mongodb.so
-  Expected in: /usr/lib/libSystem.B.dylib
-
-dyld: Symbol not found: _clock_gettime
-  Referenced from: /usr/local/opt/php70-mongodb/mongodb.so
-  Expected in: /usr/lib/libSystem.B.dylib
-</code></pre></td></tr></tbody></table></div></div>
-<p>解決方法 : https://github.com/perftools/xhgui/issues/198#issuecomment-286711319</p>
-
-<h1 id="設定-mamp">設定 MAMP</h1>
-
-<ol>
-  <li>一樣將 mongodb.so 拷貝到 mamp extension 的位置底下</li>
-  <li>編輯 mamp 的 php.ini</li>
-  <li>透過 phpinfo() 來檢查</li>
-</ol>
-
-<h1 id="php-使用-mongodb-drive">php 使用 mongodb drive</h1>
-<ul>
-  <li>http://php.net/manual/en/class.mongodb-driver-manager.php</li>
-</ul>
-
-<h3 id="更有效率地使用-mongodb-drive">更有效率地使用 mongodb drive</h3>
-<ul>
-  <li>https://docs.mongodb.com/php-library/master/tutorial/install-php-library/</li>
-  <li>MongoDB client-libraby github : https://github.com/mongodb/mongo-php-library</li>
-  <li>搜尋的碼
-    <div class="language-php highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6</pre></td><td class="code"><pre class="highlight"><code><span class="nv">$client</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">MongoDB\Client</span><span class="p">;</span>
-<span class="nv">$collection</span> <span class="o">=</span> <span class="nv">$client</span><span class="o">-&gt;</span><span class="na">selectCollection</span><span class="p">(</span><span class="s1">'db'</span><span class="p">,</span> <span class="s1">'collection'</span><span class="p">);</span>
-<span class="nv">$cursor</span> <span class="o">=</span> <span class="nv">$collection</span><span class="o">-&gt;</span><span class="na">find</span><span class="p">();</span>
-<span class="k">foreach</span> <span class="p">(</span><span class="nv">$cursor</span> <span class="k">as</span> <span class="nv">$restaurant</span><span class="p">)</span> <span class="p">{</span>
- <span class="nb">var_dump</span><span class="p">(</span><span class="nv">$restaurant</span><span class="p">);</span>
-<span class="p">};</span>
-</code></pre></td></tr></tbody></table></div>    </div>
-  </li>
-</ul>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/2017/05/09/phpmongodb/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2508,7 +2488,7 @@ dyld: Symbol not found: _clock_gettime
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">113</span>
+                <span class="site-state-item-count">114</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

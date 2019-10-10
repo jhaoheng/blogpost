@@ -281,6 +281,183 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/2016/10/24/gclouddocker-push-pull-delete/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/2016/10/24/gclouddocker-push-pull-delete/" itemprop="url">
+                【gcloud】docker push/pull/delete
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-10-24T10:01:00+08:00">
+                2016-10-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 id="basic">basic</h2>
+<ol>
+  <li>先 login gcloud</li>
+  <li>安裝 docker</li>
+</ol>
+
+<h2 id="push-to-registry">push to registry</h2>
+
+<ol>
+  <li>檢查目前 images : <code class="highlighter-rouge">docker images</code></li>
+  <li>對要上傳的 image 設定 tag : <code class="highlighter-rouge">docker tag [image_id] [location]/[project_id]/[image_name]</code>
+    <ul>
+      <li><code class="highlighter-rouge">[location]</code> : [‘gcr.io’, ‘us.gcr.io’, ‘eu.gcr.io’, ‘asia.gcr.io’, ‘b.gcr.io’, ‘bucket.gcr.io’, ‘appengine.gcr.io’, ‘gcr.kubernetes.io’]</li>
+    </ul>
+  </li>
+  <li>檢查 <code class="highlighter-rouge">docker images</code> 會發現多了一個 images</li>
+  <li>push : <code class="highlighter-rouge">gcloud docker push [location]/[project_id]/[image_name]</code></li>
+</ol>
+
+<h2 id="移除掉-image_id-locationproject_idimage_name">移除掉 [image_id] [location]/[project_id]/[image_name]</h2>
+
+<ol>
+  <li>本機 : <code class="highlighter-rouge">docker rmi [image_id] [location]/[project_id]/[image_name]</code></li>
+  <li>gcloud : 可直接到 consonle 的 registry 中，進入 image，將該版本刪除</li>
+</ol>
+
+<h2 id="pull">pull</h2>
+
+<ol>
+  <li>登入 console</li>
+  <li>進入 registry</li>
+  <li>選擇 images，取得 pull 指令</li>
+</ol>
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/2016/10/24/gclouddocker-push-pull-delete/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/php/2016/10/22/PHP-http2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2457,227 +2634,6 @@ if (provisioningProfile) {
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/xcode/2016/08/31/xcode-macros-scheme/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/xcode/2016/08/31/xcode-macros-scheme/" itemprop="url">
-                【xcode】Configurations/ Preprocessor Macros/ scheme
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-31T06:26:00+08:00">
-                2016-08-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/Xcode" itemprop="url" rel="index">
-                    <span itemprop="name">Xcode</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="why">why</h1>
-
-<p>In dev / release env, switch the default global variable :</p>
-<ul>
-  <li>url</li>
-  <li>other env variable</li>
-</ul>
-
-<h1 id="xcode-setting">xcode setting</h1>
-
-<ol>
-  <li>PROJECT -&gt; info -&gt; Configurations，default only have “Debug” &amp; “Release” tag
-    <ul>
-      <li>Use scheme to switch the tag</li>
-    </ul>
-  </li>
-  <li>goto Targets，choose the “Macros” from target
-    <ul>
-      <li>Build Setting -&gt; Preprocessor Macros, you can find “Debug” &amp; “Release” tag</li>
-      <li>In Macros, set your tag &amp; value</li>
-    </ul>
-  </li>
-</ol>
-
-<h1 id="scheme-switch">scheme switch</h1>
-
-<p>Debug &amp; Realese tags are set by xcode Configuration</p>
-
-<ol>
-  <li>edit scheme.</li>
-  <li>select Run tag, switch the “Build Configuration” tag to change your build setting.</li>
-</ol>
-
-<h1 id="coding-example">coding example</h1>
-
-<p>you can create a config.h or .pch to set your info.</p>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7</pre></td><td class="code"><pre class="highlight"><code>#if DEBUG
-#define a symbol
-#elseif RELEASE
-#define a symbol
-#else
-#define a symbol
-#endif
-</code></pre></td></tr></tbody></table></div></div>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>#if DEBUG==1
-#define debug_only YES
-#else
-#define debug_only NO
-#endif
-</code></pre></td></tr></tbody></table></div></div>
-
-<p>Notice <code class="highlighter-rouge">#if</code> and <code class="highlighter-rouge">#ifdef</code> is diff.</p>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/xcode/2016/08/31/xcode-macros-scheme/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2739,7 +2695,7 @@ if (provisioningProfile) {
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">113</span>
+                <span class="site-state-item-count">114</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
