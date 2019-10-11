@@ -109,17 +109,17 @@
 
 
 
-<meta name="description" content="Synopsis https://golang.org/pkg/sort/ sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但官方的 sort.Search() 是 binary search，不能用來搜尋 value 錯誤範例 Playground : https://play.golang.org/p/f0E0SRNHj-5 上述範例若是改為 排序後-&amp;gt;搜尋 age 即可 如果要搜尋 value, 則 search 必須重新制定搜尋 value 的做法">
+<meta name="description" content="Synopsis https://golang.org/pkg/sort/ sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但官方的 sort.Search() 是 binary search，不能用來搜尋 value 錯誤範例 Playground : https://play.golang.org/p/f0E0SRNHj-5 如果要搜尋 value, 則 search 必須重新制定搜尋 value 的做法 上述範例若是改為 排序後-&amp;gt;搜尋 age 即可, 如最下方範例">
 <meta name="keywords" content="Golang">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【Go】Sort 操作">
 <meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/11/Go-Sort_%E6%93%8D%E4%BD%9C/">
 <meta property="og:site_name" content="MAX 呼~">
-<meta property="og:description" content="Synopsis https://golang.org/pkg/sort/ sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但官方的 sort.Search() 是 binary search，不能用來搜尋 value 錯誤範例 Playground : https://play.golang.org/p/f0E0SRNHj-5 上述範例若是改為 排序後-&amp;gt;搜尋 age 即可 如果要搜尋 value, 則 search 必須重新制定搜尋 value 的做法">
+<meta property="og:description" content="Synopsis https://golang.org/pkg/sort/ sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但官方的 sort.Search() 是 binary search，不能用來搜尋 value 錯誤範例 Playground : https://play.golang.org/p/f0E0SRNHj-5 如果要搜尋 value, 則 search 必須重新制定搜尋 value 的做法 上述範例若是改為 排序後-&amp;gt;搜尋 age 即可, 如最下方範例">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【Go】Sort 操作">
-<meta name="twitter:description" content="Synopsis https://golang.org/pkg/sort/ sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但官方的 sort.Search() 是 binary search，不能用來搜尋 value 錯誤範例 Playground : https://play.golang.org/p/f0E0SRNHj-5 上述範例若是改為 排序後-&amp;gt;搜尋 age 即可 如果要搜尋 value, 則 search 必須重新制定搜尋 value 的做法">
+<meta name="twitter:description" content="Synopsis https://golang.org/pkg/sort/ sort package 預設好 int, float, string 的 sort/reverse/search 等功能 若要客製化，則必須 自定義 Len()/Swap()/Less() 等功能，才能用 sort.Sort() 進行排序 建立 type, ex: type Person struct{} type ByAge []Person 最下方有簡易範例，但官方的 sort.Search() 是 binary search，不能用來搜尋 value 錯誤範例 Playground : https://play.golang.org/p/f0E0SRNHj-5 如果要搜尋 value, 則 search 必須重新制定搜尋 value 的做法 上述範例若是改為 排序後-&amp;gt;搜尋 age 即可, 如最下方範例">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -410,10 +410,13 @@
       <li>最下方有簡易範例，但官方的 sort.Search() 是 binary search，不能用來搜尋 value
         <ul>
           <li>錯誤範例 Playground : https://play.golang.org/p/f0E0SRNHj-5</li>
-          <li>上述範例若是改為 排序後-&gt;搜尋 age 即可</li>
         </ul>
       </li>
-      <li>如果要搜尋 value, 則 search 必須重新制定搜尋 value 的做法</li>
+      <li>如果要搜尋 value, 則 search 必須重新制定搜尋 value 的做法
+        <ul>
+          <li>上述範例若是改為 排序後-&gt;搜尋 age 即可, 如最下方範例</li>
+        </ul>
+      </li>
     </ul>
   </li>
 </ul>
