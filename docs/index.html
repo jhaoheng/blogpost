@@ -281,6 +281,196 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/15/Go-sync(%E4%B8%80)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/golang/2019/10/15/Go-sync(%E4%B8%80)/" itemprop="url">
+                【Go】Sync(一)
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-10-15T02:17:00+08:00">
+                2019-10-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="synopsis">Synopsis</h1>
+
+<ul>
+  <li>sync 有幾種類型 : WaitGroup, Mutex, RWMutex, Pool, Once, Cond, Map</li>
+  <li>而何時需要用到 sync.Mutex?
+    <ul>
+      <li>如果我們不需要溝通怎麼辦？ 如果我們只是想確保一次只有一個 goroutine 可以一次訪問一個變量以避免衝突該怎麼辦？
+        <ul>
+          <li>可以用 sync.Mutex</li>
+          <li>但其實一樣可以把變數塞到 channel 解決相同的問題</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>關於 channel 的應用模式: [Lock/TryLock 模式, Or Channel 模式, Or-Done-Channel模式, Fan-in, Tee模式, 分布模式, eapache]
+    <ul>
+      <li>channel 的用途就是在於『讓多個 goroutine 互相溝通，不會產生重複取物件的問題』</li>
+      <li>Do not communicate by sharing memory; instead, share memory by communicating.</li>
+      <li>goroutine + channel 可以做到同步/異步的功能, 透過 channel 來讓多個 goroutine 互相溝通（也就是不會取到相同的值）</li>
+    </ul>
+  </li>
+</ul>
+
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/golang/2019/10/15/Go-sync(%E4%B8%80)/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/11/Go-Sort_%E6%93%8D%E4%BD%9C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2134,204 +2324,6 @@ funcMain(args []int, funcN(sum int) {
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/14/Go-time(1)-timer/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/golang/2019/09/14/Go-time(1)-timer/" itemprop="url">
-                【Go】Time(一):Timer(定時器)
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-09-14T21:53:00+08:00">
-                2019-09-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
-                    <span itemprop="name">Golang</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h1 id="type-timer">type Timer</h1>
-<blockquote>
-  <p>https://golang.org/pkg/time/#Timer</p>
-</blockquote>
-
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3</pre></td><td class="code"><pre class="highlight"><code>type Timer struct {
-	C &lt;-chan Time
-}
-</code></pre></td></tr></tbody></table></div></div>
-
-<ul>
-  <li>Timer 類型是一種事件，當 Timer 到期，目前的時間會送到 <code class="highlighter-rouge">C</code> 中，除非 Timer 被 <code class="highlighter-rouge">AfterFunc</code> 重新建立。</li>
-  <li>Timer 必須透過 NewTimer or AfterFunc 建立</li>
-</ul>
-
-<h2 id="table-list">Table list</h2>
-<ul>
-  <li><code class="highlighter-rouge">func AfterFunc</code> : 建立一個 Timer 並在時間到後，執行 Func</li>
-  <li><code class="highlighter-rouge">func NewTimer</code> : 建立一個 Timer</li>
-  <li><code class="highlighter-rouge">func (*Timer) Reset</code> : 重設置 Timer</li>
-  <li><code class="highlighter-rouge">func (*Timer) Stop</code> : 命令 Timer 停止</li>
-  <li>範例
-    <ul>
-      <li>Timer 第一次到期為兩秒後, 到期後自動設定 t.Reset(10), 再度自動倒數</li>
-      <li>每次執行 t.Reset() 後, 到期, 都會重新設定 t.Reset()</li>
-      <li>按下 Enter 後, Timer 會直接中斷倒數, 並且再度重新執行 t.Reset()</li>
-      <li>ctrl+c 停止運行</li>
-    </ul>
-  </li>
-</ul>
-
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/golang/2019/09/14/Go-time(1)-timer/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2393,7 +2385,7 @@ funcMain(args []int, funcN(sum int) {
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">114</span>
+                <span class="site-state-item-count">115</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
