@@ -281,6 +281,241 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/docker/haproxy/nginx/proxy/rtmp/rtmps/2017/11/06/haproxy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Max Hu">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/assets/images/avatar3.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="MAX 呼~">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+          
+          
+            
+                
+                <a class="post-title-link" href="/blogpost/docker/haproxy/nginx/proxy/rtmp/rtmps/2017/11/06/haproxy/" itemprop="url">
+                【haproxy】rtmps by haproxy
+              </a>
+            
+          
+        </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-06T12:13:00+08:00">
+                2017-11-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/docker" itemprop="url" rel="index">
+                    <span itemprop="name">docker</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/haproxy" itemprop="url" rel="index">
+                    <span itemprop="name">haproxy</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/nginx" itemprop="url" rel="index">
+                    <span itemprop="name">nginx</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/proxy" itemprop="url" rel="index">
+                    <span itemprop="name">proxy</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/rtmp" itemprop="url" rel="index">
+                    <span itemprop="name">rtmp</span>
+                  </a>
+                </span>
+
+                
+                
+                  , 
+                
+              
+                
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/blogpost/category/#/rtmps" itemprop="url" rel="index">
+                    <span itemprop="name">rtmps</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  <h1 id="synopsis">synopsis</h1>
+<ol>
+  <li>因 nginx-rtmp-module 並沒有支援 ssl 的方式，透過 proxy 的方式也無法使用</li>
+  <li>故使用 haproxy 的方法，透過 <code class="highlighter-rouge">rtmps://</code> 轉送到 <code class="highlighter-rouge">rtmp:1935</code>，加入 ssl，進行驗證。</li>
+  <li>本文透過 docker 建立環境與設定 : haproxy / rtmp container</li>
+  <li>再透過 ffmpeg 進行推送</li>
+</ol>
+
+
+
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/blogpost/docker/haproxy/nginx/proxy/rtmp/rtmps/2017/11/06/haproxy/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+        
+        
+        
+        
+          <div class="post-eof"></div>
+        
+      
+    </footer>
+  </article>
+
+  
+    
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/docker/nginx/rtmpt/rtmp/ossrs/2017/11/05/rtmpt&rtmp/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -2093,238 +2328,6 @@
         
         
         
-          <div class="post-eof"></div>
-        
-      
-    </footer>
-  </article>
-
-  
-    
-    
-
-  
-
-  
-  
-  
-
-  <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/raspberry/facebookatc/2017/09/08/Raspberry-FacebookATC/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Max Hu">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/assets/images/avatar3.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="MAX 呼~">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-          
-          
-            
-                
-                <a class="post-title-link" href="/blogpost/raspberry/facebookatc/2017/09/08/Raspberry-FacebookATC/" itemprop="url">
-                【Raspberry pi 3】安裝 facebook_atc
-              </a>
-            
-          
-        </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-09-08T14:08:00+08:00">
-                2017-09-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/Raspberry" itemprop="url" rel="index">
-                    <span itemprop="name">Raspberry</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/FacebookATC" itemprop="url" rel="index">
-                    <span itemprop="name">FacebookATC</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-  <h2 id="install--setting">install &amp; setting</h2>
-
-<ol>
-  <li>建立好 wifi ap</li>
-  <li>安裝 ATC : <code class="highlighter-rouge">http://facebook.github.io/augmented-traffic-control/docs/install.html</code></li>
-  <li>安裝完畢 atc django-ui 後，在執行 atcd 前，必須先知道 wan &amp; lan 的端口
-    <ul>
-      <li>透過 <code class="highlighter-rouge">route</code> 查詢</li>
-      <li>啟動 <code class="highlighter-rouge">sudo atcd --atcd-lan xxxx --atcd-wan xxxx</code></li>
-    </ul>
-  </li>
-  <li>執行 python manage.py runserver 0.0.0.0:8000</li>
-  <li>開啟瀏覽器，會看到成功畫面
-    <ul>
-      <li>若你的 atcd server 執行失敗，會產生授權錯誤的推播通知</li>
-    </ul>
-  </li>
-</ol>
-
-<h2 id="use">use</h2>
-
-<ol>
-  <li>開啟瀏覽器並打開 atc_demo_ui 的管理介面</li>
-  <li>主要設置的參數有：
-    <ul>
-      <li>網絡帶寬（bandwidth）</li>
-      <li>延遲（latency）</li>
-      <li>丟包率（packet loss）</li>
-      <li>錯包率（corrupted packets）</li>
-      <li>亂序率（packets ordering）</li>
-    </ul>
-  </li>
-  <li>新增 new profile 與 shaping settings 後，可在 Profiles 中看到設定的參數值，選擇後再開啟最上方的 trun on 即可</li>
-  <li>Network Condition Profiles 參考
-    <ul>
-      <li>https://github.com/tylertreat/Comcast#network-condition-profiles
-      - https://github.com/facebook/augmented-traffic-control/tree/master/utils/profiles</li>
-    </ul>
-  </li>
-  <li>測試 : 連上 wifi，設定 bandwidth=1，turn on，此時若網路沒有延遲，則可能是你的 atcd wan&amp;lan 設定相反</li>
-</ol>
-
-<h1 id="測試心得">測試心得</h1>
-<ol>
-  <li>因為 atc 可以個別針對各類型的裝置進行限速的行為，所以今天要限制某台 iphone，請透過該台 iphone 連到 atcd-ui 中，選擇 profile (需要的網路情境)，再開啟，即可，根據測試，不同的裝置，可以設定不同的情境，不會互相影響</li>
-  <li>如何遠端控制它台裝置？
-    <ol>
-      <li>需要先授權，授權完畢，重新整理頁面，就會看到授權的電腦</li>
-    </ol>
-  </li>
-  <li>參考 : https://github.com/facebook/augmented-traffic-control/tree/master/atc/django-atc-api</li>
-  <li>關於設定的 json 設定，我是先在 ui 的頁面中，copy 設定檔，再透過 api 的方式進行設定</li>
-</ol>
-
-
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/blogpost/raspberry/facebookatc/2017/09/08/Raspberry-FacebookATC/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-        
-        
-        
-        
       
     </footer>
   </article>
@@ -2386,7 +2389,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/blogpost/archives/">
-                <span class="site-state-item-count">115</span>
+                <span class="site-state-item-count">116</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

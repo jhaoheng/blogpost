@@ -1,4 +1,26 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-10-15T02:22:05+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】Sync(一)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/15/Go-sync(%E4%B8%80)/" rel="alternate" type="text/html" title="【Go】Sync(一)" /><published>2019-10-15T02:17:00+08:00</published><updated>2019-10-15T02:17:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/15/%5BGo%5Dsync(%E4%B8%80)</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/15/Go-sync(%E4%B8%80)/">&lt;h1 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-11-06T11:45:58+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】Go bin get os signal from docker</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/11/06/Go&Docker-_Get_os_signal_from_docker/" rel="alternate" type="text/html" title="【Go】Go bin get os signal from docker" /><published>2019-11-06T11:37:00+08:00</published><updated>2019-11-06T11:37:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/11/06/%5BGo&amp;Docker%5D_Get_os_signal_from_docker</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/11/06/Go&amp;Docker-_Get_os_signal_from_docker/">&lt;h1 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h1&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;建立 docker image, 讓 bin 在 PID=1 的狀態下執行&lt;/li&gt;
+  &lt;li&gt;接收 os signal 的訊號, 讓程式得知結束前, 需要做什麼事情&lt;/li&gt;
+  &lt;li&gt;code example : https://github.com/jhaoheng/docker_op_books/tree/master/example/run_cmd_at_pid_1&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;!--more--&gt;
+
+&lt;h2 id=&quot;dockerfile-需要注意的地方&quot;&gt;Dockerfile 需要注意的地方&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;若在 CMD 中, 直接用 &lt;code class=&quot;highlighter-rouge&quot;&gt;CMD: {your_bin}&lt;/code&gt;, 會得到錯誤的啟動, for example:&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://raw.githubusercontent.com/jhaoheng/docker_op_books/master/example/run_cmd_at_pid_1/assets/wrong.png&quot; alt=&quot;img-wrong&quot; /&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;在 dockerfile 中的 CMD 需要用 &lt;code class=&quot;highlighter-rouge&quot;&gt;exec {your_bin}&lt;/code&gt; 來執行, 正確會得到&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://github.com/jhaoheng/docker_op_books/blob/master/example/run_cmd_at_pid_1/assets/right.png?raw=true&quot; alt=&quot;img-right&quot; /&gt;&lt;/p&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">Synopsis 建立 docker image, 讓 bin 在 PID=1 的狀態下執行 接收 os signal 的訊號, 讓程式得知結束前, 需要做什麼事情 code example : https://github.com/jhaoheng/docker_op_books/tree/master/example/run_cmd_at_pid_1</summary></entry><entry><title type="html">【Go】Sync(一)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/15/Go-sync(%E4%B8%80)/" rel="alternate" type="text/html" title="【Go】Sync(一)" /><published>2019-10-15T02:17:00+08:00</published><updated>2019-10-15T02:17:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/15/%5BGo%5Dsync(%E4%B8%80)</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/10/15/Go-sync(%E4%B8%80)/">&lt;h1 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h1&gt;
 
 &lt;ul&gt;
   &lt;li&gt;sync 有幾種類型 : WaitGroup, Mutex, RWMutex, Pool, Once, Cond, Map&lt;/li&gt;
@@ -1393,129 +1415,4 @@ func catch() {
   &lt;li&gt;允許 full-duplex(全雙工) streaming.&lt;/li&gt;
   &lt;li&gt;基於效能，使用靜態路徑，解析路徑中調用的參數。REST 中 query parameters 與 payload body 會增加延遲跟複雜性&lt;/li&gt;
   &lt;li&gt;定義了一系列的 errors, 相信比 HTTP status codes 更直觀適用於 API 使用情境。&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">gRPC gRPC is a modern, open source remote procedure call (RPC) framework 簡單來講就是，server 端跟 client 端都是固定的兩方，然後透過資料格式解析 雙方都特定處理某件事情，簡單來講就是類似 socket server，但並非是 有點類似透過 protocol buffer 在本地端直接調用 func 並得到回傳值 基於 HTTP/2 協議標準設計, 所以也是有 Request 與 Response HTTP/2 是一個二進位協議, 意味著可讀性是 0 基於 ProtoBuf(Protocol Buffers) 序列化協議開發 實踐方法有四種模式 simple RPC Client-side streaming RPC Server-side streaming RPC Bidirectional streaming RPC 為了解決? 低延遲, 高擴充性, 分散式系統 可開發移動端的 clients, 與 cloud server 進行溝通 準確、高校且獨立的 protocol 分層設計以實現擴展，例如。 身份驗證，負載平衡，日誌記錄和監視等</summary></entry><entry><title type="html">【Go】callback, func as a type</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/16/Go-callback-design/" rel="alternate" type="text/html" title="【Go】callback, func as a type" /><published>2019-09-16T14:52:00+08:00</published><updated>2019-09-16T14:52:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/16/%5BGo%5Dcallback-design</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/16/Go-callback-design/">&lt;h1 id=&quot;宣告&quot;&gt;宣告&lt;/h1&gt;
-&lt;ol&gt;
-  &lt;li&gt;func as a type : &lt;code class=&quot;highlighter-rouge&quot;&gt;type callbackHandler func(name string)&lt;/code&gt;&lt;/li&gt;
-  &lt;li&gt;在宣告 func 時, 將 func 放到參數位置 : &lt;code class=&quot;highlighter-rouge&quot;&gt;func DoSomething(callback callbackHandler) {...}&lt;/code&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h1 id=&quot;用途設計&quot;&gt;用途設計&lt;/h1&gt;
-&lt;ul&gt;
-  &lt;li&gt;在 objective-c 中的 complete, 通常做的都是異步的處理, ex: 等待 api 的回應過程中, 處理其他事情, 像 closure&lt;/li&gt;
-  &lt;li&gt;所以用途設計應該可以用在
-    &lt;ol&gt;
-      &lt;li&gt;有 N 個 func, funcN 依賴 funcMain 的處理結果, 並且 funcN 可能還有其他事情需要處理&lt;/li&gt;
-      &lt;li&gt;callbackHandler 的設計, 可以將多個 func 合併在一起, 個別制定 callbackHandler 內容, 並且回傳固定的返回值. Ex: error&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;[原本]
-sum := funcMain(args []int)
-temp := funcN(sum)
-
-[整合]
-type N funcN(sum int)
-funcMain(args []int, n N) {
-	sum := 0
-	for _, v := range args {
-		sum = v + sum
-	}
-	n(sum)
-}
----
-var temp int
-funcMain(args []int, funcN(sum int) {
-	fmt.Println(sum)
-	temp = sum
-})
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-&lt;!--more--&gt;
-
-&lt;h1 id=&quot;範例設計&quot;&gt;範例設計&lt;/h1&gt;
-&lt;ol&gt;
-  &lt;li&gt;進行 sigin, 查詢資料庫&lt;/li&gt;
-  &lt;li&gt;查詢完畢, 回傳&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-pkg&quot;&gt;package pkg
-
-import (
-	&quot;errors&quot;
-	&quot;fmt&quot;
-	&quot;time&quot;
-)
-
-type Person struct{}
-
-type completeCallbackHandler func(err error)
-
-func (p *Person) Signin(account, password string, c chan string, complete completeCallbackHandler) {
-	fmt.Printf(&quot;Verify account = %s, password = %s, from database\n&quot;, account, password)
-
-	var err error
-	if false {
-		err = errors.New(&quot;Something wrong&quot;)
-	}
-	complete(err)
-
-	go func() {
-		time.Sleep(time.Second * 2)
-		c &amp;lt;- &quot;cmd : send notification to firebase&quot;
-	}()
-}
-&lt;/code&gt;&lt;/pre&gt;
-
-&lt;pre&gt;&lt;code class=&quot;language-main&quot;&gt;package main
-
-import (
-	&quot;callback/pkg&quot;
-	&quot;fmt&quot;
-	&quot;time&quot;
-)
-
-type ResponseObjs struct {
-	statusCode int
-	err        string
-}
-
-var channelOfRobot chan string = make(chan string)
-
-func main() {
-
-	go worker()
-
-	p := pkg.Person{}
-
-	//
-	r := ResponseObjs{}
-	p.Signin(&quot;xxx@gmail.com&quot;, &quot;1234&quot;, channelOfRobot, func(err error) {
-		if err != nil {
-			r.statusCode = 500
-			r.err = err.Error()
-		} else {
-			r.statusCode = 200
-			r.err = &quot;&quot;
-		}
-	})
-	fmt.Printf(&quot;return : %+v\n&quot;, r)
-
-	//
-	fmt.Println(&quot;system handle other process....&quot;)
-
-	// 按下任意鍵停止
-	var pause string
-	fmt.Scanln(&amp;amp;pause)
-}
-
-func worker() {
-	for {
-		select {
-		case cmd := &amp;lt;-channelOfRobot:
-			fmt.Printf(&quot;Exec =&amp;gt; %+v\n&quot;, cmd)
-		default:
-			time.Sleep(time.Second)
-		}
-	}
-}
-&lt;/code&gt;&lt;/pre&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">宣告 func as a type : type callbackHandler func(name string) 在宣告 func 時, 將 func 放到參數位置 : func DoSomething(callback callbackHandler) {...} 用途設計 在 objective-c 中的 complete, 通常做的都是異步的處理, ex: 等待 api 的回應過程中, 處理其他事情, 像 closure 所以用途設計應該可以用在 有 N 個 func, funcN 依賴 funcMain 的處理結果, 並且 funcN 可能還有其他事情需要處理 callbackHandler 的設計, 可以將多個 func 合併在一起, 個別制定 callbackHandler 內容, 並且回傳固定的返回值. Ex: error [原本] sum := funcMain(args []int) temp := funcN(sum) [整合] type N funcN(sum int) funcMain(args []int, n N) { sum := 0 for _, v := range args { sum = v + sum } n(sum) } --- var temp int funcMain(args []int, funcN(sum int) { fmt.Println(sum) temp = sum })</summary></entry></feed>
+&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">gRPC gRPC is a modern, open source remote procedure call (RPC) framework 簡單來講就是，server 端跟 client 端都是固定的兩方，然後透過資料格式解析 雙方都特定處理某件事情，簡單來講就是類似 socket server，但並非是 有點類似透過 protocol buffer 在本地端直接調用 func 並得到回傳值 基於 HTTP/2 協議標準設計, 所以也是有 Request 與 Response HTTP/2 是一個二進位協議, 意味著可讀性是 0 基於 ProtoBuf(Protocol Buffers) 序列化協議開發 實踐方法有四種模式 simple RPC Client-side streaming RPC Server-side streaming RPC Bidirectional streaming RPC 為了解決? 低延遲, 高擴充性, 分散式系統 可開發移動端的 clients, 與 cloud server 進行溝通 準確、高校且獨立的 protocol 分層設計以實現擴展，例如。 身份驗證，負載平衡，日誌記錄和監視等</summary></entry></feed>

@@ -83,7 +83,7 @@
 <link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="" />
+  <meta name="keywords" content="Golang," />
 
 
 
@@ -109,17 +109,20 @@
 
 
 
-<meta name="description" content="目標 透過 nginx，將 流 透過 rtmpt:80 的 protocol 轉送給 rtmp:1935 protocol 推流 ffmpeg / OBS, protocol : rtmpt 收流 VLC player, protocol : rtmp 額外測試 : 送 rtmpt 給 ossrs 延伸 透過 rtmpts (tunnel by https)，加入 ssl 透過 rtmps，直接接收 rtmps 流，並 proxy 轉送給 ossrs">
-<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta name="description" content="Synopsis 建立 docker image, 讓 bin 在 PID=1 的狀態下執行 接收 os signal 的訊號, 讓程式得知結束前, 需要做什麼事情 code example : https://github.com/jhaoheng/docker_op_books/tree/master/example/run_cmd_at_pid_1">
+<meta name="keywords" content="Golang">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【nginx】rtmpt(tunnel by http:80) to rtmp:1935">
-<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/docker/nginx/rtmpt/rtmp/ossrs/2017/11/05/rtmpt&rtmp/">
+<meta property="og:title" content="【Go】Go bin get os signal from docker">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/11/06/Go&Docker-_Get_os_signal_from_docker/">
 <meta property="og:site_name" content="MAX 呼~">
-<meta property="og:description" content="目標 透過 nginx，將 流 透過 rtmpt:80 的 protocol 轉送給 rtmp:1935 protocol 推流 ffmpeg / OBS, protocol : rtmpt 收流 VLC player, protocol : rtmp 額外測試 : 送 rtmpt 給 ossrs 延伸 透過 rtmpts (tunnel by https)，加入 ssl 透過 rtmps，直接接收 rtmps 流，並 proxy 轉送給 ossrs">
+<meta property="og:description" content="Synopsis 建立 docker image, 讓 bin 在 PID=1 的狀態下執行 接收 os signal 的訊號, 讓程式得知結束前, 需要做什麼事情 code example : https://github.com/jhaoheng/docker_op_books/tree/master/example/run_cmd_at_pid_1">
 <meta property="og:locale" content="en">
+<meta property="og:image" content="https://raw.githubusercontent.com/jhaoheng/docker_op_books/master/example/run_cmd_at_pid_1/assets/wrong.png">
+<meta property="og:image" content="https://github.com/jhaoheng/docker_op_books/blob/master/example/run_cmd_at_pid_1/assets/right.png?raw=true">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【nginx】rtmpt(tunnel by http:80) to rtmp:1935">
-<meta name="twitter:description" content="目標 透過 nginx，將 流 透過 rtmpt:80 的 protocol 轉送給 rtmp:1935 protocol 推流 ffmpeg / OBS, protocol : rtmpt 收流 VLC player, protocol : rtmp 額外測試 : 送 rtmpt 給 ossrs 延伸 透過 rtmpts (tunnel by https)，加入 ssl 透過 rtmps，直接接收 rtmps 流，並 proxy 轉送給 ossrs">
+<meta name="twitter:title" content="【Go】Go bin get os signal from docker">
+<meta name="twitter:description" content="Synopsis 建立 docker image, 讓 bin 在 PID=1 的狀態下執行 接收 os signal 的訊號, 讓程式得知結束前, 需要做什麼事情 code example : https://github.com/jhaoheng/docker_op_books/tree/master/example/run_cmd_at_pid_1">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/jhaoheng/docker_op_books/master/example/run_cmd_at_pid_1/assets/wrong.png">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -152,7 +155,7 @@
 
 
 
-  <title>【nginx】rtmpt(tunnel by http:80) to rtmp:1935 | MAX 呼~</title>
+  <title>【Go】Go bin get os signal from docker | MAX 呼~</title>
   
 
 
@@ -278,7 +281,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/docker/nginx/rtmpt/rtmp/ossrs/2017/11/05/rtmpt&rtmp/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/11/06/Go&Docker-_Get_os_signal_from_docker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -298,7 +301,7 @@
           <h1 class="post-title" itemprop="name headline">
           
           
-            【nginx】rtmpt(tunnel by http:80) to rtmp:1935
+            【Go】Go bin get os signal from docker
           
         </h1>
         
@@ -312,8 +315,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-05T09:05:00+08:00">
-                2017-11-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-11-06T11:37:00+08:00">
+                2019-11-06
               </time>
             
 
@@ -336,56 +339,8 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/docker" itemprop="url" rel="index">
-                    <span itemprop="name">docker</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/nginx" itemprop="url" rel="index">
-                    <span itemprop="name">nginx</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/rtmpt" itemprop="url" rel="index">
-                    <span itemprop="name">rtmpt</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/rtmp" itemprop="url" rel="index">
-                    <span itemprop="name">rtmp</span>
-                  </a>
-                </span>
-
-                
-                
-                  , 
-                
-              
-                
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/ossrs" itemprop="url" rel="index">
-                    <span itemprop="name">ossrs</span>
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
                   </a>
                 </span>
 
@@ -439,134 +394,29 @@
 
 
 
-  <h1 id="目標">目標</h1>
-<ol>
-  <li>透過 nginx，將 流 透過 rtmpt:80 的 protocol 轉送給 rtmp:1935 protocol</li>
-  <li>推流 ffmpeg / OBS, protocol : rtmpt</li>
-  <li>收流 VLC player, protocol : rtmp</li>
-  <li>額外測試 : 送 rtmpt 給 ossrs</li>
-  <li>延伸
-    <ol>
-      <li>透過 rtmpts (tunnel by https)，加入 ssl</li>
-      <li>透過 rtmps，直接接收 rtmps 流，並 proxy 轉送給 ossrs
-<!--more--></li>
-    </ol>
-  </li>
-</ol>
-
-<h1 id="env">env</h1>
+  <h1 id="synopsis">Synopsis</h1>
 
 <ul>
-  <li>push streaming tool
-    <ul>
-      <li>ffmpeg 3.4 :
-        <ul>
-          <li>將桌面影像上傳 : <code class="highlighter-rouge">ffmpeg -f avfoundation -i "1" -vcodec libx264 -preset ultrafast -acodec libfaac -f flv rtmpt://localhost/demo/desktop</code></li>
-        </ul>
-      </li>
-      <li>OBS
-        <ul>
-          <li>將制式的 mp4 檔案丟到 <code class="highlighter-rouge">rtmpt://localhost/demo/video</code></li>
-        </ul>
-      </li>
-      <li>wrong : <code class="highlighter-rouge">[tcp @ 0x7f830d5153c0] Connection to tcp://localhost:80 failed (Connection refused), trying next address</code>
-        <ul>
-          <li>會自動檢查 <code class="highlighter-rouge">127.0.0.1</code></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>watch streaming tool
-    <ul>
-      <li>VLC player</li>
-    </ul>
-  </li>
-  <li>docker :
-    <ul>
-      <li>ossrs</li>
-      <li>nginx:latest (1.13.6)
-        <ul>
-          <li>rtmp server</li>
-          <li>rtmpt server</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>compiler first
-    <ul>
-      <li>nginx-rtmp-module : <code class="highlighter-rouge">https://github.com/arut/nginx-rtmp-module</code></li>
-      <li>nginx-rtmpt-proxy-module : <code class="highlighter-rouge">https://github.com/kwojtek/nginx-rtmpt-proxy-module</code></li>
-    </ul>
-  </li>
+  <li>建立 docker image, 讓 bin 在 PID=1 的狀態下執行</li>
+  <li>接收 os signal 的訊號, 讓程式得知結束前, 需要做什麼事情</li>
+  <li>code example : https://github.com/jhaoheng/docker_op_books/tree/master/example/run_cmd_at_pid_1</li>
 </ul>
 
-<h1 id="nginx-conf--rtmpt--rtmp">nginx. conf : rtmpt &amp; rtmp</h1>
-<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20<br/>21<br/>22<br/>23<br/>24<br/>25<br/>26<br/>27<br/>28<br/>29<br/>30<br/>31<br/>32<br/>33<br/>34<br/>35<br/>36<br/>37<br/>38<br/>39<br/>40<br/>41<br/>42<br/>43<br/>44<br/>45<br/>46<br/>47<br/>48<br/>49<br/>50<br/>51<br/>52<br/>53<br/>54<br/>55<br/>56<br/>57<br/>58<br/>59<br/>60<br/>61<br/>62<br/>63<br/>64<br/>65</pre></td><td class="code"><pre class="highlight"><code>user  nginx;
-worker_processes  1;
+<!--more-->
 
-# should add this to enable rtmpt : 
-# https://github.com/kwojtek/nginx-rtmpt-proxy-module
-load_module modules/ngx_rtmpt_proxy_module.so;
+<h2 id="dockerfile-需要注意的地方">Dockerfile 需要注意的地方</h2>
 
-load_module modules/ngx_rtmp_module.so;
+<ul>
+  <li>若在 CMD 中, 直接用 <code class="highlighter-rouge">CMD: {your_bin}</code>, 會得到錯誤的啟動, for example:</li>
+</ul>
 
-error_log  /var/log/nginx/error.log warn;
+<p><img src="https://raw.githubusercontent.com/jhaoheng/docker_op_books/master/example/run_cmd_at_pid_1/assets/wrong.png" alt="img-wrong" /></p>
 
-pid        /var/run/nginx.pid;
+<ul>
+  <li>在 dockerfile 中的 CMD 需要用 <code class="highlighter-rouge">exec {your_bin}</code> 來執行, 正確會得到</li>
+</ul>
 
-events {
-    worker_connections  1024;
-}
-
-http {
-    keepalive_requests  4294967295;
-    access_log  /var/log/nginx/access.log;
-    server {
-        listen       80;
-
-        location ~ (^/open/1$|^/idle/.*/.*$|^/send/.*/.*$|^/close/.*/.*$) {
-            rtmpt_proxy on;
-            rtmpt_proxy_target localhost:1935; # 轉給 ossrs 請設定於此
-            rtmpt_proxy_rtmp_timeout 2; 
-            rtmpt_proxy_http_timeout 5;
-
-            add_header Cache-Control no-cache;
-            access_log on;
-
-            proxy_buffers               32 4m;
-            proxy_busy_buffers_size     25m;
-            proxy_buffer_size           512k;
-            proxy_ignore_headers        "Cache-Control" "Expires";
-            proxy_max_temp_file_size    0;
-            proxy_set_header            Host $host;
-            proxy_set_header            X-Real-IP $remote_addr;
-            proxy_set_header            X-Forwarded-For $proxy_add_x_forwarded_for;
-            client_max_body_size        1024m;
-            client_body_buffer_size     4m;
-            proxy_connect_timeout       300;
-            proxy_read_timeout          300;
-            proxy_send_timeout          300;
-            proxy_intercept_errors      off;
-        }    
-        location /fcs/ident2 {
-            return 200;
-        }
-   }
-}
- 
-rtmp {
-    access_log  /var/log/nginx/access.log;
-    server {
-        listen 1935;
-        chunk_size 4096;
-
-        application demo {
-                live on;
-                record off;
-        }
-    }
-}
-</code></pre></td></tr></tbody></table></div></div>
+<p><img src="https://github.com/jhaoheng/docker_op_books/blob/master/example/run_cmd_at_pid_1/assets/right.png?raw=true" alt="img-right" /></p>
 
 
       
@@ -595,6 +445,13 @@ rtmp {
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            
+            <a href="/blogpost/tag/#/Golang" rel="tag"># Golang</a>
+          
+        </div>
+      
 
       
       
@@ -607,18 +464,14 @@ rtmp {
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blogpost/docker/haproxy/nginx/proxy/rtmp/rtmps/2017/11/06/haproxy/" rel="next" title="【haproxy】rtmps by haproxy">
-                <i class="fa fa-chevron-left"></i> 【haproxy】rtmps by haproxy
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blogpost/docker/nginx/module/2017/11/04/nginx_add_dynamic_module/" rel="prev" title="【nginx】add dynamic module to an existing nginx">
-                【nginx】add dynamic module to an existing nginx <i class="fa fa-chevron-right"></i>
+              <a href="/blogpost/golang/2019/10/15/Go-sync(%E4%B8%80)/" rel="prev" title="【Go】Sync(一)">
+                【Go】Sync(一) <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -769,7 +622,7 @@ rtmp {
             
               <div class="post-toc-content">
     <ol class=nav>
-      <li class="nav-item nav-level-1"> <a class="nav-link" href="#目標"> <span class="nav-text">目標</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#env"> <span class="nav-text">env</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#nginx-conf--rtmpt--rtmp"> <span class="nav-text">nginx. conf : rtmpt &amp; rtmp</span> </a> </li>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#synopsis"> <span class="nav-text">Synopsis</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#dockerfile-需要注意的地方"> <span class="nav-text">Dockerfile 需要注意的地方</span> </a> </li> </ol> </li>
     </ol>
   </div>
             
