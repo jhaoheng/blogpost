@@ -1,4 +1,75 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2019-11-06T11:45:58+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】Go bin get os signal from docker</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/11/06/Go&Docker-_Get_os_signal_from_docker/" rel="alternate" type="text/html" title="【Go】Go bin get os signal from docker" /><published>2019-11-06T11:37:00+08:00</published><updated>2019-11-06T11:37:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/11/06/%5BGo&amp;Docker%5D_Get_os_signal_from_docker</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/11/06/Go&amp;Docker-_Get_os_signal_from_docker/">&lt;h1 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="https://jhaoheng.github.io/blogpost/blogpost/atom.xml" rel="self" type="application/atom+xml" /><link href="https://jhaoheng.github.io/blogpost/blogpost/" rel="alternate" type="text/html" /><updated>2020-01-14T14:56:25+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/atom.xml</id><title type="html">MAX 呼~</title><subtitle>Welcome!</subtitle><author><name>Max Hu</name></author><entry><title type="html">【Go】TestMain</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2020/01/14/Go-_TestMain/" rel="alternate" type="text/html" title="【Go】TestMain" /><published>2020-01-14T14:47:00+08:00</published><updated>2020-01-14T14:47:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2020/01/14/%5BGo%5D_TestMain</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2020/01/14/Go-_TestMain/">&lt;h1 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;在 testing 中（https://golang.org/pkg/testing/#hdr-Main）有一段描述 TestMain&lt;/li&gt;
+  &lt;li&gt;直覺反應會覺得跟 go main 有關係, 但實際上完全沒有關係&lt;/li&gt;
+  &lt;li&gt;以下探討幾個使用 TestMain 的技巧&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;func TestMain(m *testing.M) {
+	// call flag.Parse() here if TestMain uses flags
+	os.Exit(m.Run())
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;!--more--&gt;
+
+&lt;h1 id=&quot;testmainm-testingm&quot;&gt;TestMain(m *testing.M)&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;必須要用 TestMain 當作 func name, 否則會出錯&lt;/li&gt;
+  &lt;li&gt;其中的 m.Run(), 為執行 &lt;code class=&quot;highlighter-rouge&quot;&gt;此份 test&lt;/code&gt; 時, 會執行的 main thread, 邏輯是 : 執行 m.Run() 前 -&amp;gt; m.Run() 負責驅動 Testing code -&amp;gt; 執行 m.Run() 後&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pkgs&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+	&lt;span class=&quot;s2&quot;&gt;&quot;fmt&quot;&lt;/span&gt;
+	&lt;span class=&quot;s2&quot;&gt;&quot;testing&quot;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TestMain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;M&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;before&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;m&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Run&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;after&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Test_Code1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;測試 code 1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;n&quot;&gt;func&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Test_Code2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;t&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;*&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;testing&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;T&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;測試 code 2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;當執行 &lt;code class=&quot;highlighter-rouge&quot;&gt;go test -run Test_Code1 &lt;/code&gt; 會得到&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;before
+測試 code 1
+PASS
+after
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;當執行 &lt;code class=&quot;highlighter-rouge&quot;&gt;go test&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;before
+測試 code 1
+測試 code 2
+PASS
+after
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;何時會適合用到-testmain&quot;&gt;何時會適合用到 TestMain?&lt;/h1&gt;
+&lt;ul&gt;
+  &lt;li&gt;當需要載入一個 Test 都需用到的服務&lt;/li&gt;
+  &lt;li&gt;當你的測試需要用到 flag 時&lt;/li&gt;
+  &lt;li&gt;當你的測試需要在結束時，執行某些事情時&lt;/li&gt;
+  &lt;li&gt;…&lt;/li&gt;
+&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">Synopsis 在 testing 中（https://golang.org/pkg/testing/#hdr-Main）有一段描述 TestMain 直覺反應會覺得跟 go main 有關係, 但實際上完全沒有關係 以下探討幾個使用 TestMain 的技巧 func TestMain(m *testing.M) { // call flag.Parse() here if TestMain uses flags os.Exit(m.Run()) }</summary></entry><entry><title type="html">【Go】Go bin get os signal from docker</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/11/06/Go&Docker-_Get_os_signal_from_docker/" rel="alternate" type="text/html" title="【Go】Go bin get os signal from docker" /><published>2019-11-06T11:37:00+08:00</published><updated>2019-11-06T11:37:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/11/06/%5BGo&amp;Docker%5D_Get_os_signal_from_docker</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/11/06/Go&amp;Docker-_Get_os_signal_from_docker/">&lt;h1 id=&quot;synopsis&quot;&gt;Synopsis&lt;/h1&gt;
 
 &lt;ul&gt;
   &lt;li&gt;建立 docker image, 讓 bin 在 PID=1 的狀態下執行&lt;/li&gt;
@@ -1333,86 +1404,4 @@ func catch() {
     StampMicro = &quot;Jan _2 15:04:05.000000&quot;
     StampNano  = &quot;Jan _2 15:04:05.000000000&quot;
 )
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">Thinking 通常比較常看到的是，命名一個 struct 類型，然後為這個 struct 實踐方法。 今天看別人的 code 發現有這種做法，一開始還在想，為何要特別這樣做，才覺得這是 clean code 的一種方式。 Glance code package main import ( &quot;errors&quot; &quot;fmt&quot; &quot;time&quot; ) type Country string const ( Germany Country = &quot;Germany&quot; UnitedStates Country = &quot;United States&quot; NewZealand Country = &quot;New Zealand&quot; ) // timeZoneID is a map of Country to its IANA standard timezone identifier var timeZoneID = map[Country]string{ Germany: &quot;Europe/Berlin&quot;, UnitedStates: &quot;America/Los_Angeles&quot;, NewZealand: &quot;Pacific/Auckland&quot;, } // TimeZoneID returns a IANA identifier for a given Country. func (c Country) TimeZoneID() (string, error) { if id, ok := timeZoneID[c]; ok { return id, nil } return &quot;&quot;, errors.New(&quot;timezone id not found for country&quot;) } // TimeIn returns time in timezone tz with fmt format func TimeIn(t time.Time, tz, fmt string) string { // https:/golang.org/pkg/time/#LoadLocation loads location on // the basis of loc, err := time.LoadLocation(tz) if err != nil { //handle error } // convert current time to specific location, e.g Germany in given format return t.In(loc).Format(fmt) } func main() { // Get the timezone tz, err := UnitedStates.TimeZoneID() if err != nil { //handle error } usTime := TimeIn(time.Now(), tz, time.RFC3339) fmt.Printf(&quot;Time in %s: %s&quot;, UnitedStates, usTime, ) } 在這邊設定一個新的型態 Country, 目的是設定 只接收該型態的 method. 若直接使用 string, 則無法直接使用 以 string 為形態的 method. 從 main() 來看，可以清楚的知道，物件 UnitedStates 的 TimeZoneID 不直接命名的方式，也可以幫助後續無論是 Test or Debug，一種延續系統開發的作法 至於 RFC3339 是一種時間的顯示格式, 通常選擇格式, 能幫助我們在寫入資料庫選擇 DATETIME or TIMESTAMP 的格式選擇 ‘YYYY-MM-DD hh:mm:ss’ const ( ANSIC = &quot;Mon Jan _2 15:04:05 2006&quot; UnixDate = &quot;Mon Jan _2 15:04:05 MST 2006&quot; RubyDate = &quot;Mon Jan 02 15:04:05 -0700 2006&quot; RFC822 = &quot;02 Jan 06 15:04 MST&quot; RFC822Z = &quot;02 Jan 06 15:04 -0700&quot; // RFC822 with numeric zone RFC850 = &quot;Monday, 02-Jan-06 15:04:05 MST&quot; RFC1123 = &quot;Mon, 02 Jan 2006 15:04:05 MST&quot; RFC1123Z = &quot;Mon, 02 Jan 2006 15:04:05 -0700&quot; // RFC1123 with numeric zone RFC3339 = &quot;2006-01-02T15:04:05Z07:00&quot; RFC3339Nano = &quot;2006-01-02T15:04:05.999999999Z07:00&quot; Kitchen = &quot;3:04PM&quot; // Handy time stamps. Stamp = &quot;Jan _2 15:04:05&quot; StampMilli = &quot;Jan _2 15:04:05.000&quot; StampMicro = &quot;Jan _2 15:04:05.000000&quot; StampNano = &quot;Jan _2 15:04:05.000000000&quot; )</summary></entry><entry><title type="html">【Go】gRPC(一)</title><link href="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/" rel="alternate" type="text/html" title="【Go】gRPC(一)" /><published>2019-09-21T12:15:00+08:00</published><updated>2019-09-21T12:15:00+08:00</updated><id>https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/%5BGo%5DgRPC(%E4%B8%80)</id><content type="html" xml:base="https://jhaoheng.github.io/blogpost/blogpost/golang/2019/09/21/Go-gRPC(%E4%B8%80)/">&lt;h1 id=&quot;grpc&quot;&gt;gRPC&lt;/h1&gt;
-&lt;blockquote&gt;
-  &lt;p&gt;gRPC is a modern, open source remote procedure call (RPC) framework&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;簡單來講就是，server 端跟 client 端都是固定的兩方，然後透過資料格式解析
-    &lt;ul&gt;
-      &lt;li&gt;雙方都特定處理某件事情，簡單來講就是類似 socket server，但並非是&lt;/li&gt;
-      &lt;li&gt;有點類似透過 protocol buffer 在本地端直接調用 func 並得到回傳值&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;基於 HTTP/2 協議標準設計, 所以也是有 Request 與 Response
-    &lt;ul&gt;
-      &lt;li&gt;HTTP/2 是一個二進位協議, 意味著可讀性是 0&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-  &lt;li&gt;基於 ProtoBuf(Protocol Buffers) 序列化協議開發&lt;/li&gt;
-  &lt;li&gt;實踐方法有&lt;a href=&quot;https://grpc.io/docs/tutorials/basic/go/&quot;&gt;四種模式&lt;/a&gt;
-    &lt;ul&gt;
-      &lt;li&gt;simple RPC&lt;/li&gt;
-      &lt;li&gt;Client-side streaming RPC&lt;/li&gt;
-      &lt;li&gt;Server-side streaming RPC&lt;/li&gt;
-      &lt;li&gt;Bidirectional streaming RPC&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;為了解決&quot;&gt;為了解決?&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;低延遲, 高擴充性, 分散式系統&lt;/li&gt;
-  &lt;li&gt;可開發移動端的 clients, 與 cloud server 進行溝通&lt;/li&gt;
-  &lt;li&gt;準確、高校且獨立的 protocol&lt;/li&gt;
-  &lt;li&gt;分層設計以實現擴展，例如。 身份驗證，負載平衡，日誌記錄和監視等&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;!--more--&gt;
-
-&lt;h2 id=&quot;如何使用與開發&quot;&gt;如何使用與開發&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;說明書 : https://grpc.io/docs/quickstart/&lt;/li&gt;
-  &lt;li&gt;Github org page : https://github.com/grpc&lt;/li&gt;
-  &lt;li&gt;Document : https://grpc.io/docs/&lt;/li&gt;
-  &lt;li&gt;中文 : https://doc.oschina.net/grpc?t=58008&lt;/li&gt;
-  &lt;li&gt;Example : https://github.com/smallnest/grpc-examples&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;支援語言&quot;&gt;支援語言&lt;/h2&gt;
-&lt;p&gt;C++, Java (incl. support for Android), Objective-C (for iOS), Python, Ruby, Go, C#, Node.js&lt;/p&gt;
-
-&lt;h2 id=&quot;可以應用在-web-端的服務嗎&quot;&gt;可以應用在 web 端的服務嗎？&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;透過 gRPC-Web : https://github.com/grpc/grpc-web&lt;/li&gt;
-  &lt;li&gt;gRPC-Web 提供 Javascript library 讓瀏覽器端可以存取使用 gRPC 的服務&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;可以跟-json-protobuf-thrift-xml-一起應用嗎&quot;&gt;可以跟 JSON, Protobuf, Thrift, XML 一起應用嗎？&lt;/h2&gt;
-&lt;p&gt;Yes, 最初就支援 Protobuf, 並且可以延伸支援其他內容格式&lt;/p&gt;
-
-&lt;h2 id=&quot;在移動端的開發的優勢&quot;&gt;在移動端的開發的優勢？&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;節省頻寬, 使用更少的 TCP 連線&lt;/li&gt;
-  &lt;li&gt;節省 CPU 使用&lt;/li&gt;
-  &lt;li&gt;省電&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;grpc-為何比其他也是建立在-http2-架構上的-binary-blob-來得好&quot;&gt;gRPC 為何比其他也是建立在 HTTP/2 架構上的 binary blob 來得好?&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;gRPC 在跨平台上比起一般 http lib 的表現來的優秀, 例如
-    &lt;ul&gt;
-      &lt;li&gt;interaction with flow-control at the application layer&lt;/li&gt;
-      &lt;li&gt;cascading call-cancellation&lt;/li&gt;
-      &lt;li&gt;load balancing &amp;amp; failover&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;grpc-與-rest-的比較&quot;&gt;gRPC 與 REST 的比較&lt;/h2&gt;
-&lt;ul&gt;
-  &lt;li&gt;允許 full-duplex(全雙工) streaming.&lt;/li&gt;
-  &lt;li&gt;基於效能，使用靜態路徑，解析路徑中調用的參數。REST 中 query parameters 與 payload body 會增加延遲跟複雜性&lt;/li&gt;
-  &lt;li&gt;定義了一系列的 errors, 相信比 HTTP status codes 更直觀適用於 API 使用情境。&lt;/li&gt;
-&lt;/ul&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">gRPC gRPC is a modern, open source remote procedure call (RPC) framework 簡單來講就是，server 端跟 client 端都是固定的兩方，然後透過資料格式解析 雙方都特定處理某件事情，簡單來講就是類似 socket server，但並非是 有點類似透過 protocol buffer 在本地端直接調用 func 並得到回傳值 基於 HTTP/2 協議標準設計, 所以也是有 Request 與 Response HTTP/2 是一個二進位協議, 意味著可讀性是 0 基於 ProtoBuf(Protocol Buffers) 序列化協議開發 實踐方法有四種模式 simple RPC Client-side streaming RPC Server-side streaming RPC Bidirectional streaming RPC 為了解決? 低延遲, 高擴充性, 分散式系統 可開發移動端的 clients, 與 cloud server 進行溝通 準確、高校且獨立的 protocol 分層設計以實現擴展，例如。 身份驗證，負載平衡，日誌記錄和監視等</summary></entry></feed>
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</content><author><name>Max Hu</name></author><category term="Golang" /><summary type="html">Thinking 通常比較常看到的是，命名一個 struct 類型，然後為這個 struct 實踐方法。 今天看別人的 code 發現有這種做法，一開始還在想，為何要特別這樣做，才覺得這是 clean code 的一種方式。 Glance code package main import ( &quot;errors&quot; &quot;fmt&quot; &quot;time&quot; ) type Country string const ( Germany Country = &quot;Germany&quot; UnitedStates Country = &quot;United States&quot; NewZealand Country = &quot;New Zealand&quot; ) // timeZoneID is a map of Country to its IANA standard timezone identifier var timeZoneID = map[Country]string{ Germany: &quot;Europe/Berlin&quot;, UnitedStates: &quot;America/Los_Angeles&quot;, NewZealand: &quot;Pacific/Auckland&quot;, } // TimeZoneID returns a IANA identifier for a given Country. func (c Country) TimeZoneID() (string, error) { if id, ok := timeZoneID[c]; ok { return id, nil } return &quot;&quot;, errors.New(&quot;timezone id not found for country&quot;) } // TimeIn returns time in timezone tz with fmt format func TimeIn(t time.Time, tz, fmt string) string { // https:/golang.org/pkg/time/#LoadLocation loads location on // the basis of loc, err := time.LoadLocation(tz) if err != nil { //handle error } // convert current time to specific location, e.g Germany in given format return t.In(loc).Format(fmt) } func main() { // Get the timezone tz, err := UnitedStates.TimeZoneID() if err != nil { //handle error } usTime := TimeIn(time.Now(), tz, time.RFC3339) fmt.Printf(&quot;Time in %s: %s&quot;, UnitedStates, usTime, ) } 在這邊設定一個新的型態 Country, 目的是設定 只接收該型態的 method. 若直接使用 string, 則無法直接使用 以 string 為形態的 method. 從 main() 來看，可以清楚的知道，物件 UnitedStates 的 TimeZoneID 不直接命名的方式，也可以幫助後續無論是 Test or Debug，一種延續系統開發的作法 至於 RFC3339 是一種時間的顯示格式, 通常選擇格式, 能幫助我們在寫入資料庫選擇 DATETIME or TIMESTAMP 的格式選擇 ‘YYYY-MM-DD hh:mm:ss’ const ( ANSIC = &quot;Mon Jan _2 15:04:05 2006&quot; UnixDate = &quot;Mon Jan _2 15:04:05 MST 2006&quot; RubyDate = &quot;Mon Jan 02 15:04:05 -0700 2006&quot; RFC822 = &quot;02 Jan 06 15:04 MST&quot; RFC822Z = &quot;02 Jan 06 15:04 -0700&quot; // RFC822 with numeric zone RFC850 = &quot;Monday, 02-Jan-06 15:04:05 MST&quot; RFC1123 = &quot;Mon, 02 Jan 2006 15:04:05 MST&quot; RFC1123Z = &quot;Mon, 02 Jan 2006 15:04:05 -0700&quot; // RFC1123 with numeric zone RFC3339 = &quot;2006-01-02T15:04:05Z07:00&quot; RFC3339Nano = &quot;2006-01-02T15:04:05.999999999Z07:00&quot; Kitchen = &quot;3:04PM&quot; // Handy time stamps. Stamp = &quot;Jan _2 15:04:05&quot; StampMilli = &quot;Jan _2 15:04:05.000&quot; StampMicro = &quot;Jan _2 15:04:05.000000&quot; StampNano = &quot;Jan _2 15:04:05.000000000&quot; )</summary></entry></feed>

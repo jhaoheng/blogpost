@@ -2,6 +2,23 @@
 <search>
   
     <entry>
+      <title><![CDATA[【Go】TestMain]]></title>
+      <url>/blogpost/golang/2020/01/14/Go-_TestMain/</url>
+      <content type="text"><![CDATA[Synopsis  在 testing 中（https://golang.org/pkg/testing/#hdr-Main）有一段描述 TestMain  直覺反應會覺得跟 go main 有關係, 但實際上完全沒有關係  以下探討幾個使用 TestMain 的技巧func TestMain(m *testing.M) {	// call flag.Parse() here if TestMain uses flags	os.Exit(m.Run())}TestMain(m *testing.M)  必須要用 TestMain 當作 func name, 否則會出錯  其中的 m.Run(), 為執行 此份 test 時, 會執行的 main thread, 邏輯是 : 執行 m.Run() 前 -&gt; m.Run() 負責驅動 Testing code -&gt; 執行 m.Run() 後package pkgsimport (	"fmt"	"testing")func TestMain(m *testing.M) {	fmt.Println("before")	m.Run()	fmt.Println("after")}func Test_Code1(t *testing.T) {	fmt.Println("測試 code 1")}func Test_Code2(t *testing.T) {	fmt.Println("測試 code 2")}  當執行 go test -run Test_Code1  會得到before測試 code 1PASSafter  當執行 go testbefore測試 code 1測試 code 2PASSafter何時會適合用到 TestMain?  當需要載入一個 Test 都需用到的服務  當你的測試需要用到 flag 時  當你的測試需要在結束時，執行某些事情時  …]]></content>
+      <categories>
+        
+          <category> Golang </category>
+        
+      </categories>
+      <tags>
+        
+          <tag> Golang </tag>
+        
+      </tags>
+      <tags></tags>
+    </entry>
+  
+    <entry>
       <title><![CDATA[【Go】Go bin get os signal from docker]]></title>
       <url>/blogpost/golang/2019/11/06/Go&Docker-_Get_os_signal_from_docker/</url>
       <content type="text"><![CDATA[Synopsis  建立 docker image, 讓 bin 在 PID=1 的狀態下執行  接收 os signal 的訊號, 讓程式得知結束前, 需要做什麼事情  code example : https://github.com/jhaoheng/docker_op_books/tree/master/example/run_cmd_at_pid_1Dockerfile 需要注意的地方  若在 CMD 中, 直接用 CMD: {your_bin}, 會得到錯誤的啟動, for example:  在 dockerfile 中的 CMD 需要用 exec {your_bin} 來執行, 正確會得到]]></content>

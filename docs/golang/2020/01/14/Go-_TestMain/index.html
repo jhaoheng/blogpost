@@ -83,7 +83,7 @@
 <link href="/blogpost/assets/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="" />
+  <meta name="keywords" content="Golang," />
 
 
 
@@ -109,17 +109,17 @@
 
 
 
-<meta name="description" content="git : [.gitattributes] 合併策略 在 project 的路徑下，同一層有 .git，建立 .gitattributes 建立要維持固定不變的設定檔 : config.json 在 .gitattributes 中新增合併策略 config.json merge=ours 完成後，查詢 git config --global -l，是否有 merge.ours.driver=true 的參數設定 若無則下指令 : git config --global merge.ours.driver true step flow git checkout -b [branch] edit config.json &amp;amp; commit git checkout master edit config.json &amp;amp; commit 此時下 git log --all --graph --pretty=format:&apos;%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)&apos;，會看到 branch 分別在兩條線，若是在同一條線上，並不會產生 conflict git merge [branch]，讓兩條合併，此時產生 conflict，但因為設定的 .gitattributes 的規則，會讓每個分支合併後，以原本分支的檔案為主 查看 git log --all --graph --pretty=format:&apos;%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)&apos;">
-<meta name="keywords" content="jhaoheng, maxhu, golang, objective-c">
+<meta name="description" content="Synopsis 在 testing 中（https://golang.org/pkg/testing/#hdr-Main）有一段描述 TestMain 直覺反應會覺得跟 go main 有關係, 但實際上完全沒有關係 以下探討幾個使用 TestMain 的技巧 func TestMain(m *testing.M) { // call flag.Parse() here if TestMain uses flags os.Exit(m.Run()) }">
+<meta name="keywords" content="Golang">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【Git】attribute, 合併後保留原本的設定檔">
-<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/git/2017/03/15/Git-attribute/">
+<meta property="og:title" content="【Go】TestMain">
+<meta property="og:url" content="https://jhaoheng.github.io/blogpost/blogpost/golang/2020/01/14/Go-_TestMain/">
 <meta property="og:site_name" content="MAX 呼~">
-<meta property="og:description" content="git : [.gitattributes] 合併策略 在 project 的路徑下，同一層有 .git，建立 .gitattributes 建立要維持固定不變的設定檔 : config.json 在 .gitattributes 中新增合併策略 config.json merge=ours 完成後，查詢 git config --global -l，是否有 merge.ours.driver=true 的參數設定 若無則下指令 : git config --global merge.ours.driver true step flow git checkout -b [branch] edit config.json &amp;amp; commit git checkout master edit config.json &amp;amp; commit 此時下 git log --all --graph --pretty=format:&apos;%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)&apos;，會看到 branch 分別在兩條線，若是在同一條線上，並不會產生 conflict git merge [branch]，讓兩條合併，此時產生 conflict，但因為設定的 .gitattributes 的規則，會讓每個分支合併後，以原本分支的檔案為主 查看 git log --all --graph --pretty=format:&apos;%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)&apos;">
+<meta property="og:description" content="Synopsis 在 testing 中（https://golang.org/pkg/testing/#hdr-Main）有一段描述 TestMain 直覺反應會覺得跟 go main 有關係, 但實際上完全沒有關係 以下探討幾個使用 TestMain 的技巧 func TestMain(m *testing.M) { // call flag.Parse() here if TestMain uses flags os.Exit(m.Run()) }">
 <meta property="og:locale" content="en">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【Git】attribute, 合併後保留原本的設定檔">
-<meta name="twitter:description" content="git : [.gitattributes] 合併策略 在 project 的路徑下，同一層有 .git，建立 .gitattributes 建立要維持固定不變的設定檔 : config.json 在 .gitattributes 中新增合併策略 config.json merge=ours 完成後，查詢 git config --global -l，是否有 merge.ours.driver=true 的參數設定 若無則下指令 : git config --global merge.ours.driver true step flow git checkout -b [branch] edit config.json &amp;amp; commit git checkout master edit config.json &amp;amp; commit 此時下 git log --all --graph --pretty=format:&apos;%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)&apos;，會看到 branch 分別在兩條線，若是在同一條線上，並不會產生 conflict git merge [branch]，讓兩條合併，此時產生 conflict，但因為設定的 .gitattributes 的規則，會讓每個分支合併後，以原本分支的檔案為主 查看 git log --all --graph --pretty=format:&apos;%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)&apos;">
+<meta name="twitter:title" content="【Go】TestMain">
+<meta name="twitter:description" content="Synopsis 在 testing 中（https://golang.org/pkg/testing/#hdr-Main）有一段描述 TestMain 直覺反應會覺得跟 go main 有關係, 但實際上完全沒有關係 以下探討幾個使用 TestMain 的技巧 func TestMain(m *testing.M) { // call flag.Parse() here if TestMain uses flags os.Exit(m.Run()) }">
 
 
 <script type="text/javascript" id="hexo.configurations">
@@ -152,7 +152,7 @@
 
 
 
-  <title>【Git】attribute, 合併後保留原本的設定檔 | MAX 呼~</title>
+  <title>【Go】TestMain | MAX 呼~</title>
   
 
 
@@ -278,7 +278,7 @@
   
 
   <article class="post post-type- " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/git/2017/03/15/Git-attribute/">
+    <link itemprop="mainEntityOfPage" href="https://jhaoheng.github.io/blogpost/blogpost/golang/2020/01/14/Go-_TestMain/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Max Hu">
@@ -298,7 +298,7 @@
           <h1 class="post-title" itemprop="name headline">
           
           
-            【Git】attribute, 合併後保留原本的設定檔
+            【Go】TestMain
           
         </h1>
         
@@ -312,8 +312,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-03-15T09:41:00+08:00">
-                2017-03-15
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-14T14:47:00+08:00">
+                2020-01-14
               </time>
             
 
@@ -336,8 +336,8 @@
               
                 
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/blogpost/category/#/Git" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
+                  <a href="/blogpost/category/#/Golang" itemprop="url" rel="index">
+                    <span itemprop="name">Golang</span>
                   </a>
                 </span>
 
@@ -391,29 +391,78 @@
 
 
 
-  <h1 id="git--gitattributes">git : [.gitattributes]</h1>
-
-<h2 id="合併策略">合併策略</h2>
-
+  <h1 id="synopsis">Synopsis</h1>
 <ul>
-  <li>在 project 的路徑下，同一層有 .git，建立 <code class="highlighter-rouge">.gitattributes</code></li>
-  <li>建立要維持固定不變的設定檔 : config.json</li>
-  <li>在 <code class="highlighter-rouge">.gitattributes</code> 中新增合併策略 <code class="highlighter-rouge">config.json merge=ours</code></li>
-  <li>完成後，查詢 <code class="highlighter-rouge">git config --global -l</code>，是否有 <code class="highlighter-rouge">merge.ours.driver=true</code> 的參數設定</li>
-  <li>若無則下指令 : <code class="highlighter-rouge">git config --global merge.ours.driver true</code></li>
+  <li>在 testing 中（https://golang.org/pkg/testing/#hdr-Main）有一段描述 TestMain</li>
+  <li>直覺反應會覺得跟 go main 有關係, 但實際上完全沒有關係</li>
+  <li>以下探討幾個使用 TestMain 的技巧</li>
 </ul>
 
-<h2 id="step-flow">step flow</h2>
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>func TestMain(m *testing.M) {
+	// call flag.Parse() here if TestMain uses flags
+	os.Exit(m.Run())
+}
+</code></pre></td></tr></tbody></table></div></div>
+
+<!--more-->
+
+<h1 id="testmainm-testingm">TestMain(m *testing.M)</h1>
 
 <ol>
-  <li><code class="highlighter-rouge">git checkout -b [branch]</code></li>
-  <li>edit config.json &amp; commit</li>
-  <li>git checkout master</li>
-  <li>edit config.json &amp; commit</li>
-  <li>此時下 <code class="highlighter-rouge">git log --all --graph --pretty=format:'%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)'</code>，會看到 branch 分別在兩條線，若是在同一條線上，並不會產生 conflict</li>
-  <li>git merge [branch]，讓兩條合併，此時產生 conflict，但因為設定的 <code class="highlighter-rouge">.gitattributes</code> 的規則，會讓每個分支合併後，以原本分支的檔案為主</li>
-  <li>查看 <code class="highlighter-rouge">git log --all --graph --pretty=format:'%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)'</code></li>
+  <li>必須要用 TestMain 當作 func name, 否則會出錯</li>
+  <li>其中的 m.Run(), 為執行 <code class="highlighter-rouge">此份 test</code> 時, 會執行的 main thread, 邏輯是 : 執行 m.Run() 前 -&gt; m.Run() 負責驅動 Testing code -&gt; 執行 m.Run() 後</li>
 </ol>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>11<br/>12<br/>13<br/>14<br/>15<br/>16<br/>17<br/>18<br/>19<br/>20</pre></td><td class="code"><pre class="highlight"><code><span class="k">package</span> <span class="n">pkgs</span>
+
+<span class="n">import</span> <span class="p">(</span>
+	<span class="s2">"fmt"</span>
+	<span class="s2">"testing"</span>
+<span class="p">)</span>
+
+<span class="n">func</span> <span class="n">TestMain</span><span class="p">(</span><span class="n">m</span> <span class="p">*</span><span class="n">testing</span><span class="p">.</span><span class="n">M</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"before"</span><span class="p">)</span>
+	<span class="n">m</span><span class="p">.</span><span class="nf">Run</span><span class="p">()</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"after"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">Test_Code1</span><span class="p">(</span><span class="n">t</span> <span class="p">*</span><span class="n">testing</span><span class="p">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"測試 code 1"</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="n">func</span> <span class="n">Test_Code2</span><span class="p">(</span><span class="n">t</span> <span class="p">*</span><span class="n">testing</span><span class="p">.</span><span class="n">T</span><span class="p">)</span> <span class="p">{</span>
+	<span class="n">fmt</span><span class="p">.</span><span class="n">Println</span><span class="p">(</span><span class="s2">"測試 code 2"</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></td></tr></tbody></table></div></div>
+
+<ol>
+  <li>當執行 <code class="highlighter-rouge">go test -run Test_Code1 </code> 會得到</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4</pre></td><td class="code"><pre class="highlight"><code>before
+測試 code 1
+PASS
+after
+</code></pre></td></tr></tbody></table></div></div>
+
+<ol>
+  <li>當執行 <code class="highlighter-rouge">go test</code></li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><table style="margin: 0px"><tbody><tr><td class="gutter"><pre>1<br/>2<br/>3<br/>4<br/>5</pre></td><td class="code"><pre class="highlight"><code>before
+測試 code 1
+測試 code 2
+PASS
+after
+</code></pre></td></tr></tbody></table></div></div>
+
+<h1 id="何時會適合用到-testmain">何時會適合用到 TestMain?</h1>
+<ul>
+  <li>當需要載入一個 Test 都需用到的服務</li>
+  <li>當你的測試需要用到 flag 時</li>
+  <li>當你的測試需要在結束時，執行某些事情時</li>
+  <li>…</li>
+</ul>
 
 
       
@@ -442,6 +491,13 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            
+            <a href="/blogpost/tag/#/Golang" rel="tag"># Golang</a>
+          
+        </div>
+      
 
       
       
@@ -454,18 +510,14 @@
         <div class="post-nav" id="post-nav-id">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/blogpost/2017/04/05/php-mamp-pcntl-installation/" rel="next" title="【PHP-MAMP】pcntl 安裝">
-                <i class="fa fa-chevron-left"></i> 【PHP-MAMP】pcntl 安裝
-              </a>
-            
           </div>
 
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/blogpost/phalcon/memcached/mosquitto/mqtt/2017/02/08/phalcon-mosquitto-memcached/" rel="prev" title="【AWS-centos7-php7.x】phalcon / memcached / mosquitto">
-                【AWS-centos7-php7.x】phalcon / memcached / mosquitto <i class="fa fa-chevron-right"></i>
+              <a href="/blogpost/golang/2019/11/06/Go&Docker-_Get_os_signal_from_docker/" rel="prev" title="【Go】Go bin get os signal from docker">
+                【Go】Go bin get os signal from docker <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -616,7 +668,7 @@
             
               <div class="post-toc-content">
     <ol class=nav>
-      <li class="nav-item nav-level-1"> <a class="nav-link" href="#git--gitattributes"> <span class="nav-text">git : [.gitattributes]</span> </a> <ol class="nav-child"> <li class="nav-item nav-level-2"> <a class="nav-link" href="#合併策略"> <span class="nav-text">合併策略</span> </a> </li> <li class="nav-item nav-level-2"> <a class="nav-link" href="#step-flow"> <span class="nav-text">step flow</span> </a> </li> </ol> </li>
+      <li class="nav-item nav-level-1"> <a class="nav-link" href="#synopsis"> <span class="nav-text">Synopsis</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#testmainm-testingm"> <span class="nav-text">TestMain(m *testing.M)</span> </a> </li> <li class="nav-item nav-level-1"> <a class="nav-link" href="#何時會適合用到-testmain"> <span class="nav-text">何時會適合用到 TestMain?</span> </a> </li>
     </ol>
   </div>
             
